@@ -1,3 +1,8 @@
+# Trading212 files
+
+t212*
+reminder.txt
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

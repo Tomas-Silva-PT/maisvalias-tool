@@ -1,0 +1,998 @@
+[
+    {
+        "name": "AFGHANISTAN",
+        "isin_code": "AF"
+    },
+    {
+        "name": "ÅLAND ISLANDS",
+        "isin_code": "AX"
+    },
+    {
+        "name": "ALBANIA",
+        "isin_code": "AL"
+    },
+    {
+        "name": "ALGERIA",
+        "isin_code": "DZ"
+    },
+    {
+        "name": "AMERICAN SAMOA",
+        "isin_code": "AS"
+    },
+    {
+        "name": "ANDORRA",
+        "isin_code": "AD"
+    },
+    {
+        "name": "ANGOLA",
+        "isin_code": "AO"
+    },
+    {
+        "name": "ANGUILLA",
+        "isin_code": "AI"
+    },
+    {
+        "name": "ANTARCTICA",
+        "isin_code": "AQ"
+    },
+    {
+        "name": "ANTIGUA AND BARBUDA",
+        "isin_code": "AG"
+    },
+    {
+        "name": "ARGENTINA",
+        "isin_code": "AR"
+    },
+    {
+        "name": "ARMENIA",
+        "isin_code": "AM"
+    },
+    {
+        "name": "ARUBA",
+        "isin_code": "AW"
+    },
+    {
+        "name": "AUSTRALIA",
+        "isin_code": "AU"
+    },
+    {
+        "name": "AUSTRIA",
+        "isin_code": "AT"
+    },
+    {
+        "name": "AZERBAIJAN",
+        "isin_code": "AZ"
+    },
+    {
+        "name": "BAHAMAS",
+        "isin_code": "BS"
+    },
+    {
+        "name": "BAHRAIN",
+        "isin_code": "BH"
+    },
+    {
+        "name": "BANGLADESH",
+        "isin_code": "BD"
+    },
+    {
+        "name": "BARBADOS",
+        "isin_code": "BB"
+    },
+    {
+        "name": "BELARUS",
+        "isin_code": "BY"
+    },
+    {
+        "name": "BELGIUM",
+        "isin_code": "BE"
+    },
+    {
+        "name": "BELIZE",
+        "isin_code": "BZ"
+    },
+    {
+        "name": "BENIN",
+        "isin_code": "BJ"
+    },
+    {
+        "name": "BERMUDA",
+        "isin_code": "BM"
+    },
+    {
+        "name": "BHUTAN",
+        "isin_code": "BT"
+    },
+    {
+        "name": "BOLIVIA, PLURINATIONAL STATE OF",
+        "isin_code": "BO"
+    },
+    {
+        "name": "BONAIRE, SINT EUSTATIUS AND SABA",
+        "isin_code": "BQ"
+    },
+    {
+        "name": "BOSNIA AND HERZEGOVINA",
+        "isin_code": "BA"
+    },
+    {
+        "name": "BOTSWANA",
+        "isin_code": "BW"
+    },
+    {
+        "name": "BOUVET ISLAND",
+        "isin_code": "BV"
+    },
+    {
+        "name": "BRAZIL",
+        "isin_code": "BR"
+    },
+    {
+        "name": "BRITISH INDIAN OCEAN TERRITORY",
+        "isin_code": "IO"
+    },
+    {
+        "name": "BRUNEI DARUSSALAM",
+        "isin_code": "BN"
+    },
+    {
+        "name": "BULGARIA",
+        "isin_code": "BG"
+    },
+    {
+        "name": "BURKINA FASO",
+        "isin_code": "BF"
+    },
+    {
+        "name": "BURUNDI",
+        "isin_code": "BI"
+    },
+    {
+        "name": "CAMBODIA",
+        "isin_code": "KH"
+    },
+    {
+        "name": "CAMEROON",
+        "isin_code": "CM"
+    },
+    {
+        "name": "CANADA",
+        "isin_code": "CA"
+    },
+    {
+        "name": "CAPE VERDE",
+        "isin_code": "CV"
+    },
+    {
+        "name": "CAYMAN ISLANDS",
+        "isin_code": "KY"
+    },
+    {
+        "name": "CENTRAL AFRICAN REPUBLIC",
+        "isin_code": "CF"
+    },
+    {
+        "name": "CHAD",
+        "isin_code": "TD"
+    },
+    {
+        "name": "CHILE",
+        "isin_code": "CL"
+    },
+    {
+        "name": "CHINA",
+        "isin_code": "CN"
+    },
+    {
+        "name": "CHRISTMAS ISLAND",
+        "isin_code": "CX"
+    },
+    {
+        "name": "COCOS (KEELING) ISLANDS",
+        "isin_code": "CC"
+    },
+    {
+        "name": "COLOMBIA",
+        "isin_code": "CO"
+    },
+    {
+        "name": "COMOROS",
+        "isin_code": "KM"
+    },
+    {
+        "name": "CONGO",
+        "isin_code": "CG"
+    },
+    {
+        "name": "CONGO, THE DEMOCRATIC REPUBLIC OF THE",
+        "isin_code": "CD"
+    },
+    {
+        "name": "COOK ISLANDS",
+        "isin_code": "CK"
+    },
+    {
+        "name": "COSTA RICA",
+        "isin_code": "CR"
+    },
+    {
+        "name": "CÔTE D’IVOIRE",
+        "isin_code": "CI"
+    },
+    {
+        "name": "CROATIA",
+        "isin_code": "HR"
+    },
+    {
+        "name": "CUBA",
+        "isin_code": "CU"
+    },
+    {
+        "name": "CURAÇAO",
+        "isin_code": "CW"
+    },
+    {
+        "name": "CYPRUS",
+        "isin_code": "CY"
+    },
+    {
+        "name": "CZECH REPUBLIC",
+        "isin_code": "CZ"
+    },
+    {
+        "name": "DENMARK",
+        "isin_code": "DK"
+    },
+    {
+        "name": "DJIBOUTI",
+        "isin_code": "DJ"
+    },
+    {
+        "name": "DOMINICA",
+        "isin_code": "DM"
+    },
+    {
+        "name": "DOMINICAN REPUBLIC",
+        "isin_code": "DO"
+    },
+    {
+        "name": "ECUADOR",
+        "isin_code": "EC"
+    },
+    {
+        "name": "EGYPT",
+        "isin_code": "EG"
+    },
+    {
+        "name": "EL SALVADOR",
+        "isin_code": "SV"
+    },
+    {
+        "name": "EQUATORIAL GUINEA",
+        "isin_code": "GQ"
+    },
+    {
+        "name": "ERITREA",
+        "isin_code": "ER"
+    },
+    {
+        "name": "ESTONIA",
+        "isin_code": "EE"
+    },
+    {
+        "name": "ETHIOPIA",
+        "isin_code": "ET"
+    },
+    {
+        "name": "FALKLAND ISLANDS (MALVINAS)",
+        "isin_code": "FK"
+    },
+    {
+        "name": "FAROE ISLANDS",
+        "isin_code": "FO"
+    },
+    {
+        "name": "FIJI",
+        "isin_code": "FJ"
+    },
+    {
+        "name": "FINLAND",
+        "isin_code": "FI"
+    },
+    {
+        "name": "FRANCE",
+        "isin_code": "FR"
+    },
+    {
+        "name": "FRENCH GUIANA",
+        "isin_code": "GF"
+    },
+    {
+        "name": "FRENCH POLYNESIA",
+        "isin_code": "PF"
+    },
+    {
+        "name": "FRENCH SOUTHERN TERRITORIES",
+        "isin_code": "TF"
+    },
+    {
+        "name": "GABON",
+        "isin_code": "GA"
+    },
+    {
+        "name": "GAMBIA",
+        "isin_code": "GM"
+    },
+    {
+        "name": "GEORGIA",
+        "isin_code": "GE"
+    },
+    {
+        "name": "GERMANY",
+        "isin_code": "DE"
+    },
+    {
+        "name": "GHANA",
+        "isin_code": "GH"
+    },
+    {
+        "name": "GIBRALTAR",
+        "isin_code": "GI"
+    },
+    {
+        "name": "GREECE",
+        "isin_code": "GR"
+    },
+    {
+        "name": "GREENLAND",
+        "isin_code": "GL"
+    },
+    {
+        "name": "GRENADA",
+        "isin_code": "GD"
+    },
+    {
+        "name": "GUADELOUPE",
+        "isin_code": "GP"
+    },
+    {
+        "name": "GUAM",
+        "isin_code": "GU"
+    },
+    {
+        "name": "GUATEMALA",
+        "isin_code": "GT"
+    },
+    {
+        "name": "GUERNSEY",
+        "isin_code": "GG"
+    },
+    {
+        "name": "GUINEA",
+        "isin_code": "GN"
+    },
+    {
+        "name": "GUINEA-BISSAU",
+        "isin_code": "GW"
+    },
+    {
+        "name": "GUYANA",
+        "isin_code": "GY"
+    },
+    {
+        "name": "HAITI",
+        "isin_code": "HT"
+    },
+    {
+        "name": "HEARD ISLAND AND MCDONALD ISLANDS",
+        "isin_code": "HM"
+    },
+    {
+        "name": "HOLY SEE (VATICAN CITY STATE)",
+        "isin_code": "VA"
+    },
+    {
+        "name": "HONDURAS",
+        "isin_code": "HN"
+    },
+    {
+        "name": "HONG KONG",
+        "isin_code": "HK"
+    },
+    {
+        "name": "HUNGARY",
+        "isin_code": "HU"
+    },
+    {
+        "name": "ICELAND",
+        "isin_code": "IS"
+    },
+    {
+        "name": "INDIA",
+        "isin_code": "IN"
+    },
+    {
+        "name": "INDONESIA",
+        "isin_code": "ID"
+    },
+    {
+        "name": "IRAN, ISLAMIC REPUBLIC OF",
+        "isin_code": "IR"
+    },
+    {
+        "name": "IRAQ",
+        "isin_code": "IQ"
+    },
+    {
+        "name": "IRELAND",
+        "isin_code": "IE"
+    },
+    {
+        "name": "ISLE OF MAN",
+        "isin_code": "IM"
+    },
+    {
+        "name": "ISRAEL",
+        "isin_code": "IL"
+    },
+    {
+        "name": "ITALY",
+        "isin_code": "IT"
+    },
+    {
+        "name": "JAMAICA",
+        "isin_code": "JM"
+    },
+    {
+        "name": "JAPAN",
+        "isin_code": "JP"
+    },
+    {
+        "name": "JERSEY",
+        "isin_code": "JE"
+    },
+    {
+        "name": "JORDAN",
+        "isin_code": "JO"
+    },
+    {
+        "name": "KAZAKHSTAN",
+        "isin_code": "KZ"
+    },
+    {
+        "name": "KENYA",
+        "isin_code": "KE"
+    },
+    {
+        "name": "KIRIBATI",
+        "isin_code": "KI"
+    },
+    {
+        "name": "KOREA, DEMOCRATIC PEOPLE’S REPUBLIC OF",
+        "isin_code": "KP"
+    },
+    {
+        "name": "KOREA, REPUBLIC OF",
+        "isin_code": "KR"
+    },
+    {
+        "name": "KUWAIT",
+        "isin_code": "KW"
+    },
+    {
+        "name": "KYRGYZSTAN",
+        "isin_code": "KG"
+    },
+    {
+        "name": "LAO PEOPLE’S DEMOCRATIC REPUBLIC",
+        "isin_code": "LA"
+    },
+    {
+        "name": "LATVIA",
+        "isin_code": "LV"
+    },
+    {
+        "name": "LEBANON",
+        "isin_code": "LB"
+    },
+    {
+        "name": "LESOTHO",
+        "isin_code": "LS"
+    },
+    {
+        "name": "LIBERIA",
+        "isin_code": "LR"
+    },
+    {
+        "name": "LIBYA",
+        "isin_code": "LY"
+    },
+    {
+        "name": "LIECHTENSTEIN",
+        "isin_code": "LI"
+    },
+    {
+        "name": "LITHUANIA",
+        "isin_code": "LT"
+    },
+    {
+        "name": "LUXEMBOURG",
+        "isin_code": "LU"
+    },
+    {
+        "name": "MACAO",
+        "isin_code": "MO"
+    },
+    {
+        "name": "MACEDONIA, THE FORMER YUGOSLAV REPUBLIC OF",
+        "isin_code": "MK"
+    },
+    {
+        "name": "MADAGASCAR",
+        "isin_code": "MG"
+    },
+    {
+        "name": "MALAWI",
+        "isin_code": "MW"
+    },
+    {
+        "name": "MALAYSIA",
+        "isin_code": "MY"
+    },
+    {
+        "name": "MALDIVES",
+        "isin_code": "MV"
+    },
+    {
+        "name": "MALI",
+        "isin_code": "ML"
+    },
+    {
+        "name": "MALTA",
+        "isin_code": "MT"
+    },
+    {
+        "name": "MARSHALL ISLANDS",
+        "isin_code": "MH"
+    },
+    {
+        "name": "MARTINIQUE",
+        "isin_code": "MQ"
+    },
+    {
+        "name": "MAURITANIA",
+        "isin_code": "MR"
+    },
+    {
+        "name": "MAURITIUS",
+        "isin_code": "MU"
+    },
+    {
+        "name": "MAYOTTE",
+        "isin_code": "YT"
+    },
+    {
+        "name": "MEXICO",
+        "isin_code": "MX"
+    },
+    {
+        "name": "MICRONESIA, FEDERATED STATES OF",
+        "isin_code": "FM"
+    },
+    {
+        "name": "MOLDOVA, REPUBLIC OF",
+        "isin_code": "MD"
+    },
+    {
+        "name": "MONACO",
+        "isin_code": "MC"
+    },
+    {
+        "name": "MONGOLIA",
+        "isin_code": "MN"
+    },
+    {
+        "name": "MONTENEGRO",
+        "isin_code": "ME"
+    },
+    {
+        "name": "MONTSERRAT",
+        "isin_code": "MS"
+    },
+    {
+        "name": "MOROCCO",
+        "isin_code": "MA"
+    },
+    {
+        "name": "MOZAMBIQUE",
+        "isin_code": "MZ"
+    },
+    {
+        "name": "MYANMAR",
+        "isin_code": "MM"
+    },
+    {
+        "name": "NAMIBIA",
+        "isin_code": "NA"
+    },
+    {
+        "name": "NAURU",
+        "isin_code": "NR"
+    },
+    {
+        "name": "NEPAL",
+        "isin_code": "NP"
+    },
+    {
+        "name": "NETHERLANDS",
+        "isin_code": "NL"
+    },
+    {
+        "name": "NEW CALEDONIA",
+        "isin_code": "NC"
+    },
+    {
+        "name": "NEW ZEALAND",
+        "isin_code": "NZ"
+    },
+    {
+        "name": "NICARAGUA",
+        "isin_code": "NI"
+    },
+    {
+        "name": "NIGER",
+        "isin_code": "NE"
+    },
+    {
+        "name": "NIGERIA",
+        "isin_code": "NG"
+    },
+    {
+        "name": "NIUE",
+        "isin_code": "NU"
+    },
+    {
+        "name": "NORFOLK ISLAND",
+        "isin_code": "NF"
+    },
+    {
+        "name": "NORTHERN MARIANA ISLANDS",
+        "isin_code": "MP"
+    },
+    {
+        "name": "NORWAY",
+        "isin_code": "NO"
+    },
+    {
+        "name": "OMAN",
+        "isin_code": "OM"
+    },
+    {
+        "name": "PAKISTAN",
+        "isin_code": "PK"
+    },
+    {
+        "name": "PALAU",
+        "isin_code": "PW"
+    },
+    {
+        "name": "PALESTINIAN TERRITORY, OCCUPIED",
+        "isin_code": "PS"
+    },
+    {
+        "name": "PANAMA",
+        "isin_code": "PA"
+    },
+    {
+        "name": "PAPUA NEW GUINEA",
+        "isin_code": "PG"
+    },
+    {
+        "name": "PARAGUAY",
+        "isin_code": "PY"
+    },
+    {
+        "name": "PERU",
+        "isin_code": "PE"
+    },
+    {
+        "name": "PHILIPPINES",
+        "isin_code": "PH"
+    },
+    {
+        "name": "PITCAIRN",
+        "isin_code": "PN"
+    },
+    {
+        "name": "POLAND",
+        "isin_code": "PL"
+    },
+    {
+        "name": "PORTUGAL",
+        "isin_code": "PT"
+    },
+    {
+        "name": "PUERTO RICO",
+        "isin_code": "PR"
+    },
+    {
+        "name": "QATAR",
+        "isin_code": "QA"
+    },
+    {
+        "name": "RÉUNION",
+        "isin_code": "RE"
+    },
+    {
+        "name": "ROMANIA",
+        "isin_code": "RO"
+    },
+    {
+        "name": "RUSSIAN FEDERATION",
+        "isin_code": "RU"
+    },
+    {
+        "name": "RWANDA",
+        "isin_code": "RW"
+    },
+    {
+        "name": "SAINT BARTHÉLEMY",
+        "isin_code": "BL"
+    },
+    {
+        "name": "SAINT HELENA, ASCENSION AND TRISTAN DA CUNHA",
+        "isin_code": "SH"
+    },
+    {
+        "name": "SAINT KITTS AND NEVIS",
+        "isin_code": "KN"
+    },
+    {
+        "name": "SAINT LUCIA",
+        "isin_code": "LC"
+    },
+    {
+        "name": "SAINT MARTIN (FRENCH PART)",
+        "isin_code": "MF"
+    },
+    {
+        "name": "SAINT PIERRE AND MIQUELON",
+        "isin_code": "PM"
+    },
+    {
+        "name": "SAINT VINCENT AND THE GRENADINES",
+        "isin_code": "VC"
+    },
+    {
+        "name": "SAMOA",
+        "isin_code": "WS"
+    },
+    {
+        "name": "SAN MARINO",
+        "isin_code": "SM"
+    },
+    {
+        "name": "SAO TOME AND PRINCIPE",
+        "isin_code": "ST"
+    },
+    {
+        "name": "SAUDI ARABIA",
+        "isin_code": "SA"
+    },
+    {
+        "name": "SENEGAL",
+        "isin_code": "SN"
+    },
+    {
+        "name": "SERBIA",
+        "isin_code": "RS"
+    },
+    {
+        "name": "SEYCHELLES",
+        "isin_code": "SC"
+    },
+    {
+        "name": "SIERRA LEONE",
+        "isin_code": "SL"
+    },
+    {
+        "name": "SINGAPORE",
+        "isin_code": "SG"
+    },
+    {
+        "name": "SINT MAARTEN (DUTCH PART)",
+        "isin_code": "SX"
+    },
+    {
+        "name": "SLOVAKIA",
+        "isin_code": "SK"
+    },
+    {
+        "name": "SLOVENIA",
+        "isin_code": "SI"
+    },
+    {
+        "name": "SOLOMON ISLANDS",
+        "isin_code": "SB"
+    },
+    {
+        "name": "SOMALIA",
+        "isin_code": "SO"
+    },
+    {
+        "name": "SOUTH AFRICA",
+        "isin_code": "ZA"
+    },
+    {
+        "name": "SOUTH GEORGIA AND THE SOUTH SANDWICH ISLANDS",
+        "isin_code": "GS"
+    },
+    {
+        "name": "SOUTH SUDAN",
+        "isin_code": "SS"
+    },
+    {
+        "name": "SPAIN",
+        "isin_code": "ES"
+    },
+    {
+        "name": "SRI LANKA",
+        "isin_code": "LK"
+    },
+    {
+        "name": "SUDAN",
+        "isin_code": "SD"
+    },
+    {
+        "name": "SURINAME",
+        "isin_code": "SR"
+    },
+    {
+        "name": "SVALBARD AND JAN MAYEN",
+        "isin_code": "SJ"
+    },
+    {
+        "name": "SWAZILAND",
+        "isin_code": "SZ"
+    },
+    {
+        "name": "SWEDEN",
+        "isin_code": "SE"
+    },
+    {
+        "name": "SWITZERLAND",
+        "isin_code": "CH"
+    },
+    {
+        "name": "SYRIAN ARAB REPUBLIC",
+        "isin_code": "SY"
+    },
+    {
+        "name": "TAIWAN, PROVINCE OF CHINA",
+        "isin_code": "TW"
+    },
+    {
+        "name": "TAJIKISTAN",
+        "isin_code": "TJ"
+    },
+    {
+        "name": "TANZANIA, UNITED REPUBLIC OF",
+        "isin_code": "TZ"
+    },
+    {
+        "name": "THAILAND",
+        "isin_code": "TH"
+    },
+    {
+        "name": "TIMOR-LESTE",
+        "isin_code": "TL"
+    },
+    {
+        "name": "TOGO",
+        "isin_code": "TG"
+    },
+    {
+        "name": "TOKELAU",
+        "isin_code": "TK"
+    },
+    {
+        "name": "TONGA",
+        "isin_code": "TO"
+    },
+    {
+        "name": "TRINIDAD AND TOBAGO",
+        "isin_code": "TT"
+    },
+    {
+        "name": "TUNISIA",
+        "isin_code": "TN"
+    },
+    {
+        "name": "TURKEY",
+        "isin_code": "TR"
+    },
+    {
+        "name": "TURKMENISTAN",
+        "isin_code": "TM"
+    },
+    {
+        "name": "TURKS AND CAICOS ISLANDS",
+        "isin_code": "TC"
+    },
+    {
+        "name": "TUVALU",
+        "isin_code": "TV"
+    },
+    {
+        "name": "UGANDA",
+        "isin_code": "UG"
+    },
+    {
+        "name": "UKRAINE",
+        "isin_code": "UA"
+    },
+    {
+        "name": "UNITED ARAB EMIRATES",
+        "isin_code": "AE"
+    },
+    {
+        "name": "UNITED KINGDOM",
+        "isin_code": "GB"
+    },
+    {
+        "name": "UNITED STATES",
+        "isin_code": "US"
+    },
+    {
+        "name": "UNITED STATES MINOR OUTLYING ISLANDS",
+        "isin_code": "UM"
+    },
+    {
+        "name": "URUGUAY",
+        "isin_code": "UY"
+    },
+    {
+        "name": "UZBEKISTAN",
+        "isin_code": "UZ"
+    },
+    {
+        "name": "VANUATU",
+        "isin_code": "VU"
+    },
+    {
+        "name": "VENEZUELA, BOLIVARIAN REPUBLIC OF",
+        "isin_code": "VE"
+    },
+    {
+        "name": "VIET NAM",
+        "isin_code": "VN"
+    },
+    {
+        "name": "VIRGIN ISLANDS, BRITISH",
+        "isin_code": "VG"
+    },
+    {
+        "name": "VIRGIN ISLANDS, U.S.",
+        "isin_code": "VI"
+    },
+    {
+        "name": "WALLIS AND FUTUNA",
+        "isin_code": "WF"
+    },
+    {
+        "name": "WESTERN SAHARA",
+        "isin_code": "EH"
+    },
+    {
+        "name": "YEMEN",
+        "isin_code": "YE"
+    },
+    {
+        "name": "ZAMBIA",
+        "isin_code": "ZM"
+    },
+    {
+        "name": "ZIMBABWE",
+        "isin_code": "ZW"
+    }
+]
