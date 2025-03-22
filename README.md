@@ -90,6 +90,7 @@ Neste software, existem alguns pressupostos que são considerados:
 
 1. Assume-se que todas as vendas de ações/ETFs foram declaradas corretamente nos seus respetivos anos.
 2. É **necessário o carregamento do histórico completo das compras e vendas dos ativos vendidos**, ou seja, é necessário carregar os dados desde o ano em que foi feita a primeira compra do ativo na corretora. Para saber o porquê desta necessidade, consultar secção _[Como funciona?](#como-funciona)_.
+3. Apenas suporta a declaração de ações e ETFs.
 
 ## Quais são as corretoras suportadas?
 
