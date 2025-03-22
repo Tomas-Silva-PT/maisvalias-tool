@@ -1,16 +1,19 @@
 import json
 import yfinance as yf
 
+from src.models.country import Country
+
 class Asset:
-    def __init__(self, ticker : str, isin : str):
+    def __init__(self, ticker : str, isin : str, currency : str):
         self.ticker = ticker
         self.isin = isin
-        self.country_domiciled = {}
+        self.country_domiciled = ''
         self.asset_type = ''
+        self.currency = currency
     
     def fetch_data(self, asset_buffer : 'AssetBuffer'):
         if asset_buffer:
-            buffered_asset = asset_buffer.get(self.isin)
+            buffered_asset = asset_buffer.get(self.isin, self.ticker, self.currency)
             if buffered_asset is not None:
                 #print("Found in buffer: " + buffered_asset.ticker)
                 self.country_domiciled = buffered_asset.country_domiciled
@@ -18,9 +21,7 @@ class Asset:
                 return
         
         # Obter país de domicilio
-        with open('./data/codigos_paises.json', 'r', encoding='utf-8') as file:
-            paises = json.load(file)
-            self.country_domiciled = next((p for p in paises if p["alpha_2"] == self.isin[:2]), None)
+        self.country_domiciled = Country(self.isin[:2])#next((p for p in paises if p["alpha_2"] == self.isin[:2]), None)
         # Obter tipo de ativo
         self.asset_type = yf.Ticker(self.isin).info.get("quoteType", "")
         
@@ -32,20 +33,21 @@ class Asset:
         return f"Asset(Ticker: {self.ticker}, ISIN: {self.isin})"
 
     def __repr__(self):
-        return f"Asset(Ticker: {self.ticker}, ISIN: {self.isin}, Country Domiciled: {self.country_domiciled}, Asset Type: {self.asset_type})"
+        return f"Asset(Ticker: {self.ticker}, ISIN: {self.isin}, Country Domiciled: {self.country_domiciled}, Asset Type: {self.asset_type}, Currency: {self.currency})"
     
     def __eq__(self, other):
-        return self.isin == other.isin
+        return self.isin == other.isin and self.currency == other.currency and self.ticker == other.ticker
     
     def __hash__(self):
-        return hash((self.isin))
+        return hash((self.ticker, self.isin, self.currency))
     
     def to_dict(self):
         return {
             "ticker": self.ticker,
             "isin": self.isin,
             "country_domiciled": self.country_domiciled,
-            "asset_type": self.asset_type
+            "asset_type": self.asset_type,
+            "currency": self.currency
         }
         
     def from_dict(self, data : dict):
@@ -53,7 +55,7 @@ class Asset:
         self.isin = data["isin"]
         self.country_domiciled = data["country_domiciled"]
         self.asset_type = data["asset_type"]
-        
+        self.currency = data["currency"]
 
 class AssetBuffer:
     def __init__(self):
@@ -62,5 +64,5 @@ class AssetBuffer:
     def add(self, asset : Asset):
         self.assets.append(asset)
         
-    def get(self, isin : str) -> Asset:
-        return next((a for a in self.assets if a.isin == isin), None)
+    def get(self, isin : str, ticker : str, currency : str) -> Asset:
+        return next((a for a in self.assets if a.isin == isin and a.currency == currency and a.ticker == ticker), None)
