@@ -27,7 +27,7 @@ class PTDividendsFormatter:
             dividend = {
                 "Ticker": dividend_transaction.asset.ticker,
                 "Código Rendimento": "E11 - Dividendos ou lucros - sem retenção em Portugal",
-                "País da fonte": f"{country_domiciled['code']} - {country_domiciled['name_pt']}",
+                "País da fonte": f"{country_domiciled.code} - {country_domiciled.name_pt}",
                 "Rendimento Bruto": total_amount,
             }
             

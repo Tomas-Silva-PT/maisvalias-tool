@@ -44,30 +44,26 @@ No nosso caso particular, teremos de utilizar as compras de 2020, 2021 e 2022 pa
 **O valor de realização (ou valor de venda) segue a seguinte fórmula: `Valor de 1 ação * nº de ações vendidas`**.
 
 No exemplo, a venda de 2 ações por 1000€ significa que o `Valor de 1 ação` foi de `(1000 / 2) = 500€`.
-<div style="margin-left: auto;
-            margin-right: auto;
-            width: 60%">
 
-| Ano | Valor unitário | Nº de ações vendidas | Valor de Realização
-| :-: | :-: | :-:  | :-:  |
-| 2020 | 1000€ / 2 = 500€ | 1 | 500€ * 1 = 500€ |
-| 2021 | 1000€ / 2 = 500€ | 0.8 | 500€ * 0.8 = 400€  |
-| 2022 | 1000€ / 2 = 500€ | 0.2 | 500€ * 0.2 = 100€ |
 
-</div>
+| Ano | Nº de ações vendidas | Valor de Realização
+| :-: | :-:  | :-:  |
+| 2020 | 1 | 500€ * 1 = 500€ |
+| 2021 | 0.8 | 500€ * 0.8 = 400€  |
+| 2022 | 0.2 | 500€ * 0.2 = 100€ |
+
+
 
 **O valor de aquisição (ou valor de compra) segue a seguinte fórmula: `Valor comprado * nº de ações vendidas / nº ações compradas`**.
-<div style="margin-left: auto;
-            margin-right: auto;
-            width: 80%">
 
-| Ano | Valor comprado | Nº de ações compradas | Nº de ações vendidas | Valor de Aquisição
-| :-: | :-: | :-:  | :-: | :-: |
-| 2020 | 100€ | 1 | 1 | 100€ * 1 / 1 = 100€ |
-| 2021 | 100€ | 0.8 |  0.8 | 100€ * 0.8 / 0.8 = 100€ |
-| 2022 | 100€ | 0.6 |  0.2 | 100€ * 0.2 / 0.6 = 33.33€ |
 
-</div>
+| Ano | Nº de ações compradas | Nº de ações vendidas | Valor de Aquisição
+| :-: | :-:  | :-: | :-: |
+| 2020 | 1 | 1 | 100€ * 1 / 1 = 100€ |
+| 2021 | 0.8 |  0.8 | 100€ * 0.8 / 0.8 = 100€ |
+| 2022 | 0.6 |  0.2 | 100€ * 0.2 / 0.6 = 33.33€ |
+
+
 
 Neste caso a declaração das mais valias teria então de ter a seguinte informação, de forma simplista:
 
@@ -84,13 +80,49 @@ Sendo assim a mais-valia foi de:
 * Valor total de compra: `100€ + 100€ + 33.33€ = 233.33€`
 * Mais valia: `1000€ - 233.33 = 766.67€`
 
-## Quais os pressupostos?
+O exemplo acima não tem em conta impostos retidos no estrangeiros ou despesas e encargos na compra e venda de ações/ETFs.
+
+As despesas e encargos, assim como os impostos retidos no estrangeiro seguem a mesma lógica o valor de realização quando aplicados **no momento da venda**. Isto significa que se uma venda compensar múltiplas compras, os encargos de venda serão distribuídos pelas compras compensadas, conforme a fração de ações que a compra representa na venda. Assim, **imaginando que na venda existiu um encargo de 100€:**
+
+
+
+| Ano |  Nº de ações compradas | Nº de ações vendidas | Valor do encargo
+| :-: |  :-:  | :-: | :-: |
+| 2020 |  1 | 1 | 100€ * 1 / 2 = 50€ |
+| 2021 |  0.8 |  0.8 | 100€ * 0.8 / 2 = 40€ |
+| 2022 |  0.6 |  0.2 | 100€ * 0.2 / 2 = 10€ |
+
+
+
+Os aplicados no momento de compra são somados no valor de aquisição.
+Assim, **se houver um encargo de 10€ em cada compra**, então:
+
+| Ano |  Nº de ações compradas | Nº de ações vendidas | Valor do encargo
+| :-: |  :-:  | :-: | :-: |
+| 2020 |  1 | 1 | 10€ * 1 / 1 = 10€ |
+| 2021 |  0.8 |  0.8 | 10€ * 0.8 / 0.8 = 10€ |
+| 2022 |  0.6 |  0.2 | 10€ * 0.2 / 0.6 = 3.33€ |
+
+O total de encargos seria:
+
+
+
+| Ano |  Total encargos
+| :-: |  :-:  |
+| 2020 |  10€ + 50€ = 60€ |
+| 2021 |  10€ + 40€ = 50€ |
+| 2022 |  3.33€ + 10€ = 13.33€ | 
+
+Este raciocínio aplica-se tanto para os encargos como para os impostos retidos na fonte.
+
+## Quais os pressupostos/limitações?
 
 Neste software, existem alguns pressupostos que são considerados:
 
 1. Assume-se que todas as vendas de ações/ETFs foram declaradas corretamente nos seus respetivos anos.
 2. É **necessário o carregamento do histórico completo das compras e vendas dos ativos vendidos**, ou seja, é necessário carregar os dados desde o ano em que foi feita a primeira compra do ativo na corretora. Para saber o porquê desta necessidade, consultar secção _[Como funciona?](#como-funciona)_.
 3. Apenas suporta a declaração de ações e ETFs.
+4. No ficheiro das transações fornecido pela **Trading212** não consta o _Exchange Rate_ utilizado na conversão de moedas, quando se trata de dividendos. Por este motivo é utilizada o rácio de fecho do dia em que o dividendo foi pago.
 
 ## Quais são as corretoras suportadas?
 
@@ -102,7 +134,6 @@ De seguida são apresentadas as corretoras **atualmente** suportadas:
 | Corretoras suportadas |
 | :-: |
 | <img title="Trading212" alt="T212" src="https://th.bing.com/th/id/R.49fba07b493df66a09a2744a56da5a12?rik=f1LkkhRSkudvig&pid=ImgRaw&r=0" width="200" height="auto"/> |
-
 </div>
 
 ## Como utilizar?
