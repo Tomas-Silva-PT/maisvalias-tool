@@ -5,7 +5,7 @@ class PTCapitalGainsFormatter:
     def __init__(self):
         pass
     
-    def format(self, statement : Statement, year, currency = "EUR"):
+    def format(self, statement : Statement, year, currency = "EUR") -> list:
         # Obter transacoes referentes às compras e vendas
         transactions = statement.get_transactions()
         buy_transactions = [transaction for transaction in transactions if transaction.type == "Buy"]
