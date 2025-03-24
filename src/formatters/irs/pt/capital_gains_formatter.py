@@ -1,3 +1,4 @@
+from src.models.currency import Currency
 from src.models.statement import Statement
 from datetime import datetime
 
@@ -64,15 +65,26 @@ class PTCapitalGainsFormatter:
             if (sell_date.year != int(year)):
                 continue
             
+            # Converter o montante da venda para a moeda da declaração
+            if compensation["sell"].net_amount_currency == currency:
+                sell_net_amount = compensation["sell"].net_amount
+            else:
+                sell_net_amount = Currency().convert(compensation["sell"].net_amount, compensation["sell"].net_amount_currency, currency, compensation["sell"].date)
+                
+                
+            
             # Venda - Cálculo das despesas e encargos
             sell_fees = compensation["sell"].fees
             sell_fees_amount = 0
             for fee in sell_fees:
                 if(fee.currency == currency):
                     sell_fees_amount += fee.amount
+                else:
+                    sell_fees_amount += Currency().convert(fee.amount, fee.currency, currency, compensation["sell"].date)
+                    
             
             sell_fees_amount = sell_fees_amount * compensation["shares"] / compensation["sell"].shares # Para considerar casos onde uma venda compensou múltiplas compras, daí estas despesas terem de ser relativas a esta compensação
-            sell_gross_amount = compensation["sell"].net_amount - sell_fees_amount
+            sell_gross_amount = sell_net_amount - sell_fees_amount
             
             # Venda - Cálculo dos impostos
             sell_taxes = compensation["sell"].taxes
@@ -80,6 +92,9 @@ class PTCapitalGainsFormatter:
             for tax in sell_taxes:
                 if(tax.currency == currency):
                     sell_taxes_amount += tax.amount
+                else:
+                    sell_taxes_amount += Currency().convert(tax.amount, tax.currency, currency, compensation["sell"].date)
+                    
             
             sell_taxes_amount = sell_taxes_amount * compensation["shares"] / compensation["sell"].shares # Para explicação, ver README.md na parte das despesas e encargos
             sell_gross_amount -= sell_taxes_amount
@@ -90,15 +105,25 @@ class PTCapitalGainsFormatter:
             realized_value = sell_unit_value * compensation["shares"]
             
             
+            # Converter o montante da compra para a moeda da declaração
+            if compensation["buy"].net_amount_currency == currency:
+                buy_net_amount = compensation["buy"].net_amount
+            else:
+                buy_net_amount = Currency().convert(compensation["buy"].net_amount, compensation["buy"].net_amount_currency, currency, compensation["buy"].date)
+                
+            
             # Compra - Cálculo das despesas e encargos
             buy_fees = compensation["buy"].fees
             buy_fees_amount = 0
             for fee in buy_fees:
                 if(fee.currency == currency):
                     buy_fees_amount += fee.amount
+                else:
+                    buy_fees_amount += Currency().convert(fee.amount, fee.currency, currency, compensation["buy"].date)
+                    
                     
             buy_fees_amount = buy_fees_amount * compensation["shares"] / compensation["buy"].shares
-            buy_gross_amount = compensation["buy"].net_amount + buy_fees_amount
+            buy_gross_amount = buy_net_amount + buy_fees_amount
             
             # Compra - Cálculo dos impostos
             buy_taxes = compensation["buy"].taxes
@@ -106,6 +131,9 @@ class PTCapitalGainsFormatter:
             for tax in buy_taxes:
                 if(tax.currency == currency):
                     buy_taxes_amount += tax.amount
+                else:
+                    buy_taxes_amount += Currency().convert(tax.amount, tax.currency, currency, compensation["buy"].date)
+                    
             
             buy_taxes_amount = buy_taxes_amount * compensation["shares"] / compensation["buy"].shares # Para explicação, ver README.md na parte das despesas e encargos
             buy_gross_amount += buy_taxes_amount
