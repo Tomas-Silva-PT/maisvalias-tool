@@ -1,4 +1,5 @@
 from src.models import Statement, Transaction
+from src.models.currency import Currency
 
 class PTDividendsFormatter:
     def __init__(self):
@@ -25,17 +26,24 @@ class PTDividendsFormatter:
             for dividend_transaction in dividend_transactions:
                 if dividend_transaction.net_amount_currency == currency:
                     total_net_amount += dividend_transaction.net_amount
+                else:
+                    total_net_amount += Currency().convert(dividend_transaction.net_amount, dividend_transaction.net_amount_currency, currency, dividend_transaction.date)
+                    
             total_fees_amount = 0
             for dividend_transaction in dividend_transactions:
                 for dividend_fee in dividend_transaction.fees:
                     if dividend_fee.currency == currency:
                         total_fees_amount += dividend_fee.amount
-            
+                    else:
+                        total_fees_amount += Currency().convert(dividend_fee.amount, dividend_fee.currency, currency, dividend_transaction.date)
+                        
             total_tax_amount = 0
             for dividend_transaction in dividend_transactions:
                 for dividend_tax in dividend_transaction.taxes:
                     if dividend_tax.currency == currency:
                         total_tax_amount += dividend_tax.amount
+                    else:
+                        total_tax_amount += Currency().convert(dividend_tax.amount, dividend_tax.currency, currency, dividend_transaction.date)
                         
                         
             dividend_transaction = dividend_transactions[0]

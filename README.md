@@ -19,7 +19,7 @@ O algoritmo por detrás do cálculo das mais valias é o seguinte:
 Imaginando que, todos os anos, desde 2020, faço uma compra de 100€ do ETF _VUAA_.
 No final do ano de 2024, por motivos pessoais, fiz uma venda correspondente a 2 ações do ETF.
 
-O meu extrato de transações, de forma simplista e com valores hipotéticos, será algo como:
+O meu extrato de transações, de forma simplista e com valores hipotéticos, seria algo como:
 
 | Ano | Transação | Nº de ações | Montante |
 | :-: | :-: | :-: | :-: |
@@ -37,7 +37,7 @@ No ano de 2025, em que terei de preencher a declaração referente às mais vali
 Segundo [alínea d), nº 6, artigo 43](https://info.portaldasfinancas.gov.pt/pt/informacao_fiscal/codigos_tributarios/irs/Pages/irs47.aspx) do código do imposto sobre o rendimento das pessoas singulares (CIRS), a data de aquisição segue a estratégia FIFO - _First In First Out_. 
 Isto significa que a venda das 2 ações devem ser compensadas com as compras mais antigas (e que ainda não foram compensadas por vendas anteriores).
 
-No nosso caso particular, teremos de utilizar as compras de 2020, 2021 e 2022 para compensar a venda, já que a soma das ações compradas nesses anos, dá `1 + 0.8 + 0.2 = 2`. Neste caso apenas declaramos a venda de 0.2 das 0.6 ações compradas em 2022.
+Neste caso particular, teremos de utilizar as compras de 2020, 2021 e 2022 para compensar a venda, já que a soma das ações compradas nesses anos, dá `1 + 0.8 + 0.2 = 2`. Neste caso apenas declaramos a venda de 0.2 das 0.6 ações compradas em 2022.
 
 #### Calcular as mais-valias
 
@@ -65,7 +65,7 @@ No exemplo, a venda de 2 ações por 1000€ significa que o `Valor de 1 ação`
 
 
 
-Neste caso a declaração das mais valias teria então de ter a seguinte informação, de forma simplista:
+Neste caso a declaração das mais valias teria de ter a seguinte informação, de forma simplista:
 
 | Ano de Aquisição | Valor de Aquisição | Ano de Realização | Valor de Realização |
 | :-: | :-: | :-: | :-: |
@@ -80,9 +80,9 @@ Sendo assim a mais-valia foi de:
 * Valor total de compra: `100€ + 100€ + 33.33€ = 233.33€`
 * Mais valia: `1000€ - 233.33 = 766.67€`
 
-O exemplo acima não tem em conta impostos retidos no estrangeiros ou despesas e encargos na compra e venda de ações/ETFs.
+O exemplo acima não tem em conta impostos retidos no estrangeiro ou despesas e encargos na compra e venda de ações/ETFs.
 
-As despesas e encargos, assim como os impostos retidos no estrangeiro seguem a mesma lógica o valor de realização quando aplicados **no momento da venda**. Isto significa que se uma venda compensar múltiplas compras, os encargos de venda serão distribuídos pelas compras compensadas, conforme a fração de ações que a compra representa na venda. Assim, **imaginando que na venda existiu um encargo de 100€:**
+As despesas e encargos, assim como os impostos retidos no estrangeiro seguem a mesma lógica do valor de realização quando aplicados **no momento da venda**. Isto significa que se uma venda compensar múltiplas compras, os encargos de venda serão distribuídos pelas compras compensadas, conforme a fração de ações que a compra representa na venda. Assim, **imaginando que na venda existiu um encargo de 100€:**
 
 
 
@@ -94,7 +94,7 @@ As despesas e encargos, assim como os impostos retidos no estrangeiro seguem a m
 
 
 
-Os aplicados no momento de compra são somados no valor de aquisição.
+Os encargos aplicados no momento de compra são somados no valor de aquisição.
 Assim, **se houver um encargo de 10€ em cada compra**, então:
 
 | Ano |  Nº de ações compradas | Nº de ações vendidas | Valor do encargo
