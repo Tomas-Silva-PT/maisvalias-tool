@@ -36,33 +36,35 @@
 
 #################################### VERIFICAR SE É ETF ou STOCK ############################################
 
-# import yfinance as yf
+import yfinance as yf
 
-# def is_etf(ticker):
-#     asset_type = yf.Ticker(ticker).info.get("quoteType", "")
-#     print(asset_type)
-#     return asset_type == "ETF"
+def is_etf(ticker):
+    asset = yf.Ticker(ticker).info
+    print(asset)
+    asset_type = asset.get("quoteType", "")
+    print(asset_type)
+    return asset_type == "ETF"
 
-# # Example usage
-# print(is_etf("IE00BL0BMZ89"))   # True (ETF)
+# Example usage
+print(is_etf("IE00B5BMR087"))   # True (ETF)
 # print(is_etf("BTC-USD"))  # False (Stock)
 
 
 #################################### OBTER CURRENCY EXCHANGE RATE ############################################
 
-import yfinance as yf
+# import yfinance as yf
 
-# Define the ticker symbol for EUR/USD
-src = 'EUR'
-dst = 'USD'
-ticker = f'{src}{dst}=X'
+# # Define the ticker symbol for EUR/USD
+# src = 'EUR'
+# dst = 'USD'
+# ticker = f'{src}{dst}=X'
 
-# Fetch the data
-data = yf.Ticker(ticker)
+# # Fetch the data
+# data = yf.Ticker(ticker)
 
-# Get historical market data
-hist = data.history(start="2023-01-06")
+# # Get historical market data
+# hist = data.history(start="2024-02-01")
 
-# Print the latest exchange rate
-print(hist)
-print(len(hist))
+# # Print the latest exchange rate
+# print(hist)
+# print(len(hist))
