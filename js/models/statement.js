@@ -4,8 +4,10 @@ class Statement {
         this.sortTransactions();
     }
 
-    fetchData(assetBuffer) {
-        this.transactions.forEach(transaction => transaction.fetchData(assetBuffer));
+    async fetchData(assetBuffer) {
+        for (let transaction of this.transactions) {
+            await transaction.fetchData(assetBuffer);
+        }
     }
 
     addTransaction(transaction) {
