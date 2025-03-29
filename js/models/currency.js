@@ -31,9 +31,9 @@ class Currency {
     }
 }
 
-let currency = new Currency();
-let value = await currency.convert(100, 'USD', 'EUR', '2023-01-06');
-console.log(value);
+// let currency = new Currency();
+// let value = await currency.convert(100, 'USD', 'EUR', '2023-01-06');
+// console.log(value);
 
 
 export { Currency };

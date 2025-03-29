@@ -1,4 +1,4 @@
-import { Country } from "./country";
+import { Country } from "./country.js";
 import yf from "yahoo-finance2";
 
 class Asset {
@@ -26,7 +26,7 @@ class Asset {
         // Obter tipo de ativo usando Yahoo Finance
         try {
             const assetInfo = await yf.search(this.isin);
-            this.assetType = assetInfo?.price?.quoteType || "";
+            this.assetType = assetInfo?.quotes[0]?.quoteType || "";
         } catch (error) {
             console.error("Erro ao buscar dados do ativo:", error);
         }

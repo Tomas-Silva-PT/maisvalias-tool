@@ -1,9 +1,9 @@
-import { Currency } from "./Currency";
+import { Currency } from "../../../models/currency.js";
 
 class PTCapitalGainsFormatter {
     constructor() {}
 
-    format(statement, year, currency = "EUR") {
+    async format(statement, year, currency = "EUR") {
         // Obter transacoes referentes às compras e vendas
         const transactions = statement.getTransactions();
         const buyTransactions = transactions.filter(t => t.type === "Buy");
@@ -16,10 +16,10 @@ class PTCapitalGainsFormatter {
         
         // Fazer compensação das vendas com as compras
         const compensations = [];
-        sellTransactions.forEach(sell => {
-            let remainingShares = sell.shares;
-            
-            for (const buy of buyTransactions) {
+        for (let sell of sellTransactions) {
+            let remainingSharesForCompensation = sell.shares;
+
+            for (let buy of buyTransactions) {
                 if (buy.asset.isin !== sell.asset.isin) continue;
                 // Verificar se a compra ocorreu depois da venda, nesse caso, ignorar
                 if (new Date(buy.date) > new Date(sell.date)) continue;
@@ -34,77 +34,126 @@ class PTCapitalGainsFormatter {
                 if (availableShares <= 0) continue;
 
                 // Calcular nº de ações da venda que podem ser compensadas
-                const sharesToCompensate = Math.min(availableShares, remainingShares);
-                remainingShares -= sharesToCompensate;
+                const sharesToCompensate = Math.min(availableShares, remainingSharesForCompensation);
+                remainingSharesForCompensation -= sharesToCompensate;
 
-                compensations.push({ buy, sell, shares: sharesToCompensate });
+                compensations.push({ buy: buy, sell: sell, shares: sharesToCompensate });
 
                 // Verificar se todas as ações da venda foram compensadas
-                if (remainingShares === 0) break;
+                if (remainingSharesForCompensation < Number.EPSILON) break;    
             }
-        });
+        }
 
         // Formatar as compensações no formato das mais valias do IRS PT, referentes ao ano especificado
         const capitalGains = [];
         const currencyConverter = new Currency();
-
-        compensations.forEach(({ buy, sell, shares }) => {
+        for (const compensation of compensations) {
             // Verificar se a venda ocorreu no ano especificado
-            if (new Date(sell.date).getFullYear() !== parseInt(year)) return;
+            if (new Date(compensation["sell"].date).getFullYear() !== parseInt(year)) continue;
 
             // Converter o montante da venda para a moeda da declaração
-            const sellNetAmount = sell.netAmountCurrency === currency
-                ? sell.netAmount
-                : currencyConverter.convert(sell.netAmount, sell.netAmountCurrency, currency, sell.date);
+            let sellNetAmount = 0;
+            if (compensation["sell"].netAmountCurrency === currency) {
+                sellNetAmount = compensation["sell"].netAmount;
+            } else {
+                sellNetAmount = await currencyConverter.convert(compensation["sell"].netAmount, compensation["sell"].netAmountCurrency, currency, compensation["sell"].date);
+            }
 
             // Converter os custos da venda para a moeda da declaração
-            const sellFeesAmount = sell.fees.reduce((sum, fee) => sum + (fee.currency === currency
-                ? fee.amount
-                : currencyConverter.convert(fee.amount, fee.currency, currency, sell.date)), 0) * shares / sell.shares;
-            
+            let sellFeesAmount = 0;
+            for (let fee of compensation["sell"].fees) {
+                if (fee.currency === currency) {
+                    sellFeesAmount += fee.amount;
+                } else {
+                    sellFeesAmount += await currencyConverter.convert(fee.amount, fee.currency, currency, compensation["sell"].date);
+                }
+            }
+            let sellCompensationFeesAmount = sellFeesAmount * compensation["shares"] / compensation["sell"].shares;
+
             // Converter os impostos da venda para a moeda da declaração
-            const sellTaxesAmount = sell.taxes.reduce((sum, tax) => sum + (tax.currency === currency
-                ? tax.amount
-                : currencyConverter.convert(tax.amount, tax.currency, currency, sell.date)), 0) * shares / sell.shares;
+            let sellTaxesAmount = 0;
+            for (let tax of compensation["sell"].taxes) {
+                if (tax.currency === currency) {
+                    sellTaxesAmount += tax.amount;
+                } else {
+                    sellTaxesAmount += await currencyConverter.convert(tax.amount, tax.currency, currency, compensation["sell"].date);
+                }
+            }
+            let sellCompensationTaxesAmount = sellTaxesAmount * compensation["shares"] / compensation["sell"].shares;
 
-            const sellGrossAmount = sellNetAmount - sellFeesAmount - sellTaxesAmount;
-            const sellUnitValue = sellGrossAmount / sell.shares;
-            const realizedValue = sellUnitValue * shares;
+            // Calcular o montante bruto da venda
+            let sellGrossAmount = sellNetAmount + sellFeesAmount + sellTaxesAmount;
+            
+            // Cálculo do valor de realização (valor de venda)
+            let sellUnitValue = sellGrossAmount / compensation["sell"].shares;
+            let realizedValue = sellUnitValue * compensation["shares"];
 
-            const buyNetAmount = buy.netAmountCurrency === currency
-                ? buy.netAmount
-                : currencyConverter.convert(buy.netAmount, buy.netAmountCurrency, currency, buy.date);
+            // Converter o montante da compra para a moeda da declaração
+            let buyNetAmount = 0;
+            if (compensation["buy"].netAmountCurrency === currency) {
+                buyNetAmount = compensation["buy"].netAmount;
+            } else {
+                buyNetAmount = await currencyConverter.convert(compensation["buy"].netAmount, compensation["buy"].netAmountCurrency, currency, compensation["sell"].date);
+            }
 
-            const buyFeesAmount = buy.fees.reduce((sum, fee) => sum + (fee.currency === currency
-                ? fee.amount
-                : currencyConverter.convert(fee.amount, fee.currency, currency, buy.date)), 0) * shares / buy.shares;
+            // Converter os custos da compra para a moeda da declaração
+            let buyFeesAmount = 0;
+            for (let fee of compensation["buy"].fees) {
+                if (fee.currency === currency) {
+                    buyFeesAmount += fee.amount;
+                } else {
+                    buyFeesAmount += await currencyConverter.convert(fee.amount, fee.currency, currency, compensation["buy"].date);
+                }
+            }
+            let buyCompensationFeesAmount = buyFeesAmount * compensation["shares"] / compensation["buy"].shares;
 
-            const buyTaxesAmount = buy.taxes.reduce((sum, tax) => sum + (tax.currency === currency
-                ? tax.amount
-                : currencyConverter.convert(tax.amount, tax.currency, currency, buy.date)), 0) * shares / buy.shares;
+            // Converter os impostos da compra para a moeda da declaração
+            let buyTaxesAmount = 0;
+            for (let tax of compensation["buy"].taxes) {
+                if (tax.currency === currency) {
+                    buyTaxesAmount += tax.amount;
+                } else {
+                    buyTaxesAmount += await currencyConverter.convert(tax.amount, tax.currency, currency, compensation["buy"].date);
+                }
+            }
+            let buyCompensationTaxesAmount = buyTaxesAmount * compensation["shares"] / compensation["buy"].shares;
 
-            const buyGrossAmount = buyNetAmount + buyFeesAmount + buyTaxesAmount;
-            const buyUnitValue = buyGrossAmount / buy.shares;
-            const acquiredValue = buyUnitValue * shares;
+            // Calcular o montante bruto da compra
+            let buyGrossAmount = buyNetAmount + buyFeesAmount + buyTaxesAmount;
+            
+            // Cálculo do valor de aquisição (valor de compra)
+            let buyUnitValue = buyGrossAmount / compensation["buy"].shares;
+            let acquiredValue = buyUnitValue * compensation["shares"];
 
-            const code = buy.asset.assetType === "EQUITY" ? "G01" : "G20";
-            const countryDomiciled = buy.asset.countryDomiciled;
+            let code;
+            switch(compensation["buy"].asset.assetType) {
+                case "EQUITY":
+                    code = "G01"
+                    break;
+                case "ETF":
+                    code = "G20"
+                    break;
+            }
+
+            let countryDomiciled = compensation["buy"].asset.countryDomiciled;
 
             capitalGains.push({
-                Ticker: sell.asset.ticker,
-                "País da fonte": `${countryDomiciled.code} - ${countryDomiciled.name_pt}`,
+                "Ticker": compensation["sell"].asset.ticker,
+                "País da fonte": `${countryDomiciled.code} - ${countryDomiciled.namePt}`,
                 "Código": code,
-                "Ano de Aquisição": new Date(buy.date).getFullYear(),
-                "Mês de Aquisição": new Date(buy.date).getMonth() + 1,
+                "Ano de Aquisição": new Date(compensation["buy"].date).getFullYear(),
+                "Mês de Aquisição": new Date(compensation["buy"].date).getMonth() + 1,
                 "Valor de Aquisição": acquiredValue,
-                "Ano de Realização": new Date(sell.date).getFullYear(),
-                "Mês de Realização": new Date(sell.date).getMonth() + 1,
+                "Ano de Realização": new Date(compensation["sell"].date).getFullYear(),
+                "Mês de Realização": new Date(compensation["sell"].date).getMonth() + 1,
                 "Valor de Realização": realizedValue,
-                "Despesas e Encargos": sellFeesAmount + buyFeesAmount,
-                "Imposto retido no estrangeiro": sellTaxesAmount + buyTaxesAmount,
-                "País da Contraparte": `${sell.broker.country.code} - ${sell.broker.country.name_pt}`
+                "Despesas e Encargos": sellCompensationFeesAmount + buyCompensationFeesAmount,
+                "Imposto retido no estrangeiro": sellCompensationTaxesAmount + buyCompensationTaxesAmount,
+                "País da Contraparte": `${compensation["sell"].broker.country.code} - ${compensation["sell"].broker.country.namePt}`
             });
-        });
+
+        }
+        
 
         return capitalGains;
     }

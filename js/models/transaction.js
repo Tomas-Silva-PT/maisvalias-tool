@@ -1,7 +1,7 @@
-import { Asset, AssetBuffer } from "./asset";
-import { Broker } from "../models/brokers/broker";
-import { Tax } from "./tax";
-import { Fee } from "./fee";
+import { Asset, AssetBuffer } from "./asset.js";
+import { Trading212 } from "./brokers/trading212.js";
+import { Tax } from "./tax.js";
+import { Fee } from "./fee.js";
 
 class Transaction {
     constructor(date, time, type, ticker, isin, shares, assetCurrency, netAmount, netAmountCurrency, taxes, fees, broker) {
@@ -17,8 +17,8 @@ class Transaction {
         this.broker = broker;
     }
 
-    fetchData(assetBuffer) {
-        this.asset.fetchData(assetBuffer);
+    async fetchData(assetBuffer) {
+        await this.asset.fetchData(assetBuffer);
     }
 
     toString() {
