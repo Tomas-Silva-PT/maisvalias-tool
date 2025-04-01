@@ -7,11 +7,26 @@
 }
 
 body {
-    background-color: #121C2A; /* Dark blue background */
+    background-color: #32a084; /* Dark blue background */
     color: #E0E0E0; /* Light text */
     font-size: 16px;
     line-height: 1.5;
-    padding: 20px;
+    padding: 0px;
+}
+
+.logo {
+    margin-bottom: -15px;
+    width: 70px;
+}
+
+.logo-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.clean-link {
+    text-decoration: none;
+    color: inherit;
 }
 
 .container {
@@ -30,25 +45,23 @@ body {
     display: flex;
     justify-content: space-between;
     padding: 15px;
-    background-color: #2C3E50; /* Dark blue-gray navbar */
+    background-color: #121C2A; /* Dark blue-gray navbar */
     color: white;
-    border-radius: 5px;
+    border-radius: 0px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     margin-bottom: 20px;
     flex-wrap: wrap;
     align-items: center;
 }
 
-.navbar .logo {
-    width: 50px;
-}
 
 .navbar .app-name a {
     color: white;
     text-decoration: none;
-    font-size: 20px;
+    font-size: 10px;
     font-weight: bold;
     transition: color 0.3s ease;
+    
 }
 
 .navbar .app-name a:hover {
