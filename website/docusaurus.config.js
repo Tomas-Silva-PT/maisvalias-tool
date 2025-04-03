@@ -124,6 +124,10 @@ const config = {
                 label: 'GitHub',
                 href: 'https://github.com/Tomas-Silva-PT/maisvalias-tool',
               },
+              {
+                label: 'Comunidade',
+                href: 'https://github.com/Tomas-Silva-PT/maisvalias-tool/discussions'
+              }
             ],
           },
         ],
