@@ -18,6 +18,10 @@ Para quem utiliza a plataforma _Trading212_ para efetuar os seus investimentos p
 
 Se estiveres interesado e quiseres saberes mais informações acerca desta ferramenta, está tudo documentado [aqui](https://tomas-silva-pt.github.io/maisvalias-tool/docs/intro).
 
+* [Como funciona?](https://tomas-silva-pt.github.io/maisvalias-tool/docs/intro/#-como-funciona)
+* [Quais os pressupostos/limitações?](https://tomas-silva-pt.github.io/maisvalias-tool/docs/intro/#%EF%B8%8F-quais-os-pressupostos-e-limita%C3%A7%C3%B5es)
+* [Quais são as corretoras suportadas?](https://tomas-silva-pt.github.io/maisvalias-tool/docs/category/corretoras-suportadas)
+
 ## Disclaimer
 
 _O **maisvalias-tool** é uma ferramenta independente, cujos resultados produzidos não têm carácter vinculativo. Como tal, deve existir uma retificação dos resultados, assim como a consulta da legislação em vigor, consultando sempre que necessário a Autoridade Tributária e Aduaneira.
