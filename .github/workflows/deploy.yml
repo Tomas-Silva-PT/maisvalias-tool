@@ -14,17 +14,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
-          cache: 'npm'  # 👈 Use npm cache
+          node-version-file: website/package.json
+          cache: "npm"
           cache-dependency-path: website/package-lock.json
 
       - name: Install dependencies
+        working-directory: website/
         run: npm ci  # 👈 npm equivalent of yarn install --frozen-lockfile
 
       - name: Build website
+        working-directory: website/
         run: npm run build
 
       - name: Upload Build Artifact
