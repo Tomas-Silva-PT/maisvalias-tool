@@ -19,6 +19,7 @@ jobs:
         with:
           node-version: 22
           cache: 'npm'  # 👈 Use npm cache
+          cache-dependency-path: website/package-lock.json
 
       - name: Install dependencies
         run: npm ci  # 👈 npm equivalent of yarn install --frozen-lockfile
