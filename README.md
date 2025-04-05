@@ -4,6 +4,8 @@
 
 ---
 
+# ⚠️ **Não utilizar! Esta ferramenta ainda está em processo de desenvolvimento!**
+
 # maisvalias-tool
 
 ## O que é?
