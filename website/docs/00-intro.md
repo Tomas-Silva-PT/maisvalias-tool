@@ -37,7 +37,7 @@ De seguida, são apresentadas as corretoras **atualmente** suportadas:
 |:-:|
 | ![Trading212](https://th.bing.com/th/id/R.49fba07b493df66a09a2744a56da5a12?rik=f1LkkhRSkudvig&pid=ImgRaw&r=0) **Trading212** |
 
-## 🛠️ Como utilizar? 
+
 
 ## 🔍 Como funciona?  
 
@@ -55,6 +55,9 @@ A **maisvalias-tool** calcula automaticamente os valores de mais-valias a declar
 Para mais detalhes sobre como carregar os dados ou casos específicos, consulta a secção [Como utilizar?](#-como-funciona).
 
 Se quiseres mais detalhes sobre o racíocinio por detrás desta ferramenta, consulta a secção [Algoritmo](./conceitos-chave/algoritmo).
+
+## 🛠️ Como utilizar? 
+
 
 ## ⚠️ Disclaimer  
 
