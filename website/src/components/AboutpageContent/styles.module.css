@@ -1,0 +1,37 @@
+.section {
+    padding-bottom: 4rem;
+    color: var(--ifm-color-text);
+}
+
+.text {
+  color: var(--ifm-color-text);
+  text-align: justify;
+  font-size: 1.125rem;
+}
+
+.paragraph {
+  width: 100%;
+  padding: 2rem;
+  padding-bottom: 0rem;
+  padding-top: 3rem;
+  padding-left: 20vh;
+  padding-right: 20vh;
+}
+
+.title {
+  margin-top: 5rem;
+  text-align: center;
+}
+
+.fadeIn {
+  animation: fadeIn 1.5s ease-in-out; /* Apply the fadeIn animation */
+}
+
+@keyframes fadeIn {
+  from {
+      opacity: 0; /* Start with opacity 0 (invisible) */
+  }
+  to {
+      opacity: 1; /* End with opacity 1 (fully visible) */
+  }
+}
