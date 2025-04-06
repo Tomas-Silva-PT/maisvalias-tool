@@ -38,6 +38,7 @@ body {
     max-width: 1200px;
     margin: 0 auto;
     animation: fadeIn 1s ease-in;
+    padding: 4rem;
 }
 
 /* Navbar Styles */

@@ -1,0 +1,23 @@
+.features {
+  display: flex;
+  align-items: center;
+  padding: 2rem 0;
+  width: 100%;
+}
+
+.featureSvg {
+  height: 200px;
+  width: 200px;
+}
+
+.howitworksTitle {
+  font-size: 3rem;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 5rem;
+}
+
+.howitworksSection {
+  margin-top: 5rem;
+  margin-bottom: 2rem;
+}
