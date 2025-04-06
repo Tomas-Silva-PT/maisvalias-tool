@@ -1,0 +1,44 @@
+.section {
+  margin-top: 5rem;
+  background: linear-gradient(
+      191deg,
+      rgba(43, 200, 169, 0) 53%,
+      var(--ifm-color-secondary) 89%
+    ),
+    linear-gradient(
+      166deg,
+      rgba(43, 200, 169, 0) 53%,
+      var(--ifm-color-secondary) 89%
+    ),
+    var(--ifm-color-primary-lighter)
+    ;
+
+    padding-bottom: 4rem;
+    
+    color: black;
+
+    clip-path: polygon(100% 10%, 86% 13%, 68% 20%, 55% 20%, 37% 30%, 22% 28%, 7% 28%, 0% 41%, 0% 100%, 100% 100%);
+
+}
+
+.title {
+  font-size: 3rem;
+  display: flex;
+  justify-content: center;
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.link {
+  margin: 1rem;
+}
+
+.stockline {
+  width: 100%;
+  height: 23vh;
+  stroke: var(--ifm-color-strokeline);
+}

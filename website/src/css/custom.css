@@ -11,10 +11,18 @@
   --ifm-color-primary-darker: #277148;
   --ifm-color-primary-darkest: #205d3b;
   --ifm-color-primary-light: #33925d;
-  --ifm-color-primary-lighter: #359962;
+  /* --ifm-color-primary-lighter: #359962; */
+  --ifm-color-primary-lighter: #32d8b4;
   --ifm-color-primary-lightest: #3cad6e;
   --ifm-code-font-size: 95%;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+
+  --ifm-color-secondary: rgba(33, 175, 199, 1);
+  --ifm-color-strokeline: black;
+  --ifm-navbar-text-outline-opacity: 0;
+  --ifm-navbar-text-color: black;
+
+  --ifm-navbar-link-color: black;
 }
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
@@ -27,6 +35,14 @@
   --ifm-color-primary-lighter: #32d8b4;
   --ifm-color-primary-lightest: #4fddbf;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+
+  --ifm-color-secondary: rgba(33, 175, 199, 1);
+  --ifm-color-strokeline: white;
+
+  --ifm-navbar-text-outline-opacity: 0;
+  --ifm-navbar-text-color: black;
+
+  --ifm-navbar-link-color: black;
 }
 
 .header-github-link:hover {
@@ -40,4 +56,74 @@
   display: flex;
   background: url('../../static/img/icons8-github.svg') no-repeat;
   background-size: contain;
+}
+
+
+
+.navbar {
+  background-color: var(--ifm-color-primary-lighter);
+  box-shadow: none;
+  text-shadow: 
+  1px 1px 1px rgba(0, 0, 0, var(--ifm-navbar-text-outline-opacity)), /* Stronger, more visible shadow */
+  -1px -1px 1px rgba(0, 0, 0, var(--ifm-navbar-text-outline-opacity)),
+  1px -1px 1px rgba(0, 0, 0, var(--ifm-navbar-text-outline-opacity)),
+  -1px 1px 1px rgba(0, 0, 0, var(--ifm-navbar-text-outline-opacity));
+  color: var(--ifm-navbar-text-color);
+}
+
+.navbar a:hover {
+  color: white; /* Change this to your desired hover color */
+}
+
+.hero-subtitle {
+  color: black;
+}
+
+.hero-title {
+  color: black;
+}
+
+/* Animations */
+
+.hero-fade-in {
+  animation: heroFadeIn 1.5s ease-in-out; /* Apply the fadeIn animation */
+}
+
+@keyframes heroFadeIn {
+  from {
+      transform: translateY(-50%);
+      opacity: 0; /* Start with opacity 0 (invisible) */
+  }
+  to {
+      opacity: 1; /* End with opacity 1 (fully visible) */
+  }
+}
+
+.feature-fade-in {
+  animation: featureFadeIn 1.5s ease-in-out; /* Apply the fadeIn animation */
+}
+
+@keyframes featureFadeIn {
+  from {
+      transform: translateX(-50%);
+      opacity: 0; /* Start with opacity 0 (invisible) */
+  }
+  to {
+      opacity: 1; /* End with opacity 1 (fully visible) */
+  }
+}
+
+.animated-line {
+  stroke-dasharray: 300; /* Adjust to the length of your polyline */
+  stroke-dashoffset: 300; /* Start with the stroke hidden */
+  animation: drawLine 5s ease forwards; /* Animation: 3 seconds, ease-in, and end at the final state */
+}
+
+@keyframes drawLine {
+  0% {
+    stroke-dashoffset: 300; /* Start with the stroke completely hidden */
+  }
+  100% {
+    stroke-dashoffset: 0; /* End with the stroke fully visible */
+  }
 }

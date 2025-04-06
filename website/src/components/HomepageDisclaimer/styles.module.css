@@ -1,0 +1,28 @@
+.section {
+
+  background: linear-gradient(
+      15deg,
+      rgba(43, 200, 169, 0) 30%,
+      var(--ifm-color-secondary) 75%
+    ),
+    linear-gradient(
+      340deg,
+      rgba(43, 200, 169, 0) 30%,
+      var(--ifm-color-secondary) 75%
+    ),
+    var(--ifm-color-primary-lighter)
+    ;
+
+    padding-bottom: 4rem;
+    
+    color: black;
+
+}
+
+.text {
+  color: white;
+  font-weight: bold;
+  padding: 2rem;
+  height:100%;
+  text-align: center;
+}
