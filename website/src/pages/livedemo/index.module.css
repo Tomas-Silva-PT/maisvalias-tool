@@ -1,0 +1,92 @@
+/**
+ * CSS files with the .module.css suffix will be treated as CSS modules
+ * and scoped locally.
+ */
+
+.heroBanner {
+  padding: 0 0;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.stockline {
+  height: 23vh;
+  stroke: var(--ifm-color-strokeline);
+}
+
+
+
+
+.buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.homepageHeader {
+  background: linear-gradient(
+      191deg,
+      rgba(43, 200, 169, 0) 53%,
+      var(--ifm-color-secondary) 89%
+    ),
+    linear-gradient(
+      166deg,
+      rgba(43, 200, 169, 0) 53%,
+      var(--ifm-color-secondary) 89%
+    ),
+    var(--ifm-color-primary-lighter)
+    ;
+
+    clip-path: polygon(0% 90%, 14% 87%, 32% 80%, 45% 80%, 63% 70%, 78% 72%, 93% 72%, 100% 59%, 100% 0%, 0% 0%);
+    /* clip-path: url(#arrowClip); */
+
+}
+
+
+
+.heroContent {
+  width: 100%;
+}
+
+.heroSection {
+  padding-top: 2rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  width: 100%
+}
+
+/* .homepageHeader::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 125%;
+  background: url('../../static/img/arrow.svg');
+  background-size: cover;
+} */
+
+@media screen and (max-width: 933px) {
+  .stockline {
+    height: 23vh;
+  }
+}
+
+@media screen and (max-width: 517px) {
+  .stockline {
+    height: 33vh;
+  }
+}
+
+@media screen and (max-width: 404px) {
+  .stockline {
+    height: 40vh;
+  }
+}
+
+@media screen and (max-width: 365px) {
+  .stockline {
+    height: 45vh;
+  }
+}
