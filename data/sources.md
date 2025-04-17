@@ -6,3 +6,23 @@ https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2
 Preenchimento do Anexo J: 
 https://taofinance.pt/irs-anexo-j-declaracao-de-mais-valias-obtidas-no-estrangeiro/
 https://taofinance.pt/como-declarar-dividendos-de-acoes/#declarar-dividendos-estrangeiro
+
+
+https://www.alphavantage.co/support/#api-key
+0OI0PY4I1W4Z2T6B
+
+[Exemplo API Yahoo Finance](https://query1.finance.yahoo.com/v8/finance/chart/EUR=X?period1=1735603200&period2=1735689600&interval=1d)
+
+
+https://query1.finance.yahoo.com/v8/finance/search?q=USD/EUR
+
+https://query2.finance.yahoo.com/ws/fundamentals-timeseries/v1/finance/timeseries/AAPL?symbol=AAPL
+
+https://query2.finance.yahoo.com/v8/finance/chart/EUR=X?period1=1735603200&period2=1735689600&interval=1d
+
+https://query1.finance.yahoo.com/v8/finance/search?q=apple&lang=en-US&includePrePost=false&interval=2m&useYfid=true&range=1d&corsDomain=finance.yahoo.com&.tsrc=finance
+
+https://query1.finance.yahoo.com/v8/finance/chart/EURUSD=X?lang=en-US&includePrePost=false&interval=2m&useYfid=true&range=1d&corsDomain=finance.yahoo.com&.tsrc=finance
+
+https://www.reddit.com/r/sheets/comments/12snqft/broken_yahoo_finance_api_url/
+

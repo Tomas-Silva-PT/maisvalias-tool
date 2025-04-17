@@ -36,8 +36,8 @@ function LiveDemoHeader() {
           <polyline
             points="-1,84 14,78 32,65 45,65 63,47 78,51 94,52 103,22"
             fill="none"
-            stroke-width="4"
-            class="animated-line"
+            strokeWidth="4"
+            className="animated-line"
           />
         </svg>
       </div>

@@ -43,8 +43,8 @@ function AboutPageHeader() {
             points="-1,83 14,75 32,61 45,61 63,40 78,44 94,45 103,7"
             fill="none"
 
-            stroke-width="4"
-            class="animated-line"
+            strokeWidth="4"
+            className="animated-line"
           />
         </svg>
       </div>

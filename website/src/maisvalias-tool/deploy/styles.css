@@ -1,0 +1,279 @@
+/* General Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+body {
+    background-color: #32a084; /* Dark blue background */
+    color: #E0E0E0; /* Light text */
+    font-size: 16px;
+    line-height: 1.5;
+    padding: 0px;
+}
+
+.logo {
+    margin-bottom: -15px;
+    width: 70px;
+}
+
+.logo-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.clean-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.container {
+    background-color: #1F2A35; /* Slightly lighter dark blue */
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    animation: fadeIn 1s ease-in;
+    padding: 4rem;
+}
+
+/* Navbar Styles */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px;
+    background-color: #121C2A; /* Dark blue-gray navbar */
+    color: white;
+    border-radius: 0px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+
+.navbar .app-name a {
+    color: white;
+    text-decoration: none;
+    font-size: 10px;
+    font-weight: bold;
+    transition: color 0.3s ease;
+    
+}
+
+.navbar .app-name a:hover {
+    color: #1abc9c; /* Soft green on hover */
+}
+
+/* Form Section */
+.upload-section {
+    margin-bottom: 30px;
+}
+
+.upload-section label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #ddd; /* Lighter label color */
+}
+
+.upload-section select, 
+.upload-section input[type="file"], 
+.upload-section button {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #444; /* Darker borders */
+    border-radius: 5px;
+    font-size: 16px;
+    background-color: #34495E; /* Dark blue-gray for form elements */
+    color: #fff; /* Light text */
+    transition: border-color 0.3s ease;
+}
+
+.upload-section select:focus,
+.upload-section input[type="file"]:focus,
+.upload-section button:focus {
+    border-color: #1abc9c; /* Soft green focus border */
+}
+
+.upload-section button {
+    background-color: #16a085; /* Soft green button */
+    color: white;
+    cursor: pointer;
+    border: none;
+    font-weight: bold;
+}
+
+.upload-section button:hover {
+    background-color: #1abc9c; /* Slightly lighter green on hover */
+}
+
+/* Tables */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 30px;
+    animation: slideIn 1s ease-in-out;
+}
+
+th, td {
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #444; /* Darker borders for table */
+}
+
+th {
+    background-color: #1abc9c; /* Soft green header */
+    color: white;
+    font-weight: bold;
+}
+
+td {
+    background-color: #34495E; /* Dark blue-gray table cells */
+}
+
+tr:nth-child(even) td {
+    background-color: #2C3E50; /* Slightly darker background for even rows */
+}
+
+button.download-btn {
+    margin-top: 20px;
+    background-color: #1abc9c; /* Soft green for download buttons */
+    color: white;
+    font-weight: bold;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button.download-btn:hover {
+    background-color: #16a085; /* Darker green on hover */
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(-50%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Media Queries for Responsiveness */
+
+/* Mobile - small devices */
+@media (max-width: 600px) {
+    body {
+        padding: 10px;
+    }
+
+    .navbar {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .navbar .logo {
+        margin-bottom: 10px;
+    }
+
+    .navbar .app-name a {
+        font-size: 18px;
+    }
+
+    .container {
+        padding: 15px;
+    }
+
+    .upload-section select, 
+    .upload-section input[type="file"], 
+    .upload-section button {
+        width: 100%;
+        padding: 10px;
+    }
+
+    table {
+        font-size: 14px;
+    }
+
+    th, td {
+        padding: 10px;
+    }
+
+    button.download-btn {
+        width: 100%;
+        padding: 12px;
+    }
+}
+
+/* Tablet - medium devices */
+@media (min-width: 601px) and (max-width: 900px) {
+    .container {
+        padding: 20px;
+    }
+
+    .upload-section select, 
+    .upload-section input[type="file"], 
+    .upload-section button {
+        width: 100%;
+        padding: 12px;
+    }
+
+    button.download-btn {
+        width: auto;
+        padding: 10px 20px;
+    }
+
+    table {
+        font-size: 16px;
+    }
+
+    th, td {
+        padding: 12px;
+    }
+}
+
+/* Desktop - large devices */
+@media (min-width: 901px) {
+    .container {
+        padding: 30px;
+    }
+
+    .upload-section select, 
+    .upload-section input[type="file"], 
+    .upload-section button {
+        width: 100%;
+        padding: 12px;
+    }
+
+    button.download-btn {
+        width: auto;
+        padding: 10px 20px;
+    }
+
+    table {
+        font-size: 18px;
+    }
+
+    th, td {
+        padding: 15px;
+    }
+}

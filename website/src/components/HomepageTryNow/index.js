@@ -17,8 +17,8 @@ export default function HomepageTryNow() {
         <polyline
           points="-2,90 6,60 22,60 37,64 55,43 68,44 87,29 101,23"
           fill="none"
-          stroke-width="4"
-          class="animated-line"
+          strokeWidth="4"
+          className="animated-line"
         />
       </svg>
 
@@ -27,7 +27,7 @@ export default function HomepageTryNow() {
         <div className={styles.buttons}>
           <Link
             className={clsx("button button--secondary button--lg", styles.link)}
-            to="/docs/intro"
+            to="/livedemo"
           >
             Experimentar
           </Link>

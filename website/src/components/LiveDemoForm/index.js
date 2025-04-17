@@ -6,6 +6,11 @@ import React, { useEffect, useState } from "react";
 import useBaseUrl from "@docusaurus/useBaseUrl";
 import { ArrowRight, Upload, X } from "lucide-react";
 
+import { Statement } from "../../maisvalias-tool/models/statement.js";
+import { Trading212Parser } from "../../maisvalias-tool/parsers/trading212parser.js";
+import { AssetBuffer } from "../../maisvalias-tool/models/asset.js";
+import { PTCapitalGainsFormatter } from "../../maisvalias-tool/formatters/pt/irs/capital_gains_formatter.js";
+
 const steps = [
   {
     num: 1,
@@ -133,7 +138,7 @@ export default function LiveDemoForm() {
     let description = currStepData.description;
     return (
       <>
-        <div className={clsx(styles.content)}>
+        <div className={clsx(styles.content, styles.fadeIn)}>
           <h3>{description}:</h3>
           {currStepData.num === 1 && <ContentStep1 />}
           {currStepData.num === 2 && <ContentStep2 />}
@@ -180,8 +185,42 @@ export default function LiveDemoForm() {
     setFiles((prev) => prev.filter((_, i) => i !== index));
   }
 
-  function onFilesSelected () {
+  async function onFilesSelected() {
+    console.log("Files: " + files);
     if (files.length === 0 || !broker) return;
+
+    const parser = new Trading212Parser();
+    const statement = new Statement([]);
+    const formatter = new PTCapitalGainsFormatter();
+
+    const filePromises = files.map((file) => {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const data = e.target.result;
+          const transactions = parser.parse(data);
+          resolve(transactions);
+        };
+
+        reader.onerror = function (e) {
+          reject(e.target.error);
+        };
+
+        reader.readAsText(file);
+      });
+    });
+
+    let transactions = await Promise.all(filePromises);
+    transactions.forEach((transaction) => {
+      statement.addTransactions(transaction);
+    });
+
+    await statement.fetchData(new AssetBuffer());
+    const capitalGains = await formatter.format(statement, "2023");
+    console.log("Capital Gains: " + capitalGains);
+    console.log("Capital Gains Length: " + capitalGains.length);
+
+
     setStep((step) => step + 1);
   }
 
@@ -191,7 +230,7 @@ export default function LiveDemoForm() {
         <div className={clsx(styles.contentStep2)}>
           <Upload className={clsx(styles.contentStep2UploadIcon)} />
           <input
-            class={clsx(styles.contentStep2UploadInput)}
+            className={clsx(styles.contentStep2UploadInput)}
             id="file-upload"
             type="file"
             accept=".csv"
@@ -211,16 +250,20 @@ export default function LiveDemoForm() {
                       className={clsx(styles.contentStep2FileRemove)}
                       onClick={() => removeFile(index)}
                     >
-                      <X/>
+                      <X />
                     </div>
                   </div>
                 ))}
               </div>
-              <div className={clsx(styles.contentStep2Process)} onClick={onFilesSelected}>
-              <div className={clsx(styles.contentStep2ProcessText)}>
-                Processar {files.length} ficheiro{files.length !== 1 ? "s" : ""}
-              </div>
-              <ArrowRight/>
+              <div
+                className={clsx(styles.contentStep2Process)}
+                onClick={onFilesSelected}
+              >
+                <div className={clsx(styles.contentStep2ProcessText)}>
+                  Processar {files.length} ficheiro
+                  {files.length !== 1 ? "s" : ""}
+                </div>
+                <ArrowRight />
               </div>
             </>
           )}
@@ -234,7 +277,7 @@ export default function LiveDemoForm() {
   }
   return (
     <>
-      <section className={clsx(styles.form)}>
+      <section className={clsx(styles.form, styles.fadeIn)}>
         <Header step={step} />
         <Content step={step} />
       </section>
