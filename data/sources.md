@@ -26,3 +26,10 @@ https://query1.finance.yahoo.com/v8/finance/chart/EURUSD=X?lang=en-US&includePre
 
 https://www.reddit.com/r/sheets/comments/12snqft/broken_yahoo_finance_api_url/
 
+
+
+Proxies
+
+https://allorigins.win/
+
+https://github.com/Freeboard/thingproxy
