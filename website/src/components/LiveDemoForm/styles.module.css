@@ -73,6 +73,21 @@
   align-items: center;
 }
 
+.fadeIn {
+  animation: fadeIn 1.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+
+
 .headerStep {
   /* background: gray; */
   display: flex;
@@ -270,6 +285,7 @@
   justify-content: space-between;
   align-items: center;
   flex-direction: row wrap;
+  color: white;
   text-shadow: 0px 0px 5px rgb(0, 0, 0);
   cursor: pointer;
   z-index: 1;
