@@ -28,6 +28,7 @@ class Asset {
         try {
             // const assetInfo = await yf.search(this.isin);
             // this.assetType = assetInfo?.quotes[0]?.quoteType || "";
+            console.log("Isin: " + this.isin);
             this.assetType = await YahooFinance.getAssetType(this.isin);
         } catch (error) {
             console.error("Erro ao buscar dados do ativo:", error);

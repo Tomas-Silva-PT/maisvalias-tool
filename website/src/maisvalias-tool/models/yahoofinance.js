@@ -2,6 +2,7 @@ class YahooFinance {
   static corsProblem = false;
 
   static async getExchangeRate(fromCurrency, toCurrency, date) {
+    console.log("Getting exchange rate...");
     const ticker = `${fromCurrency}${toCurrency}=X`;
     let exchangeDate = new Date(date);
     let nextExchangeDate = new Date(date);
@@ -31,13 +32,7 @@ class YahooFinance {
         );
       data = await this._delayedFetch(url, 500, 10000);
     }
-
-    // let response = await fetch(url);
-
-    // let data = await response.json();
-    // if (data.length === 0) throw new Error("No exchange rate data found");
-    // console.log(data);
-
+    if (data.contents) data = JSON.parse(data.contents);
     let exchangeRate =
       data["chart"]["result"][0]["indicators"]["quote"][0].close;
     return exchangeRate;
@@ -46,6 +41,7 @@ class YahooFinance {
   static async search(query) {
     let data;
     let url;
+    console.log("Searching...");
     try {
       if(this.corsProblem) { throw new Error("CORS problem"); }
       console.log("Query: " + query);
@@ -76,13 +72,14 @@ class YahooFinance {
       console.error("❌ Fetch failed:", error);
       console.warn("Retrying in 10 seconds...");
       await new Promise((resolve) => setTimeout(resolve, fallbackDelay));
-      return await this._delayedFetch(query);
+      return await this._delayedFetch(url);
     }
   }
 
   static async getAssetType(isin) {
+    console.log("Getting asset type...");
     let data = await this.search(isin);
-    data = JSON.parse(data.contents);
+    if (data.contents) data = JSON.parse(data.contents);
     return data.quotes[0].quoteType;
   }
 }
