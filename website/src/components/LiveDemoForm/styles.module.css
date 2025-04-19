@@ -301,3 +301,130 @@
 .contentStep2ProcessText {
   margin-right: 0.5rem;
 }
+
+.contentStep3 {
+  display: flex;
+  flex-direction: column;
+  place-content: center;
+  place-items: center;
+  height: auto;
+}
+
+.contentStep3Title {
+  background: var(--ifm-color-primary-lighter);
+  margin: 0;
+  width: 100%;
+  text-align: center;
+  /* color: var(--ifm-color-primary-lighter); */
+  color: var(--ifm-color-text);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+
+
+
+.contentStep3Table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background-color: white;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  background-color: rgba(0,0,0,0);
+}
+
+
+.contentStep3TableHeader {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--ifm-color-secondary);
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  font-weight: bold;
+  color: var(--ifm-color-text);
+  text-align: center;
+}
+
+.contentStep3TableHeader div {
+  width: calc(100% / 12);
+}
+
+.contentStep3TableBody {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+}
+
+.contentStep3TableBody > div:nth-child(odd) {
+  background: rgb(231, 231, 231);
+}
+
+.contentStep3TableBody > div:nth-child(even) {
+  background: white;
+}
+
+.contentStep3TableBodyRow {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  color: black;
+}
+
+
+
+.contentStep3TableBodyRow div {
+  width: calc(100% / 12);
+}
+
+.collapsible {
+  
+  color: #444;
+  cursor: pointer;
+  padding: 1rem;
+  width: 100%;
+  border: none;
+  border-top-right-radius: 6px;
+  border-top-left-radius: 6px;
+  text-align: left;
+  outline: none;
+  text-align: center;
+  font-weight: bold;
+  font-size: 1rem;
+  color: var(--ifm-color-text);
+
+}
+
+.yearSection {
+  background: linear-gradient(to bottom, var(--ifm-color-secondary), var(--ifm-color-primary-lighter));
+}
+
+.active, .collapsible:hover {
+  background-color: var(--ifm-color-primary)
+}
+
+.collapsibleContent {
+  overflow: hidden;
+  background-color: #f1f1f1;
+  max-height: 0;
+  width: 100%;
+}
+
+.collapsible:after {
+  content: '\02795'; /* Unicode character for "plus" sign (+) */
+  font-size: 13px;
+  color: white;
+  float: right;
+  margin-left: 5px;
+}
+
+.active:after {
+  content: "\2796"; /* Unicode character for "minus" sign (-) */
+}
