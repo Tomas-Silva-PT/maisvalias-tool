@@ -14,11 +14,11 @@ class Currency {
         p[2] === exchangeRateDate
     );
     if (buffered) {
+      // console.log("Exchange Rate: " + buffered[3]);
       return value * buffered[3];
     }
 
     const exchangeRate = await YahooFinance.getExchangeRate(fromCurrency, toCurrency, exchangeRateDate);
-
     this.buffer.push([
       fromCurrency,
       toCurrency,

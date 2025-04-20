@@ -189,6 +189,9 @@ export default function LiveDemoForm() {
   }
 
   async function onFilesSelected() {
+    const loader = document.getElementById("custom-loader-container");
+    loader.style.display = "flex";
+
     console.log("Files: " + files);
     if (files.length === 0 || !broker) return;
 
@@ -220,9 +223,11 @@ export default function LiveDemoForm() {
     });
 
     await statement.fetchData(new AssetBuffer());
-    let capitalGains = await formatterCapitalGains.format(statement, "2023");
-    let dividends = await formatterDividends.format(statement, "2023");
+    let capitalGains = await formatterCapitalGains.format(statement);
+    let dividends = await formatterDividends.format(statement);
+    dividends = dividends["toUser"];
 
+    loader.style.display = "none";
     setCapitalGains(capitalGains);
     setDividends(dividends);
     setStep((step) => step + 1);
@@ -281,91 +286,162 @@ export default function LiveDemoForm() {
     const content = button.nextElementSibling;
     button.classList.toggle(styles.active);
 
-    if (content.style.maxHeight){
+    if (content.style.maxHeight) {
       content.style.maxHeight = null;
     } else {
-      content.style.maxHeight = '100%';// content.scrollHeight + 'px';
+      content.style.maxHeight = "100%"; // content.scrollHeight + 'px';
       console.log("Height: " + content.scrollHeight);
     }
   }
 
   function ContentStep3(props) {
+    const years = [
+      ...new Set([
+        ...capitalGains.map((gain) => Number(gain["Ano de Realização"])),
+        ...dividends.map((div) => Number(div["Ano rendimento"])),
+      ]),
+    ];
+    console.log("Different years: " + years);
     return (
       <>
         <div className={clsx(styles.contentStep3)}>
-          <button onClick={toggleCollapible} className={clsx(styles.yearSection, styles.collapsible)}>2023</button>
-          <div className={clsx(styles.collapsibleContent)}>
-            <h2 onClick={toggleCollapible} className={clsx(styles.collapsible, styles.contentStep3Title)}>Mais valias</h2>
-            <div className={clsx(styles.collapsibleContent, styles.contentStep3Table)}>
-              <div className={clsx(styles.contentStep3TableHeader)}>
-                <div>Ticker</div>
-                <div>País da fonte</div>
-                <div>Código</div>
-                <div>Ano de Aquisição</div>
-                <div>Mês de Aquisição</div>
-                <div>Valor de Aquisição</div>
-                <div>Ano de Realização</div>
-                <div>Mês de Realização</div>
-                <div>Valor de Realização</div>
-                <div>Despesas e Encargos</div>
-                <div>Imposto retido no estrangeiro</div>
-                <div>País da Contraparte</div>
-              </div>
-              <div className={clsx(styles.contentStep3TableBody)}>
-                {capitalGains.length > 0 &&
-                  capitalGains.map((capitalGain, index) => (
-                    <div
-                      key={index}
-                      className={clsx(styles.contentStep3TableBodyRow)}
+          {
+
+            years.sort((a, b) => b - a)
+            .map((year) => {
+              const capitalGainsForYear = capitalGains.filter(
+                (gain) => gain["Ano de Realização"] == year
+              );
+              const dividendsForYear = dividends.filter(
+                (div) => (div["Ano rendimento"]) == year
+              );
+              return (
+                <div className={clsx(styles.contentStep3Year)}>
+                  <button
+                    onClick={toggleCollapible}
+                    className={clsx(styles.yearSection, styles.collapsible)}
+                  >
+                    {year}
+                  </button>
+                  <div className={clsx(styles.collapsibleContent)}>
+                    <h2
+                      onClick={toggleCollapible}
+                      className={clsx(
+                        styles.collapsible,
+                        styles.contentStep3Title
+                      )}
                     >
-                      <div>{capitalGain["Ticker"]}</div>
-                      <div>{capitalGain["País da fonte"]}</div>
-                      <div>{capitalGain["Código"]}</div>
-                      <div>{capitalGain["Ano de Aquisição"]}</div>
-                      <div>{capitalGain["Mês de Aquisição"]}</div>
-                      <div>{capitalGain["Valor de Aquisição"]}</div>
-                      <div>{capitalGain["Ano de Realização"]}</div>
-                      <div>{capitalGain["Mês de Realização"]}</div>
-                      <div>{capitalGain["Valor de Realização"]}</div>
-                      <div>{capitalGain["Despesas e Encargos"]}</div>
-                      <div>{capitalGain["Imposto retido no estrangeiro"]}</div>
-                      <div>{capitalGain["País da Contraparte"]}</div>
-                    </div>
-                  ))}
-              </div>
-            </div>
-            <h2 onClick={toggleCollapible} className={clsx(styles.collapsible, styles.contentStep3Title)}>Dividendos</h2>
-            <div className={clsx(styles.collapsibleContent, styles.contentStep3Table)}>
-              <div className={clsx(styles.contentStep3TableHeader)}>
-                <div>Ticker</div>
-                <div>Código Rendimento</div>
-                <div>País da fonte</div>
-                <div>Rendimento Bruto</div>
-                <div>Imposto Pago no Estrangeiro - No país da fonte</div>
-              </div>
-              <div className={clsx(styles.contentStep3TableBody)}>
-                {dividends.length > 0 &&
-                  dividends.map((dividend, index) => (
-                    <div
-                      key={index}
-                      className={clsx(styles.contentStep3TableBodyRow)}
+                      Mais valias ({capitalGainsForYear.length})
+                    </h2>
+                    {
+                      capitalGainsForYear.length > 0 && (
+                        <div
+                      className={clsx(
+                        styles.collapsibleContent,
+                        styles.contentStep3Table
+                      )}
                     >
-                      <div>{dividend["Ticker"]}</div>
-                      <div>{dividend["Código Rendimento"]}</div>
-                      <div>{dividend["País da fonte"]}</div>
-                      <div>{dividend["Rendimento Bruto"]}</div>
-                      <div>
-                        {
-                          dividend[
-                            "Imposto Pago no Estrangeiro - No país da fonte"
-                          ]
-                        }
+                      <div className={clsx(styles.contentStep3TableHeader)}>
+                        <div>Ticker</div>
+                        <div>País da fonte</div>
+                        <div>Código</div>
+                        <div>Ano de Aquisição</div>
+                        <div>Mês de Aquisição</div>
+                        <div>Dia de Aquisição</div>
+                        <div>Valor de Aquisição</div>
+                        <div>Ano de Realização</div>
+                        <div>Mês de Realização</div>
+                        <div>Dia de Realização</div>
+                        <div>Valor de Realização</div>
+                        <div>Despesas e Encargos</div>
+                        <div>Imposto retido no estrangeiro</div>
+                        <div>País da Contraparte</div>
+                      </div>
+                      <div className={clsx(styles.contentStep3TableBody)}>
+                        {capitalGainsForYear.length > 0 &&
+                          capitalGainsForYear.map((capitalGain, index) => (
+                            <div
+                              key={index}
+                              className={clsx(styles.contentStep3TableBodyRow)}
+                            >
+                              <div>{capitalGain["Ticker"]}</div>
+                              <div>{capitalGain["País da fonte"]}</div>
+                              <div>{capitalGain["Código"]}</div>
+                              <div>{capitalGain["Ano de Aquisição"]}</div>
+                              <div>{capitalGain["Mês de Aquisição"]}</div>
+                              <div>{capitalGain["Dia de Aquisição"]}</div>
+                              <div>{capitalGain["Valor de Aquisição"]}</div>
+                              <div>{capitalGain["Ano de Realização"]}</div>
+                              <div>{capitalGain["Mês de Realização"]}</div>
+                              <div>{capitalGain["Dia de Realização"]}</div>
+                              <div>{capitalGain["Valor de Realização"]}</div>
+                              <div>{capitalGain["Despesas e Encargos"]}</div>
+                              <div>
+                                {capitalGain["Imposto retido no estrangeiro"]}
+                              </div>
+                              <div>{capitalGain["País da Contraparte"]}</div>
+                            </div>
+                          ))}
                       </div>
                     </div>
-                  ))}
-              </div>
-            </div>
-          </div>
+                      )
+                    }
+                    
+                    <h2
+                      onClick={toggleCollapible}
+                      className={clsx(
+                        styles.collapsible,
+                        styles.contentStep3Title
+                      )}
+                    >
+                      Dividendos ({dividendsForYear.length})
+                    </h2>
+                    {
+                      dividendsForYear.length > 0 && (
+                        <div
+                      className={clsx(
+                        styles.contentStep3Table,
+                        styles.collapsibleContent
+                      )}
+                    >
+                      <div className={clsx(styles.contentStep3TableHeader)}>
+                        <div>Ticker</div>
+                        <div>Código Rendimento</div>
+                        <div>País da fonte</div>
+                        <div>Rendimento Bruto</div>
+                        <div>
+                          Imposto Pago no Estrangeiro - No país da fonte
+                        </div>
+                      </div>
+                      <div className={clsx(styles.contentStep3TableBody)}>
+                        {dividendsForYear.length > 0 &&
+                          dividendsForYear.map((dividend, index) => (
+                            <div
+                              key={index}
+                              className={clsx(styles.contentStep3TableBodyRow)}
+                            >
+                              <div>{dividend["Ticker"]}</div>
+                              <div>{dividend["Código Rendimento"]}</div>
+                              <div>{dividend["País da fonte"]}</div>
+                              <div>{dividend["Rendimento Bruto"]}</div>
+                              <div>
+                                {
+                                  dividend[
+                                    "Imposto Pago no Estrangeiro - No país da fonte"
+                                  ]
+                                }
+                              </div>
+                            </div>
+                          ))}
+                      </div>
+                    </div>
+                      )
+                    }
+                    
+                  </div>
+                </div>
+              );
+            })}
         </div>
       </>
     );
