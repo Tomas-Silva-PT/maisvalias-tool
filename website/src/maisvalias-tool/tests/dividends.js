@@ -8,6 +8,7 @@ async function test() {
   const startTime = Date.now();
   const filesPath = [
     "./data/t212_2023.csv",
+    "./data/t212_2023.csv",
     "./data/t212_2024.csv",
     "./data/t212_2024.csv",
     "./data/t212_2022.csv",
@@ -24,7 +25,7 @@ async function test() {
   await statement.fetchData(new AssetBuffer());
   let parsingTime = Date.now() - startTime;
   const formatter = new PTDividendsFormatter();
-  const dividends = await formatter.format(statement, "2023");
+  const dividends = await formatter.format(statement);
 
   const formattingTime = Date.now() - startTime;
 

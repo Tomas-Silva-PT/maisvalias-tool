@@ -312,12 +312,13 @@
 
 .contentStep3Title {
   background: var(--ifm-color-primary-lighter);
-  margin: 0;
   width: 100%;
+  margin:0;
   text-align: center;
   /* color: var(--ifm-color-primary-lighter); */
   color: var(--ifm-color-text);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
 }
 
 
@@ -329,8 +330,6 @@
   margin: 0;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   background-color: white;
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
   background-color: rgba(0,0,0,0);
 }
 
@@ -341,8 +340,7 @@
   justify-content: space-between;
   align-items: center;
   background-color: var(--ifm-color-secondary);
-  border-top-left-radius: 6px;
-  border-top-right-radius: 6px;
+
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   font-weight: bold;
   color: var(--ifm-color-text);
@@ -391,8 +389,6 @@
   padding: 1rem;
   width: 100%;
   border: none;
-  border-top-right-radius: 6px;
-  border-top-left-radius: 6px;
   text-align: left;
   outline: none;
   text-align: center;
@@ -404,17 +400,19 @@
 
 .yearSection {
   background: linear-gradient(to bottom, var(--ifm-color-secondary), var(--ifm-color-primary-lighter));
+  
 }
 
-.active, .collapsible:hover {
-  background-color: var(--ifm-color-primary)
+.contentStep3Year {
+  margin-bottom: 1rem;
+  width: 100%;
 }
 
 .collapsibleContent {
   overflow: hidden;
-  background-color: #f1f1f1;
   max-height: 0;
   width: 100%;
+
 }
 
 .collapsible:after {

@@ -49,9 +49,9 @@ class Transaction {
             this.shares === other.shares &&
             this.netAmount === other.netAmount &&
             this.netAmountCurrency === other.netAmountCurrency &&
-            JSON.stringify(this.taxes) === JSON.stringify(other.taxes) &&
-            this.broker === other.broker &&
-            JSON.stringify(this.fees) === JSON.stringify(other.fees)
+            Tax.isEquals(this.taxes, other.taxes) &&
+            Trading212.isEquals(this.broker, other.broker) &&
+            Fee.isEquals(this.fees, other.fees)
         );
     }
 

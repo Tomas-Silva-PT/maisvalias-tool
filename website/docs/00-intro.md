@@ -28,6 +28,7 @@ Nesta ferramenta, existem alguns pressupostos que são considerados para o bom f
 2. 📂 **Histórico completo:** É necessário o carregamento do histórico completo das compras e vendas dos ativos vendidos, ou seja, carregar os dados desde o ano em que foi feita a primeira compra do ativo na corretora. Para saber o porquê desta necessidade, consultar a secção Como funciona?.
 3. 📊 **Ações e ETFs:** Apenas suporta a declaração de ações e ETFs.
 4. 💱 **Taxa de câmbio:** No ficheiro das transações fornecido pela Trading212 não consta o Exchange Rate utilizado na conversão de moedas, quando se trata de dividendos. Por este motivo, é utilizado o rácio de fecho do dia em que o dividendo foi pago.
+5. 🌍 **Apenas rendimentos no estrangeiro:** Esta ferramenta foi pensada para a declaração de **investimentos no estrangeiros através de corretoras estrangeiras**. Lembra-te que isso pode afetar alguns resultados apresentados pela ferramenta!
 
 ## 🏦 Quais são as corretoras suportadas?  
 

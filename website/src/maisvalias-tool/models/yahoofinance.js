@@ -27,14 +27,14 @@ class YahooFinance {
             "?period1=" +
             unixDate +
             "&period2=" +
-            unixNextDate +
+            unixDate +
             "&interval=1d"
         );
       data = await this._delayedFetch(url, 500, 10000);
     }
     if (data.contents) data = JSON.parse(data.contents);
     let exchangeRate =
-      data["chart"]["result"][0]["indicators"]["quote"][0].close;
+      data["chart"]["result"][0]["indicators"]["quote"][0]["close"][0];
     return exchangeRate;
   }
 

@@ -8,7 +8,6 @@ import styles from "./index.module.css";
 
 import LiveDemoForm from "@site/src/components/LiveDemoForm";
 
-
 function LiveDemoHeader() {
   const { siteConfig } = useDocusaurusContext();
   return (
@@ -63,6 +62,10 @@ export default function LiveDemoPage() {
     >
       <LiveDemoHeader />
       <main>
+        <div id="custom-loader-container">
+          <div class="custom-loader"></div>
+          <p class="custom-loader-text">Calculando...</p>
+        </div>
         <LiveDemoContent />
       </main>
     </Layout>
