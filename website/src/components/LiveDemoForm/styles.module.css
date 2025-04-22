@@ -124,7 +124,7 @@
   border-radius: 50%;
   font-size: 1.125em;
   font-weight: bold;
-  text-shadow: 0px 0px 8px black;
+  text-shadow: 0px 0px 8px var(--ifm-inverse-color-text);
 }
 
 .headerStepTitle {
@@ -425,4 +425,178 @@
 
 .active:after {
   content: "\2796"; /* Unicode character for "minus" sign (-) */
+}
+
+/* Fiscal Year Card CSS */
+
+.threedots {
+  color: var(--ifm-color-text);
+  fill: var(--ifm-color-text);
+  cursor: pointer
+}
+
+.threedots:hover {
+  color: var(--ifm-color-primary);
+  fill: var(--ifm-color-primary);
+}
+
+.fiscalCard {
+  background-color: inherit;
+  border: 1px solid var(--ifm-color-secondary);
+  border-radius: 1rem;
+  padding: 1rem;
+  box-shadow: 0 0px 10px var(--ifm-color-secondary);
+  width: 100%;
+  margin: 1rem;
+}
+
+.fiscalCardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--ifm-color-secondary);
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.fiscalCardTitle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: bold;
+  font-size: 1.2rem;
+  width: 100%;
+}
+
+.fiscalCardTitle > * {
+  margin: 0;
+}
+
+.fiscalCardButton {
+  background-color: var(--ifm-color-primary);
+  border: none;
+  padding: 0.5rem 1rem;
+  color: white;
+  font-weight: bold;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+.fiscalCardButton:hover {
+  background-color: var(--ifm-color-secondary);
+}
+
+.fiscalCardTabs {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.fiscalCardTabs button {
+  background: none;
+  border: 2px solid transparent;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-weight: bold;
+  color: inherit;
+  transition: border 0.2s ease-in-out;
+}
+
+.fiscalCardTabs button.fiscalCardTabActive {
+  /* border-color: var(--ifm-color-primary); */
+  /* background-color: var(--ifm-color-primary); */
+  color: var(--ifm-color-primary);
+  border-bottom: 3px solid var(--ifm-color-primary);
+}
+
+.fiscalCardTabActive {
+
+}
+
+.fiscalCardTable {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: inherit;
+}
+
+.fiscalCardTable th, .fiscalCardTable td {
+  padding: 0.5rem;
+  text-align: left;
+  border-bottom: 1px solid #ccc;
+}
+
+.fiscalCardTable tr:nth-child(even) {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.fiscalCardActions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+
+
+.fiscalCardAction {
+  display: flex;
+  align-items: center;
+  background: transparent;
+  color: var(--ifm-color-secondary);
+  fill: var(--ifm-color-secondary);
+  cursor: pointer;
+  border: none;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  padding: 0.2rem;
+  border-radius: 0.5rem;
+  border: 1px solid transparent;
+}
+
+.fiscalCardAction > :first-child {
+  margin-right: 0.5rem;
+}
+
+
+
+.fiscalCardAction:hover {
+  border: 1px solid var(--ifm-color-secondary);
+  background-color: var(--ifm-color-secondary);
+  color: white;
+  fill: white;
+}
+
+.fiscalCardActionsDropdown {
+  position: relative;
+  display: none;
+}
+
+.fiscalCardActionsDropdownContent {
+  display: none;
+  box-shadow: 1px 1px 10px var(--ifm-color-secondary);
+  border: 0px solid transparent;
+  border-radius: 0.5rem;
+  background-color: var(--ifm-inverse-color-text);
+}
+
+.fiscalCardActionsDropdown:hover > .fiscalCardActionsDropdownContent {
+  display: block;
+  position: absolute;
+  left: -150px;
+}
+
+.fiscalCardMenu {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+@media (max-width: 720px) {
+  .fiscalCardActions {
+    display: none;
+  }
+  .fiscalCardActionsDropdown {
+    display: block;
+  }
 }
