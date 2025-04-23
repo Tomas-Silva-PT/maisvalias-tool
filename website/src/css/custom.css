@@ -19,6 +19,7 @@
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
 
   --ifm-color-secondary: rgba(33, 175, 199, 1);
+  --ifm-color-secondary-darker: rgb(28, 144, 165);
   --ifm-color-transparent-secondary: rgba(33, 175, 199, 0.5);
   --ifm-color-strokeline: black;
   --ifm-navbar-text-outline-opacity: 0;
@@ -151,7 +152,6 @@
   pointer-events: all;
   color: var(--ifm-color-secondary);
   font-weight: bold;
-  transition: all 0.5s ease;
   display: none;
 }
 
