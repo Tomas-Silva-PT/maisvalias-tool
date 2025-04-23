@@ -466,6 +466,7 @@
   font-weight: bold;
   font-size: 1.2rem;
   width: 100%;
+  stroke: var(--ifm-color-secondary);
 }
 
 .fiscalCardTitle > * {
@@ -505,8 +506,8 @@
 .fiscalCardTabs button.fiscalCardTabActive {
   /* border-color: var(--ifm-color-primary); */
   /* background-color: var(--ifm-color-primary); */
-  color: var(--ifm-color-primary);
-  border-bottom: 3px solid var(--ifm-color-primary);
+  color: var(--ifm-color-secondary);
+  border-bottom: 3px solid var(--ifm-color-secondary);
 }
 
 .fiscalCardTabActive {
@@ -517,6 +518,16 @@
   width: 100%;
   border-collapse: collapse;
   background-color: inherit;
+  overflow: auto;
+  max-height: 400px;
+  position: relative;
+}
+
+.fiscalCardTable thead > *{
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background-color: var(--ifm-color-secondary-darker);
 }
 
 .fiscalCardTable th, .fiscalCardTable td {

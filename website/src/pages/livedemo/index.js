@@ -63,8 +63,8 @@ export default function LiveDemoPage() {
       <LiveDemoHeader />
       <main>
         <div id="custom-loader-container">
-          <div class="custom-loader"></div>
-          <p class="custom-loader-text">Calculando...</p>
+          <div className="custom-loader"></div>
+          <p className="custom-loader-text">Calculando...</p>
         </div>
         <LiveDemoContent />
       </main>
