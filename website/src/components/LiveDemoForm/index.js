@@ -11,6 +11,7 @@ import { Trading212Parser } from "../../maisvalias-tool/parsers/trading212parser
 import { AssetBuffer } from "../../maisvalias-tool/models/asset.js";
 import { PTCapitalGainsFormatter } from "../../maisvalias-tool/formatters/pt/irs/capital_gains_formatter.js";
 import { PTDividendsFormatter } from "../../maisvalias-tool/formatters/pt/irs/dividends_formatter.js";
+import { PTIRSFormatter } from "../../maisvalias-tool/formatters/pt/irs/irs_xml_formatter.js";
 
 const steps = [
   {
@@ -63,10 +64,13 @@ export default function LiveDemoForm() {
   const [capitalGains, setCapitalGains] = useState([]);
   const [dividends, setDividends] = useState([]);
   const [fiscalData, setFiscalData] = useState({});
+  const [IRSdialogVisible, setIRSdialogVisible] = useState(false);
+  const [fiscalYear, setFiscalYear] = useState(null);
 
   useEffect(() => {
-    const script = document.createElement('script');
-    script.src = 'https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js';
+    const script = document.createElement("script");
+    script.src =
+      "https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js";
     script.async = true;
     document.body.appendChild(script);
 
@@ -237,13 +241,30 @@ export default function LiveDemoForm() {
     await statement.fetchData(new AssetBuffer());
     let capitalGains = await formatterCapitalGains.format(statement);
     let dividends = await formatterDividends.format(statement);
-    dividends = dividends["toUser"];
+    // dividends = dividends["toUser"];
+    console.log("Dividends: " + JSON.stringify(dividends));
+
+    let toUserDividends = dividends["toUser"];
+
+    if (!toUserDividends) {
+      console.warn(
+        "toUserDividends is undefined. Check formatterDividends output."
+      );
+    } else {
+      console.log("toUserDividends: " + JSON.stringify(toUserDividends));
+    }
+
+    let filteredCapitalGainsYears = capitalGains.map((gain) =>
+      Number(gain["Ano de Realização"])
+    );
+    let filteredDividendsYears = toUserDividends.map((div) =>
+      Number(div["Ano rendimento"])
+    );
+
+    console.log("Filtered: " + JSON.stringify(filteredDividendsYears));
 
     const years = [
-      ...new Set([
-        ...capitalGains.map((gain) => Number(gain["Ano de Realização"])),
-        ...dividends.map((div) => Number(div["Ano rendimento"])),
-      ]),
+      ...new Set([...filteredCapitalGainsYears, ...filteredDividendsYears]),
     ];
 
     years.sort((a, b) => a - b);
@@ -253,16 +274,22 @@ export default function LiveDemoForm() {
       acc[curr]["capitalGains"] = capitalGains.filter(
         (gain) => gain["Ano de Realização"] == curr
       );
-      acc[curr]["dividends"] = dividends.filter(
+      acc[curr]["dividends"] = {};
+      if (!acc[curr]["dividends"]["toUser"])
+        acc[curr]["dividends"]["toUser"] = {};
+      if (!acc[curr]["dividends"]["toIRS"])
+        acc[curr]["dividends"]["toIRS"] = {};
+      acc[curr]["dividends"]["toUser"] = dividends["toUser"].filter(
+        (div) => div["Ano rendimento"] == curr
+      );
+      acc[curr]["dividends"]["toIRS"] = dividends["toIRS"].filter(
         (div) => div["Ano rendimento"] == curr
       );
       return acc;
     }, {});
-    // console.log("Fiscal Data: " + JSON.stringify(data));
+    console.log("Fiscal Data: " + JSON.stringify(data));
 
     loader.style.display = "none";
-    setCapitalGains(capitalGains);
-    setDividends(dividends);
     setFiscalData(data);
     setStep((step) => step + 1);
   }
@@ -315,31 +342,177 @@ export default function LiveDemoForm() {
     );
   }
 
-  function toggleCollapible(e) {
-    const button = e.currentTarget;
-    const content = button.nextElementSibling;
-    button.classList.toggle(styles.active);
+  // function toggleCollapible(e) {
+  //   const button = e.currentTarget;
+  //   const content = button.nextElementSibling;
+  //   button.classList.toggle(styles.active);
 
-    if (content.style.maxHeight) {
-      content.style.maxHeight = null;
-    } else {
-      content.style.maxHeight = "100%"; // content.scrollHeight + 'px';
-      console.log("Height: " + content.scrollHeight);
-    }
-  }
+  //   if (content.style.maxHeight) {
+  //     content.style.maxHeight = null;
+  //   } else {
+  //     content.style.maxHeight = "100%"; // content.scrollHeight + 'px';
+  //     console.log("Height: " + content.scrollHeight);
+  //   }
+  // }
 
   function exportToExcel(year, data) {
     console.log("Exporting to Excel...");
     const wsCapitalGains = XLSX.utils.json_to_sheet(data["capitalGains"]);
-    const wsDividends = XLSX.utils.json_to_sheet(data["dividends"]);
+    const wsDividends = XLSX.utils.json_to_sheet(data["dividends"]["toIRS"]);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, wsCapitalGains, "Mais valias");
     XLSX.utils.book_append_sheet(wb, wsDividends, "Dividendos");
     XLSX.writeFile(wb, `maisvalias-tool-${year}.xlsx`);
   }
 
-  function exportToIRS (year, data) {
+  function exportToIRS(year) {
+    setFiscalYear(year);
+    setIRSdialogVisible(true);
+  }
 
+  function DialogIRSDeclaration({ visible, year, data }) {
+    const [files, setFiles] = useState([]);
+
+    function onFileUpload(e) {
+      const files = e.target.files;
+      setFiles((prev) => Array.from(files));
+    }
+
+    function closeDialogIRS() {
+      setIRSdialogVisible(false);
+    }
+
+    function onDeclarationUpload(e) {
+      const loader = document.getElementById(
+        "declaration-custom-loader-container"
+      );
+      loader.style.display = "flex";
+
+      const file = files[0];
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const xml_irs = e.target.result;
+
+        const fullfilledIRS = PTIRSFormatter.format(
+          xml_irs,
+          fiscalData[fiscalYear]["capitalGains"],
+          fiscalData[fiscalYear]["dividends"]["toIRS"]
+        );
+
+        fullfilledIRS.then((irs) => {
+          console.log("Declaração formatada: " + irs);
+          loader.style.display = "none";
+          document.getElementById("declaration-upload").style.display = "none";
+          document.getElementById("declaration-download").style.display =
+            "block";
+
+          const blob = new Blob([irs], { type: "application/xml" });
+          const link = document.createElement("a");
+          link.href = URL.createObjectURL(blob);
+          link.download = `declaracao-irs-${fiscalYear}-preenchida.xml`;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          URL.revokeObjectURL(link.href);
+        });
+      };
+
+      reader.onerror = function (e) {
+        console.error(e.target.error);
+      };
+
+      reader.readAsText(file);
+    }
+
+    return (
+      <>
+        {visible && (
+          <div className={clsx(styles.dialogIRSDeclaration)}>
+            <div className={clsx(styles.dialogIRSDeclarationCard)}>
+              <div className={clsx(styles.dialogIRSDeclarationHeader)}>
+                <svg width="2rem" height="2rem" viewBox="0 0 24 24">
+                  <text x="0" y="18">
+                    IRS
+                  </text>
+                </svg>
+                <div className={clsx(styles.dialogIRSDeclarationTitle)}>
+                  Preencher declaração
+                  <div className={clsx(styles.dialogIRSDeclarationSubtitle)}>
+                    Adiciona os resultados da ferramenta à tua declaração do IRS
+                  </div>
+                </div>
+                <X
+                  onClick={closeDialogIRS}
+                  className={clsx(styles.dialogIRSDeclarationClose)}
+                />
+              </div>
+              <div className={clsx(styles.dialogIRSDeclarationContent)}>
+                <div
+                  id="declaration-custom-loader-container"
+                  className="local-custom-loader-container"
+                >
+                  <div className="custom-loader"></div>
+                  <p className="custom-loader-text">Calculando...</p>
+                </div>
+                <div id="declaration-upload">
+                  <p>
+                    Coloca aqui a tua declaração de IRS para podermos
+                    preenchê-la com os dados calculados:
+                  </p>
+                  <div className={clsx(styles.contentStep2)}>
+                    <Upload className={clsx(styles.contentStep2UploadIcon)} />
+                    <input
+                      className={clsx(styles.contentStep2UploadInput)}
+                      id="file-upload"
+                      type="file"
+                      accept=".xml"
+                      onChange={onFileUpload}
+                    />
+                    <label htmlFor="file-upload">Escolher ficheiro</label>
+                    {files.length > 0 && (
+                      <>
+                        <div className={clsx(styles.contentStep2Files)}>
+                          {files.map((file, index) => (
+                            <div
+                              key={index}
+                              className={clsx(styles.contentStep2File)}
+                            >
+                              <div
+                                className={clsx(styles.contentStep2FileName)}
+                              >
+                                {file.name}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                        <div
+                          className={clsx(styles.contentStep2Process)}
+                          onClick={onDeclarationUpload}
+                        >
+                          <div className={clsx(styles.contentStep2ProcessText)}>
+                            Processar {files.length} ficheiro
+                            {files.length !== 1 ? "s" : ""}
+                          </div>
+                          <ArrowRight />
+                        </div>
+                      </>
+                    )}
+                  </div>
+                  <p style={{ "font-style": "italic", "font-weight": "bold", "padding": "1rem"}}>
+                    Nota: A declaração não deve conter erros e deve estar num estado em que não precises de preencher mais nenhuma informação sem ser os ganhos com investimentos. A declaração que aqui colocares deve ser a obtida no portal das finanças através da opção "Guardar".
+                  </p>
+                </div>
+                <div id="declaration-download" style={{ display: "none" }}>
+                  <p>
+                    A tua declaração foi preenchida e enviada para o teu dispositivo. Confirma sempre se os resultados estão corretos!
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </>
+    );
   }
 
   function FiscalYearCard({ year, data }) {
@@ -368,7 +541,10 @@ export default function LiveDemoForm() {
           </div>
           <div className={clsx(styles.fiscalCardMenu)}>
             <div className={clsx(styles.fiscalCardActions)}>
-              <div onClick={() => exportToExcel(year, data)} className={clsx(styles.fiscalCardAction)}>
+              <div
+                onClick={() => exportToExcel(year, data)}
+                className={clsx(styles.fiscalCardAction)}
+              >
                 <svg width="1rem" height="1rem" viewBox="0 0 24 24">
                   <path
                     fillRule="evenodd"
@@ -378,7 +554,10 @@ export default function LiveDemoForm() {
                 </svg>
                 <span>Exportar Excel</span>
               </div>
-              <div onClick={() => exportToIRS(year, data)} className={clsx(styles.fiscalCardAction)}>
+              <div
+                onClick={() => exportToIRS(year, data)}
+                className={clsx(styles.fiscalCardAction)}
+              >
                 <svg width="1rem" height="1rem" viewBox="0 0 24 24">
                   <text x="0" y="18">
                     IRS
@@ -396,12 +575,15 @@ export default function LiveDemoForm() {
                 viewBox="0 0 16 16"
               >
                 <path
-                  class="cls-1"
+                  className="cls-1"
                   d="M8,6.5A1.5,1.5,0,1,1,6.5,8,1.5,1.5,0,0,1,8,6.5ZM.5,8A1.5,1.5,0,1,0,2,6.5,1.5,1.5,0,0,0,.5,8Zm12,0A1.5,1.5,0,1,0,14,6.5,1.5,1.5,0,0,0,12.5,8Z"
                 />
               </svg>
               <div className={clsx(styles.fiscalCardActionsDropdownContent)}>
-                <div onClick={() => exportToExcel(year, data)} className={clsx(styles.fiscalCardAction)}>
+                <div
+                  onClick={() => exportToExcel(year, data)}
+                  className={clsx(styles.fiscalCardAction)}
+                >
                   <svg width="1rem" height="1rem" viewBox="0 0 24 24">
                     <path
                       fillRule="evenodd"
@@ -411,7 +593,10 @@ export default function LiveDemoForm() {
                   </svg>
                   <span>Exportar Excel</span>
                 </div>
-                <div onClick={() => exportToIRS(year, data)} className={clsx(styles.fiscalCardAction)}>
+                <div
+                  onClick={() => exportToIRS(year, data)}
+                  className={clsx(styles.fiscalCardAction)}
+                >
                   <svg width="1rem" height="1rem" viewBox="0 0 24 24">
                     <text x="0" y="18">
                       IRS
@@ -440,7 +625,7 @@ export default function LiveDemoForm() {
             }
             onClick={() => setActiveTab("dividends")}
           >
-            Dividendos ({data["dividends"].length})
+            Dividendos ({data["dividends"]["toUser"].length})
           </button>
         </div>
         <table className={clsx(styles.fiscalCardTable)}>
@@ -477,15 +662,26 @@ export default function LiveDemoForm() {
             </tr>
           </thead>
           <tbody>
-            {data[activeTab].map((row, index) => {
-              return (
-                <tr>
-                  {Object.values(row).map((value, index) => {
-                    return <td key={index}>{value}</td>;
-                  })}
-                </tr>
-              );
-            })}
+            {activeTab === "dividends" &&
+              data[activeTab]["toUser"].map((row, index) => {
+                return (
+                  <tr>
+                    {Object.values(row).map((value, index) => {
+                      return <td key={index}>{value}</td>;
+                    })}
+                  </tr>
+                );
+              })}
+            {activeTab !== "dividends" &&
+              data[activeTab].map((row, index) => {
+                return (
+                  <tr>
+                    {Object.values(row).map((value, index) => {
+                      return <td key={index}>{value}</td>;
+                    })}
+                  </tr>
+                );
+              })}
           </tbody>
         </table>
       </div>
@@ -493,156 +689,13 @@ export default function LiveDemoForm() {
   }
 
   function ContentStep3(props) {
-    const years = [
-      ...new Set([
-        ...capitalGains.map((gain) => Number(gain["Ano de Realização"])),
-        ...dividends.map((div) => Number(div["Ano rendimento"])),
-      ]),
-    ];
-    console.log("Different years: " + years);
     return (
       <>
         <div className={clsx(styles.contentStep3)}>
-          {/* {
-
-            years.sort((a, b) => b - a)
-            .map((year) => {
-              const capitalGainsForYear = capitalGains.filter(
-                (gain) => gain["Ano de Realização"] == year
-              );
-              const dividendsForYear = dividends.filter(
-                (div) => (div["Ano rendimento"]) == year
-              );
-              return (
-                <div className={clsx(styles.contentStep3Year)}>
-                  <button
-                    onClick={toggleCollapible}
-                    className={clsx(styles.yearSection, styles.collapsible)}
-                  >
-                    {year}
-                  </button>
-                  <div className={clsx(styles.collapsibleContent)}>
-                    <h2
-                      onClick={toggleCollapible}
-                      className={clsx(
-                        styles.collapsible,
-                        styles.contentStep3Title
-                      )}
-                    >
-                      Mais valias ({capitalGainsForYear.length})
-                    </h2>
-                    {
-                      capitalGainsForYear.length > 0 && (
-                        <div
-                      className={clsx(
-                        styles.collapsibleContent,
-                        styles.contentStep3Table
-                      )}
-                    >
-                      <div className={clsx(styles.contentStep3TableHeader)}>
-                        <div>Ticker</div>
-                        <div>País da fonte</div>
-                        <div>Código</div>
-                        <div>Ano de Aquisição</div>
-                        <div>Mês de Aquisição</div>
-                        <div>Dia de Aquisição</div>
-                        <div>Valor de Aquisição</div>
-                        <div>Ano de Realização</div>
-                        <div>Mês de Realização</div>
-                        <div>Dia de Realização</div>
-                        <div>Valor de Realização</div>
-                        <div>Despesas e Encargos</div>
-                        <div>Imposto retido no estrangeiro</div>
-                        <div>País da Contraparte</div>
-                      </div>
-                      <div className={clsx(styles.contentStep3TableBody)}>
-                        {capitalGainsForYear.length > 0 &&
-                          capitalGainsForYear.map((capitalGain, index) => (
-                            <div
-                              key={index}
-                              className={clsx(styles.contentStep3TableBodyRow)}
-                            >
-                              <div>{capitalGain["Ticker"]}</div>
-                              <div>{capitalGain["País da fonte"]}</div>
-                              <div>{capitalGain["Código"]}</div>
-                              <div>{capitalGain["Ano de Aquisição"]}</div>
-                              <div>{capitalGain["Mês de Aquisição"]}</div>
-                              <div>{capitalGain["Dia de Aquisição"]}</div>
-                              <div>{capitalGain["Valor de Aquisição"]}</div>
-                              <div>{capitalGain["Ano de Realização"]}</div>
-                              <div>{capitalGain["Mês de Realização"]}</div>
-                              <div>{capitalGain["Dia de Realização"]}</div>
-                              <div>{capitalGain["Valor de Realização"]}</div>
-                              <div>{capitalGain["Despesas e Encargos"]}</div>
-                              <div>
-                                {capitalGain["Imposto retido no estrangeiro"]}
-                              </div>
-                              <div>{capitalGain["País da Contraparte"]}</div>
-                            </div>
-                          ))}
-                      </div>
-                    </div>
-                      )
-                    }
-                    
-                    <h2
-                      onClick={toggleCollapible}
-                      className={clsx(
-                        styles.collapsible,
-                        styles.contentStep3Title
-                      )}
-                    >
-                      Dividendos ({dividendsForYear.length})
-                    </h2>
-                    {
-                      dividendsForYear.length > 0 && (
-                        <div
-                      className={clsx(
-                        styles.contentStep3Table,
-                        styles.collapsibleContent
-                      )}
-                    >
-                      <div className={clsx(styles.contentStep3TableHeader)}>
-                        <div>Ticker</div>
-                        <div>Código Rendimento</div>
-                        <div>País da fonte</div>
-                        <div>Rendimento Bruto</div>
-                        <div>
-                          Imposto Pago no Estrangeiro - No país da fonte
-                        </div>
-                      </div>
-                      <div className={clsx(styles.contentStep3TableBody)}>
-                        {dividendsForYear.length > 0 &&
-                          dividendsForYear.map((dividend, index) => (
-                            <div
-                              key={index}
-                              className={clsx(styles.contentStep3TableBodyRow)}
-                            >
-                              <div>{dividend["Ticker"]}</div>
-                              <div>{dividend["Código Rendimento"]}</div>
-                              <div>{dividend["País da fonte"]}</div>
-                              <div>{dividend["Rendimento Bruto"]}</div>
-                              <div>
-                                {
-                                  dividend[
-                                    "Imposto Pago no Estrangeiro - No país da fonte"
-                                  ]
-                                }
-                              </div>
-                            </div>
-                          ))}
-                      </div>
-                    </div>
-                      )
-                    }
-                    
-                  </div>
-                </div>
-              );
-            })} */}
           {Object.entries(fiscalData).map(([year, data]) => {
             return <FiscalYearCard key={year} year={year} data={data} />;
           })}
+          <DialogIRSDeclaration visible={IRSdialogVisible} />
         </div>
       </>
     );

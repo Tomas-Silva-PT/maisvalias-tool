@@ -34,7 +34,11 @@ class PTIRSFormatter {
       );
     }
 
-    const quadro9_2A = quadro9.querySelector("AnexoJq092AT01");
+    let quadro9_2A = quadro9.querySelector("AnexoJq092AT01");
+    if (!quadro9_2A) {
+      quadro9_2A = xmlDoc.createElement("AnexoJq092AT01");
+      quadro9.appendChild(quadro9_2A);
+    }
     let quadro9_2A_lines = quadro9_2A.childNodes;
     let currNLinha = 951;
     let currNumero = 1;
@@ -122,20 +126,21 @@ class PTIRSFormatter {
       );
     }
 
-    const quadro8A = quadro8.querySelector("AnexoJq08AT01");
-    if(!quadro8A) {
-        quadro8A = xmlDoc.createElement("AnexoJq08AT01");
-        quadro8.appendChild(quadro8A);
+    let quadro8A = quadro8.querySelector("AnexoJq08AT01");
+    if (!quadro8A) {
+      quadro8A = xmlDoc.createElement("AnexoJq08AT01");
+      quadro8.appendChild(quadro8A);
     }
     let quadro8A_lines = quadro8A.childNodes;
-currNLinha = 801; // é o padrão da AT para a primeira linha deste quadro
-currNumero = 1;
+    currNLinha = 801; // é o padrão da AT para a primeira linha deste quadro
+    currNumero = 1;
     if (quadro8A_lines) {
-      currNLinha += quadro8A_lines.length; 
+      currNLinha += quadro8A_lines.length;
     }
 
     // Adicionar as mais valias de capital
     dividends.forEach((div) => {
+      console.log("Dividendo: " + JSON.stringify(div));
       const linha = xmlDoc.createElement("AnexoJq08AT01-Linha");
       linha.setAttribute("numero", currNumero);
 
@@ -144,19 +149,24 @@ currNumero = 1;
       linha.appendChild(NLinha);
 
       const CodRendimento = xmlDoc.createElement("CodRendimento");
-      CodRendimento.textContent = div["Código de Rendimento"].split("-")[0].trim();
+      CodRendimento.textContent = div["Código Rendimento"]
+        .split("-")[0]
+        .trim();
       linha.appendChild(CodRendimento);
 
       const CodPais = xmlDoc.createElement("CodPais");
-      CodPais.textContent = gain["País da fonte"].split("-")[0].trim();
+      CodPais.textContent = div["País da fonte"].split("-")[0].trim();
       linha.appendChild(CodPais);
 
       const RendimentoBruto = xmlDoc.createElement("RendimentoBruto");
       RendimentoBruto.textContent = div["Rendimento Bruto"];
       linha.appendChild(RendimentoBruto);
 
-      const ImpostoPagoEstrangeiroPaisFonte = xmlDoc.createElement("ImpostoPagoEstrangeiroPaisFonte");
-      ImpostoPagoEstrangeiroPaisFonte.textContent = gain["Imposto Pago no Estrangeiro - No país da fonte"];
+      const ImpostoPagoEstrangeiroPaisFonte = xmlDoc.createElement(
+        "ImpostoPagoEstrangeiroPaisFonte"
+      );
+      ImpostoPagoEstrangeiroPaisFonte.textContent =
+      div["Imposto Pago no Estrangeiro - No país da fonte"];
       linha.appendChild(ImpostoPagoEstrangeiroPaisFonte);
 
       quadro8A.appendChild(linha);
@@ -252,17 +262,17 @@ currNumero = 1;
 
     let quadro8A = quadro8.getElementsByTagName("AnexoJq08AT01")[0];
     if (!quadro8A) {
-    //   throw new Error(
-    //     "O Quadro 8A nao foi encontrado na declaração IRS, por favor adicione antes de utilizar esta ferramenta."
-    //   );
-        quadro8A = xmlDoc.createElement("AnexoJq08AT01");
-        quadro8.appendChild(quadro8A);
+      //   throw new Error(
+      //     "O Quadro 8A nao foi encontrado na declaração IRS, por favor adicione antes de utilizar esta ferramenta."
+      //   );
+      quadro8A = xmlDoc.createElement("AnexoJq08AT01");
+      quadro8.appendChild(quadro8A);
     }
     let quadro8A_lines = quadro8A.childNodes;
     currNLinha = 801; // é o padrão da AT para a primeira linha deste quadro
     currNumero = 1;
     if (quadro8A_lines) {
-      currNLinha += quadro8A_lines.length; 
+      currNLinha += quadro8A_lines.length;
     }
 
     // Adicionar as mais valias de capital
@@ -280,14 +290,15 @@ currNumero = 1;
       addNode("CodRendimento", div["Código Rendimento"].split("-")[0].trim());
       addNode("CodPais", div["País da fonte"].split("-")[0].trim());
       addNode("RendimentoBruto", div["Rendimento Bruto"]);
-      addNode("ImpostoPagoEstrangeiroPaisFonte", div["Imposto Pago no Estrangeiro - No país da fonte"]);
+      addNode(
+        "ImpostoPagoEstrangeiroPaisFonte",
+        div["Imposto Pago no Estrangeiro - No país da fonte"]
+      );
 
       quadro8A.appendChild(linha);
       currNLinha++;
       currNumero++;
     });
-
-    
 
     // Converter documento para string
     const xmlString = new XMLSerializer().serializeToString(xmlDoc);
