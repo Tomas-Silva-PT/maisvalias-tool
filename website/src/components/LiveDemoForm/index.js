@@ -37,22 +37,28 @@ const brokers = [
   {
     name: "Trading212",
     logo: "/img/brokers/trading212.png",
+    active: true
   },
   {
     name: "eToro",
     logo: "/img/brokers/etoro.png",
+    active: false
+
   },
   {
     name: "XTB",
     logo: "/img/brokers/xtb.png",
+    active: false
   },
   {
     name: "Degiro",
     logo: "/img/brokers/degiro.png",
+    active: false
   },
   {
     name: "Revolut",
     logo: "/img/brokers/revolut.png",
+    active: false
   },
 ];
 
@@ -178,9 +184,17 @@ export default function LiveDemoForm() {
         <div className={clsx(styles.contentStep1)}>
           {brokers.map((broker) => (
             <div
-              className={clsx(styles.contentStep1Broker)}
-              onClick={() => onBrokerSelected(broker)}
-            >
+              className={broker.active === true ? clsx(styles.contentStep1Broker, styles.contentStep1BrokerActive) : clsx(styles.contentStep1Broker)}
+              onClick={() => {if (broker.active === true) {onBrokerSelected(broker)}}}
+            > 
+              {broker.active === false && 
+                <div className={clsx(styles.contentStep1BrokerInactive)}>
+
+                  🚧 Em breve
+                </div>
+              
+                
+              }
               <img
                 style={{ width: "100%", height: "auto" }}
                 alt={broker.name}
