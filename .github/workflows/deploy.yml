@@ -20,8 +20,12 @@ jobs:
           cache: "npm"
           cache-dependency-path: website/package-lock.json
 
-      - name: Install dependencies
+      - name: Install website dependencies
         working-directory: website/
+        run: npm ci  # 👈 npm equivalent of yarn install --frozen-lockfile
+
+      - name: Install codebase dependencies
+        working-directory: js/
         run: npm ci  # 👈 npm equivalent of yarn install --frozen-lockfile
 
       - name: Build codebase
