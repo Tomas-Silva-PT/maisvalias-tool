@@ -1,10 +1,20 @@
 import { Asset, AssetBuffer } from "./asset.js";
-import { Trading212 } from "./brokers/trading212.js";
 import { Tax } from "./tax.js";
 import { Fee } from "./fee.js";
+import { Broker } from "./brokers/broker.js";
 
 class Transaction {
-    constructor(date, time, type, ticker, isin, shares, assetCurrency, netAmount, netAmountCurrency, taxes, fees, broker) {
+    date: string;
+    time: string;
+    type: string;
+    asset: Asset;
+    shares: number;
+    netAmount: number;
+    netAmountCurrency: string;
+    taxes: Tax[];
+    fees: Fee[];
+    broker: Broker;
+    constructor(date : string, time : string, type : string, ticker : string, isin : string, shares : number, assetCurrency : string, netAmount : number, netAmountCurrency : string, taxes : Tax[], fees : Fee[], broker : Broker) {
         this.date = date;
         this.time = time;
         this.type = type;
@@ -17,30 +27,15 @@ class Transaction {
         this.broker = broker;
     }
 
-    async fetchData(assetBuffer) {
+    async fetchData(assetBuffer : AssetBuffer) : Promise<any> {
         await this.asset.fetchData(assetBuffer);
     }
 
-    toString() {
+    toString() : string {
         return `Transaction(Date: ${this.date}, Time: ${this.time}, Ticker: ${this.asset.ticker}, ISIN: ${this.asset.isin}, Shares: ${this.shares}, Net Amount: ${this.netAmount})`;
     }
 
-    toDict() {
-        return {
-            date: this.date,
-            time: this.time,
-            type: this.type,
-            asset: this.asset,
-            shares: this.shares,
-            amount: this.netAmount,
-            amount_currency: this.netAmountCurrency,
-            taxes: this.taxes,
-            broker: this.broker,
-            fees: this.fees,
-        };
-    }
-
-    equals(other) {
+    equals(other : Transaction) : boolean {
         return (
             this.date === other.date &&
             this.time === other.time &&
@@ -49,15 +44,10 @@ class Transaction {
             this.shares === other.shares &&
             this.netAmount === other.netAmount &&
             this.netAmountCurrency === other.netAmountCurrency &&
-            JSON.stringify(this.taxes) === JSON.stringify(other.taxes) &&
-            this.broker === other.broker &&
-            JSON.stringify(this.fees) === JSON.stringify(other.fees)
+            this.broker.isEquals(this.broker, other.broker)
         );
     }
 
-    hashCode() {
-        return `${this.date}-${this.time}-${this.type}-${this.asset.ticker}-${this.asset.toString()}-${this.shares}-${this.netAmount}-${this.netAmountCurrency}-${this.broker}`.hashCode();
-    }
 }
 
 export { Transaction };

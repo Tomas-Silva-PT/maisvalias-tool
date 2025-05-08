@@ -3,15 +3,20 @@ import { YahooFinance } from "./yahoofinance.js";
 // import yf from "yahoo-finance2";
 
 class Asset {
-    constructor(ticker, isin, currency) {
+    ticker: string;
+    isin: string;
+    countryDomiciled?: Country;
+    assetType: string;
+    currency: string;
+
+    constructor(ticker : string, isin : string, currency : string) {
         this.ticker = ticker;
         this.isin = isin;
-        this.countryDomiciled = "";
         this.assetType = "";
         this.currency = currency;
     }
 
-    async fetchData(assetBuffer) {
+    async fetchData(assetBuffer : AssetBuffer) : Promise<any> {
         if (assetBuffer) {
             const bufferedAsset = assetBuffer.get(this.isin, this.ticker, this.currency);
             if (bufferedAsset) {
@@ -28,7 +33,6 @@ class Asset {
         try {
             // const assetInfo = await yf.search(this.isin);
             // this.assetType = assetInfo?.quotes[0]?.quoteType || "";
-            console.log("Isin: " + this.isin);
             this.assetType = await YahooFinance.getAssetType(this.isin);
         } catch (error) {
             console.error("Erro ao buscar dados do ativo:", error);
@@ -39,44 +43,27 @@ class Asset {
         }
     }
 
-    toString() {
+    toString() : string {
         return `Asset(Ticker: ${this.ticker}, ISIN: ${this.isin})`;
     }
 
-    toDict() {
-        return {
-            ticker: this.ticker,
-            isin: this.isin,
-            country_domiciled: this.countryDomiciled,
-            asset_type: this.assetType,
-            currency: this.currency
-        };
-    }
-
-    fromDict(data) {
-        this.ticker = data.ticker;
-        this.isin = data.isin;
-        this.countryDomiciled = data.country_domiciled;
-        this.assetType = data.asset_type;
-        this.currency = data.currency;
-    }
-
-    equals(other) {
+    equals(other : Asset) : boolean {
         return this.isin === other.isin && this.currency === other.currency && this.ticker === other.ticker;
     }
 }
 
 class AssetBuffer {
+    assets: Asset[];
     constructor() {
         this.assets = [];
     }
 
-    add(asset) {
+    add(asset : Asset) {
         this.assets.push(asset);
     }
 
-    get(isin, ticker, currency) {
-        return this.assets.find(a => a.isin === isin && a.currency === currency && a.ticker === ticker) || null;
+    get(isin : string, ticker : string, currency : string) : Asset | undefined {
+        return this.assets.find(a => a.isin === isin && a.currency === currency && a.ticker === ticker);
     }
 }
 
