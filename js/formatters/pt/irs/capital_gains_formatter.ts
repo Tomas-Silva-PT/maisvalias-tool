@@ -1,16 +1,18 @@
+import { CapitalGain } from "../../../models/capitalgain.js";
 import { Currency } from "../../../models/currency.js";
+import { Statement } from "../../../models/statement.js";
 
 class PTCapitalGainsFormatter {
     constructor() {}
 
-    async format(statement, year, currency = "EUR") {
+    async format(statement : Statement, year? : number, currency : string = "EUR") : Promise<CapitalGain[]> {
         // Obter transacoes referentes às compras e vendas
         const transactions = statement.getTransactions();
         const buyTransactions = transactions.filter(t => t.type === "Buy");
         const sellTransactions = transactions.filter(t => t.type === "Sell");
         
-        buyTransactions.sort((a, b) => new Date(a.date) - new Date(b.date));
-        sellTransactions.sort((a, b) => new Date(a.date) - new Date(b.date));
+        buyTransactions.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+        sellTransactions.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
         
         // FIFO
         
@@ -45,11 +47,11 @@ class PTCapitalGainsFormatter {
         }
 
         // Formatar as compensações no formato das mais valias do IRS PT, referentes ao ano especificado
-        const capitalGains = [];
+        let capitalGains : CapitalGain[] = [];
         const currencyConverter = new Currency();
         for (const compensation of compensations) {
             // Verificar se a venda ocorreu no ano especificado
-            if (new Date(compensation["sell"].date).getFullYear() !== parseInt(year)) continue;
+            if (year && new Date(compensation["sell"].date).getFullYear() !== year) continue;
 
             // Converter o montante da venda para a moeda da declaração
             let sellNetAmount = 0;
@@ -125,7 +127,8 @@ class PTCapitalGainsFormatter {
             let buyUnitValue = buyGrossAmount / compensation["buy"].shares;
             let acquiredValue = buyUnitValue * compensation["shares"];
 
-            let code;
+            let code : string;
+            code = "";
             switch(compensation["buy"].asset.assetType) {
                 case "EQUITY":
                     code = "G01"
@@ -136,21 +139,29 @@ class PTCapitalGainsFormatter {
             }
 
             let countryDomiciled = compensation["buy"].asset.countryDomiciled;
+            // Para ações domiciliadas em Portugal e adquiridas em corretoras estrangeiras, o país da fonte deve ser o da corretora
+            if (countryDomiciled?.code === "620") {
+                countryDomiciled = compensation["buy"].broker.country;
+            }
 
-            capitalGains.push({
+            let capitalGain : CapitalGain = {
                 "Ticker": compensation["sell"].asset.ticker,
-                "País da fonte": `${countryDomiciled.code} - ${countryDomiciled.namePt}`,
+                "País da fonte": `${countryDomiciled?.code} - ${countryDomiciled?.namePt}`,
                 "Código": code,
                 "Ano de Aquisição": new Date(compensation["buy"].date).getFullYear(),
                 "Mês de Aquisição": new Date(compensation["buy"].date).getMonth() + 1,
-                "Valor de Aquisição": acquiredValue,
+                "Dia de Aquisição": new Date(compensation["buy"].date).getDay(),
+                "Valor de Aquisição": Math.round(acquiredValue * 100) / 100,
                 "Ano de Realização": new Date(compensation["sell"].date).getFullYear(),
                 "Mês de Realização": new Date(compensation["sell"].date).getMonth() + 1,
-                "Valor de Realização": realizedValue,
-                "Despesas e Encargos": sellCompensationFeesAmount + buyCompensationFeesAmount,
-                "Imposto retido no estrangeiro": sellCompensationTaxesAmount + buyCompensationTaxesAmount,
+                "Dia de Realização": new Date(compensation["sell"].date).getDay(),
+                "Valor de Realização": Math.round(realizedValue * 100 ) / 100,
+                "Despesas e Encargos": Math.round((sellCompensationFeesAmount + buyCompensationFeesAmount ) * 100 ) / 100,
+                "Imposto retido no estrangeiro": Math.round((sellCompensationTaxesAmount + buyCompensationTaxesAmount ) * 100 ) / 100,
                 "País da Contraparte": `${compensation["sell"].broker.country.code} - ${compensation["sell"].broker.country.namePt}`
-            });
+            }
+
+            capitalGains.push(capitalGain);
 
         }
         

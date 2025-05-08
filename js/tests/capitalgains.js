@@ -24,7 +24,7 @@ async function test() {
   await statement.fetchData(new AssetBuffer());
   parsingTime = Date.now() - startTime;
   const formatter = new PTCapitalGainsFormatter();
-  const capitalGains = await formatter.format(statement, "2023");
+  const capitalGains = await formatter.format(statement);
   const formattingTime = Date.now() - startTime;
 
   const df = capitalGains;

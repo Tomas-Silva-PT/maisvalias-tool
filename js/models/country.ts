@@ -1,7 +1,13 @@
 import paisesJson from "./codigos_paises.json" with { type: "json" };
 
 class Country {
-    constructor(alpha2) {
+    code: string;
+    alpha2: string;
+    alpha3: string;
+    namePt: string;
+    nameEn: string;
+
+    constructor(alpha2 : string) {
         const paises = paisesJson;
         const country = paises.find(p => p.alpha_2 === alpha2);
         
@@ -20,25 +26,7 @@ class Country {
         return `Country(alpha_2: ${this.alpha2})`;
     }
 
-    toDict() {
-        return {
-            code: this.code,
-            alpha_2: this.alpha2,
-            alpha_3: this.alpha3,
-            name_pt: this.namePt,
-            name_en: this.nameEn
-        };
-    }
-
-    fromDict(data) {
-        this.code = data.code;
-        this.alpha2 = data.alpha_2;
-        this.alpha3 = data.alpha_3;
-        this.namePt = data.name_pt;
-        this.nameEn = data.name_en;
-    }
-
-    equals(other) {
+    equals(other : Country) : boolean {
         return this.code === other.code;
     }
 }
