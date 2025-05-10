@@ -46,7 +46,7 @@ O resultado final será entregue ao investidor no passo **7**, permitindo-lhe co
 ## 🚀 Tecnologias utilizadas
 
 ### 🖥️ Linguagem  
-Atualmente desenvolvida em **Javascript**, o _core_ da ferramenta assenta nesta linguagem para transformação do teu histórico de transações no formato desejado para declaração no IRS.  
+Atualmente desenvolvida em **Typescript**, o _core_ da ferramenta assenta nesta linguagem para transformação do teu histórico de transações no formato desejado para declaração no IRS.  
 
 ### 📚 Bibliotecas Utilizadas  
-- [**yahoo-finance2**](https://www.npmjs.com/package/yahoo-finance2) – usada para obter dados financeiros das ações em que investes.  
+- [**API Yahoo Finance**] – usada para obter dados financeiros das ações em que investes.

@@ -12,6 +12,10 @@ import { AssetBuffer } from "../../maisvalias-tool/models/asset.js";
 import { PTCapitalGainsFormatter } from "../../maisvalias-tool/formatters/pt/irs/capital_gains_formatter.js";
 import { PTDividendsFormatter } from "../../maisvalias-tool/formatters/pt/irs/dividends_formatter.js";
 import { PTIRSFormatter } from "../../maisvalias-tool/formatters/pt/irs/irs_xml_formatter.js";
+import DisclaimerPopup from "@site/src/components/DisclaimerPopup";
+
+
+const disclaimerMessage = "O maisvalias-tool é uma ferramenta independente, cujos resultados produzidos não têm caráter vinculativo. Como tal é essencial que haja uma verificação manual dos resultados. Consulta a legislação em vigor e a Autoridade Tributária e Aduaneira sempre que necessário.";
 
 const steps = [
   {
@@ -719,6 +723,7 @@ export default function LiveDemoForm() {
       <section className={clsx(styles.form, styles.fadeIn)}>
         <Header step={step} />
         <Content step={step} />
+        <DisclaimerPopup title="Importante" message={disclaimerMessage} />
       </section>
     </>
   );
