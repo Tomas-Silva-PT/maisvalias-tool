@@ -60,6 +60,8 @@ class Trading212Parser implements Parser {
         })
         .filter((tax) => tax != undefined);
 
+      const exchangeRate = parseFloat(record["Exchange rate"]);
+
       const transaction = new Transaction(
         date,
         time,
@@ -72,7 +74,8 @@ class Trading212Parser implements Parser {
         amountCurrency,
         taxes,
         fees,
-        new Trading212()
+        new Trading212(),
+        exchangeRate
       );
       if (transaction.type) transactions.push(transaction);
     });
