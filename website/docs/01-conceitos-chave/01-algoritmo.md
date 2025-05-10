@@ -36,23 +36,23 @@ No ano de 2025, em que terei de preencher a declaração referente às mais vali
 
 Agora é importante identificar quais foram as ações vendidas, porque, dependendo de quanto tempo já as detínhamos, isso pode trazer-nos alguns benefícios fiscais.
 
-Segundo [alínea d), nº 6, artigo 43](https://info.portaldasfinancas.gov.pt/pt/informacao_fiscal/codigos_tributarios/irs/Pages/irs47.aspx) do código do imposto sobre o rendimento das pessoas singulares (CIRS), a data de aquisição segue a estratégia [FIFO - _First In First Out_](./terminologia#fifo-first-in-first-out). 
-Isto significa que a venda das 2 ações devem ser [compensadas](./terminologia#compensações) com as compras mais antigas (e que ainda não foram compensadas por vendas anteriores).
+Segundo [alínea d), nº 6, artigo 43](https://info.portaldasfinancas.gov.pt/pt/informacao_fiscal/codigos_tributarios/irs/Pages/irs47.aspx) do código do imposto sobre o rendimento das pessoas singulares (CIRS), a data de aquisição segue a estratégia [FIFO - _First In First Out_](./terminologia#-fifo-first-in-first-out). 
+Isto significa que a venda das 2 ações devem ser [compensadas](./terminologia#-compensações) com as compras mais antigas (e que ainda não foram compensadas por vendas anteriores).
 
 Neste caso particular, teremos de utilizar as compras de 2020, 2021 e 2022 para compensar a venda, já que a soma das ações compradas nesses anos, dá `1 + 0.8 + 0.2 = 2`. Neste caso apenas declaramos a venda de 0.2 das 0.6 ações compradas em 2022.
 
 ## 💰 Calcular as mais-valias
 
 Agora que temos as compras e vendas identificadas, já podemos proceder ao cálculo das mais-valias.
-Para tal, temos de identificar o [valor de aquisição](./terminologia#valor-de-aquisição) e o [valor de realização](./terminologia#valor-de-realização) para cada [compensação](./terminologia#compensações) identificada.
+Para tal, temos de identificar o [valor de aquisição](./terminologia#-valor-de-aquisição) e o [valor de realização](./terminologia#-valor-de-realização) para cada [compensação](./terminologia#-compensações) identificada.
 
 ### Valor de realização
 
-**O [valor de realização](./terminologia#valor-de-realização) (ou valor de venda) segue a seguinte fórmula: `Valor de 1 ação * nº de ações vendidas`**.
+**O [valor de realização](./terminologia#-valor-de-realização) (ou valor de venda) segue a seguinte fórmula: `Valor de 1 ação * nº de ações vendidas`**.
 
 No exemplo, a venda de 2 ações por 1000€ significa que o `Valor de 1 ação` foi de `(1000 / 2) = 500€`.
 
-Como tal, para cada [compensação](./terminologia#compensações), o respetivo [valor de realização](./terminologia#valor-de-realização) é o seguinte:
+Como tal, para cada [compensação](./terminologia#-compensações), o respetivo [valor de realização](./terminologia#-valor-de-realização) é o seguinte:
 
 | Ano | Nº de ações vendidas | Valor de Realização
 | :-: | :-:  | :-:  |
@@ -62,9 +62,9 @@ Como tal, para cada [compensação](./terminologia#compensações), o respetivo 
 
 ### Valor de aquisição
 
-**O [valor de aquisição](./terminologia#valor-de-aquisição) (ou valor de compra) segue a seguinte fórmula: `Valor comprado * nº de ações vendidas / nº ações compradas`**.
+**O [valor de aquisição](./terminologia#-valor-de-aquisição) (ou valor de compra) segue a seguinte fórmula: `Valor comprado * nº de ações vendidas / nº ações compradas`**.
 
-Assim sendo, para cada [compensação](./terminologia#compensações), o respetivo [valor de aquisição](./terminologia#valor-de-aquisição) é o seguinte:
+Assim sendo, para cada [compensação](./terminologia#-compensações), o respetivo [valor de aquisição](./terminologia#-valor-de-aquisição) é o seguinte:
 
 | Ano | Nº de ações compradas | Nº de ações vendidas | Valor de Aquisição
 | :-: | :-:  | :-: | :-: |
@@ -103,7 +103,7 @@ Não sei se reparaste, mas até aqui não foi mencionado no cálculo os custos v
 
 O exemplo não tem em conta impostos retidos no estrangeiro ou despesas e encargos na compra e venda de ações/ETFs.
 
-As despesas e encargos, assim como os impostos retidos no estrangeiro seguem a mesma lógica do [valor de realização](./terminologia#valor-de-realização) quando aplicados **no momento da venda**. Isto significa que se uma venda [compensar](./terminologia#compensações) múltiplas compras, os encargos de venda serão distribuídos pelas compras [compensadas](./terminologia#compensações), conforme a fração de ações que a compra representa na venda.
+As despesas e encargos, assim como os impostos retidos no estrangeiro seguem a mesma lógica do [valor de realização](./terminologia#-valor-de-realização) quando aplicados **no momento da venda**. Isto significa que se uma venda [compensar](./terminologia#-compensações) múltiplas compras, os encargos de venda serão distribuídos pelas compras [compensadas](./terminologia#-compensações), conforme a fração de ações que a compra representa na venda.
 A fórmula é a seguinte:
 
 > `Encargo na venda = Valor total do encargo na venda * Nº ações compradas / Nº ações vendidas`
@@ -116,7 +116,7 @@ Para facilitar, nada melhor como um exemplo. **Considerando que na venda existiu
 | 2021 |  0.8 |  0.8 | 100€ * 0.8 / 2 = 40€ |
 | 2022 |  0.6 |  0.2 | 100€ * 0.2 / 2 = 10€ |
 
-Os encargos aplicados no momento de compra são somados no [valor de aquisição](./terminologia#valor-de-aquisição).
+Os encargos aplicados no momento de compra são somados no [valor de aquisição](./terminologia#-valor-de-aquisição).
 A fórmula é a seguinte:
 
 > `Encargo na compra = Valor total do encargo na compra * Nº ações compradas / Nº ações vendidas`
@@ -141,4 +141,4 @@ Deste modo, o total de encargos seria:
 
 O total de encargos seria: `60€ + 50€ + 13.33€ = 123.33€`.
 
-Este raciocínio aplica-se tanto para os [encargos](./terminologia#encargos) como para os [impostos retidos na fonte](./terminologia#impostos-retidos-na-fonte).
+Este raciocínio aplica-se tanto para os [encargos](./terminologia#-encargos) como para os [impostos retidos na fonte](./terminologia#-impostos-retidos-na-fonte).
