@@ -1,2 +1,0 @@
-from .capital_gains_formatter import PTCapitalGainsFormatter
-from .dividends_formatter import PTDividendsFormatter
