@@ -14,7 +14,8 @@ class Transaction {
     taxes: Tax[];
     fees: Fee[];
     broker: Broker;
-    constructor(date : string, time : string, type : string, ticker : string, isin : string, shares : number, assetCurrency : string, netAmount : number, netAmountCurrency : string, taxes : Tax[], fees : Fee[], broker : Broker) {
+    exchangeRate? : number;
+    constructor(date : string, time : string, type : string, ticker : string, isin : string, shares : number, assetCurrency : string, netAmount : number, netAmountCurrency : string, taxes : Tax[], fees : Fee[], broker : Broker, exchangeRate? : number) {
         this.date = date;
         this.time = time;
         this.type = type;
@@ -25,6 +26,7 @@ class Transaction {
         this.taxes = taxes;
         this.fees = fees;
         this.broker = broker;
+        if(exchangeRate && !isNaN(exchangeRate)) this.exchangeRate = exchangeRate;
     }
 
     async fetchData(assetBuffer : AssetBuffer) : Promise<any> {
@@ -44,7 +46,8 @@ class Transaction {
             this.shares === other.shares &&
             this.netAmount === other.netAmount &&
             this.netAmountCurrency === other.netAmountCurrency &&
-            this.broker.isEquals(this.broker, other.broker)
+            this.broker.isEquals(this.broker, other.broker) &&
+            this.exchangeRate === other.exchangeRate
         );
     }
 
