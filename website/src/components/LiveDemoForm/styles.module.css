@@ -86,8 +86,6 @@
   }
 }
 
-
-
 .headerStep {
   /* background: gray; */
   display: flex;
@@ -145,10 +143,10 @@
 .headerProgress {
   height: 100%;
   background: linear-gradient(
-      to left,
-      var(--ifm-color-primary-lighter),
-      var(--ifm-color-secondary) 
-    );
+    to left,
+    var(--ifm-color-primary-lighter),
+    var(--ifm-color-secondary)
+  );
   width: 0%;
   transition: all 2s linear;
   border-radius: 1rem;
@@ -158,8 +156,20 @@
   .headerSteps {
     flex-direction: column;
   }
+  .headerStep {
+    margin-bottom: 1rem;
+  }
 }
 
+@media (max-width: 935px) {
+  .section {
+    clip-path: polygon(
+    100% 0%,
+
+    100% 100%
+  );
+  }
+}
 
 .content {
   /* background: purple; */
@@ -197,7 +207,7 @@
   top: 0;
   left: 0;
   border-radius: 0.5rem;
-  background: rgba(0,0,0,0.5);
+  background: rgba(0, 0, 0, 0.5);
   text-align: center;
   display: flex;
   justify-content: center;
@@ -215,7 +225,6 @@
   border-width: 0.2rem;
   border-style: solid;
   cursor: pointer;
-
 }
 
 .contentStep2 {
@@ -239,7 +248,6 @@
 }
 
 .contentStep2UploadIcon {
-  
   width: 3rem;
   height: auto;
 }
@@ -271,7 +279,7 @@
   font-style: italic;
   padding: 0.5rem;
   margin: 0.5rem 0 0.5rem 0;
-  display:flex;
+  display: flex;
   flex-flow: row wrap;
   justify-content: space-between;
   align-items: center;
@@ -324,7 +332,6 @@
 }
 
 .declarationDownloadButton {
-
   border-radius: 0.5rem;
   margin-top: 1rem;
   display: flex;
@@ -333,7 +340,7 @@
   flex-direction: row wrap;
   color: white;
   text-shadow: 0px 0px 5px rgb(0, 0, 0);
-  box-shadow: 0px 0px 8px rgb(0,0,0,0.2);
+  box-shadow: 0px 0px 8px rgb(0, 0, 0, 0.2);
   cursor: pointer;
   z-index: 1;
   text-align: center;
@@ -372,16 +379,12 @@
 .contentStep3Title {
   background: var(--ifm-color-primary-lighter);
   width: 100%;
-  margin:0;
+  margin: 0;
   text-align: center;
   /* color: var(--ifm-color-primary-lighter); */
   color: var(--ifm-color-text);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-
 }
-
-
-
 
 .contentStep3Table {
   width: 100%;
@@ -389,9 +392,8 @@
   margin: 0;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   background-color: white;
-  background-color: rgba(0,0,0,0);
+  background-color: rgba(0, 0, 0, 0);
 }
-
 
 .contentStep3TableHeader {
   display: flex;
@@ -435,14 +437,11 @@
   color: black;
 }
 
-
-
 .contentStep3TableBodyRow div {
   width: calc(100% / 12);
 }
 
 .collapsible {
-  
   color: #444;
   cursor: pointer;
   padding: 1rem;
@@ -454,12 +453,14 @@
   font-weight: bold;
   font-size: 1rem;
   color: var(--ifm-color-text);
-
 }
 
 .yearSection {
-  background: linear-gradient(to bottom, var(--ifm-color-secondary), var(--ifm-color-primary-lighter));
-  
+  background: linear-gradient(
+    to bottom,
+    var(--ifm-color-secondary),
+    var(--ifm-color-primary-lighter)
+  );
 }
 
 .contentStep3Year {
@@ -471,11 +472,10 @@
   overflow: hidden;
   max-height: 0;
   width: 100%;
-
 }
 
 .collapsible:after {
-  content: '\02795'; /* Unicode character for "plus" sign (+) */
+  content: "\02795"; /* Unicode character for "plus" sign (+) */
   font-size: 13px;
   color: white;
   float: right;
@@ -491,7 +491,7 @@
 .threedots {
   color: var(--ifm-color-text);
   fill: var(--ifm-color-text);
-  cursor: pointer
+  cursor: pointer;
 }
 
 .threedots:hover {
@@ -570,7 +570,6 @@
 }
 
 .fiscalCardTabActive {
-
 }
 
 .fiscalCardTable {
@@ -582,14 +581,15 @@
   position: relative;
 }
 
-.fiscalCardTable thead > *{
+.fiscalCardTable thead > * {
   position: sticky;
   top: 0;
   z-index: 1;
   background-color: var(--ifm-color-secondary-darker);
 }
 
-.fiscalCardTable th, .fiscalCardTable td {
+.fiscalCardTable th,
+.fiscalCardTable td {
   padding: 0.5rem;
   text-align: left;
   border-bottom: 1px solid #ccc;
@@ -604,8 +604,6 @@
   justify-content: center;
   gap: 1rem;
 }
-
-
 
 .fiscalCardAction {
   display: flex;
@@ -625,8 +623,6 @@
 .fiscalCardAction > :first-child {
   margin-right: 0.5rem;
 }
-
-
 
 .fiscalCardAction:hover {
   border: 1px solid var(--ifm-color-secondary);
@@ -684,7 +680,6 @@
   z-index: 99;
 }
 
-
 .dialogIRSDeclarationClose {
   position: absolute;
   top: 0.5rem;
@@ -700,7 +695,11 @@
   width: 50%;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(180deg, var(--ifm-color-primary-lighter), var(--ifm-color-secondary));
+  background: linear-gradient(
+    180deg,
+    var(--ifm-color-primary-lighter),
+    var(--ifm-color-secondary)
+  );
   border-radius: 0.5rem;
   box-shadow: 0px 0px 6px var(--ifm-color-text);
   color: black;
