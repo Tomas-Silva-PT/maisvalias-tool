@@ -57,8 +57,11 @@ Para mais detalhes sobre como carregar os dados ou casos específicos, consulta 
 
 Se quiseres mais detalhes sobre o racíocinio por detrás desta ferramenta, consulta a secção [Algoritmo](./conceitos-chave/algoritmo).
 
-## 🛠️ Como utilizar? 
+## 🛠️ Como utilizar?
 
+Para começares já a utilizar a ferramenta, vai até à nossa [demonstração](/livedemo). Prepara os documentos com o histórico de compras e vendas e segue os passos que forem indicados.
+
+Qualquer dúvida volta a esta documentação ou deixa-a registada no [repositório GitHub](https://github.com/Tomas-Silva-PT/maisvalias-tool/issues) para que te possamos ajudar.
 
 ## ⚠️ Disclaimer  
 
