@@ -15,9 +15,6 @@
   stroke: var(--ifm-color-strokeline);
 }
 
-
-
-
 .buttons {
   display: flex;
   align-items: center;
@@ -35,15 +32,22 @@
       rgba(43, 200, 169, 0) 53%,
       var(--ifm-color-secondary) 89%
     ),
-    var(--ifm-color-primary-lighter)
-    ;
+    var(--ifm-color-primary-lighter);
 
-    clip-path: polygon(0% 90%, 14% 87%, 32% 80%, 45% 80%, 63% 70%, 78% 72%, 93% 72%, 100% 59%, 100% 0%, 0% 0%);
-    /* clip-path: url(#arrowClip); */
-
+  clip-path: polygon(
+    0% 90%,
+    14% 87%,
+    32% 80%,
+    45% 80%,
+    63% 70%,
+    78% 72%,
+    93% 72%,
+    100% 59%,
+    100% 0%,
+    0% 0%
+  );
+  /* clip-path: url(#arrowClip); */
 }
-
-
 
 .heroContent {
   width: 100%;
@@ -53,7 +57,7 @@
   padding-top: 2rem;
   padding-left: 2rem;
   padding-right: 2rem;
-  width: 100%
+  width: 100%;
 }
 
 /* .homepageHeader::after {
@@ -69,24 +73,24 @@
 
 @media screen and (max-width: 933px) {
   .stockline {
-    height: 23vh;
+    height: 29vh;
   }
 }
 
 @media screen and (max-width: 517px) {
   .stockline {
-    height: 33vh;
+    height: 35vh;
   }
 }
 
 @media screen and (max-width: 404px) {
   .stockline {
-    height: 40vh;
+    height: 45vh;
   }
 }
 
 @media screen and (max-width: 365px) {
   .stockline {
-    height: 45vh;
+    height: 50vh;
   }
 }
