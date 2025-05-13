@@ -25,11 +25,11 @@ jobs:
         run: npm ci  # 👈 npm equivalent of yarn install --frozen-lockfile
 
       - name: Install codebase dependencies
-        working-directory: js/
+        working-directory: src/
         run: npm ci  # 👈 npm equivalent of yarn install --frozen-lockfile
 
       - name: Build codebase
-        working-directory: js/
+        working-directory: src/
         run: npm run build
 
       - name: Build website
