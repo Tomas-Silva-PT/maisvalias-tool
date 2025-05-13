@@ -1,6 +1,7 @@
 # Trading212 files
 
 t212*
+data/revolut*
 reminder.txt
 *.xlsx
 

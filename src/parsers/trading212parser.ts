@@ -72,9 +72,9 @@ class Trading212Parser implements Parser {
         assetCurrency,
         amount,
         amountCurrency,
+        new Trading212(),
         taxes,
         fees,
-        new Trading212(),
         exchangeRate
       );
       if (transaction.type) transactions.push(transaction);

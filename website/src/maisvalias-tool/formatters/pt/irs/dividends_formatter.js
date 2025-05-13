@@ -51,24 +51,37 @@ class PTDividendsFormatter {
                     for (let transaction of listDividends) {
                         const fees = transaction.fees;
                         const taxes = transaction.taxes;
-                        for (let fee of fees) {
-                            if (fee.currency === currency) {
-                                totalFeesAmount += fee.amount;
-                            }
-                            else {
-                                totalFeesAmount += yield currencyConverter.convert(fee.amount, fee.currency, currency, transaction.date);
+                        if (fees) {
+                            for (let fee of fees) {
+                                if (fee.currency === currency) {
+                                    totalFeesAmount += fee.amount;
+                                }
+                                else if (fee.exchangeRate) {
+                                    totalFeesAmount += fee.amount * fee.exchangeRate;
+                                }
+                                else {
+                                    totalFeesAmount += yield currencyConverter.convert(fee.amount, fee.currency, currency, transaction.date);
+                                }
                             }
                         }
-                        for (let tax of taxes) {
-                            if (tax.currency === currency) {
-                                totalTaxAmount += tax.amount;
-                            }
-                            else {
-                                totalTaxAmount += yield currencyConverter.convert(tax.amount, tax.currency, currency, transaction.date);
+                        if (taxes) {
+                            for (let tax of taxes) {
+                                if (tax.currency === currency) {
+                                    totalTaxAmount += tax.amount;
+                                }
+                                else if (tax.exchangeRate) {
+                                    totalTaxAmount += tax.amount * tax.exchangeRate;
+                                }
+                                else {
+                                    totalTaxAmount += yield currencyConverter.convert(tax.amount, tax.currency, currency, transaction.date);
+                                }
                             }
                         }
                         if (transaction.netAmountCurrency === currency) {
                             totalNetAmount += transaction.netAmount;
+                        }
+                        else if (transaction.exchangeRate) {
+                            totalNetAmount += transaction.netAmount * transaction.exchangeRate;
                         }
                         else {
                             totalNetAmount += yield currencyConverter.convert(transaction.netAmount, transaction.netAmountCurrency, currency, transaction.date);
@@ -102,10 +115,13 @@ class PTDividendsFormatter {
             // Se quiseres ignorar este facto para poderes mostrar os dividendos por ativo, comenta o seguinte bloco de código
             const dividendsForUser = dividends;
             let dividendsForIRS = dividends.reduce((acc, curr) => {
-                let ref = acc.find((dividend) => dividend["Código Rendimento"] === curr["Código Rendimento"] && dividend["País da fonte"] === curr["País da fonte"] && dividend["Ano rendimento"] === curr["Ano rendimento"]);
+                let ref = acc.find((dividend) => dividend["Código Rendimento"] === curr["Código Rendimento"] &&
+                    dividend["País da fonte"] === curr["País da fonte"] &&
+                    dividend["Ano rendimento"] === curr["Ano rendimento"]);
                 if (ref) {
                     ref["Rendimento Bruto"] += curr["Rendimento Bruto"];
-                    ref["Imposto Pago no Estrangeiro - No país da fonte"] += curr["Imposto Pago no Estrangeiro - No país da fonte"];
+                    ref["Imposto Pago no Estrangeiro - No país da fonte"] +=
+                        curr["Imposto Pago no Estrangeiro - No país da fonte"];
                 }
                 else {
                     const { Ticker } = curr, rest = __rest(curr, ["Ticker"]);
@@ -114,8 +130,8 @@ class PTDividendsFormatter {
                 return acc;
             }, []);
             return {
-                "toUser": dividendsForUser,
-                "toIRS": dividendsForIRS
+                toUser: dividendsForUser,
+                toIRS: dividendsForIRS,
             };
         });
     }

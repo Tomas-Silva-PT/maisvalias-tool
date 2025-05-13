@@ -229,7 +229,7 @@
 
 .contentStep2 {
   position: relative;
-  margin-top: 1rem;
+  margin-top: 0;
   display: flex;
   flex-flow: row wrap;
   justify-content: center;
@@ -318,6 +318,7 @@
   text-shadow: 0px 0px 5px rgb(0, 0, 0);
   cursor: pointer;
   z-index: 1;
+  text-align: center;
 }
 
 .contentStep2Process:hover {
@@ -329,6 +330,8 @@
 
 .contentStep2ProcessText {
   margin-right: 0.5rem;
+  text-align: center;
+  width: 100%;
 }
 
 .declarationDownloadButton {

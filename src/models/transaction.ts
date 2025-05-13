@@ -11,11 +11,11 @@ class Transaction {
     shares: number;
     netAmount: number;
     netAmountCurrency: string;
-    taxes: Tax[];
-    fees: Fee[];
+    taxes?: Tax[];
+    fees?: Fee[];
     broker: Broker;
     exchangeRate? : number;
-    constructor(date : string, time : string, type : string, ticker : string, isin : string, shares : number, assetCurrency : string, netAmount : number, netAmountCurrency : string, taxes : Tax[], fees : Fee[], broker : Broker, exchangeRate? : number) {
+    constructor(date : string, time : string, type : string, ticker : string, isin : string, shares : number, assetCurrency : string, netAmount : number, netAmountCurrency : string, broker : Broker, taxes? : Tax[], fees? : Fee[], exchangeRate? : number) {
         this.date = date;
         this.time = time;
         this.type = type;
@@ -34,7 +34,7 @@ class Transaction {
     }
 
     toString() : string {
-        return `Transaction(Date: ${this.date}, Time: ${this.time}, Ticker: ${this.asset.ticker}, ISIN: ${this.asset.isin}, Shares: ${this.shares}, Net Amount: ${this.netAmount})`;
+        return `Transaction(Date: ${this.date}, Time: ${this.time}, Ticker: ${this.asset.ticker}, ISIN: ${this.asset.isin}, Shares: ${this.shares}, Net Amount: ${this.netAmount}, Exchange Rate: ${this.exchangeRate})`;
     }
 
     equals(other : Transaction) : boolean {

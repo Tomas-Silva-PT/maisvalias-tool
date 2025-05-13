@@ -12,6 +12,7 @@ class YahooFinance {
         return __awaiter(this, void 0, void 0, function* () {
             console.log("Getting exchange rate...");
             const ticker = `${fromCurrency}${toCurrency}=X`;
+            // console.log("fromCurrency: " + fromCurrency + ", toCurrency: " + toCurrency + ", date: " + date);
             let exchangeDate = new Date(date);
             let nextExchangeDate = new Date(date);
             nextExchangeDate.setDate(nextExchangeDate.getDate() + 1);

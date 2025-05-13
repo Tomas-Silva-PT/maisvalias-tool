@@ -14,8 +14,8 @@ class PTCapitalGainsFormatter {
         return __awaiter(this, arguments, void 0, function* (statement, year, currency = "EUR") {
             // Obter transacoes referentes às compras e vendas
             const transactions = statement.getTransactions();
-            const buyTransactions = transactions.filter(t => t.type === "Buy");
-            const sellTransactions = transactions.filter(t => t.type === "Sell");
+            const buyTransactions = transactions.filter((t) => t.type === "Buy");
+            const sellTransactions = transactions.filter((t) => t.type === "Sell");
             buyTransactions.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
             sellTransactions.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
             // FIFO
@@ -31,7 +31,7 @@ class PTCapitalGainsFormatter {
                         continue;
                     // Calcular nº de ações da compra já compensada anteriormente
                     const alreadyCompensated = compensations
-                        .filter(c => c.buy.equals(buy))
+                        .filter((c) => c.buy.equals(buy))
                         .reduce((sum, c) => sum + c.shares, 0);
                     // Calcular nº de ações da compra que faltam compensar
                     const availableShares = buy.shares - alreadyCompensated;
@@ -40,7 +40,11 @@ class PTCapitalGainsFormatter {
                     // Calcular nº de ações da venda que podem ser compensadas
                     const sharesToCompensate = Math.min(availableShares, remainingSharesForCompensation);
                     remainingSharesForCompensation -= sharesToCompensate;
-                    compensations.push({ buy: buy, sell: sell, shares: sharesToCompensate });
+                    compensations.push({
+                        buy: buy,
+                        sell: sell,
+                        shares: sharesToCompensate,
+                    });
                     // Verificar se todas as ações da venda foram compensadas
                     if (remainingSharesForCompensation < Number.EPSILON)
                         break;
@@ -58,31 +62,46 @@ class PTCapitalGainsFormatter {
                 if (compensation["sell"].netAmountCurrency === currency) {
                     sellNetAmount = compensation["sell"].netAmount;
                 }
+                else if (compensation["sell"].exchangeRate) {
+                    sellNetAmount =
+                        compensation["sell"].netAmount * compensation["sell"].exchangeRate;
+                }
                 else {
                     sellNetAmount = yield currencyConverter.convert(compensation["sell"].netAmount, compensation["sell"].netAmountCurrency, currency, compensation["sell"].date);
                 }
                 // Converter os custos da venda para a moeda da declaração
                 let sellFeesAmount = 0;
-                for (let fee of compensation["sell"].fees) {
-                    if (fee.currency === currency) {
-                        sellFeesAmount += fee.amount;
-                    }
-                    else {
-                        sellFeesAmount += yield currencyConverter.convert(fee.amount, fee.currency, currency, compensation["sell"].date);
+                if (compensation["sell"].fees) {
+                    for (let fee of compensation["sell"].fees) {
+                        if (fee.currency === currency) {
+                            sellFeesAmount += fee.amount;
+                        }
+                        else if (fee.exchangeRate) {
+                            sellFeesAmount += fee.amount * fee.exchangeRate;
+                        }
+                        else {
+                            sellFeesAmount += yield currencyConverter.convert(fee.amount, fee.currency, currency, compensation["sell"].date);
+                        }
                     }
                 }
-                let sellCompensationFeesAmount = sellFeesAmount * compensation["shares"] / compensation["sell"].shares;
+                let sellCompensationFeesAmount = (sellFeesAmount * compensation["shares"]) / compensation["sell"].shares;
                 // Converter os impostos da venda para a moeda da declaração
                 let sellTaxesAmount = 0;
-                for (let tax of compensation["sell"].taxes) {
-                    if (tax.currency === currency) {
-                        sellTaxesAmount += tax.amount;
-                    }
-                    else {
-                        sellTaxesAmount += yield currencyConverter.convert(tax.amount, tax.currency, currency, compensation["sell"].date);
+                if (compensation["sell"].taxes) {
+                    for (let tax of compensation["sell"].taxes) {
+                        if (tax.currency === currency) {
+                            sellTaxesAmount += tax.amount;
+                        }
+                        else if (tax.exchangeRate) {
+                            sellTaxesAmount += tax.amount * tax.exchangeRate;
+                        }
+                        else {
+                            sellTaxesAmount += yield currencyConverter.convert(tax.amount, tax.currency, currency, compensation["sell"].date);
+                        }
                     }
                 }
-                let sellCompensationTaxesAmount = sellTaxesAmount * compensation["shares"] / compensation["sell"].shares;
+                let sellCompensationTaxesAmount = (sellTaxesAmount * compensation["shares"]) /
+                    compensation["sell"].shares;
                 // Calcular o montante bruto da venda
                 let sellGrossAmount = sellNetAmount + sellFeesAmount + sellTaxesAmount;
                 // Cálculo do valor de realização (valor de venda)
@@ -93,31 +112,45 @@ class PTCapitalGainsFormatter {
                 if (compensation["buy"].netAmountCurrency === currency) {
                     buyNetAmount = compensation["buy"].netAmount;
                 }
+                else if (compensation["buy"].exchangeRate) {
+                    buyNetAmount +=
+                        compensation["buy"].netAmount * compensation["buy"].exchangeRate;
+                }
                 else {
                     buyNetAmount = yield currencyConverter.convert(compensation["buy"].netAmount, compensation["buy"].netAmountCurrency, currency, compensation["sell"].date);
                 }
                 // Converter os custos da compra para a moeda da declaração
                 let buyFeesAmount = 0;
-                for (let fee of compensation["buy"].fees) {
-                    if (fee.currency === currency) {
-                        buyFeesAmount += fee.amount;
-                    }
-                    else {
-                        buyFeesAmount += yield currencyConverter.convert(fee.amount, fee.currency, currency, compensation["buy"].date);
+                if (compensation["buy"].fees) {
+                    for (let fee of compensation["buy"].fees) {
+                        if (fee.currency === currency) {
+                            buyFeesAmount += fee.amount;
+                        }
+                        else if (fee.exchangeRate) {
+                            buyFeesAmount += fee.amount * fee.exchangeRate;
+                        }
+                        else {
+                            buyFeesAmount += yield currencyConverter.convert(fee.amount, fee.currency, currency, compensation["buy"].date);
+                        }
                     }
                 }
-                let buyCompensationFeesAmount = buyFeesAmount * compensation["shares"] / compensation["buy"].shares;
+                let buyCompensationFeesAmount = (buyFeesAmount * compensation["shares"]) / compensation["buy"].shares;
                 // Converter os impostos da compra para a moeda da declaração
                 let buyTaxesAmount = 0;
-                for (let tax of compensation["buy"].taxes) {
-                    if (tax.currency === currency) {
-                        buyTaxesAmount += tax.amount;
-                    }
-                    else {
-                        buyTaxesAmount += yield currencyConverter.convert(tax.amount, tax.currency, currency, compensation["buy"].date);
+                if (compensation["buy"].taxes) {
+                    for (let tax of compensation["buy"].taxes) {
+                        if (tax.currency === currency) {
+                            buyTaxesAmount += tax.amount;
+                        }
+                        else if (tax.exchangeRate) {
+                            buyTaxesAmount += tax.amount * tax.exchangeRate;
+                        }
+                        else {
+                            buyTaxesAmount += yield currencyConverter.convert(tax.amount, tax.currency, currency, compensation["buy"].date);
+                        }
                     }
                 }
-                let buyCompensationTaxesAmount = buyTaxesAmount * compensation["shares"] / compensation["buy"].shares;
+                let buyCompensationTaxesAmount = (buyTaxesAmount * compensation["shares"]) / compensation["buy"].shares;
                 // Calcular o montante bruto da compra
                 let buyGrossAmount = buyNetAmount + buyFeesAmount + buyTaxesAmount;
                 // Cálculo do valor de aquisição (valor de compra)
@@ -139,9 +172,9 @@ class PTCapitalGainsFormatter {
                     countryDomiciled = compensation["buy"].broker.country;
                 }
                 let capitalGain = {
-                    "Ticker": compensation["sell"].asset.ticker,
+                    Ticker: compensation["sell"].asset.ticker,
                     "País da fonte": `${countryDomiciled === null || countryDomiciled === void 0 ? void 0 : countryDomiciled.code} - ${countryDomiciled === null || countryDomiciled === void 0 ? void 0 : countryDomiciled.namePt}`,
-                    "Código": code,
+                    Código: code,
                     "Ano de Aquisição": new Date(compensation["buy"].date).getFullYear(),
                     "Mês de Aquisição": new Date(compensation["buy"].date).getMonth() + 1,
                     "Dia de Aquisição": new Date(compensation["buy"].date).getDay(),
@@ -152,7 +185,7 @@ class PTCapitalGainsFormatter {
                     "Valor de Realização": Math.round(realizedValue * 100) / 100,
                     "Despesas e Encargos": Math.round((sellCompensationFeesAmount + buyCompensationFeesAmount) * 100) / 100,
                     "Imposto retido no estrangeiro": Math.round((sellCompensationTaxesAmount + buyCompensationTaxesAmount) * 100) / 100,
-                    "País da Contraparte": `${compensation["sell"].broker.country.code} - ${compensation["sell"].broker.country.namePt}`
+                    "País da Contraparte": `${compensation["sell"].broker.country.code} - ${compensation["sell"].broker.country.namePt}`,
                 };
                 capitalGains.push(capitalGain);
             }

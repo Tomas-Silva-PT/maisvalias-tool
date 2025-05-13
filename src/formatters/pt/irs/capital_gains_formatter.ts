@@ -87,39 +87,45 @@ class PTCapitalGainsFormatter {
 
       // Converter os custos da venda para a moeda da declaração
       let sellFeesAmount = 0;
-      for (let fee of compensation["sell"].fees) {
-        if (fee.currency === currency) {
-          sellFeesAmount += fee.amount;
-        } else if (fee.exchangeRate) {
-          sellFeesAmount += fee.amount * fee.exchangeRate;
-        } else {
-          sellFeesAmount += await currencyConverter.convert(
-            fee.amount,
-            fee.currency,
-            currency,
-            compensation["sell"].date
-          );
+      if (compensation["sell"].fees) {
+        for (let fee of compensation["sell"].fees) {
+          if (fee.currency === currency) {
+            sellFeesAmount += fee.amount;
+          } else if (fee.exchangeRate) {
+            sellFeesAmount += fee.amount * fee.exchangeRate;
+          } else {
+            sellFeesAmount += await currencyConverter.convert(
+              fee.amount,
+              fee.currency,
+              currency,
+              compensation["sell"].date
+            );
+          }
         }
       }
+
       let sellCompensationFeesAmount =
         (sellFeesAmount * compensation["shares"]) / compensation["sell"].shares;
 
       // Converter os impostos da venda para a moeda da declaração
       let sellTaxesAmount = 0;
-      for (let tax of compensation["sell"].taxes) {
-        if (tax.currency === currency) {
-          sellTaxesAmount += tax.amount;
-        } else if (tax.exchangeRate) {
-          sellTaxesAmount += tax.amount * tax.exchangeRate;
-        } else {
-          sellTaxesAmount += await currencyConverter.convert(
-            tax.amount,
-            tax.currency,
-            currency,
-            compensation["sell"].date
-          );
+      if (compensation["sell"].taxes) {
+        for (let tax of compensation["sell"].taxes) {
+          if (tax.currency === currency) {
+            sellTaxesAmount += tax.amount;
+          } else if (tax.exchangeRate) {
+            sellTaxesAmount += tax.amount * tax.exchangeRate;
+          } else {
+            sellTaxesAmount += await currencyConverter.convert(
+              tax.amount,
+              tax.currency,
+              currency,
+              compensation["sell"].date
+            );
+          }
         }
       }
+
       let sellCompensationTaxesAmount =
         (sellTaxesAmount * compensation["shares"]) /
         compensation["sell"].shares;
@@ -149,37 +155,42 @@ class PTCapitalGainsFormatter {
 
       // Converter os custos da compra para a moeda da declaração
       let buyFeesAmount = 0;
-      for (let fee of compensation["buy"].fees) {
-        if (fee.currency === currency) {
-          buyFeesAmount += fee.amount;
-        } else if (fee.exchangeRate) {
-          buyFeesAmount += fee.amount * fee.exchangeRate;
-        } else {
-          buyFeesAmount += await currencyConverter.convert(
-            fee.amount,
-            fee.currency,
-            currency,
-            compensation["buy"].date
-          );
+      if (compensation["buy"].fees) {
+        for (let fee of compensation["buy"].fees) {
+          if (fee.currency === currency) {
+            buyFeesAmount += fee.amount;
+          } else if (fee.exchangeRate) {
+            buyFeesAmount += fee.amount * fee.exchangeRate;
+          } else {
+            buyFeesAmount += await currencyConverter.convert(
+              fee.amount,
+              fee.currency,
+              currency,
+              compensation["buy"].date
+            );
+          }
         }
       }
+
       let buyCompensationFeesAmount =
         (buyFeesAmount * compensation["shares"]) / compensation["buy"].shares;
 
       // Converter os impostos da compra para a moeda da declaração
       let buyTaxesAmount = 0;
-      for (let tax of compensation["buy"].taxes) {
-        if (tax.currency === currency) {
-          buyTaxesAmount += tax.amount;
-        } else if (tax.exchangeRate) {
-          buyTaxesAmount += tax.amount * tax.exchangeRate;
-        } else {
-          buyTaxesAmount += await currencyConverter.convert(
-            tax.amount,
-            tax.currency,
-            currency,
-            compensation["buy"].date
-          );
+      if (compensation["buy"].taxes) {
+        for (let tax of compensation["buy"].taxes) {
+          if (tax.currency === currency) {
+            buyTaxesAmount += tax.amount;
+          } else if (tax.exchangeRate) {
+            buyTaxesAmount += tax.amount * tax.exchangeRate;
+          } else {
+            buyTaxesAmount += await currencyConverter.convert(
+              tax.amount,
+              tax.currency,
+              currency,
+              compensation["buy"].date
+            );
+          }
         }
       }
       let buyCompensationTaxesAmount =

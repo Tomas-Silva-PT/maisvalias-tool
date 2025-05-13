@@ -51,7 +51,8 @@ class Trading212Parser {
                 return new Tax(taxName, taxAmount, taxCurrency);
             })
                 .filter((tax) => tax != undefined);
-            const transaction = new Transaction(date, time, type, ticker, isin, shares, assetCurrency, amount, amountCurrency, taxes, fees, new Trading212());
+            const exchangeRate = parseFloat(record["Exchange rate"]);
+            const transaction = new Transaction(date, time, type, ticker, isin, shares, assetCurrency, amount, amountCurrency, new Trading212(), taxes, fees, exchangeRate);
             if (transaction.type)
                 transactions.push(transaction);
         });

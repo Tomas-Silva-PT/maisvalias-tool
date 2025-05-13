@@ -8,14 +8,15 @@ import { ArrowRight, Upload, X } from "lucide-react";
 
 import { Statement } from "../../maisvalias-tool/models/statement.js";
 import { Trading212Parser } from "../../maisvalias-tool/parsers/trading212parser.js";
+import { RevolutParser } from "../../maisvalias-tool/parsers/revolutparser.js";
 import { AssetBuffer } from "../../maisvalias-tool/models/asset.js";
 import { PTCapitalGainsFormatter } from "../../maisvalias-tool/formatters/pt/irs/capital_gains_formatter.js";
 import { PTDividendsFormatter } from "../../maisvalias-tool/formatters/pt/irs/dividends_formatter.js";
 import { PTIRSFormatter } from "../../maisvalias-tool/formatters/pt/irs/irs_xml_formatter.js";
 import DisclaimerPopup from "@site/src/components/DisclaimerPopup";
 
-
-const disclaimerMessage = "O maisvalias-tool é uma ferramenta independente, cujos resultados produzidos não têm caráter vinculativo. Como tal é essencial que haja uma verificação manual dos resultados. Consulta a legislação em vigor e a Autoridade Tributária e Aduaneira sempre que necessário.";
+const disclaimerMessage =
+  "O maisvalias-tool é uma ferramenta independente, cujos resultados produzidos não têm caráter vinculativo. Como tal é essencial que haja uma verificação manual dos resultados. Consulta a legislação em vigor e a Autoridade Tributária e Aduaneira sempre que necessário.";
 
 const steps = [
   {
@@ -28,7 +29,7 @@ const steps = [
     num: 2,
     title: "Indicar histórico de transações",
     description:
-      "Coloca os ficheiros da corretora referentes ao histórico de transações, desde o ano da criação da conta na mesma",
+      "Coloca os seguintes ficheiros da corretora, desde o ano da criação da conta",
   },
   {
     num: 3,
@@ -41,28 +42,27 @@ const brokers = [
   {
     name: "Trading212",
     logo: "/img/brokers/trading212.png",
-    active: true
+    active: true,
   },
   {
     name: "eToro",
     logo: "/img/brokers/etoro.png",
-    active: false
-
+    active: false,
   },
   {
     name: "XTB",
     logo: "/img/brokers/xtb.png",
-    active: false
+    active: false,
   },
   {
     name: "Degiro",
     logo: "/img/brokers/degiro.png",
-    active: false
+    active: false,
   },
   {
     name: "Revolut",
     logo: "/img/brokers/revolut.png",
-    active: false
+    active: true,
   },
 ];
 
@@ -70,7 +70,7 @@ export default function LiveDemoForm() {
   const [step, setStep] = useState(1);
   const [broker, setBroker] = useState({});
   const [progress, setProgress] = useState(0);
-  const [files, setFiles] = useState([]);
+
   const [capitalGains, setCapitalGains] = useState([]);
   const [dividends, setDividends] = useState([]);
   const [fiscalData, setFiscalData] = useState({});
@@ -188,17 +188,25 @@ export default function LiveDemoForm() {
         <div className={clsx(styles.contentStep1)}>
           {brokers.map((broker) => (
             <div
-              className={broker.active === true ? clsx(styles.contentStep1Broker, styles.contentStep1BrokerActive) : clsx(styles.contentStep1Broker)}
-              onClick={() => {if (broker.active === true) {onBrokerSelected(broker)}}}
-            > 
-              {broker.active === false && 
+              className={
+                broker.active === true
+                  ? clsx(
+                      styles.contentStep1Broker,
+                      styles.contentStep1BrokerActive
+                    )
+                  : clsx(styles.contentStep1Broker)
+              }
+              onClick={() => {
+                if (broker.active === true) {
+                  onBrokerSelected(broker);
+                }
+              }}
+            >
+              {broker.active === false && (
                 <div className={clsx(styles.contentStep1BrokerInactive)}>
-
                   🚧 Em breve
                 </div>
-              
-                
-              }
+              )}
               <img
                 style={{ width: "100%", height: "auto" }}
                 alt={broker.name}
@@ -211,110 +219,113 @@ export default function LiveDemoForm() {
     );
   }
 
-  function onFileUpload(e) {
-    const files = e.target.files;
-    if (files) {
-      setFiles((prev) => [...prev, ...Array.from(files)]);
+  function Trading212Files() {
+    const [files, setFiles] = useState([]);
+
+    function onFileUpload(e) {
+      const files = e.target.files;
+      if (files) {
+        setFiles((prev) => [...prev, ...Array.from(files)]);
+      }
     }
-  }
 
-  function removeFile(index) {
-    setFiles((prev) => prev.filter((_, i) => i !== index));
-  }
+    function removeFile(index) {
+      setFiles((prev) => prev.filter((_, i) => i !== index));
+    }
 
-  async function onFilesSelected() {
-    const loader = document.getElementById("custom-loader-container");
-    loader.style.display = "flex";
+    async function onFilesSelected() {
+      const loader = document.getElementById("custom-loader-container");
+      loader.style.display = "flex";
 
-    console.log("Files: " + files);
-    if (files.length === 0 || !broker) return;
+      console.log("Files: " + files);
+      if (files.length === 0 || !broker) return;
 
-    const parser = new Trading212Parser();
-    const statement = new Statement([]);
-    const formatterCapitalGains = new PTCapitalGainsFormatter();
-    const formatterDividends = new PTDividendsFormatter();
+      const parser = new Trading212Parser();
+      const statement = new Statement([]);
+      const formatterCapitalGains = new PTCapitalGainsFormatter();
+      const formatterDividends = new PTDividendsFormatter();
 
-    const filePromises = files.map((file) => {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          const data = e.target.result;
-          const transactions = parser.parse(data);
-          resolve(transactions);
-        };
+      const filePromises = files.map((file) => {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            const data = e.target.result;
+            const transactions = parser.parse(data);
+            resolve(transactions);
+          };
 
-        reader.onerror = function (e) {
-          reject(e.target.error);
-        };
+          reader.onerror = function (e) {
+            reject(e.target.error);
+          };
 
-        reader.readAsText(file);
+          reader.readAsText(file);
+        });
       });
-    });
 
-    let transactions = await Promise.all(filePromises);
-    transactions.forEach((transaction) => {
-      statement.addTransactions(transaction);
-    });
+      let transactions = await Promise.all(filePromises);
+      transactions.forEach((transaction) => {
+        statement.addTransactions(transaction);
+      });
 
-    await statement.fetchData(new AssetBuffer());
-    let capitalGains = await formatterCapitalGains.format(statement);
-    let dividends = await formatterDividends.format(statement);
-    // dividends = dividends["toUser"];
-    console.log("Dividends: " + JSON.stringify(dividends));
+      await statement.fetchData(new AssetBuffer());
+      let capitalGains = await formatterCapitalGains.format(statement);
+      let dividends = await formatterDividends.format(statement);
+      // dividends = dividends["toUser"];
+      console.log("Dividends: " + JSON.stringify(dividends));
 
-    let toUserDividends = dividends["toUser"];
+      let toUserDividends = dividends["toUser"];
 
-    if (!toUserDividends) {
-      console.warn(
-        "toUserDividends is undefined. Check formatterDividends output."
+      if (!toUserDividends) {
+        console.warn(
+          "toUserDividends is undefined. Check formatterDividends output."
+        );
+      } else {
+        console.log("toUserDividends: " + JSON.stringify(toUserDividends));
+      }
+
+      let filteredCapitalGainsYears = capitalGains.map((gain) =>
+        Number(gain["Ano de Realização"])
       );
-    } else {
-      console.log("toUserDividends: " + JSON.stringify(toUserDividends));
+      let filteredDividendsYears = toUserDividends.map((div) =>
+        Number(div["Ano rendimento"])
+      );
+
+      console.log("Filtered: " + JSON.stringify(filteredDividendsYears));
+
+      const years = [
+        ...new Set([...filteredCapitalGainsYears, ...filteredDividendsYears]),
+      ];
+
+      years.sort((a, b) => a - b);
+
+      let data = years.reduce((acc, curr) => {
+        if (!acc[curr]) acc[curr] = {};
+        acc[curr]["capitalGains"] = capitalGains.filter(
+          (gain) => gain["Ano de Realização"] == curr
+        );
+        acc[curr]["dividends"] = {};
+        if (!acc[curr]["dividends"]["toUser"])
+          acc[curr]["dividends"]["toUser"] = {};
+        if (!acc[curr]["dividends"]["toIRS"])
+          acc[curr]["dividends"]["toIRS"] = {};
+        acc[curr]["dividends"]["toUser"] = dividends["toUser"].filter(
+          (div) => div["Ano rendimento"] == curr
+        );
+        acc[curr]["dividends"]["toIRS"] = dividends["toIRS"].filter(
+          (div) => div["Ano rendimento"] == curr
+        );
+        return acc;
+      }, {});
+      console.log("Fiscal Data: " + JSON.stringify(data));
+
+      loader.style.display = "none";
+      setFiscalData(data);
+      setStep((step) => step + 1);
     }
 
-    let filteredCapitalGainsYears = capitalGains.map((gain) =>
-      Number(gain["Ano de Realização"])
-    );
-    let filteredDividendsYears = toUserDividends.map((div) =>
-      Number(div["Ano rendimento"])
-    );
-
-    console.log("Filtered: " + JSON.stringify(filteredDividendsYears));
-
-    const years = [
-      ...new Set([...filteredCapitalGainsYears, ...filteredDividendsYears]),
-    ];
-
-    years.sort((a, b) => a - b);
-
-    let data = years.reduce((acc, curr) => {
-      if (!acc[curr]) acc[curr] = {};
-      acc[curr]["capitalGains"] = capitalGains.filter(
-        (gain) => gain["Ano de Realização"] == curr
-      );
-      acc[curr]["dividends"] = {};
-      if (!acc[curr]["dividends"]["toUser"])
-        acc[curr]["dividends"]["toUser"] = {};
-      if (!acc[curr]["dividends"]["toIRS"])
-        acc[curr]["dividends"]["toIRS"] = {};
-      acc[curr]["dividends"]["toUser"] = dividends["toUser"].filter(
-        (div) => div["Ano rendimento"] == curr
-      );
-      acc[curr]["dividends"]["toIRS"] = dividends["toIRS"].filter(
-        (div) => div["Ano rendimento"] == curr
-      );
-      return acc;
-    }, {});
-    console.log("Fiscal Data: " + JSON.stringify(data));
-
-    loader.style.display = "none";
-    setFiscalData(data);
-    setStep((step) => step + 1);
-  }
-
-  function ContentStep2(props) {
     return (
       <>
+        <h4>Histórico de operações:</h4>
         <div className={clsx(styles.contentStep2)}>
           <Upload className={clsx(styles.contentStep2UploadIcon)} />
           <input
@@ -356,6 +367,236 @@ export default function LiveDemoForm() {
             </>
           )}
         </div>
+      </>
+    );
+  }
+
+  function RevolutFiles() {
+    const [operationFiles, setOperationFiles] = useState([]);
+    const [profitLossFiles, setProfitLossFiles] = useState([]);
+
+    function removeOperationFile(index) {
+      setOperationFiles((prev) => prev.filter((_, i) => i !== index));
+    }
+
+    function onOperationFileUpload(e) {
+      const files = e.target.files;
+      if (files) {
+        setOperationFiles((prev) => [...Array.from(files)]);
+      }
+    }
+
+    function removeProfitLossFile(index) {
+      setProfitLossFiles((prev) => prev.filter((_, i) => i !== index));
+    }
+
+    function onProfitLossFileUpload(e) {
+      const files = e.target.files;
+      if (files) {
+        setProfitLossFiles((prev) => [...Array.from(files)]);
+      }
+    }
+
+    async function onFilesSelected() {
+      const loader = document.getElementById("custom-loader-container");
+      loader.style.display = "flex";
+
+      if (
+        profitLossFiles.length === 0 ||
+        operationFiles.length === 0 ||
+        !broker
+      )
+        return;
+
+      const parser = new RevolutParser();
+      const statement = new Statement([]);
+      const formatterCapitalGains = new PTCapitalGainsFormatter();
+      const formatterDividends = new PTDividendsFormatter();
+
+      const profitLossPromises = profitLossFiles.map((file) => {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            const data = e.target.result;
+            parser.loadIsins(data);
+            resolve();
+          };
+
+          reader.onerror = function (e) {
+            reject(e.target.error);
+          };
+
+          reader.readAsText(file);
+        });
+      });
+
+      await Promise.all(profitLossPromises);
+
+      const operationsPromises = operationFiles.map((file) => {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            const data = e.target.result;
+            const transactions = parser.parse(data);
+            resolve(transactions);
+          };
+
+          reader.onerror = function (e) {
+            reject(e.target.error);
+          };
+
+          reader.readAsText(file);
+        });
+      });
+
+      let transactions = await Promise.all(operationsPromises);
+
+      transactions.forEach((transaction) => {
+        statement.addTransactions(transaction);
+      });
+
+      await statement.fetchData(new AssetBuffer());
+      let capitalGains = await formatterCapitalGains.format(statement);
+      let dividends = await formatterDividends.format(statement);
+      // dividends = dividends["toUser"];
+      console.log("Dividends: " + JSON.stringify(dividends));
+
+      let toUserDividends = dividends["toUser"];
+
+      if (!toUserDividends) {
+        console.warn(
+          "toUserDividends is undefined. Check formatterDividends output."
+        );
+      } else {
+        console.log("toUserDividends: " + JSON.stringify(toUserDividends));
+      }
+
+      let filteredCapitalGainsYears = capitalGains.map((gain) =>
+        Number(gain["Ano de Realização"])
+      );
+      let filteredDividendsYears = toUserDividends.map((div) =>
+        Number(div["Ano rendimento"])
+      );
+
+      console.log("Filtered: " + JSON.stringify(filteredDividendsYears));
+
+      const years = [
+        ...new Set([...filteredCapitalGainsYears, ...filteredDividendsYears]),
+      ];
+
+      years.sort((a, b) => a - b);
+
+      let data = years.reduce((acc, curr) => {
+        if (!acc[curr]) acc[curr] = {};
+        acc[curr]["capitalGains"] = capitalGains.filter(
+          (gain) => gain["Ano de Realização"] == curr
+        );
+        acc[curr]["dividends"] = {};
+        if (!acc[curr]["dividends"]["toUser"])
+          acc[curr]["dividends"]["toUser"] = {};
+        if (!acc[curr]["dividends"]["toIRS"])
+          acc[curr]["dividends"]["toIRS"] = {};
+        acc[curr]["dividends"]["toUser"] = dividends["toUser"].filter(
+          (div) => div["Ano rendimento"] == curr
+        );
+        acc[curr]["dividends"]["toIRS"] = dividends["toIRS"].filter(
+          (div) => div["Ano rendimento"] == curr
+        );
+        return acc;
+      }, {});
+      console.log("Fiscal Data: " + JSON.stringify(data));
+
+      loader.style.display = "none";
+      setFiscalData(data);
+      setStep((step) => step + 1);
+    }
+
+    return (
+      <>
+        <h4>Histórico de operações:</h4>
+        <div className={clsx(styles.contentStep2)}>
+          <Upload className={clsx(styles.contentStep2UploadIcon)} />
+          <input
+            className={clsx(styles.contentStep2UploadInput)}
+            id="file-upload"
+            type="file"
+            accept=".csv"
+            onChange={onOperationFileUpload}
+          />
+          <label htmlFor="file-upload">Escolher ficheiro</label>
+          {operationFiles.length > 0 && (
+            <>
+              <div className={clsx(styles.contentStep2Files)}>
+                {operationFiles.map((file, index) => (
+                  <div key={index} className={clsx(styles.contentStep2File)}>
+                    <div className={clsx(styles.contentStep2FileName)}>
+                      {file.name}
+                    </div>
+                    <div
+                      className={clsx(styles.contentStep2FileRemove)}
+                      onClick={() => removeOperationFile(index)}
+                    >
+                      <X />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
+        </div>
+        <br></br>
+        <h4>Extrato de lucros e perdas:</h4>
+        <div className={clsx(styles.contentStep2)}>
+          <Upload className={clsx(styles.contentStep2UploadIcon)} />
+          <input
+            className={clsx(styles.contentStep2UploadInput)}
+            id="file-upload"
+            type="file"
+            accept=".csv"
+            onChange={onProfitLossFileUpload}
+          />
+          <label htmlFor="file-upload">Escolher ficheiro</label>
+          {profitLossFiles.length > 0 && (
+            <>
+              <div className={clsx(styles.contentStep2Files)}>
+                {profitLossFiles.map((file, index) => (
+                  <div key={index} className={clsx(styles.contentStep2File)}>
+                    <div className={clsx(styles.contentStep2FileName)}>
+                      {file.name}
+                    </div>
+                    <div
+                      className={clsx(styles.contentStep2FileRemove)}
+                      onClick={() => removeProfitLossFile(index)}
+                    >
+                      <X />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
+        </div>
+        {operationFiles.length > 0 && profitLossFiles.length > 0 && (
+          <div
+            className={clsx(styles.contentStep2Process)}
+            onClick={onFilesSelected}
+          >
+            <div className={clsx(styles.contentStep2ProcessText)}>
+              Processar {operationFiles.length + profitLossFiles.length}{" "}
+              ficheiros
+            </div>
+            <ArrowRight />
+          </div>
+        )}
+      </>
+    );
+  }
+
+  function ContentStep2(props) {
+    return (
+      <>
+        {broker.name === "Trading212" && <Trading212Files />}
+        {broker.name === "Revolut" && <RevolutFiles />}
       </>
     );
   }
@@ -516,13 +757,25 @@ export default function LiveDemoForm() {
                       </>
                     )}
                   </div>
-                  <p style={{ "font-style": "italic", "font-weight": "bold", "padding": "1rem"}}>
-                    Nota: A declaração não deve conter erros e deve estar num estado em que não precises de preencher mais nenhuma informação sem ser os ganhos com investimentos. A declaração que aqui colocares deve ser a obtida no portal das finanças através da opção "Guardar".
+                  <p
+                    style={{
+                      "font-style": "italic",
+                      "font-weight": "bold",
+                      padding: "1rem",
+                    }}
+                  >
+                    Nota: A declaração não deve conter erros e deve estar num
+                    estado em que não precises de preencher mais nenhuma
+                    informação sem ser os ganhos com investimentos. A declaração
+                    que aqui colocares deve ser a obtida no portal das finanças
+                    através da opção "Guardar".
                   </p>
                 </div>
                 <div id="declaration-download" style={{ display: "none" }}>
                   <p>
-                    A tua declaração foi preenchida e enviada para o teu dispositivo. Confirma sempre se os resultados estão corretos!
+                    A tua declaração foi preenchida e enviada para o teu
+                    dispositivo. Confirma sempre se os resultados estão
+                    corretos!
                   </p>
                 </div>
               </div>

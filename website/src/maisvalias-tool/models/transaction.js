@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import { Asset } from "./asset.js";
 class Transaction {
-    constructor(date, time, type, ticker, isin, shares, assetCurrency, netAmount, netAmountCurrency, taxes, fees, broker) {
+    constructor(date, time, type, ticker, isin, shares, assetCurrency, netAmount, netAmountCurrency, broker, taxes, fees, exchangeRate) {
         this.date = date;
         this.time = time;
         this.type = type;
@@ -20,6 +20,8 @@ class Transaction {
         this.taxes = taxes;
         this.fees = fees;
         this.broker = broker;
+        if (exchangeRate && !isNaN(exchangeRate))
+            this.exchangeRate = exchangeRate;
     }
     fetchData(assetBuffer) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -27,7 +29,7 @@ class Transaction {
         });
     }
     toString() {
-        return `Transaction(Date: ${this.date}, Time: ${this.time}, Ticker: ${this.asset.ticker}, ISIN: ${this.asset.isin}, Shares: ${this.shares}, Net Amount: ${this.netAmount})`;
+        return `Transaction(Date: ${this.date}, Time: ${this.time}, Ticker: ${this.asset.ticker}, ISIN: ${this.asset.isin}, Shares: ${this.shares}, Net Amount: ${this.netAmount}, Exchange Rate: ${this.exchangeRate})`;
     }
     equals(other) {
         return (this.date === other.date &&
@@ -37,7 +39,8 @@ class Transaction {
             this.shares === other.shares &&
             this.netAmount === other.netAmount &&
             this.netAmountCurrency === other.netAmountCurrency &&
-            this.broker.isEquals(this.broker, other.broker));
+            this.broker.isEquals(this.broker, other.broker) &&
+            this.exchangeRate === other.exchangeRate);
     }
 }
 export { Transaction };
