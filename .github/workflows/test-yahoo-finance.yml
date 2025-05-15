@@ -7,6 +7,7 @@ on:
 
 jobs:
   test-connection:
+    name: Test Yahoo Finance API Connection
     runs-on: ubuntu-latest
 
     steps:
@@ -14,7 +15,7 @@ jobs:
       uses: actions/checkout@v3
 
     - name: Set up Node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
           node-version-file: src/package.json
           cache: "npm"
@@ -28,6 +29,10 @@ jobs:
       working-directory: src/
       run: npm run build
 
-    - name: Run Yahoo Finance Test
-      working-directory: website/maisvalias-tool
-      run: node tests/test-yahoo-finance.js
+    - name: Run Yahoo Finance Test - Get Exchange Rate
+      working-directory: website/src/maisvalias-tool/
+      run: node tests/test-yahoo-finance-exchange-rate.js
+
+    - name: Run Yahoo Finance Test - Search Stock
+      working-directory: website/src/maisvalias-tool/
+      run: node tests/test-yahoo-finance-search.js
