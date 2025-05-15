@@ -34,11 +34,8 @@ Nesta ferramenta, existem alguns pressupostos que são considerados para o bom f
 
 De seguida, são apresentadas as corretoras **atualmente** suportadas:  
 
-| Corretoras Suportadas |
-|:-:|
-| ![Trading212](https://th.bing.com/th/id/R.49fba07b493df66a09a2744a56da5a12?rik=f1LkkhRSkudvig&pid=ImgRaw&r=0) **Trading212** |
-
-
+| ![Trading212](../static/img/brokers/trading212.png) | ![Revolut](../static/img/brokers/revolut.png) |
+|:-:| :-: |
 
 ## 🔍 Como funciona?  
 
