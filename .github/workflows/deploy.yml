@@ -1,4 +1,4 @@
-name: Deploy to GitHub Pages
+name: Deploy Website to GitHub Pages
 
 on:
   push:
@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   build:
-    name: Deploy to GitHub Pages
+    name: Build website
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -42,7 +42,7 @@ jobs:
           path: website/build
 
   deploy:
-    name: Deploy to GitHub Pages
+    name: Deploy website
     needs: build
 
     permissions:
