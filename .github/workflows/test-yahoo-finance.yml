@@ -1,0 +1,33 @@
+name: Test Yahoo Finance API Connection
+
+on:
+  schedule:
+    - cron: "0 0 * * *"  # Runs daily at midnight (UTC)
+  workflow_dispatch:  # Allows manual triggering from GitHub UI
+
+jobs:
+  test-connection:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+          node-version-file: src/package.json
+          cache: "npm"
+          cache-dependency-path: src/package-lock.json
+
+    - name: Install codebase dependencies
+      working-directory: src/
+      run: npm ci  # 👈 npm equivalent of yarn install --frozen-lockfile
+    
+    - name: Build codebase
+      working-directory: src/
+      run: npm run build
+
+    - name: Run Yahoo Finance Test
+      working-directory: website/maisvalias-tool
+      run: node tests/test-yahoo-finance.js

@@ -37,6 +37,8 @@ De seguida, são apresentadas as corretoras **atualmente** suportadas:
 | ![Trading212](../static/img/brokers/trading212.png) | ![Revolut](../static/img/brokers/revolut.png) |
 |:-:| :-: |
 
+Para saberes como utilizar a ferramenta para cada corretora, consulta a secção [Corretoras suportadas](./category/corretoras-suportadas).
+
 ## 🔍 Como funciona?  
 
 A **maisvalias-tool** calcula automaticamente os valores de mais-valias a declarar no IRS, com base no histórico de transações fornecido. Aqui está como o processo funciona:  
