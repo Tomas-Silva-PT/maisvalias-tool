@@ -3,8 +3,8 @@ import { YahooFinance } from "../models/yahoofinance.js";
 async function testConnection() {
   try {
     const rate = await YahooFinance.getExchangeRate('USD', 'EUR', '2025-05-15');
-    if(rate) {
-      throw Error();
+    if(!rate) {
+      throw Error('Not found');
     }
     console.log('Exchange rate fetched successfully:', rate);
     process.exit(0); // Success
