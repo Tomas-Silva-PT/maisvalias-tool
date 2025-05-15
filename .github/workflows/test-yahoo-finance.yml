@@ -7,7 +7,7 @@ on:
 
 jobs:
   test-connection:
-    name: Test Yahoo Finance API Connection - Get Exchange Rate
+    name: Test Yahoo Finance API Connection
     runs-on: ubuntu-latest
 
     steps:
@@ -29,6 +29,10 @@ jobs:
       working-directory: src/
       run: npm run build
 
-    - name: Run Yahoo Finance Test
+    - name: Run Yahoo Finance Test - Get Exchange Rate
       working-directory: website/src/maisvalias-tool/
-      run: node tests/test-yahoo-finance.js
+      run: node tests/test-yahoo-finance-exchange-rate.js
+
+    - name: Run Yahoo Finance Test - Search Stock
+      working-directory: website/src/maisvalias-tool/
+      run: node tests/test-yahoo-finance-search.js
