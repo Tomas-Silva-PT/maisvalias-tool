@@ -22,6 +22,10 @@ Se estiveres interesado e quiseres saberes mais informações acerca desta ferra
 * [Quais os pressupostos/limitações?](https://tomas-silva-pt.github.io/maisvalias-tool/docs/intro/#%EF%B8%8F-quais-os-pressupostos-e-limita%C3%A7%C3%B5es)
 * [Quais são as corretoras suportadas?](https://tomas-silva-pt.github.io/maisvalias-tool/docs/category/corretoras-suportadas)
 
+## Utilização
+
+Para utilizares esta ferramenta, dirige-te à página oficial: [maisvalias-tool](https://Tomas-Silva-PT.github.io/maisvalias-tool).
+
 ## Disclaimer
 
 _O **maisvalias-tool** é uma ferramenta independente, cujos resultados produzidos não têm carácter vinculativo. Como tal, deve existir uma retificação dos resultados, assim como a consulta da legislação em vigor, consultando sempre que necessário a Autoridade Tributária e Aduaneira.

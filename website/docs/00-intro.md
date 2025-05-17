@@ -10,25 +10,24 @@ Vem conhecer a ferramenta **maisvalias-tool em menos de 5 minutos**. :blush:
 
 A ferramenta **maisvalias-tool** tem como objetivo calcular automaticamente os valores de investimentos a declarar no IRS. 📈  
 
-Para quem utiliza a plataforma _Trading212_ para efetuar os seus investimentos, esta ferramenta permite transformar o histórico de compras e vendas no formato requerido pela Autoridade Tributária e Aduaneira (AT) no momento do preenchimento da declaração anual de rendimentos. 📝
+Para quem utiliza corretoras para efetuar os seus investimentos, esta ferramenta permite transformar o histórico de compras e vendas no formato requerido pela Autoridade Tributária e Aduaneira (AT) no momento do preenchimento da declaração anual de rendimentos. 📝
 
 ## 🔧 O que é preciso para utilizar?  
 
 Para utilizar esta ferramenta, apenas precisas de fornecer as seguintes informações:  
 
 1. 📈 **Corretora:** Qual a corretora onde investes.  
-2. 📜 **Histórico de transações:** O teu histórico de transações desde a criação da conta na corretora.  
-3. 📆 **Ano de cálculo:** Qual o ano a que pretendes calcular as mais-valias.  
+2. 📜 **Histórico de transações:** O teu histórico de transações desde a criação da conta na corretora.
 
 ## ⚠️ Quais os pressupostos e limitações?
 
 Nesta ferramenta, existem alguns pressupostos que são considerados para o bom funcionamento da mesma:
 
 1. ✅ **Declaração correta:** Assume-se que todas as vendas de ações/ETFs foram declaradas corretamente nos seus respetivos anos.
-2. 📂 **Histórico completo:** É necessário o carregamento do histórico completo das compras e vendas dos ativos vendidos, ou seja, carregar os dados desde o ano em que foi feita a primeira compra do ativo na corretora. Para saber o porquê desta necessidade, consultar a secção Como funciona?.
+2. 📂 **Histórico completo:** É necessário o carregamento do histórico completo das compras e vendas dos ativos vendidos, ou seja, carregar os dados desde o ano em que foi feita a primeira compra do ativo na corretora. Para saber o porquê desta necessidade, consultar a secção [Como funciona?](#-como-funciona).
 3. 📊 **Ações e ETFs:** Apenas suporta a declaração de ações e ETFs.
-4. 💱 **Taxa de câmbio:** No ficheiro das transações fornecido pela Trading212 não consta o Exchange Rate utilizado na conversão de moedas, quando se trata de dividendos. Por este motivo, é utilizado o rácio de fecho do dia em que o dividendo foi pago.
-5. 🌍 **Apenas rendimentos no estrangeiro:** Esta ferramenta foi pensada para a declaração de **investimentos no estrangeiros através de corretoras estrangeiras**. Lembra-te que isso pode afetar alguns resultados apresentados pela ferramenta!
+4. 💱 **Taxa de câmbio:** Caso a corretora não forneça a taxa de câmbio entre a moeda do ativo e a moeda portuguesa (€), é utilizado o rácio de fecho do dia da operação de compra/venda.
+5. 🌍 **Apenas rendimentos no estrangeiro:** Esta ferramenta foi pensada para a declaração de **investimentos feitos através de corretoras estrangeiras**.
 
 ## 🏦 Quais são as corretoras suportadas?  
 
