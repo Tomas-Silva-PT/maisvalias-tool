@@ -129,6 +129,13 @@ export default function LiveDemoForm() {
     let num = props.num;
     let title = props.title;
     let description = props.description;
+
+    function setCurrStepNum(e) {
+      if (num < currStep) {
+        setStep(num);
+      }
+    }
+
     return (
       <>
         <div
@@ -139,6 +146,7 @@ export default function LiveDemoForm() {
               ? styles.headerStepActive
               : styles.headerStepInactive
           )}
+          onClick={(e) => setCurrStepNum(e)}
         >
           <div className={clsx(styles.headerStepNum)}>{num}</div>
           <div className={clsx(styles.headerStepTitle)}>{title}</div>

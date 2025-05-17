@@ -96,6 +96,7 @@
 
 .headerStepActive {
   opacity: 1;
+  cursor: pointer;
 }
 
 .headerStepInactive {
