@@ -20,6 +20,8 @@ A tua contribuição pode ser feita a vários níveis, quer seja via:
        * **Testes:** Indica-nos que testes efetuastes e como poderemos replicá-los.
   6. Feito! Do teu lado é tudo! Do nosso lado iremos avaliar a tua contribuição e em caso de aprovação, deixarás a tua pegada neste projeto :)
 
+Se quiseres, consulta o [_template_](./docs/pull-request-template.md) com o qual podes basear a tua proposta.
+
 Obrigado pela tua participação,
 
 Tomás
