@@ -20,8 +20,6 @@ A tua contribuição pode ser feita a vários níveis, quer seja via:
        * **Testes:** Indica-nos que testes efetuastes e como poderemos replicá-los.
   6. Feito! Do teu lado é tudo! Do nosso lado iremos avaliar a tua contribuição e em caso de aprovação, deixarás a tua pegada neste projeto :)
 
-
-
 Obrigado pela tua participação,
 
 Tomás
