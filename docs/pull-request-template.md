@@ -1,7 +1,7 @@
 # Template para _pull request_
 
 ### Título 
-Adicionar suporte para corretora Revolut
+Adicionar suporte para corretora Revolut.
 
 ### Descrição  
 Este PR pretende adicionar a capacidade da ferramenta **maisvalias-tool** calcular mais valias obtidas na Revolut.
@@ -16,7 +16,7 @@ Incorporar suporte para a Revolut na ferramenta **maisvalias-tool** permitirá u
 ### Alterações  
 - Foi desenvolvido o código para dar _parse_ dos extratos da Revolut.
 - Foi atualizado o website para permitir escolher a Revolut como corretora.  
-- Foram adicionados scripts de teste à nova funcionalidade
+- Foram adicionados scripts de teste à nova funcionalidade.
 
 ### Testes  
 Para testar a funcionalidade, foi criado o arquivo `teste-revolut.js`, que verifica o _parsing_ dos extratos da Revolut.  
