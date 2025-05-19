@@ -1,18 +1,18 @@
 <p align="center">
-    <img src="/assets/images/logo-no-bg.png" height="150" alt="logo">
+    <img src="/assets/images/logo-no-bg-icon.png" height="150" alt="logo">
 </p>
 
 ---
 
 # ⚠️ **Não utilizar! Esta ferramenta ainda está em processo de desenvolvimento!**
 
+---
+
 # maisvalias-tool
 
-## O que é?
+A ferramenta **maisvalias-tool** tem como objetivo calcular automaticamente os valores de investimentos a declarar no IRS.
 
-O software **maisvalias-tool** tem como objetivo calcular automaticamente os valores de investimentos a declarar no IRS.
-
-Para quem utiliza a plataforma _Trading212_ para efetuar os seus investimentos poderá utilizar esta ferramenta para transformar o histórico de compras e vendas no formato requerido pela Autoridade Tributária e Aduaneira (AT) no momento de preenchimento da declaração anual de rendimentos.
+Para quem utiliza corretoras para efetuar os seus investimentos poderá utilizar esta ferramenta para transformar o histórico de compras e vendas no formato requerido pela _Autoridade Tributária e Aduaneira (AT)_ no momento de preenchimento da declaração anual de rendimentos.
 
 ## Documentação
 
@@ -30,7 +30,11 @@ Para utilizares esta ferramenta, dirige-te à página oficial: [maisvalias-tool]
 
 Se quiseres contribuir para o projeto, dá uma olhadela ao [guia de contribuição](./CONTRIBUTING.md).
 
-## Disclaimer
+## Licença
+
+**Maisvalias-tool** é disponibilizado sob a licença [MIT License](./LICENSE).
+
+## Termos de responsabilidade
 
 _O **maisvalias-tool** é uma ferramenta independente, cujos resultados produzidos não têm carácter vinculativo. Como tal, deve existir uma retificação dos resultados, assim como a consulta da legislação em vigor, consultando sempre que necessário a Autoridade Tributária e Aduaneira.
 Deste modo não me responsabilizo por quaisquer perdas causadas pelo uso desta ferramenta._

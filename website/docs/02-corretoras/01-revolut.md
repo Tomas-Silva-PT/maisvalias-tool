@@ -45,6 +45,14 @@ O seguinte guia vai ensinar-te, passo a passo, como calcular automaticamente as 
 
 E assim tens os ficheiros necessários para utilizar a ferramenta `maisvalias-tool`.
 
+:::danger
+
+Os ficheiros da Revolut são exportados no formato `excel`, no entanto a ferramenta necessita que os mesmos estejam no formato `csv`.
+
+Por esse motivo **deves fazer a conversão de um formato para o outro.**
+
+:::
+
 ## Como utilizar maisvalias-tool
 
 No site oficial, navega até à página `Demonstração`:
