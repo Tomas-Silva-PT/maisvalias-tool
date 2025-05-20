@@ -1,6 +1,6 @@
 # Trading212
 
-Descobre como utilizar a ferramenta com esta corretora
+Descobre como utilizar a ferramenta com esta corretora.
 
 Para utilizares a ferramenta `maisvalias-tool` com esta corretora, precisas de obter o histórico das transações efetuadas **desde do ano em que realizaste a primeira compra de um ativo**.
 

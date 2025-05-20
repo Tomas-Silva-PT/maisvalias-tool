@@ -14,6 +14,7 @@ import { PTCapitalGainsFormatter } from "../../maisvalias-tool/formatters/pt/irs
 import { PTDividendsFormatter } from "../../maisvalias-tool/formatters/pt/irs/dividends_formatter.js";
 import { PTIRSFormatter } from "../../maisvalias-tool/formatters/pt/irs/irs_xml_formatter.js";
 import DisclaimerPopup from "@site/src/components/DisclaimerPopup";
+import HelpDialog from "@site/src/components/HelpDialog";
 
 const disclaimerMessage =
   "O maisvalias-tool é uma ferramenta independente, cujos resultados produzidos não têm caráter vinculativo. Como tal é essencial que haja uma verificação manual dos resultados. Consulta a legislação em vigor e a Autoridade Tributária e Aduaneira sempre que necessário.";
@@ -43,6 +44,7 @@ const brokers = [
     name: "Trading212",
     logo: "/img/brokers/trading212.png",
     active: true,
+    doclink: "/docs/corretoras/trading212",
   },
   {
     name: "eToro",
@@ -63,6 +65,7 @@ const brokers = [
     name: "Revolut",
     logo: "/img/brokers/revolut.png",
     active: true,
+    doclink: "/docs/corretoras/revolut",
   },
 ];
 
@@ -70,6 +73,7 @@ export default function LiveDemoForm() {
   const [step, setStep] = useState(1);
   const [broker, setBroker] = useState({});
   const [progress, setProgress] = useState(0);
+  const [helpDialogVisible, setHelpDialogVisible] = useState(false);
 
   const [capitalGains, setCapitalGains] = useState([]);
   const [dividends, setDividends] = useState([]);
@@ -87,11 +91,15 @@ export default function LiveDemoForm() {
     return () => {
       document.body.removeChild(script);
     };
+
   }, []);
 
   useEffect(() => {
     let newProgress = ((step - 1) / 2) * 100;
     setProgress(newProgress);
+
+    const shouldShowHelp = step === 2;
+    setHelpDialogVisible(shouldShowHelp);
   }, [step]);
 
   function Header(props) {
@@ -609,19 +617,6 @@ export default function LiveDemoForm() {
     );
   }
 
-  // function toggleCollapible(e) {
-  //   const button = e.currentTarget;
-  //   const content = button.nextElementSibling;
-  //   button.classList.toggle(styles.active);
-
-  //   if (content.style.maxHeight) {
-  //     content.style.maxHeight = null;
-  //   } else {
-  //     content.style.maxHeight = "100%"; // content.scrollHeight + 'px';
-  //     console.log("Height: " + content.scrollHeight);
-  //   }
-  // }
-
   function exportToExcel(year, data) {
     console.log("Exporting to Excel...");
     const wsCapitalGains = XLSX.utils.json_to_sheet(data["capitalGains"]);
@@ -985,6 +980,11 @@ export default function LiveDemoForm() {
         <Header step={step} />
         <Content step={step} />
         <DisclaimerPopup title="Importante" message={disclaimerMessage} />
+        <HelpDialog
+          visible={helpDialogVisible}
+          message="Não sabes onde encontrar os ficheiros?"
+          link={useBaseUrl(broker.doclink)}
+        />
       </section>
     </>
   );

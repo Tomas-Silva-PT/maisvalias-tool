@@ -1,0 +1,104 @@
+.container {
+  position: fixed;
+  bottom: 1%;
+  right: 1%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  color: rgb(30, 30, 30);
+  transition: all 1s ease;
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+}
+
+.body {
+  --size: max(5vw, 4rem);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  width: var(--size);
+  height: var(--size);
+  border-radius: 50%;
+  background: linear-gradient(
+      191deg,
+      rgba(43, 200, 169, 0) 53%,
+      var(--ifm-color-secondary) 89%
+    ),
+    linear-gradient(
+      166deg,
+      rgba(43, 200, 169, 0) 53%,
+      var(--ifm-color-secondary) 89%
+    ),
+    var(--ifm-color-primary-lighter);
+}
+
+.body:hover {
+  cursor: pointer;
+    border-color: var(--ifm-color-secondary);
+  box-shadow: 0px 0px 10px var(--ifm-color-secondary);
+  border-width: 0.2rem;
+  border-style: solid;
+}
+
+.body p {
+  margin: 0;
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: var(--ifm-color-text);
+  text-shadow: 0px 0px 8px var(--ifm-inverse-color-text);
+}
+
+.footer {
+  margin-top: 0.5rem;
+  margin-right: 0.5rem;
+  position: relative;
+  height: auto;
+  display: none;
+}
+
+.footer p {
+  margin-bottom: 0.5rem;
+  font-size: 0.8rem;
+  font-weight: bold;
+  background: rgb(200,200,200);
+  border-radius: 0.5rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.footer p:hover {
+    cursor: pointer;
+    border-color: var(--ifm-color-secondary);
+  box-shadow: 0px 0px 10px var(--ifm-color-secondary);
+  border-style: inset;
+  border-width: 0.1rem;
+  border-style: solid;
+}
+
+.button {
+  width: auto;
+  position: absolute;
+  right: 0;
+  bottom: 0.0rem;
+  font-weight: bold;
+  border: 2px solid rgb(0,0,0,0.1);
+  padding: 0.2rem 1.5rem;
+  border-radius: 0.5rem;
+}
+
+.button:hover {
+  cursor: pointer;
+  border: 2px solid rgb(0,0,0,1);
+  background-color: black;
+  color: white;
+  transition: all 0.15s ease-in-out;
+}

@@ -1,6 +1,6 @@
 # Revolut
 
-Descobre como utilizar a ferramenta com esta corretora
+Descobre como utilizar a ferramenta com esta corretora.
 
 Para utilizares a ferramenta `maisvalias-tool` com esta corretora, precisas de obter o histórico das transações efetuadas **desde do ano em que realizaste a primeira compra de um ativo**.
 
@@ -21,7 +21,7 @@ O seguinte guia vai ensinar-te, passo a passo, como calcular automaticamente as 
 
 ![step](../../static/img/brokers/revolut/steps/step4.png)
 
-### Passo 4: Obter o extrato da conta
+### Passo 4: Obter o histórico de operações
 
 ![step](../../static/img/brokers/revolut/steps/step5.png)
 
