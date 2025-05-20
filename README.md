@@ -24,7 +24,34 @@ Se estiveres interesado e quiseres saberes mais informações acerca desta ferra
 
 ## Utilização
 
+### Online (recomendado)
+
 Para utilizares esta ferramenta, dirige-te à página oficial: [maisvalias-tool](https://Tomas-Silva-PT.github.io/maisvalias-tool).
+
+### Localmente
+
+Se quiseres utilizar esta ferramenta no teu ambiente local, segue os seguintes passos:
+
+#### 1. Clona o repositório
+
+```bash
+git clone https://github.com/Tomas-Silva-PT/maisvalias-tool.git
+```
+
+#### 2. Instala as dependências
+
+```bash
+cd maisvalias-tool/website
+npm install
+```
+
+#### 3. Inicia o website
+
+```bash
+npm run start
+```
+
+Para aprenderes a utilizar a ferramenta, consulta a [documentação](https://tomas-silva-pt.github.io/maisvalias-tool/docs/intro) no site oficial.
 
 ## Contribuição
 
