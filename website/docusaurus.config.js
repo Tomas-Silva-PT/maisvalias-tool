@@ -90,6 +90,8 @@ const config = {
             label: 'Documentação',
           },
           {to: '/about', label: 'Sobre Nós', position: 'left'},
+          {to: '/donate', label: 'Donativo', position: 'left'},
+          {to: '/faq', label: 'FAQ', position: 'left'},
           {to: '/livedemo', label: 'Demonstração', position: 'left'},
           {
             href: "https://github.com/Tomas-Silva-PT/maisvalias-tool",
