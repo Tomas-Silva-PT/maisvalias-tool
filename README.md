@@ -78,4 +78,5 @@ Dito isto, **apenas é enviado para os serviços a data e a moeda** necessária 
 ## Termos de responsabilidade
 
 _O **maisvalias-tool** é uma ferramenta independente, cujos resultados produzidos não têm carácter vinculativo. Como tal, deve existir uma retificação dos resultados, assim como a consulta da legislação em vigor, consultando sempre que necessário a Autoridade Tributária e Aduaneira.
-Deste modo não me responsabilizo por quaisquer perdas causadas pelo uso desta ferramenta._
+
+Consulta os termos de responsabilidade [aqui](DISCLAIMER.md).
