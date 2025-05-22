@@ -30,7 +30,7 @@ class PTIRSFormatter {
     }
 
     // No caso das mais valias de capital, verificar o quadro 9.2A
-    const quadro9 = xmlDoc.querySelector("Quadro09");
+    const quadro9 = anexoJ.querySelector("Quadro09");
     if (quadro9 === null) {
       throw new Error(
         "O Quadro 9 nao foi encontrado na declaração IRS, por favor adicione antes de utilizar esta ferramenta."
@@ -39,7 +39,7 @@ class PTIRSFormatter {
 
     let quadro9_2A = quadro9.querySelector("AnexoJq092AT01");
     if (!quadro9_2A) {
-      quadro9_2A = xmlDoc.createElement("AnexoJq092AT01");
+      quadro9_2A = xmlDoc.createElementNS(quadro9.namespaceURI, "AnexoJq092AT01");
       quadro9.appendChild(quadro9_2A);
     }
     let quadro9_2A_lines = quadro9_2A.childNodes;
@@ -51,65 +51,65 @@ class PTIRSFormatter {
 
     // Adicionar as mais valias de capital
     capitalGains.forEach((gain) => {
-      const linha = xmlDoc.createElement("AnexoJq092AT01-Linha");
+      const linha = xmlDoc.createElementNS(quadro9.namespaceURI, "AnexoJq092AT01-Linha");
       linha.setAttribute("numero", currNumero.toString());
 
-      const NLinha = xmlDoc.createElement("NLinha");
+      const NLinha = xmlDoc.createElementNS(quadro9.namespaceURI, "NLinha");
       NLinha.textContent = currNLinha.toString();
       linha.appendChild(NLinha);
 
-      const CodPais = xmlDoc.createElement("CodPais");
+      const CodPais = xmlDoc.createElementNS(quadro9.namespaceURI, "CodPais");
       CodPais.textContent = gain["País da fonte"].split("-")[0].trim();
       linha.appendChild(CodPais);
 
-      const Codigo = xmlDoc.createElement("Codigo");
+      const Codigo = xmlDoc.createElementNS(quadro9.namespaceURI, "Codigo");
       Codigo.textContent = gain["Código"];
       linha.appendChild(Codigo);
 
-      const AnoRealizacao = xmlDoc.createElement("AnoRealizacao");
+      const AnoRealizacao = xmlDoc.createElementNS(quadro9.namespaceURI, "AnoRealizacao");
       AnoRealizacao.textContent = gain["Ano de Realização"].toString();
       linha.appendChild(AnoRealizacao);
 
-      const MesRealizacao = xmlDoc.createElement("MesRealizacao");
+      const MesRealizacao = xmlDoc.createElementNS(quadro9.namespaceURI, "MesRealizacao");
       MesRealizacao.textContent = gain["Mês de Realização"].toString();
       linha.appendChild(MesRealizacao);
 
-      const DiaRealizacao = xmlDoc.createElement("DiaRealizacao");
+      const DiaRealizacao = xmlDoc.createElementNS(quadro9.namespaceURI, "DiaRealizacao");
       DiaRealizacao.textContent = gain["Dia de Realização"].toString();
       linha.appendChild(DiaRealizacao);
 
-      const ValorRealizacao = xmlDoc.createElement("ValorRealizacao");
+      const ValorRealizacao = xmlDoc.createElementNS(quadro9.namespaceURI, "ValorRealizacao");
       ValorRealizacao.textContent = gain["Valor de Realização"].toString();
       linha.appendChild(ValorRealizacao);
 
-      const AnoAquisicao = xmlDoc.createElement("AnoAquisicao");
+      const AnoAquisicao = xmlDoc.createElementNS(quadro9.namespaceURI, "AnoAquisicao");
       AnoAquisicao.textContent = gain["Ano de Aquisição"].toString();
       linha.appendChild(AnoAquisicao);
 
-      const MesAquisicao = xmlDoc.createElement("MesAquisicao");
+      const MesAquisicao = xmlDoc.createElementNS(quadro9.namespaceURI, "MesAquisicao");
       MesAquisicao.textContent = gain["Mês de Aquisição"].toString();
       linha.appendChild(MesAquisicao);
 
-      const DiaAquisicao = xmlDoc.createElement("DiaAquisicao");
+      const DiaAquisicao = xmlDoc.createElementNS(quadro9.namespaceURI, "DiaAquisicao");
       DiaAquisicao.textContent = gain["Dia de Aquisição"].toString();
       linha.appendChild(DiaAquisicao);
 
-      const ValorAquisicao = xmlDoc.createElement("ValorAquisicao");
+      const ValorAquisicao = xmlDoc.createElementNS(quadro9.namespaceURI, "ValorAquisicao");
       ValorAquisicao.textContent = gain["Valor de Aquisição"].toString();
       linha.appendChild(ValorAquisicao);
 
-      const DespesasEncargos = xmlDoc.createElement("DespesasEncargos");
+      const DespesasEncargos = xmlDoc.createElementNS(quadro9.namespaceURI, "DespesasEncargos");
       DespesasEncargos.textContent = gain["Despesas e Encargos"].toString();
       linha.appendChild(DespesasEncargos);
 
-      const ImpostoPagoNoEstrangeiro = xmlDoc.createElement(
+      const ImpostoPagoNoEstrangeiro = xmlDoc.createElementNS(quadro9.namespaceURI, 
         "ImpostoPagoNoEstrangeiro"
       );
       ImpostoPagoNoEstrangeiro.textContent =
         gain["Imposto retido no estrangeiro"].toString();
       linha.appendChild(ImpostoPagoNoEstrangeiro);
 
-      const CodPaisContraparte = xmlDoc.createElement("CodPaisContraparte");
+      const CodPaisContraparte = xmlDoc.createElementNS(quadro9.namespaceURI, "CodPaisContraparte");
       CodPaisContraparte.textContent = gain["País da Contraparte"]
         .split("-")[0]
         .trim();
@@ -131,7 +131,7 @@ class PTIRSFormatter {
 
     let quadro8A = quadro8.querySelector("AnexoJq08AT01");
     if (!quadro8A) {
-      quadro8A = xmlDoc.createElement("AnexoJq08AT01");
+      quadro8A = xmlDoc.createElementNS(quadro8.namespaceURI, "AnexoJq08AT01");
       quadro8.appendChild(quadro8A);
     }
     let quadro8A_lines = quadro8A.childNodes;
@@ -144,28 +144,28 @@ class PTIRSFormatter {
     // Adicionar as mais valias de capital
     dividends.forEach((div) => {
       console.log("Dividendo: " + JSON.stringify(div));
-      const linha = xmlDoc.createElement("AnexoJq08AT01-Linha");
+      const linha = xmlDoc.createElementNS(quadro8.namespaceURI,"AnexoJq08AT01-Linha");
       linha.setAttribute("numero", currNumero.toString());
 
-      const NLinha = xmlDoc.createElement("NLinha");
+      const NLinha = xmlDoc.createElementNS(quadro8.namespaceURI,"NLinha");
       NLinha.textContent = currNLinha.toString();
       linha.appendChild(NLinha);
 
-      const CodRendimento = xmlDoc.createElement("CodRendimento");
+      const CodRendimento = xmlDoc.createElementNS(quadro8.namespaceURI,"CodRendimento");
       CodRendimento.textContent = div["Código Rendimento"]
         .split("-")[0]
         .trim();
       linha.appendChild(CodRendimento);
 
-      const CodPais = xmlDoc.createElement("CodPais");
+      const CodPais = xmlDoc.createElementNS(quadro8.namespaceURI,"CodPais");
       CodPais.textContent = div["País da fonte"].split("-")[0].trim();
       linha.appendChild(CodPais);
 
-      const RendimentoBruto = xmlDoc.createElement("RendimentoBruto");
+      const RendimentoBruto = xmlDoc.createElementNS(quadro8.namespaceURI,"RendimentoBruto");
       RendimentoBruto.textContent = div["Rendimento Bruto"].toString();
       linha.appendChild(RendimentoBruto);
 
-      const ImpostoPagoEstrangeiroPaisFonte = xmlDoc.createElement(
+      const ImpostoPagoEstrangeiroPaisFonte = xmlDoc.createElementNS(quadro8.namespaceURI,
         "ImpostoPagoEstrangeiroPaisFonte"
       );
       ImpostoPagoEstrangeiroPaisFonte.textContent =

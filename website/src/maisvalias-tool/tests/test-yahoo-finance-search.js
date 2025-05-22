@@ -15,6 +15,9 @@ function testConnection() {
             if (!assetType) {
                 throw Error('Not found');
             }
+            else if (assetType !== 'ETF') {
+                throw Error('Could identify it as an ETF');
+            }
             console.log('Asset type fetched successfully:', assetType);
             process.exit(0); // Success
         }
