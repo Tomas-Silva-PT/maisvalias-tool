@@ -3,7 +3,7 @@
 A ferramenta *maisvalias-tool* tem como objetivo auxiliar investidores na organização de informações relativas a mais-valias e dividendos, com vista à preparação da declaração de IRS em Portugal.
 
 **Aviso Legal:**
-O uso desta ferramenta é de responsabilidade exclusiva do utilizador. Embora sejam feitos todos os esforços para garantir a precisão dos cálculos e funcionalidades, *maisvalias-tool* não garante a total exatidão, atualização ou adequação dos resultados às necessidades fiscais específicas de cada utilizador. O utilizador é o único responsável por verificar a exatidão dos dados e dos cálculos apresentados.
+O uso desta ferramenta é de **responsabilidade exclusiva do utilizador**. Embora sejam feitos todos os esforços para garantir a precisão dos cálculos e funcionalidades, *maisvalias-tool* **não garante** a total exatidão, atualização ou adequação dos resultados às necessidades fiscais específicas de cada utilizador. **O utilizador é o único responsável por verificar a exatidão dos dados e dos cálculos apresentados**.
 
 **Esta ferramenta não substitui o aconselhamento de um contabilista certificado ou de um consultor fiscal.** Recomendamos vivamente que os resultados gerados sejam revistos por um profissional antes de qualquer submissão à Autoridade Tributária.
 
