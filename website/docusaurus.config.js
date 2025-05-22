@@ -119,6 +119,10 @@ const config = {
                 label: 'Corretoras suportadas',
                 to: '/docs/category/corretoras-suportadas',
               },
+              {
+                label: 'Funcionalidades',
+                to: '/docs/category/funcionalidades',
+              },
             ],
           },
           {
@@ -131,7 +135,24 @@ const config = {
               {
                 label: 'Comunidade',
                 href: 'https://github.com/Tomas-Silva-PT/maisvalias-tool/discussions'
-              }
+              },
+              {
+                label: 'Contribuir',
+                href: 'https://github.com/Tomas-Silva-PT/maisvalias-tool/blob/main/CONTRIBUTING.md'
+              },
+            ],
+          },
+          {
+            title: 'Legal',
+            items: [
+              {
+                label: 'Termos de responsabilidade',
+                href: 'https://github.com/Tomas-Silva-PT/maisvalias-tool/blob/main/DISCLAIMER.md'
+              },
+              {
+                label: 'Privacidade',
+                href: 'https://github.com/Tomas-Silva-PT/maisvalias-tool/blob/main/PRIVACY.md'
+              },
             ],
           },
         ],

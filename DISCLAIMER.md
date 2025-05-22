@@ -1,4 +1,4 @@
-# Termo de Responsabilidade
+# Termos de Responsabilidade
 
 A ferramenta *maisvalias-tool* tem como objetivo auxiliar investidores na organização de informações relativas a mais-valias e dividendos, com vista à preparação da declaração de IRS em Portugal.
 

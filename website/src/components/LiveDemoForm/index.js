@@ -17,7 +17,7 @@ import DisclaimerPopup from "@site/src/components/DisclaimerPopup";
 import HelpDialog from "@site/src/components/HelpDialog";
 
 const disclaimerMessage =
-  "O maisvalias-tool é uma ferramenta independente, cujos resultados produzidos não têm caráter vinculativo. Como tal é essencial que haja uma verificação manual dos resultados. Consulta a legislação em vigor e a Autoridade Tributária e Aduaneira sempre que necessário.";
+  "O maisvalias-tool é uma ferramenta independente, cujos resultados produzidos não têm caráter vinculativo. Como tal é essencial que haja uma verificação manual dos resultados. Consulta a legislação em vigor e a Autoridade Tributária e Aduaneira sempre que necessário. Consulta os termos de responsabilidade para saberes mais.";
 
 const steps = [
   {

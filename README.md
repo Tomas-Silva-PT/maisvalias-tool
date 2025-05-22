@@ -59,24 +59,14 @@ Se quiseres contribuir para o projeto, dá uma olhadela ao [guia de contribuiç�
 
 ## Privacidade
 
-A `maisvalias-tool` foi desenvolvida com foco na **privacidade** dos utilizadores:
-- Todos os dados inseridos na ferramenta (transações, dividendos, etc.) são **processados localmente no teu navegador**.
-- **Nenhuma informação pessoal é enviada para servidores.**
+A `maisvalias-tool` foi desenvolvida com foco na **privacidade** dos utilizadores.
 
-As duas **únicas situações em que há comunicação com um servidor externo** são:
+Antes de utilizares a ferramenta, consulta as políticas de privacidade [aqui](PRIVACY.md).
 
-1. Obtenção de taxas de câmbio — apenas **se a corretora não fornecer diretamente a mesma**.
-2. **Identificação do tipo de ativo (Ação ou ETF)**, pois isto influencia a maneira como deve ser declarado no IRS.
+## Termos de responsabilidade
 
-Nestes casos, a ferramenta consulta serviços públicos para obter a informação necessária.
-Dito isto, **apenas é enviado para os serviços a data e a moeda** necessária para obter a taxa de câmbio (ex.: `USD` em `2024-06-10`), assim como o **ticker** do ativo (ex.: `VUAA`) para a ferramenta saber se é uma ação ou ETF.
+Antes de utilizares a ferramenta, consulta os termos de responsabilidade [aqui](DISCLAIMER.md).
 
 ## Licença
 
 **Maisvalias-tool** é disponibilizado sob a licença [MIT License](./LICENSE).
-
-## Termos de responsabilidade
-
-_O **maisvalias-tool** é uma ferramenta independente, cujos resultados produzidos não têm carácter vinculativo. Como tal, deve existir uma retificação dos resultados, assim como a consulta da legislação em vigor, consultando sempre que necessário a Autoridade Tributária e Aduaneira.
-
-Consulta os termos de responsabilidade [aqui](DISCLAIMER.md).
