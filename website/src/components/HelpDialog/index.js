@@ -9,7 +9,15 @@ export default function HelpDialog({ visible, message, link }) {
 
   function showLinks() {
     setLinksVisible(!linksVisible);
-    !linksVisible ? document.getElementById("help-popup-footer").style.display = "block" : document.getElementById("help-popup-footer").style.display = "none";
+    // !linksVisible ? document.getElementById("help-popup-footer").style.display = "block" : document.getElementById("help-popup-footer").style.display = "none";
+
+    const footer = document.getElementById("help-popup-footer");
+    const questionmark = document.getElementById("help-popup-question");
+    const closemark = document.getElementById("help-popup-close");
+
+    footer.classList.toggle(styles.growned);
+    questionmark.classList.toggle(styles.hide);
+    closemark.classList.toggle(styles.hide);
   }
 
   return (
@@ -17,15 +25,17 @@ export default function HelpDialog({ visible, message, link }) {
       {visible && (
         <div id="help-popup" className={clsx(styles.container)}>
           <div className={clsx(styles.header)}></div>
-          <div id="help-popup-footer"  className={clsx(styles.footer)}>
+          <div id="help-popup-footer"  className={clsx(styles.footer, styles.shrinked)}>
             <p onClick={() => window.open(link, "_blank")}>{message}</p>
 
           </div>
           <div
+            id="help-popup-body"
             onClick={() => showLinks()}
-            className={clsx(styles.body)}
+            className={clsx(styles.body, styles.dialogClosed)}
           >
-            <p>?</p>
+            <p id="help-popup-question" className={clsx(styles.dialogClosed)}>?</p>
+            <p id="help-popup-close" className={clsx(styles.hide)}><X className={clsx(styles.dialogOpened)}/></p>
           </div>
         </div>
       )}

@@ -16,7 +16,6 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-
 }
 
 .body {
@@ -43,7 +42,7 @@
 
 .body:hover {
   cursor: pointer;
-    border-color: var(--ifm-color-secondary);
+  border-color: var(--ifm-color-secondary);
   box-shadow: 0px 0px 10px var(--ifm-color-secondary);
   border-width: 0.2rem;
   border-style: solid;
@@ -62,22 +61,32 @@
   margin-right: 0.5rem;
   position: relative;
   height: auto;
-  display: none;
+  transition: opacity 1s ease;
 }
 
 .footer p {
   margin-bottom: 0.5rem;
   font-size: 0.8rem;
   font-weight: bold;
-  background: rgb(200,200,200);
+  background: rgb(200, 200, 200);
   border-radius: 0.5rem;
   padding-left: 0.5rem;
   padding-right: 0.5rem;
 }
 
+.shrinked {
+  transform: scale(0);
+  transform-origin: bottom right; /* Growth starts here */
+  transition: transform 0.5s ease;
+}
+
+.growned {
+  transform: scale(1);
+}
+
 .footer p:hover {
-    cursor: pointer;
-    border-color: var(--ifm-color-secondary);
+  cursor: pointer;
+  border-color: var(--ifm-color-secondary);
   box-shadow: 0px 0px 10px var(--ifm-color-secondary);
   border-style: inset;
   border-width: 0.1rem;
@@ -88,17 +97,52 @@
   width: auto;
   position: absolute;
   right: 0;
-  bottom: 0.0rem;
+  bottom: 0rem;
   font-weight: bold;
-  border: 2px solid rgb(0,0,0,0.1);
+  border: 2px solid rgb(0, 0, 0, 0.1);
   padding: 0.2rem 1.5rem;
   border-radius: 0.5rem;
 }
 
 .button:hover {
   cursor: pointer;
-  border: 2px solid rgb(0,0,0,1);
+  border: 2px solid rgb(0, 0, 0, 1);
   background-color: black;
   color: white;
   transition: all 0.15s ease-in-out;
+}
+
+.dialogOpened {
+  will-change: transform;
+  transform-origin: center center;
+  animation: 0.5s ease-in-out 0s forwards rotateIn;
+  display: inline-block;
+}
+
+.dialogClosed {
+  will-change: transform;
+  transform-origin: center center;
+  animation: 0.5s ease-in-out 0s forwards rotateOut;
+}
+
+.hide {
+  display: none;
+}
+
+@keyframes rotateIn {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(180deg);
+  }
+}
+
+@keyframes rotateOut {
+  from {
+    transform: rotate(90deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
 }
