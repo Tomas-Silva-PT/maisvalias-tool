@@ -61,7 +61,7 @@ Se quiseres contribuir para o projeto, dá uma olhadela ao [guia de contribuiç�
 
 ## Privacidade
 
-A `maisvalias-tool` foi desenvolvida com foco na **privacidade** dos utilizadores.
+A **maisvalias-tool** foi desenvolvida com foco na **privacidade** dos utilizadores.
 
 Antes de utilizares a ferramenta, consulta as políticas de privacidade [aqui](PRIVACY.md).
 
