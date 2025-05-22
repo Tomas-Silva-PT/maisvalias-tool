@@ -48,7 +48,6 @@ const brokers = [
       {
         message: "Não sabes onde encontrar os ficheiros?",
         link: "docs/corretoras/trading212",
-        internal: true,
       },
     ],
   },
@@ -75,7 +74,6 @@ const brokers = [
       {
         message: "Não sabes onde encontrar os ficheiros?",
         link: "docs/corretoras/revolut",
-        internal: true,
       },
     ],
   },
