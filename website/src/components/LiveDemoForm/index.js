@@ -44,7 +44,13 @@ const brokers = [
     name: "Trading212",
     logo: "/img/brokers/trading212.png",
     active: true,
-    doclink: "/docs/corretoras/trading212",
+    docs: [
+      {
+        message: "Não sabes onde encontrar os ficheiros?",
+        link: "docs/corretoras/trading212",
+        internal: true,
+      },
+    ],
   },
   {
     name: "eToro",
@@ -65,7 +71,13 @@ const brokers = [
     name: "Revolut",
     logo: "/img/brokers/revolut.png",
     active: true,
-    doclink: "/docs/corretoras/revolut",
+    docs: [
+      {
+        message: "Não sabes onde encontrar os ficheiros?",
+        link: "docs/corretoras/revolut",
+        internal: true,
+      },
+    ],
   },
 ];
 
@@ -91,7 +103,6 @@ export default function LiveDemoForm() {
     return () => {
       document.body.removeChild(script);
     };
-
   }, []);
 
   useEffect(() => {
@@ -980,11 +991,7 @@ export default function LiveDemoForm() {
         <Header step={step} />
         <Content step={step} />
         <DisclaimerPopup title="Importante" message={disclaimerMessage} />
-        <HelpDialog
-          visible={helpDialogVisible}
-          message="Não sabes onde encontrar os ficheiros?"
-          link={useBaseUrl(broker.doclink)}
-        />
+        <HelpDialog visible={helpDialogVisible} docs={broker.docs} />
       </section>
     </>
   );
