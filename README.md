@@ -13,7 +13,7 @@ Para quem utiliza corretoras para efetuar os seus investimentos poderá utilizar
 
 ## Documentação
 
-Se estiveres interesado e quiseres saberes mais informações acerca desta ferramenta, está tudo documentado [aqui](https://tomas-silva-pt.github.io/maisvalias-tool/docs/intro).
+Se estiveres interessado e quiseres saberes mais informações acerca desta ferramenta, está tudo documentado [aqui](https://tomas-silva-pt.github.io/maisvalias-tool/docs/intro).
 
 ## Utilização
 
