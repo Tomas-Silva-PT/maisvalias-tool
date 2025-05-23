@@ -11,6 +11,8 @@ A ferramenta **maisvalias-tool** tem como objetivo calcular automaticamente os v
 
 Para quem utiliza corretoras para efetuar os seus investimentos poderá utilizar esta ferramenta para transformar o histórico de compras e vendas no formato requerido pela _Autoridade Tributária e Aduaneira (AT)_ no momento de preenchimento da declaração anual de rendimentos.
 
+[![Vê a demonstração](./assets/maisvalias-tool-demo.gif)](./assets/maisvalias-tool-demo.gif)
+
 ## Documentação
 
 Se estiveres interessado e quiseres saberes mais informações acerca desta ferramenta, está tudo documentado [aqui](https://tomas-silva-pt.github.io/maisvalias-tool/docs/intro).
