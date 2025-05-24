@@ -11,13 +11,13 @@ quis entrar no mundo do Open-Source e sentir que estou a entregar
 a minha vida para que tal desejo se possa tornar realidade, e como
 tal, aqui estou eu!
 
-Continuarei a utilizar o plural "somos", com a esperança que no futuro a comunidade de contribuidores aumente para além de mim.
+Continuarei a utilizar o plural "somos", com a esperança que no futuro a comunidade de contribuidores deste projeto aumente para além de mim.
 
 ## Porquê criar o **maisvalias-tool**
 
-Esta aplicação na verdade surgiu de uma necessidade pessoal. Quando
+Na verdade esta aplicação surgiu de uma necessidade pessoal. Quando
 começei a trabalhar e a investir o meu dinheiro surgiu-me a dúvida
-existencial de **"como é que eu vou declarar isto?"**. Decidi
+existencial de **"como é que eu depois vou declarar isto?"**. Decidi
 então fazer a minha pesquisa e, numa fase inicial, desenvolver esta
 aplicação para uso próprio. Após conversar com pessoas à minha volta
 percebi a dúvida existencial era compartilhada pelo que surgiu a
@@ -28,7 +28,7 @@ oportunidade ideal para um projeto Open-Source.
 Para partilhares ideias, sugestões, ou dúvidas, sugiro que o faças
 no nosso repositório [Github](https://github.com/Tomas-Silva-PT/maisvalias-tool).
 
-Também podes-nos enviar um e-mail para: **[escapetools.software.solutions@gmail.com](mailto:escapetools.software.solutions@gmail.com)**.
+Também podes enviar um e-mail para: **[escapetools.software.solutions@gmail.com](mailto:escapetools.software.solutions@gmail.com)**.
 
 ## Como nos apoiar
 

@@ -18,18 +18,18 @@ A ferramenta irá processar o teu histórico de transações para te fornecer as
 Sim! Recomendamos que utilizes a funcionalidade de exportação para excel para validares e retificares os resultados obtidos. Se verificares que os valores obtidos estão corretos, podes ir mais além e exportá-los diretamente para uma declaração de IRS. Vê como fazer tudo isto através da [documentação](/docs/category/funcionalidades).
 
 ## Os meus dados estão seguros?
-Sim. A aplicação foi concebida para funcionar maioritariamente no **lado do cliente** — ou seja, todos os dados são processados diretamente no teu navegador, e **não são enviados para nenhum servidor**.
+A aplicação foi concebida para funcionar maioritariamente no **lado do cliente** — ou seja, todos os dados são processados diretamente no teu navegador, e **não são enviados para nenhum servidor**.
 
 As **únicas exceções** são: 
 
-1) Quando é necessário obter **taxas de câmbio** para conversão de valores em moedas estrangeiras. Neste caso, se a **corretora não fornecer a taxa de câmbio**, a aplicação recorre a um serviço externo (como o BCE ou outro provedor público) para obter a taxa de referência. Neste processo, **apenas a moeda e a data da transação são enviadas**, nunca os dados da sua carteira ou transações pessoais.
+1) Quando é necessário obter **taxas de câmbio** para conversão de valores em moedas estrangeiras. Neste caso, se a **corretora não fornecer a taxa de câmbio**, a aplicação recorre a um serviço externo para obter a taxa de referência. Neste processo, **apenas a moeda e a data da transação são enviadas**, nunca os dados da sua carteira ou transações pessoais.
 
-2) Para saber se o ativo que investes é uma **ação ou ETF**, a ferramenta utiliza um serviço externo para o saber. Neste processo, **apenas é enviado para o serviço o `ticker` do ativo (ex.: `VUAA`)**.
+2) Para saber se o ativo que investes é uma **ação ou ETF**, a ferramenta utiliza um serviço externo. Neste processo, **apenas é enviado para o serviço o `ticker` do ativo (ex.: `VUAA`)**.
 
 Estas exceções não envolvem dados pessoais que permitam identificar o sujeito que utiliza a ferramenta, mas achamos importante deixar transparente estes dois aspetos da ferramenta.
 
 ## Esta ferramenta submete a minha declaração de IRS?
-A `maisvalias-tool` **não submete** a tua declaração. Serve apenas para **preparar os dados** no formato correto. O que ela permite é exportar os resultados para uma declaração de IRS. 
+A `maisvalias-tool` **não submete** a tua declaração. Serve apenas para **preparar os dados** no formato compatível. O que ela permite é exportar os resultados para uma declaração de IRS. 
 
 :::warning
 Lembra-te de verificar sempre os resultados antes de os utilizares, já que os resultados desta ferramenta não são vinculativos.
