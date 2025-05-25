@@ -2,7 +2,7 @@
 name: Alterar documentação
 about: Propõe alterações na documentação desta ferramenta
 title: "[DOCUMENTATION]"
-labels: documentation
+labels: bug, documentation
 assignees: ''
 
 ---
