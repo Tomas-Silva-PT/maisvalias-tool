@@ -1,4 +1,4 @@
-# Como contribuir para o maisvalias-tool
+# Como contribuir para o **maisvalias-tool**
 
 Fico feliz se estiveres a ler isto, significa que tens interesse em saber como podes contribuir para que este projeto cresça, e por isso, agradeço-te! Precisamos de mais pessoas como tu ;)
 
@@ -21,6 +21,14 @@ A tua contribuição pode ser feita a vários níveis, quer seja via:
   6. Feito! Do teu lado é tudo! Do nosso lado iremos avaliar a tua contribuição e em caso de aprovação, deixarás a tua pegada neste projeto :)
 
 Se quiseres, consulta o [_template_](./docs/pull-request-template.md) com o qual podes basear a tua proposta.
+
+### Guias de contribuições
+
+Consulta abaixo os guias para os **cenários de contribuição mais comuns**:
+
+* [Adicionar uma nova corretora](docs/how-to-add-broker.md)
+
+---
 
 Obrigado pela tua participação,
 
