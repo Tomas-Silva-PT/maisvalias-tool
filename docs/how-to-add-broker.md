@@ -27,13 +27,13 @@ O nome da nova classe deve ser igual ao nome da corretora:
 
 Antes de desenvolveres o novo _broker_, deixamos aqui algumas notas:
 
-* O atributo _country_ deve ser um objeto do tipo `Country`, com o código [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) do país onde a corretora está domiciliada. Por exemplo, a _Trading 212 Markets Ltd._ para investidores portugueses está domiciliada no Chipre, logo o código é **CY**.
+* O atributo _country_ deve ser um objeto do tipo [`Country`](../src/models/country.ts), com o código [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) do país onde a corretora está domiciliada. Por exemplo, a _Trading 212 Markets Ltd._ para investidores portugueses está domiciliada no Chipre, logo o código é **CY**.
 
 Sugiro que consultes os _brokers_ já existentes para perceberes como deverá ficar o resultado final.
 
-### 2. Desenvolver o `parser`
+### 2. Desenvolver o parser
 
-O `parser` será utilizado para interpretar os dados exportados da corretora, e irá convertê-los no formato padrão: [`Transaction`](../src/models/transaction.ts).
+O parser será utilizado para interpretar os dados exportados da corretora, e irá convertê-los no formato padrão: [`Transaction`](../src/models/transaction.ts).
 
 Dirige-te até à diretoria onde ficam todos os _parsers_:
 > src > [parsers](../src/parsers/)
@@ -46,13 +46,13 @@ O nome da nova classe deve seguir a nomenclatura:
 
 Antes de desenvolveres o novo _parser_, deixamos aqui algumas notas:
 
-* O método `parse` da interface `Parser` tem como entrada uma `String`. Isto acontece porque em regra geral os ficheiros exportados das corretoras vêm no formato `csv`. Como tal foi mais fácil interpretar o conteúdo dos ficheiros como uma `String`.
+* O método `parse` da interface [`Parser`](../src/parsers/parser.ts) tem como entrada uma `String`. Isto acontece porque em regra geral os ficheiros exportados das corretoras vêm no formato `csv`. Como tal foi mais fácil interpretar o conteúdo dos ficheiros como uma `String`.
 
-* Nesta ferramenta, o **ISIN** (_Internacional Security Identification Number_) da ação/ETF é talvez a informação mais importante de cada `Transaction`, pois permite identificar o ativo univocamente, assim como permite ao sistema distinguir se o ativo é uma ação ou um ETF, e qual o país de domicilio do mesmo (ex.: EDP tem o isin **PT**EDP0AM0009 e a APPLE tem o isin **US**0378331005).
+* Nesta ferramenta, o **ISIN** (_Internacional Security Identification Number_) da ação/ETF é talvez a informação mais importante de cada [`Transaction`](../src/models/transaction.ts), pois permite identificar o ativo univocamente, assim como permite ao sistema distinguir se o ativo é uma ação ou um ETF, e qual o país de domicilio do mesmo (ex.: EDP tem o isin **PT**EDP0AM0009 e a APPLE tem o isin **US**0378331005).
 
-* Atualmente o tipo de uma `Transaction` tem de ser um de três valores: _buy_, _sell_ ou _dividend_.
+* Atualmente o tipo de uma [`Transaction`](../src/models/transaction.ts) tem de ser um de três valores: _buy_, _sell_ ou _dividend_.
 
-* O campo `amount` de uma `Transaction` corresponde ao **valor líquido** ganho com a operação. Isto significa que neste `amount` já foi retirado o valor das comissões ou taxas que a corretora possa aplicar durante a transação.
+* O campo `amount` de uma [`Transaction`](../src/models/transaction.ts) corresponde ao **valor líquido** ganho com a operação. Isto significa que neste `amount` já foi retirado o valor das comissões ou taxas que a corretora possa aplicar durante a transação.
 
 * O `exchange rate` é a taxa de câmbio para converter moeda estrangeira para a moeda portuguesa.
 
@@ -68,11 +68,11 @@ Vamos ver o que precisas de acrescentar para cada etapa.
 
 #### Etapa: Escolher corretora
 
-Vai até à diretoria, mais especificamente ao componente `LiveDemoForm`:
+Vai até à diretoria, mais especificamente ao componente [`LiveDemoForm`](../website/src/components/LiveDemoForm/):
 
 > website > src > components > LiveDemoForm
 
-No ficheiro `index.js`, adiciona as configurações para a nova corretora:
+No ficheiro [`index.js`](../website/src/components/LiveDemoForm/index.js), adiciona as configurações para a nova corretora:
 
 ```javascript
 const brokers = [
@@ -104,9 +104,9 @@ Vai até à diretoria:
 
 > website > src > components
 
-Copia a diretoria `FilesTrading212` e faz as seguintes alterações no ficheiro `index.js`:
+Copia a diretoria [`FilesTrading212`](../website/src/components/FilesTrading212/) e faz as seguintes alterações no ficheiro [`index.js`](../website/src/components/FilesTrading212/index.js):
 
-##### 1. Altera o `parser`
+##### 1. Altera o parser
 
 De:
 ```javascript
@@ -160,9 +160,9 @@ Na função principal do componente é necessário adaptar as funções existent
 
 É dificil de explicar passo-a-passo, mas no fundo recomendamos-te a analisar a função principal de outras corretoras e tentares adaptar para a nova.
 
-##### 4. Altera o `LiveDemoForm`
+##### 4. Altera o [`LiveDemoForm`](../website/src/components/LiveDemoForm/)
 
-Assim que tiveres implementado o componente anterior, tens agora de o incoporar no componente `LiveDemoForm`:
+Assim que tiveres implementado o componente anterior, tens agora de o incoporar no componente [`LiveDemoForm`](../website/src/components/LiveDemoForm/):
 
 Nos imports, adiciona o novo componente:
 
@@ -173,7 +173,7 @@ import FilesTrading212 from "@site/src/components/FilesTrading212";
 import FilesXTB from "@site/src/components/FilesXTB";
 ```
 
-Na função `ContentStep4`, adiciona o novo componente:
+Na função `ContentStep2`, adiciona o novo componente:
 
 ```javascript
 function ContentStep2(props) {
