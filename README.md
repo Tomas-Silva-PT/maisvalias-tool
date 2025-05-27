@@ -7,7 +7,7 @@
 
 ## Introdução
 
-A ferramenta **maisvalias-tool** tem como objetivo calcular automaticamente os valores de investimentos a declarar no IRS.
+A ferramenta **maisvalias-tool** tem como objetivo auxiliar investidores na organização de informações relativas a mais-valias e dividendos, com vista à preparação da declaração de IRS em Portugal.
 
 Para quem utiliza corretoras para efetuar os seus investimentos poderá utilizar esta ferramenta para transformar o histórico de compras e vendas no formato requerido pela _Autoridade Tributária e Aduaneira (AT)_ no momento de preenchimento da declaração anual de rendimentos.
 
