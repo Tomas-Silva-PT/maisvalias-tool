@@ -26,7 +26,7 @@ oportunidade ideal para um projeto Open-Source.
 ## Como nos contactar
 
 Para partilhares ideias, sugestões, ou dúvidas, sugiro que o faças
-no nosso repositório [Github](https://github.com/Tomas-Silva-PT/maisvalias-tool).
+no nosso repositório [Github](https://github.com/Tomas-Silva-PT/maisvalias-tool/issues).
 
 Também podes enviar um e-mail para: **[escapetools.software.solutions@gmail.com](mailto:escapetools.software.solutions@gmail.com)**.
 

@@ -143,7 +143,7 @@ class PTIRSFormatter {
 
     // Adicionar as mais valias de capital
     dividends.forEach((div) => {
-      console.log("Dividendo: " + JSON.stringify(div));
+      // console.log("Dividendo: " + JSON.stringify(div));
       const linha = xmlDoc.createElementNS(quadro8.namespaceURI,"AnexoJq08AT01-Linha");
       linha.setAttribute("numero", currNumero.toString());
 

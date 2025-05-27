@@ -8,6 +8,7 @@ import FilesRevolut from "@site/src/components/FilesRevolut";
 import FilesTrading212 from "@site/src/components/FilesTrading212";
 import { PTIRSFormatter } from "../../maisvalias-tool/formatters/pt/irs/irs_xml_formatter.js";
 import DisclaimerPopup from "@site/src/components/DisclaimerPopup";
+import ErrorPopup from "@site/src/components/ErrorPopup";
 import HelpDialog from "@site/src/components/HelpDialog";
 
 const disclaimerMessage =
@@ -241,8 +242,12 @@ export default function LiveDemoForm() {
   function ContentStep2(props) {
     return (
       <>
-        {broker.name === "Trading212" && <FilesTrading212 setFiscalData={setFiscalData} setStep={setStep} />}
-        {broker.name === "Revolut" && <FilesRevolut setFiscalData={setFiscalData} setStep={setStep} />}
+        {broker.name === "Trading212" && (
+          <FilesTrading212 setFiscalData={setFiscalData} setStep={setStep} />
+        )}
+        {broker.name === "Revolut" && (
+          <FilesRevolut setFiscalData={setFiscalData} setStep={setStep} />
+        )}
       </>
     );
   }
@@ -264,6 +269,7 @@ export default function LiveDemoForm() {
 
   function DialogIRSDeclaration({ visible, year, data }) {
     const [files, setFiles] = useState([]);
+    const [showError, setError] = useState(false);
 
     function onFileUpload(e) {
       const files = e.target.files;
@@ -291,22 +297,32 @@ export default function LiveDemoForm() {
           fiscalData[fiscalYear]["dividends"]["toIRS"]
         );
 
-        fullfilledIRS.then((irs) => {
-          console.log("Declaração formatada: " + irs);
-          loader.style.display = "none";
-          document.getElementById("declaration-upload").style.display = "none";
-          document.getElementById("declaration-download").style.display =
-            "block";
+        const contentFile = document.getElementById("contentFile");
+        fullfilledIRS
+          .then((irs) => {
+            contentFile.classList.remove(clsx(styles.contentStep2Error));
 
-          const blob = new Blob([irs], { type: "application/xml" });
-          const link = document.createElement("a");
-          link.href = URL.createObjectURL(blob);
-          link.download = `declaracao-irs-${fiscalYear}-preenchida.xml`;
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-          URL.revokeObjectURL(link.href);
-        });
+            // console.log("Declaração formatada: " + irs);
+            loader.style.display = "none";
+            document.getElementById("declaration-upload").style.display =
+              "none";
+            document.getElementById("declaration-download").style.display =
+              "block";
+
+            const blob = new Blob([irs], { type: "application/xml" });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = `declaracao-irs-${fiscalYear}-preenchida.xml`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(link.href);
+          })
+          .catch((e) => {
+            contentFile.classList.add(clsx(styles.contentStep2Error));
+            loader.style.display = "none";
+            setError(true);
+          });
       };
 
       reader.onerror = function (e) {
@@ -351,7 +367,7 @@ export default function LiveDemoForm() {
                     Coloca aqui a tua declaração de IRS para podermos
                     preenchê-la com os dados calculados:
                   </p>
-                  <div className={clsx(styles.contentStep2)}>
+                  <div id="contentFile" className={clsx(styles.contentStep2)}>
                     <Upload className={clsx(styles.contentStep2UploadIcon)} />
                     <input
                       className={clsx(styles.contentStep2UploadInput)}
@@ -414,6 +430,28 @@ export default function LiveDemoForm() {
               </div>
             </div>
           </div>
+        )}
+        {showError && (
+          <ErrorPopup title="Erro" closeFunction={() => setError(false)}>
+            <h3>Falha ao processar os ficheiros</h3>
+            <span>
+              Os ficheiros não são compatíveis com o formato esperado.
+            </span>
+            <p>
+              Por favor verifica quais os ficheiros corretos através da{" "}
+              <a href="docs/como-utilizar/exportar-irs" target="_blank">
+                documentação
+              </a>{" "}
+              e tenta novamente.
+            </p>
+            <p>
+              Se o problema persistir,{" "}
+              <a href="./about#como-nos-contactar" target="_blank">
+                contacta-nos
+              </a>
+              .
+            </p>
+          </ErrorPopup>
         )}
       </>
     );
@@ -596,9 +634,11 @@ export default function LiveDemoForm() {
     return (
       <>
         <div className={clsx(styles.contentStep3)}>
-          {Object.entries(fiscalData).map(([year, data]) => {
-            return <FiscalYearCard key={year} year={year} data={data} />;
-          })}
+          {Object.entries(fiscalData)
+            .sort((a, b) => b[0] - a[0])
+            .map(([year, data]) => {
+              return <FiscalYearCard key={year} year={year} data={data} />;
+            })}
           <DialogIRSDeclaration visible={IRSdialogVisible} />
         </div>
       </>

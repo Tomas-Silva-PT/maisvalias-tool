@@ -72,6 +72,10 @@ class RevolutParser {
         // }
         this.isins = this.isins.filter((item, index, self) => index ===
             self.findIndex((t) => t.ticker === item.ticker && t.isin === item.isin));
+        // console.log("Isins: " + JSON.stringify(this.isins));
+        if (!this.isins || this.isins.length === 0) {
+            throw new Error("Invalid file data: no isins found");
+        }
         // console.log("Isins loaded: " + JSON.stringify(this.isins));
     }
     parse(fileData) {

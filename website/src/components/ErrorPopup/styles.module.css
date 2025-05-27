@@ -1,0 +1,86 @@
+.container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 101;
+  backdrop-filter: blur(2px);
+  text-align: center;
+}
+
+.content {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgb(27, 27, 27);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 102;
+  margin: auto;
+  color: rgb(255, 255, 255);
+  border-radius: 0.5rem;
+  box-shadow: 0px 0px 8px rgba(175, 175, 175, 0.5);
+  width: auto;
+  max-width: 25%;
+  padding: 1rem;
+}
+
+.content .icon {
+  background-color: #ff3b3b;
+  color: white;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  font-size: 2em;
+  font-weight: bold;
+  line-height: 50px;
+  text-align: center;
+}
+
+.header {
+  /* background: linear-gradient(135deg, #ff0000, #ff4646); */
+  width: 100%;
+  padding: 1rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.body {
+  width: 100%;
+  line-height: 1.4;
+}
+
+.footer {
+  width: 100%;
+  position: relative;
+}
+
+.button {
+  background: linear-gradient(to right, #444, #666);
+  color: white;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+  text-align: center;
+}
+
+.button:hover {
+  cursor: pointer;
+  background: linear-gradient(to right, #999999, #4e4e4e);
+  color: white;
+}
