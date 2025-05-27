@@ -9,6 +9,7 @@
   align-items: center;
   justify-content: center;
   z-index: 101;
+  -webkit-backdrop-filter: blur(2px);
   backdrop-filter: blur(2px);
   text-align: center;
 }
@@ -31,6 +32,7 @@
   width: auto;
   max-width: 25%;
   padding: 1rem;
+  min-width: 300px;
 }
 
 .content .icon {
