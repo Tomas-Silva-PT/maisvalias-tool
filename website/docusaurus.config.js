@@ -12,7 +12,7 @@ import {themes as prismThemes} from 'prism-react-renderer';
 const config = {
   title: 'maisvalias-tool',
   tagline: 'Descobre rapidamente as mais valias e dividendos que precisas de declarar no IRS',
-  favicon: 'img/favicon.ico',
+  favicon: '/img/favicon.ico',
 
   // Set the production url of your site here
   url: 'https://Tomas-Silva-PT.github.io',
@@ -74,12 +74,13 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
+      
       // Replace with your project's social card
-      image: 'img/docusaurus-social-card.jpg',
+      image: 'img/maisvaliastool-social-card.png',
       navbar: {
         title: 'maisvalias-tool',
         logo: {
-          alt: 'maisvalias-tool Logo',
+          alt: 'maisvalias-tool logo',
           src: 'img/logo.png',
         },
         items: [

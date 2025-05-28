@@ -61,7 +61,7 @@ export default function Home() {
   return (
     <Layout
       title={`Bem-vindo`}
-      description="Ferramenta de cálculo das mais valias IRS PT <head />"
+      description="A maisvalias-tool tem como objetivo ajudar investidores a organizar as mais-valias e dividendos para a declaração de IRS em Portugal."
     >
       <HomepageHeader />
       <main>

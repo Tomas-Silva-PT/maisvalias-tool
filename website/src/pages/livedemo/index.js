@@ -57,8 +57,8 @@ export default function LiveDemoPage() {
   const { siteConfig } = useDocusaurusContext();
   return (
     <Layout
-      title={`Bem-vindo`}
-      description="Ferramenta de cálculo das mais valias IRS PT <head />"
+      title={`Demonstração`}
+      description="A maisvalias-tool tem como objetivo ajudar investidores a organizar as mais-valias e dividendos para a declaração de IRS em Portugal."
     >
       <LiveDemoHeader />
       <main>
