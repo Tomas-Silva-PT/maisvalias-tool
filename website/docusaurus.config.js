@@ -156,6 +156,15 @@ const config = {
               },
             ],
           },
+          {
+            title: 'Contactos',
+            items: [
+              {
+                label: 'Email',
+                href: 'mailto:escapetools.software.solutions@gmail.com'
+              }
+            ],
+          },
         ],
         copyright: `Copyright © ${new Date().getFullYear()} maisvalias-tool Built with Docusaurus.`,
       },
