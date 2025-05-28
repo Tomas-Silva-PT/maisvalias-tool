@@ -74,7 +74,9 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
-      
+      metadata: [
+        {name:'google-site-verification', content: 'agaUECWdm1BmOf_WHRHxdk8c8ap2-q6XCU22-o84kAU'},
+      ],
       // Replace with your project's social card
       image: 'img/maisvaliastool-social-card.png',
       navbar: {
