@@ -27,20 +27,28 @@ Para utilizares esta ferramenta, dirige-te à página oficial: [maisvalias-tool]
 
 Se quiseres utilizar esta ferramenta no teu ambiente local, segue os seguintes passos:
 
-#### 1. Clona o repositório
+#### 1. Clonar o repositório
 
 ```bash
 git clone https://github.com/Tomas-Silva-PT/maisvalias-tool.git
 ```
 
-#### 2. Instala as dependências
+#### 2. Instalar as dependências da ferramenta
+
+```bash
+cd maisvalias-tool/src
+npm install
+npm run build
+```
+
+#### 3. Instalar as dependências do website
 
 ```bash
 cd maisvalias-tool/website
 npm install
 ```
 
-#### 3. Inicia o website
+#### 4. Iniciar o website
 
 ```bash
 npm run start
