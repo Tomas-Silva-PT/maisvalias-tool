@@ -2,7 +2,6 @@ import { PTIRSFormatter } from "../formatters/pt/irs/irs_xml_formatter.js";
 
 import { Statement } from "../models/statement.js";
 import { Trading212Parser } from "../parsers/trading212parser.js";
-import { AssetBuffer } from "../models/asset.js";
 import { PTCapitalGainsFormatter } from "../formatters/pt/irs/capital_gains_formatter.js";
 import { PTDividendsFormatter } from "../formatters/pt/irs/dividends_formatter.js";
 import fs from "fs";
@@ -23,7 +22,7 @@ async function test() {
     statement.addTransactions(transactions);
   }
 
-  await statement.fetchData(new AssetBuffer());
+  await statement.fetchData();
 
   const capitalGainsformatter = new PTCapitalGainsFormatter();
   const dividendsformatter = new PTDividendsFormatter();

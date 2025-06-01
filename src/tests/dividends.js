@@ -1,6 +1,5 @@
 import { Statement } from "../models/statement.js";
 import { Trading212Parser } from "../parsers/trading212parser.js";
-import { AssetBuffer } from "../models/asset.js";
 import { PTDividendsFormatter } from "../formatters/pt/irs/dividends_formatter.js";
 import fs from "fs";
 
@@ -22,7 +21,7 @@ async function test() {
     statement.addTransactions(transactions);
   }
 
-  await statement.fetchData(new AssetBuffer());
+  await statement.fetchData();
   let parsingTime = Date.now() - startTime;
   const formatter = new PTDividendsFormatter();
   const dividends = await formatter.format(statement);

@@ -7,7 +7,7 @@ class Tax {
             this.exchangeRate = exchangeRate;
     }
     toString() {
-        return `Tax(Name: ${this.name}, Amount: ${this.amount}, Currency: ${this.currency})`;
+        return `Tax(Name: ${this.name}, Amount: ${this.amount}, Currency: ${this.currency}, ExchangeRate: ${this.exchangeRate})`;
     }
     equals(other) {
         return this.name === other.name && this.amount === other.amount && this.currency === other.currency && this.exchangeRate === other.exchangeRate;

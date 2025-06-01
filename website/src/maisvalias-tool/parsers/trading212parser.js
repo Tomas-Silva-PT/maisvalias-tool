@@ -35,7 +35,7 @@ class Trading212Parser {
                 .filter((key) => key.toLowerCase().includes("fee"))
                 .map((feeName) => {
                 const feeAmount = parseFloat(record[feeName]);
-                if (isNaN(feeAmount))
+                if (isNaN(feeAmount) || feeAmount < Number.EPSILON)
                     return;
                 const feeCurrency = record[`Currency (${feeName})`].replaceAll('"', "");
                 return new Fee(feeName, feeAmount, feeCurrency);
@@ -45,13 +45,13 @@ class Trading212Parser {
                 .filter((key) => key.toLowerCase().includes("tax"))
                 .map((taxName) => {
                 const taxAmount = parseFloat(record[taxName]);
-                if (isNaN(taxAmount))
+                if (isNaN(taxAmount) || taxAmount < Number.EPSILON)
                     return;
                 const taxCurrency = record[`Currency (${taxName})`].replaceAll('"', "");
                 return new Tax(taxName, taxAmount, taxCurrency);
             })
                 .filter((tax) => tax != undefined);
-            const exchangeRate = parseFloat(record["Exchange rate"]);
+            let exchangeRate = 1 / parseFloat(record["Exchange rate"]);
             const transaction = new Transaction(date, time, type, ticker, isin, shares, assetCurrency, amount, amountCurrency, new Trading212(), taxes, fees, exchangeRate);
             if (transaction.type)
                 transactions.push(transaction);

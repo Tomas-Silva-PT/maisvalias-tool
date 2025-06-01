@@ -5,7 +5,6 @@ import { ArrowRight, Upload, X } from "lucide-react";
 
 import { Statement } from "../../maisvalias-tool/models/statement.js";
 import { Trading212Parser } from "../../maisvalias-tool/parsers/trading212parser.js";
-import { AssetBuffer } from "../../maisvalias-tool/models/asset.js";
 import { PTCapitalGainsFormatter } from "../../maisvalias-tool/formatters/pt/irs/capital_gains_formatter.js";
 import { PTDividendsFormatter } from "../../maisvalias-tool/formatters/pt/irs/dividends_formatter.js";
 
@@ -53,113 +52,109 @@ export default function FilesTrading212({ setFiscalData, setStep }) {
   }
 
   async function onFilesSelected() {
-    const loader = document.getElementById("custom-loader-container");
-    loader.style.display = "flex";
+  const start = performance.now();
 
-    // console.log("Files: " + files);
-    if (files.length === 0 || !broker) return;
+  const loader = document.getElementById("custom-loader-container");
+  loader.style.display = "flex";
 
-    const parser = new Trading212Parser();
-    const statement = new Statement([]);
-    const formatterCapitalGains = new PTCapitalGainsFormatter();
-    const formatterDividends = new PTDividendsFormatter();
+  if (files.length === 0 || !broker) return;
 
-    const filePromises = files.map((file) => {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          const data = e.target.result;
-          try {
-            const transactions = parser.parse(data);
-            resolve(transactions);
-          } catch (error) {
-            reject();
-          }
-        };
+  const parser = new Trading212Parser();
+  const statement = new Statement([]);
+  const formatterCapitalGains = new PTCapitalGainsFormatter();
+  const formatterDividends = new PTDividendsFormatter();
 
-        reader.onerror = function (e) {
-          reject(e.target.error);
-        };
+  const filePromises = files.map((file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const data = e.target.result;
+        try {
+          const transactions = parser.parse(data);
+          resolve(transactions);
+        } catch (error) {
+          reject();
+        }
+      };
 
-        reader.readAsText(file);
-      });
+      reader.onerror = function (e) {
+        reject(e.target.error);
+      };
+
+      reader.readAsText(file);
     });
-    let transactions = [];
+  });
 
-    try {
-      transactions = await Promise.all(filePromises);
-      dispatchSuccess();
-    } catch (error) {
-      dispatchError();
-      return;
-    }
+  let transactions = [];
 
-    transactions.forEach((transaction) => {
-      statement.addTransactions(transaction);
-    });
-
-    await statement.fetchData(new AssetBuffer());
-    let capitalGains = await formatterCapitalGains.format(statement);
-    let dividends = await formatterDividends.format(statement);
-    // dividends = dividends["toUser"];
-    // console.log("Dividends: " + JSON.stringify(dividends));
-
-    let toUserDividends = dividends["toUser"];
-
-    if (!toUserDividends) {
-      console.warn(
-        "toUserDividends is undefined. Check formatterDividends output."
-      );
-    }
-    // else {
-    //   console.log("toUserDividends: " + JSON.stringify(toUserDividends));
-    // }
-
-    let filteredCapitalGainsYears = capitalGains.map((gain) =>
-      Number(gain["Ano de Realização"])
-    );
-    let filteredDividendsYears = toUserDividends.map((div) =>
-      Number(div["Ano rendimento"])
-    );
-
-    // console.log("Filtered: " + JSON.stringify(filteredDividendsYears));
-
-    const years = [
-      ...new Set([...filteredCapitalGainsYears, ...filteredDividendsYears]),
-    ];
-
-    years.sort((a, b) => a - b);
-
-    let data = years.reduce((acc, curr) => {
-      if (!acc[curr]) acc[curr] = {};
-      acc[curr]["capitalGains"] = capitalGains.filter(
-        (gain) => gain["Ano de Realização"] == curr
-      );
-      acc[curr]["dividends"] = {};
-      if (!acc[curr]["dividends"]["toUser"])
-        acc[curr]["dividends"]["toUser"] = {};
-      if (!acc[curr]["dividends"]["toIRS"])
-        acc[curr]["dividends"]["toIRS"] = {};
-      acc[curr]["dividends"]["toUser"] = dividends["toUser"].filter(
-        (div) => div["Ano rendimento"] == curr
-      );
-      acc[curr]["dividends"]["toIRS"] = dividends["toIRS"].filter(
-        (div) => div["Ano rendimento"] == curr
-      );
-      return acc;
-    }, {});
-    // console.log("Fiscal Data: " + JSON.stringify(data));
-
-    loader.style.display = "none";
-
-    if (Object.entries(data).length === 0) {
-      dispatchError();
-    } else {
-      dispatchSuccess()
-      setFiscalData(data);
-      setStep((step) => step + 1);
-    }
+  try {
+    transactions = await Promise.all(filePromises);
+    dispatchSuccess();
+  } catch (error) {
+    dispatchError();
+    const end = performance.now();
+    console.log(`onFilesSelected duration: ${((end - start) / 1000).toFixed(3)} seconds`);
+    return;
   }
+
+  transactions.forEach((transaction) => {
+    statement.addTransactions(transaction);
+  });
+
+  await statement.fetchData();
+  let capitalGains = await formatterCapitalGains.format(statement);
+  let dividends = await formatterDividends.format(statement);
+
+  let toUserDividends = dividends["toUser"];
+
+  if (!toUserDividends) {
+    console.warn("toUserDividends is undefined. Check formatterDividends output.");
+  }
+
+  let filteredCapitalGainsYears = capitalGains.map((gain) =>
+    Number(gain["Ano de Realização"])
+  );
+  let filteredDividendsYears = toUserDividends.map((div) =>
+    Number(div["Ano rendimento"])
+  );
+
+  const years = [
+    ...new Set([...filteredCapitalGainsYears, ...filteredDividendsYears]),
+  ];
+
+  years.sort((a, b) => a - b);
+
+  let data = years.reduce((acc, curr) => {
+    if (!acc[curr]) acc[curr] = {};
+    acc[curr]["capitalGains"] = capitalGains.filter(
+      (gain) => gain["Ano de Realização"] == curr
+    );
+    acc[curr]["dividends"] = {};
+    if (!acc[curr]["dividends"]["toUser"]) acc[curr]["dividends"]["toUser"] = {};
+    if (!acc[curr]["dividends"]["toIRS"]) acc[curr]["dividends"]["toIRS"] = {};
+    acc[curr]["dividends"]["toUser"] = dividends["toUser"].filter(
+      (div) => div["Ano rendimento"] == curr
+    );
+    acc[curr]["dividends"]["toIRS"] = dividends["toIRS"].filter(
+      (div) => div["Ano rendimento"] == curr
+    );
+    return acc;
+  }, {});
+
+  loader.style.display = "none";
+
+  if (Object.entries(data).length === 0) {
+    dispatchError();
+  } else {
+    dispatchSuccess();
+    setFiscalData(data);
+    setStep((step) => step + 1);
+  }
+
+  const end = performance.now();
+  console.log(`Duração do processamento: ${((end - start) / 1000).toFixed(3)} segundos`);
+}
+
 
   return (
     <>

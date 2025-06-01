@@ -1,6 +1,5 @@
 import { Statement } from "../models/statement.js";
 import { Trading212Parser } from "../parsers/trading212parser.js";
-import { AssetBuffer } from "../models/asset.js";
 import { PTCapitalGainsFormatter } from "../formatters/pt/irs/capital_gains_formatter.js";
 import fs from "fs";
 
@@ -21,7 +20,7 @@ async function test() {
     statement.addTransactions(transactions);
   }
   var parsingTime;
-  await statement.fetchData(new AssetBuffer());
+  await statement.fetchData();
   parsingTime = Date.now() - startTime;
   const formatter = new PTCapitalGainsFormatter();
   const capitalGains = await formatter.format(statement);

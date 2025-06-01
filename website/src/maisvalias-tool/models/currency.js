@@ -13,6 +13,12 @@ class Currency {
     constructor() {
         this.buffer = [];
     }
+    static getExchangeRates(fromCurrency, toCurrency, fromDate, toDate) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const exchangeRates = yield YahooFinance.getExchangeRateBatch(fromCurrency, toCurrency, fromDate, toDate);
+            return exchangeRates;
+        });
+    }
     convert(value, fromCurrency, toCurrency, exchangeRateDate) {
         return __awaiter(this, void 0, void 0, function* () {
             const buffered = this.buffer.find((p) => p[0] === fromCurrency &&

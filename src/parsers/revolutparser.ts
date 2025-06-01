@@ -1,7 +1,7 @@
-import { Transaction } from "../models/transaction";
-import { Parser } from "./parser";
-import { Fee } from "../models/fee";
-import { Revolut } from "../models/brokers/revolut";
+import { Transaction } from "../models/transaction.js";
+import { Parser } from "./parser.js";
+import { Fee } from "../models/fee.js";
+import { Revolut } from "../models/brokers/revolut.js";
 
 class RevolutParser implements Parser {
   isins?: Record<string, string>[];
@@ -134,7 +134,8 @@ class RevolutParser implements Parser {
       const assetCurrency = record["Currency"];
       const amountCurrency = record["Currency"];
       // console.log("Currency: " + amountCurrency);
-      const exchangeRate = 1 / parseFloat(record["FX Rate"].replace("\r", "").replace(",", ".")); // Porque a taxa de câmbio vem do EUR para a moeda do ativo, e nós queremos ao contrário
+      let exchangeRate = 1 / parseFloat(record["FX Rate"].replace("\r", "").replace(",", ".")); // Porque a taxa de câmbio vem do EUR para a moeda do ativo, e nós queremos ao contrário
+      if (isNaN(exchangeRate) || exchangeRate < Number.EPSILON) exchangeRate = 1;
       // console.log("Exchange Rate: " + exchangeRate);
       const feeAmount = totalAmount - priceShare * shares;
       const fees: Fee[] = [];

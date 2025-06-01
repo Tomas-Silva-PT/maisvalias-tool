@@ -11,7 +11,7 @@ class Tax {
     }
 
     toString() : string {
-        return `Tax(Name: ${this.name}, Amount: ${this.amount}, Currency: ${this.currency})`;
+        return `Tax(Name: ${this.name}, Amount: ${this.amount}, Currency: ${this.currency}, ExchangeRate: ${this.exchangeRate})`;
     }
 
     equals(other : Tax) : boolean {

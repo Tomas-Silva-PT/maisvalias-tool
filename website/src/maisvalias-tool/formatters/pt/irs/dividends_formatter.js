@@ -60,6 +60,7 @@ class PTDividendsFormatter {
                                     totalFeesAmount += fee.amount * fee.exchangeRate;
                                 }
                                 else {
+                                    console.log("Converting dividend fee");
                                     totalFeesAmount += yield currencyConverter.convert(fee.amount, fee.currency, currency, transaction.date);
                                 }
                             }
@@ -73,6 +74,7 @@ class PTDividendsFormatter {
                                     totalTaxAmount += tax.amount * tax.exchangeRate;
                                 }
                                 else {
+                                    console.log("Converting dividend tax");
                                     totalTaxAmount += yield currencyConverter.convert(tax.amount, tax.currency, currency, transaction.date);
                                 }
                             }
@@ -84,6 +86,7 @@ class PTDividendsFormatter {
                             totalNetAmount += transaction.netAmount * transaction.exchangeRate;
                         }
                         else {
+                            console.log("Converting dividend amount");
                             totalNetAmount += yield currencyConverter.convert(transaction.netAmount, transaction.netAmountCurrency, currency, transaction.date);
                         }
                     }

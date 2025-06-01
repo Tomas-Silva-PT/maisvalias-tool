@@ -1,4 +1,4 @@
-import { Asset, AssetBuffer } from "./asset.js";
+import { Asset } from "./asset.js";
 import { Tax } from "./tax.js";
 import { Fee } from "./fee.js";
 import { Broker } from "./brokers/broker.js";
@@ -27,10 +27,6 @@ class Transaction {
         this.fees = fees;
         this.broker = broker;
         if(exchangeRate && !isNaN(exchangeRate)) this.exchangeRate = exchangeRate;
-    }
-
-    async fetchData(assetBuffer : AssetBuffer) : Promise<any> {
-        await this.asset.fetchData(assetBuffer);
     }
 
     toString() : string {

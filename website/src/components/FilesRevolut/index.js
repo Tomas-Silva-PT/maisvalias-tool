@@ -5,7 +5,6 @@ import { ArrowRight, Upload, X } from "lucide-react";
 
 import { Statement } from "../../maisvalias-tool/models/statement.js";
 import { RevolutParser } from "../../maisvalias-tool/parsers/revolutparser.js";
-import { AssetBuffer } from "../../maisvalias-tool/models/asset.js";
 import { PTCapitalGainsFormatter } from "../../maisvalias-tool/formatters/pt/irs/capital_gains_formatter.js";
 import { PTDividendsFormatter } from "../../maisvalias-tool/formatters/pt/irs/dividends_formatter.js";
 
@@ -53,6 +52,8 @@ export default function FilesRevolut({ setFiscalData, setStep }) {
   }
 
   async function onFilesSelected() {
+    const start = performance.now();
+
     const loader = document.getElementById("custom-loader-container");
     loader.style.display = "flex";
 
@@ -70,12 +71,8 @@ export default function FilesRevolut({ setFiscalData, setStep }) {
         reader.onload = (e) => {
           const data = e.target.result;
           try {
-            try {
-              parser.loadIsins(data);
-              resolve();
-            } catch (e) {
-              reject();
-            }
+            parser.loadIsins(data);
+            resolve();
           } catch (e) {
             reject();
           }
@@ -98,6 +95,10 @@ export default function FilesRevolut({ setFiscalData, setStep }) {
       contentStep22.classList.add(clsx(styles.contentStep2Error));
       loader.style.display = "none";
       setError(true);
+      const end = performance.now();
+      console.log(
+        `onFilesSelected duration: ${((end - start) / 1000).toFixed(3)} seconds`
+      );
       return;
     }
 
@@ -107,17 +108,13 @@ export default function FilesRevolut({ setFiscalData, setStep }) {
         reader.onload = (e) => {
           const data = e.target.result;
           try {
-            try {
-              const transactions = parser.parse(data);
-              if (transactions.length === 0) {
-                reject();
-              }
-              resolve(transactions);
-            } catch (e) {
-              console.error(e);
+            const transactions = parser.parse(data);
+            if (transactions.length === 0) {
               reject();
             }
+            resolve(transactions);
           } catch (e) {
+            console.error(e);
             reject();
           }
         };
@@ -129,6 +126,7 @@ export default function FilesRevolut({ setFiscalData, setStep }) {
         reader.readAsText(file);
       });
     });
+
     let transactions = [];
     let contentStep21 = document.getElementById("contentStep2-1");
 
@@ -139,6 +137,10 @@ export default function FilesRevolut({ setFiscalData, setStep }) {
       contentStep21.classList.add(clsx(styles.contentStep2Error));
       loader.style.display = "none";
       setError(true);
+      const end = performance.now();
+      console.log(
+        `onFilesSelected duration: ${((end - start) / 1000).toFixed(3)} seconds`
+      );
       return;
     }
 
@@ -146,11 +148,9 @@ export default function FilesRevolut({ setFiscalData, setStep }) {
       statement.addTransactions(transaction);
     });
 
-    await statement.fetchData(new AssetBuffer());
+    await statement.fetchData();
     let capitalGains = await formatterCapitalGains.format(statement);
     let dividends = await formatterDividends.format(statement);
-    // dividends = dividends["toUser"];
-    // console.log("Dividends: " + JSON.stringify(dividends));
 
     let toUserDividends = dividends["toUser"];
 
@@ -159,9 +159,6 @@ export default function FilesRevolut({ setFiscalData, setStep }) {
         "toUserDividends is undefined. Check formatterDividends output."
       );
     }
-    // else {
-    //   console.log("toUserDividends: " + JSON.stringify(toUserDividends));
-    // }
 
     let filteredCapitalGainsYears = capitalGains.map((gain) =>
       Number(gain["Ano de Realização"])
@@ -169,8 +166,6 @@ export default function FilesRevolut({ setFiscalData, setStep }) {
     let filteredDividendsYears = toUserDividends.map((div) =>
       Number(div["Ano rendimento"])
     );
-
-    // console.log("Filtered: " + JSON.stringify(filteredDividendsYears));
 
     const years = [
       ...new Set([...filteredCapitalGainsYears, ...filteredDividendsYears]),
@@ -196,10 +191,8 @@ export default function FilesRevolut({ setFiscalData, setStep }) {
       );
       return acc;
     }, {});
-    // console.log("Fiscal Data: " + JSON.stringify(data));
 
     loader.style.display = "none";
-
 
     if (Object.entries(data).length === 0) {
       setError(true);
@@ -209,6 +202,11 @@ export default function FilesRevolut({ setFiscalData, setStep }) {
       setFiscalData(data);
       setStep((step) => step + 1);
     }
+
+    const end = performance.now();
+    console.log(
+      `onFilesSelected duration: ${((end - start) / 1000).toFixed(3)} seconds`
+    );
   }
 
   return (

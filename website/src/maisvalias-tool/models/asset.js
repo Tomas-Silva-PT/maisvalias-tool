@@ -7,9 +7,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { Country } from "./country.js";
 import { YahooFinance } from "./yahoofinance.js";
-// import yf from "yahoo-finance2";
 class Asset {
     constructor(ticker, isin, currency) {
         this.ticker = ticker;
@@ -17,48 +15,30 @@ class Asset {
         this.assetType = "";
         this.currency = currency;
     }
-    fetchData(assetBuffer) {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (assetBuffer) {
-                const bufferedAsset = assetBuffer.get(this.isin, this.ticker, this.currency);
-                if (bufferedAsset) {
-                    this.countryDomiciled = bufferedAsset.countryDomiciled;
-                    this.assetType = bufferedAsset.assetType;
-                    return;
-                }
-            }
-            // Obter país de domicilio
-            this.countryDomiciled = new Country(this.isin.substring(0, 2));
-            // Obter tipo de ativo usando Yahoo Finance
-            try {
-                // const assetInfo = await yf.search(this.isin);
-                // this.assetType = assetInfo?.quotes[0]?.quoteType || "";
-                this.assetType = yield YahooFinance.getAssetType(this.isin);
-            }
-            catch (error) {
-                console.error("Erro ao buscar dados do ativo:", error);
-            }
-            if (assetBuffer) {
-                assetBuffer.add(this);
-            }
-        });
-    }
     toString() {
         return `Asset(Ticker: ${this.ticker}, ISIN: ${this.isin})`;
     }
     equals(other) {
         return this.isin === other.isin && this.currency === other.currency && this.ticker === other.ticker;
     }
+    static getAssetTypes(isins) {
+        return __awaiter(this, void 0, void 0, function* () {
+            // Obter tipo de ativos usando Yahoo Finance
+            let assetTypes = {};
+            const BATCH_SIZE = 7;
+            try {
+                for (let i = 0; i < isins.length; i += BATCH_SIZE) {
+                    const batch = isins.slice(i, i + BATCH_SIZE);
+                    const batchResult = yield YahooFinance.getAssetTypeBatch(batch);
+                    Object.assign(assetTypes, batchResult);
+                }
+                // console.log("Asset Types: " + JSON.stringify(assetTypes));
+            }
+            catch (error) {
+                console.error("Erro ao buscar dados do ativo:", error);
+            }
+            return assetTypes;
+        });
+    }
 }
-class AssetBuffer {
-    constructor() {
-        this.assets = [];
-    }
-    add(asset) {
-        this.assets.push(asset);
-    }
-    get(isin, ticker, currency) {
-        return this.assets.find(a => a.isin === isin && a.currency === currency && a.ticker === ticker);
-    }
-}
-export { Asset, AssetBuffer };
+export { Asset };

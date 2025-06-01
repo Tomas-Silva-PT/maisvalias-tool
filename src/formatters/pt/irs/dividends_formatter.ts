@@ -65,6 +65,7 @@ class PTDividendsFormatter {
               } else if (fee.exchangeRate) {
                 totalFeesAmount += fee.amount * fee.exchangeRate;
               } else {
+                console.log("Converting dividend fee");
                 totalFeesAmount += await currencyConverter.convert(
                   fee.amount,
                   fee.currency,
@@ -81,6 +82,7 @@ class PTDividendsFormatter {
               } else if (tax.exchangeRate) {
                 totalTaxAmount += tax.amount * tax.exchangeRate;
               } else {
+                console.log("Converting dividend tax");
                 totalTaxAmount += await currencyConverter.convert(
                   tax.amount,
                   tax.currency,
@@ -96,6 +98,7 @@ class PTDividendsFormatter {
           } else if (transaction.exchangeRate) {
             totalNetAmount += transaction.netAmount * transaction.exchangeRate;
           } else {
+            console.log("Converting dividend amount");
             totalNetAmount += await currencyConverter.convert(
               transaction.netAmount,
               transaction.netAmountCurrency,
