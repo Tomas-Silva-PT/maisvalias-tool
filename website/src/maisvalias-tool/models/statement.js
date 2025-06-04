@@ -72,27 +72,36 @@ class Statement {
             // console.log("Taxes without exchange rate:" + JSON.stringify(taxesWithoutExchangeRate));
             // console.log("Fees without exchange rate:" + JSON.stringify(feesWithoutExchangeRate));
             // console.log("Transactions without exchange rate:" + JSON.stringify(transactionsWithoutExchangeRate));
+            console.log(`[START] Fetching exchange rate...`);
+            const start = performance.now();
             for (const rateToFetch of exchangeRatesToFetch) {
                 const exchangeRates = yield Currency.getExchangeRates(rateToFetch.currency, this.baseCurrency, rateToFetch.fromDate, rateToFetch.toDate);
-                // console.log("Exchange Rates: ", JSON.stringify(exchangeRates));
+                //  console.log("Exchange Rates: ", JSON.stringify(exchangeRates));
                 transactionsWithoutExchangeRate.filter((transaction) => transaction.netAmountCurrency === rateToFetch.currency).forEach((transaction) => {
                     var _a;
+                    // console.log("Date transaction: ", transaction.date);
                     transaction.exchangeRate = (_a = exchangeRates.find((rate) => rate.date === transaction.date)) === null || _a === void 0 ? void 0 : _a.close;
                 });
                 // console.log("Adding exchange rates to taxes");
                 taxesWithoutExchangeRate.filter((tax) => Object.values(tax)[0].currency === rateToFetch.currency).forEach((tax) => {
                     let taxObject = Object.values(tax)[0];
                     let date = Object.keys(tax)[0];
-                    let trueExchangeRate = exchangeRates.find((rate) => rate.date === date).close;
-                    taxObject.exchangeRate = trueExchangeRate;
+                    // console.log("Date tax: ", date);
+                    let trueExchangeRate = exchangeRates.find((rate) => rate.date === date);
+                    // console.log("True Exchange Rate: ", trueExchangeRate);
+                    taxObject.exchangeRate = trueExchangeRate === null || trueExchangeRate === void 0 ? void 0 : trueExchangeRate.close;
                 });
                 feesWithoutExchangeRate.filter((fee) => Object.values(fee)[0].currency === rateToFetch.currency).forEach((fee) => {
                     let feeObject = Object.values(fee)[0];
                     let date = Object.keys(fee)[0];
-                    let trueExchangeRate = exchangeRates.find((rate) => rate.date === date).close;
-                    feeObject.exchangeRate = trueExchangeRate;
+                    // console.log("Date fee: ", date);
+                    let trueExchangeRate = exchangeRates.find((rate) => rate.date === date);
+                    // console.log("True Exchange Rate: ", trueExchangeRate);
+                    feeObject.exchangeRate = trueExchangeRate === null || trueExchangeRate === void 0 ? void 0 : trueExchangeRate.close;
                 });
             }
+            const end = performance.now();
+            console.log(`[END] Fetching exchange rate... (took ${((end - start) / 1000).toFixed(3)} seconds)`);
             // console.log("Taxes without exchange rate:" + JSON.stringify(taxesWithoutExchangeRate));
             // console.log("Exchange Rates Found");
         });
@@ -106,7 +115,11 @@ class Statement {
                     continue;
                 isins.push(isin);
             }
+            console.log("[START] Fetching asset types...");
+            const start = performance.now();
             const assetTypes = yield Asset.getAssetTypes(isins);
+            const end = performance.now();
+            console.log(`[END] Fetching asset types... (took ${((end - start) / 1000).toFixed(3)} seconds)`);
             for (let transaction of this.transactions) {
                 const isin = transaction.asset.isin;
                 const assetType = assetTypes[isin];

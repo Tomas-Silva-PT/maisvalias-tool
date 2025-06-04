@@ -26,15 +26,9 @@ class Asset {
     static async getAssetTypes(isins : string[]): Promise<Record<string, string>> {
         // Obter tipo de ativos usando Yahoo Finance
         let assetTypes : Record<string, string> = {};
-        const BATCH_SIZE = 7;
+
         try {
-            for(let i = 0; i < isins.length; i += BATCH_SIZE) {
-                const batch = isins.slice(i, i + BATCH_SIZE);
-                const batchResult = await YahooFinance.getAssetTypeBatch(batch);
-                Object.assign(assetTypes, batchResult);
-            }
-            
-            // console.log("Asset Types: " + JSON.stringify(assetTypes));
+            assetTypes = await YahooFinance.getAssetTypeBatch(isins);
         } catch (error) {
             console.error("Erro ao buscar dados do ativo:", error);
         }

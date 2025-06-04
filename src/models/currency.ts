@@ -1,5 +1,5 @@
 // import yf from "yahoo-finance2";
-import { YahooFinance } from "./yahoofinance.js";
+import { ExchangeRate, YahooFinance } from "./yahoofinance.js";
 
 class Currency {
   buffer: any[];
@@ -7,7 +7,7 @@ class Currency {
     this.buffer = [];
   }
 
-  static async getExchangeRates(fromCurrency: string, toCurrency: string, fromDate : string, toDate  : string) : Promise<any[]> {
+  static async getExchangeRates(fromCurrency: string, toCurrency: string, fromDate : string, toDate  : string) : Promise<ExchangeRate[]> {
     const exchangeRates = await YahooFinance.getExchangeRateBatch(fromCurrency, toCurrency, fromDate, toDate);
     return exchangeRates;
   }

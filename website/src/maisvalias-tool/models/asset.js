@@ -25,14 +25,8 @@ class Asset {
         return __awaiter(this, void 0, void 0, function* () {
             // Obter tipo de ativos usando Yahoo Finance
             let assetTypes = {};
-            const BATCH_SIZE = 7;
             try {
-                for (let i = 0; i < isins.length; i += BATCH_SIZE) {
-                    const batch = isins.slice(i, i + BATCH_SIZE);
-                    const batchResult = yield YahooFinance.getAssetTypeBatch(batch);
-                    Object.assign(assetTypes, batchResult);
-                }
-                // console.log("Asset Types: " + JSON.stringify(assetTypes));
+                assetTypes = yield YahooFinance.getAssetTypeBatch(isins);
             }
             catch (error) {
                 console.error("Erro ao buscar dados do ativo:", error);
