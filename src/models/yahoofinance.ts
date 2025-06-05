@@ -48,8 +48,8 @@ class YahooFinance {
       current.setDate(current.getDate() + 1); // next day
     }
 
-    console.log("Number of intervals: " + result.length);
-    console.log("Number of dates: " + dates.length);
+    // console.log("Number of intervals: " + result.length);
+    // console.log("Number of dates: " + dates.length);
 
     return result;
   }
@@ -96,8 +96,8 @@ class YahooFinance {
     // Check: if no. intervals is bigger than the no. of dates. If yes, then it's better to make API calls for each date
     // We want to minimize the amount of API calls
     if (intervals.length < dates.length) {
+      console.log("Fetching exchange rates by intervals...");
       for (let interval of intervals) {
-        console.log("Fetching exchange rates by intervals...");
         const from = new Date(interval.from.toUTCString())
         const to = new Date(interval.to.toUTCString())
         to.setDate(to.getDate() + 1);
@@ -127,8 +127,8 @@ class YahooFinance {
         exchangeRates = exchangeRates.concat(exchangeRates, zipped);
       }
     } else {
+      console.log("Fetching exchange rates by specific dates...");
       for (const date of dates) {
-        console.log("Fetching exchange rates by specific dates...");
         const oDate = new Date(date);
         let unixDate = Math.floor(oDate.getTime() / 1000);
         let data;
