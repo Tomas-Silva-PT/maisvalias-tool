@@ -4,6 +4,7 @@ t212*
 data/revolut*
 reminder.txt
 *.xlsx
+maisvalias-tool/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

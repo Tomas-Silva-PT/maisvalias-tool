@@ -15,6 +15,7 @@ class YahooFinance {
   static corsProblem = false;
 
   static proxies: Proxy[] = [new AllOriginsProxy(), new YahooSynoProxy()];
+  static numRetriesCycles : number = 5;
 
   static _splitIntervalByYear(startDate: Date, endDate: Date) {
     const result = [];
@@ -42,6 +43,36 @@ class YahooFinance {
     return result;
   }
 
+  static async get(url: string): Promise<any> {
+    let data;
+    try {
+      if (this.corsProblem) { throw new Error("CORS problem"); }
+      let response = await fetch(url);
+      data = await response.json();
+
+    }
+    catch (error) {
+      this.corsProblem = true;
+      let retries = 0;
+      while (retries < this.proxies.length * this.numRetriesCycles) {
+        const proxy = this.proxies[retries % this.proxies.length];
+        try {
+          data = await proxy.get(url);
+          break;
+        }
+        catch (error) {
+          console.warn(`Proxy failed: ${proxy.constructor.name}`, error);
+        }
+        retries++;
+      }
+
+      if (!data) throw new Error("All proxies failed to fetch the required data...");
+
+    }
+    if (data.contents) data = JSON.parse(data.contents);
+    return data;
+  }
+
   static async getExchangeRateBatch(fromCurrency: string, toCurrency: string, fromDate: string, toDate: string): Promise<ExchangeRate[]> {
     console.log("Getting exchange rate batch...");
     const ticker = `${fromCurrency}${toCurrency}=X`;
@@ -56,25 +87,15 @@ class YahooFinance {
     //console.log("Intervals: " + JSON.stringify(intervals));
     for (let interval of intervals) {
       //console.log("[before] From: " + interval.from + ", To: " + interval.to);
-      const from = new Date(interval.from.toUTCString()) 
-      const to = new Date(interval.to.toUTCString()) 
+      const from = new Date(interval.from.toUTCString())
+      const to = new Date(interval.to.toUTCString())
       to.setDate(to.getDate() + 1);
       let unixFromDate = Math.floor(from.getTime() / 1000);
       let unixToDate = Math.floor(to.getTime() / 1000);
       //console.log("[before] From: " + unixFromDate + ", To: " + unixToDate);
       let data;
       const url = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?period1=${unixFromDate}&period2=${unixToDate}&interval=1d`;
-      try {
-        if (this.corsProblem) { throw new Error("CORS problem"); }
-        let response = await fetch(url);
-        data = await response.json();
-      } catch (error) {
-        this.corsProblem = true;
-        let proxy = this.proxies[0];
-        data = await proxy.get(url);
-        // data = await this._delayedFetch(url, 500, 10000);
-      }
-      if (data.contents) data = JSON.parse(data.contents);
+      data = await this.get(url);
 
       // ZIP it
       const timestamps = data.chart.result[0].timestamp;
@@ -116,18 +137,7 @@ class YahooFinance {
     let unixNextDate = Math.floor(nextExchangeDate.getTime() / 1000);
     let data;
     let url = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?period1=${unixDate}&period2=${unixNextDate}&interval=1d`;
-
-    try {
-      if (this.corsProblem) { throw new Error("CORS problem"); }
-      let response = await fetch(url);
-      data = await response.json();
-    } catch (error) {
-      this.corsProblem = true;
-      let proxy = this.proxies[0];
-      data = await proxy.get(url);
-      // data = await this._delayedFetch(url, 500, 10000);
-    }
-    if (data.contents) data = JSON.parse(data.contents);
+    data = await this.get(url);
     let exchangeRate =
       data["chart"]["result"][0]["indicators"]["quote"][0]["close"][0];
     return parseFloat(exchangeRate);
@@ -137,18 +147,7 @@ class YahooFinance {
     let data;
     let query = queries.join(",");
     let url = `https://query2.finance.yahoo.com/v1/finance/search?q=${query}&corsDomain=finance.yahoo.com`;
-
-    // console.log("Searching...");
-    try {
-      if (this.corsProblem) { throw new Error("CORS problem"); }
-      let response = await fetch(url);
-      data = await response.json();
-    } catch (error) {
-      this.corsProblem = true;
-      let proxy = this.proxies[0];
-      data = await proxy.get(url);
-      // data = await this._delayedFetch(url, 500, 10000);
-    }
+    data = await this.get(url);
     return data;
   }
 
@@ -156,18 +155,7 @@ class YahooFinance {
     let data;
     let url = `https://query2.finance.yahoo.com/v1/finance/search?q=${query}&corsDomain=finance.yahoo.com`;
     console.log("Searching...");
-    try {
-      if (this.corsProblem) { throw new Error("CORS problem"); }
-      // console.log("Query: " + query);
-      let response = await fetch(url);
-      data = await response.json();
-    } catch (error) {
-      this.corsProblem = true;
-      // console.log("Query: " + query);
-      let proxy = this.proxies[0];
-      data = await proxy.get(url);
-      // data = await this._delayedFetch(url, 500, 10000);
-    }
+    data = await this.get(url);
     return data;
   }
 
@@ -191,8 +179,6 @@ class YahooFinance {
     for (let i = 0; i < isins.length; i += BATCHSIZE) {
       const batch = isins.slice(i, i + BATCHSIZE);
       let data = await this.searchBatch(batch);
-      if (data.contents) data = JSON.parse(data.contents);
-
       data.quotes.forEach((quote: any, index: number) => {
         assetTypes[isins[index + i]] = quote.quoteType;
       });
@@ -203,7 +189,6 @@ class YahooFinance {
   static async getAssetType(isin: string): Promise<string> {
     console.log("Getting asset type...");
     let data = await this.search(isin);
-    if (data.contents) data = JSON.parse(data.contents);
     // console.log("Quote Type: " + data.quotes[0].quoteType);
     return data.quotes[0].quoteType;
   }
