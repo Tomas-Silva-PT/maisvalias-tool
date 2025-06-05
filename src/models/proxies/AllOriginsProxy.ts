@@ -1,11 +1,11 @@
-import { Proxy } from "./Proxy";
+import { BaseProxy } from "./BaseProxy";
 
-class AllOriginsProxy implements Proxy {
-    async get(url: string): Promise<any> {
-        const response = await fetch('https://api.allorigins.win/get?url=' + encodeURIComponent(url));
-        const json = await response.json();
-        return json;
+class AllOriginsProxy extends BaseProxy {
+
+    _replaceDomain(url: string): string {
+        return 'https://api.allorigins.win/get?url=' + encodeURIComponent(url);
     }
+
 }
 
 export { AllOriginsProxy };

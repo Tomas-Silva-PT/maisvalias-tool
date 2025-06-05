@@ -1,5 +1,6 @@
-import { AllOriginsProxy } from "./proxies/AllOriginsProxy";
-import { Proxy } from "./proxies/Proxy";
+import { AllOriginsProxy } from "./proxies/AllOriginsProxy.js";
+import { Proxy } from "./proxies/Proxy.js";
+import { YahooSynoProxy } from "./proxies/YahooSynoProxy.js";
 
 type ExchangeRate = {
   "timestamp": number,
@@ -12,6 +13,8 @@ type ExchangeRate = {
 
 class YahooFinance {
   static corsProblem = false;
+
+  static proxies: Proxy[] = [new AllOriginsProxy(), new YahooSynoProxy()];
 
   static _splitIntervalByYear(startDate: Date, endDate: Date) {
     const result = [];
@@ -39,11 +42,6 @@ class YahooFinance {
     return result;
   }
 
-
-  static _convertTimeZone(date: Date, timezone: string): Date {
-    return new Date(date.toLocaleString("en-US", { timeZone: timezone }));
-  }
-
   static async getExchangeRateBatch(fromCurrency: string, toCurrency: string, fromDate: string, toDate: string): Promise<ExchangeRate[]> {
     console.log("Getting exchange rate batch...");
     const ticker = `${fromCurrency}${toCurrency}=X`;
@@ -57,10 +55,9 @@ class YahooFinance {
 
     //console.log("Intervals: " + JSON.stringify(intervals));
     for (let interval of intervals) {
-      // Yahoo uses dates in the Europe/London timezone, so we have to convert the dates accordingly (Europe/Lisbon -> Europe/London)
       //console.log("[before] From: " + interval.from + ", To: " + interval.to);
-      const from = new Date(interval.from.toUTCString()) //this._convertTimeZone(new Date(interval.from), "Europe/London");
-      const to = new Date(interval.to.toUTCString()) //this._convertTimeZone(new Date(interval.to), "Europe/London");
+      const from = new Date(interval.from.toUTCString()) 
+      const to = new Date(interval.to.toUTCString()) 
       to.setDate(to.getDate() + 1);
       let unixFromDate = Math.floor(from.getTime() / 1000);
       let unixToDate = Math.floor(to.getTime() / 1000);
@@ -73,7 +70,7 @@ class YahooFinance {
         data = await response.json();
       } catch (error) {
         this.corsProblem = true;
-        let proxy: Proxy = new AllOriginsProxy();
+        let proxy = this.proxies[0];
         data = await proxy.get(url);
         // data = await this._delayedFetch(url, 500, 10000);
       }
@@ -126,7 +123,7 @@ class YahooFinance {
       data = await response.json();
     } catch (error) {
       this.corsProblem = true;
-      let proxy: Proxy = new AllOriginsProxy();
+      let proxy = this.proxies[0];
       data = await proxy.get(url);
       // data = await this._delayedFetch(url, 500, 10000);
     }
@@ -148,7 +145,7 @@ class YahooFinance {
       data = await response.json();
     } catch (error) {
       this.corsProblem = true;
-      let proxy: Proxy = new AllOriginsProxy();
+      let proxy = this.proxies[0];
       data = await proxy.get(url);
       // data = await this._delayedFetch(url, 500, 10000);
     }
@@ -167,7 +164,7 @@ class YahooFinance {
     } catch (error) {
       this.corsProblem = true;
       // console.log("Query: " + query);
-      let proxy: Proxy = new AllOriginsProxy();
+      let proxy = this.proxies[0];
       data = await proxy.get(url);
       // data = await this._delayedFetch(url, 500, 10000);
     }
