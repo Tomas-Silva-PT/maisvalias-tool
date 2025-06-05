@@ -2,7 +2,7 @@ import { YahooFinance } from "../models/yahoofinance.js";
 
 async function testConnection() {
   try {
-    const rate = await YahooFinance.getExchangeRateBatch('USD', 'EUR', '2020-01-01', '2020-01-15');
+    const rate = await YahooFinance.getExchangeRateBatch('USD', 'EUR', ['2020-01-01', '2020-01-15']);
     if(!rate) {
       throw Error('Not found');
     }

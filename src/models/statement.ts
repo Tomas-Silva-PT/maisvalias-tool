@@ -8,8 +8,7 @@ import { ExchangeRate } from "./yahoofinance.js";
 
 type ExchangeRateToFetch = {
     currency: string;
-    fromDate: string;
-    toDate: string;
+    dates: string[];
 };
 
 class Statement {
@@ -29,13 +28,11 @@ class Statement {
         let rate = exchangesToFetch.find((r) => r.currency === currency);
 
         if (rate) {
-            rate.fromDate = date < rate.fromDate ? date : rate.fromDate;
-            rate.toDate = date > rate.toDate ? date : rate.toDate;
+            rate.dates.push(date);
         } else {
             exchangesToFetch.push({
                 currency,
-                fromDate: date,
-                toDate: date,
+                dates: [date],
             });
         }
     }
@@ -97,7 +94,7 @@ class Statement {
         const start = performance.now();
 
         for (const rateToFetch of exchangeRatesToFetch) {
-            const exchangeRates : ExchangeRate[] = await Currency.getExchangeRates(rateToFetch.currency, this.baseCurrency, rateToFetch.fromDate, rateToFetch.toDate);
+            const exchangeRates : ExchangeRate[] = await Currency.getExchangeRates(rateToFetch.currency, this.baseCurrency, rateToFetch.dates);
             //  console.log("Exchange Rates: ", JSON.stringify(exchangeRates));
             
             transactionsWithoutExchangeRate.filter((transaction) => transaction.netAmountCurrency === rateToFetch.currency).forEach((transaction) => {

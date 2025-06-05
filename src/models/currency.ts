@@ -7,8 +7,8 @@ class Currency {
     this.buffer = [];
   }
 
-  static async getExchangeRates(fromCurrency: string, toCurrency: string, fromDate : string, toDate  : string) : Promise<ExchangeRate[]> {
-    const exchangeRates = await YahooFinance.getExchangeRateBatch(fromCurrency, toCurrency, fromDate, toDate);
+  static async getExchangeRates(fromCurrency: string, toCurrency: string, dates : string[]) : Promise<ExchangeRate[]> {
+    const exchangeRates = await YahooFinance.getExchangeRateBatch(fromCurrency, toCurrency, dates);
     return exchangeRates;
   }
 

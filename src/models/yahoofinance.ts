@@ -15,10 +15,18 @@ class YahooFinance {
   static corsProblem = false;
 
   static proxies: Proxy[] = [new AllOriginsProxy(), new YahooSynoProxy()];
-  static numRetriesCycles : number = 5;
+  static numRetriesCycles: number = 5;
 
-  static _splitIntervalByYear(startDate: Date, endDate: Date) {
+  static _splitIntervalByYear(dates: string[]) {
     const result = [];
+
+    // Sort dates
+    dates.sort();
+
+    const startDate = new Date(dates[0]);
+    const endDate = new Date(dates[dates.length - 1]);
+
+    // console.log("Start Date: " + startDate + ", End Date: " + endDate);
 
     let current = new Date(startDate);
 
@@ -39,6 +47,9 @@ class YahooFinance {
       current = new Date(endOfPeriod.getTime());
       current.setDate(current.getDate() + 1); // next day
     }
+
+    console.log("Number of intervals: " + result.length);
+    console.log("Number of dates: " + dates.length);
 
     return result;
   }
@@ -73,55 +84,76 @@ class YahooFinance {
     return data;
   }
 
-  static async getExchangeRateBatch(fromCurrency: string, toCurrency: string, fromDate: string, toDate: string): Promise<ExchangeRate[]> {
+  static async getExchangeRateBatch(fromCurrency: string, toCurrency: string, dates: string[]): Promise<ExchangeRate[]> {
     console.log("Getting exchange rate batch...");
     const ticker = `${fromCurrency}${toCurrency}=X`;
 
     let exchangeRates: ExchangeRate[] = [];
 
     // Divide the interval into years
-    const intervals = this._splitIntervalByYear(new Date(fromDate), new Date(toDate));
+    const intervals = this._splitIntervalByYear(dates);
 
-    if (intervals.length > 0) { }
+    // Check: if no. intervals is bigger than the no. of dates. If yes, then it's better to make API calls for each date
+    // We want to minimize the amount of API calls
+    if (intervals.length < dates.length) {
+      for (let interval of intervals) {
+        console.log("Fetching exchange rates by intervals...");
+        const from = new Date(interval.from.toUTCString())
+        const to = new Date(interval.to.toUTCString())
+        to.setDate(to.getDate() + 1);
+        let unixFromDate = Math.floor(from.getTime() / 1000);
+        let unixToDate = Math.floor(to.getTime() / 1000);
+        let data;
+        const url = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?period1=${unixFromDate}&period2=${unixToDate}&interval=1d`;
+        data = await this.get(url);
 
-    //console.log("Intervals: " + JSON.stringify(intervals));
-    for (let interval of intervals) {
-      //console.log("[before] From: " + interval.from + ", To: " + interval.to);
-      const from = new Date(interval.from.toUTCString())
-      const to = new Date(interval.to.toUTCString())
-      to.setDate(to.getDate() + 1);
-      let unixFromDate = Math.floor(from.getTime() / 1000);
-      let unixToDate = Math.floor(to.getTime() / 1000);
-      //console.log("[before] From: " + unixFromDate + ", To: " + unixToDate);
-      let data;
-      const url = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?period1=${unixFromDate}&period2=${unixToDate}&interval=1d`;
-      data = await this.get(url);
+        // ZIP it
+        const timestamps = data.chart.result[0].timestamp;
+        const quotes = data.chart.result[0].indicators.quote[0];
 
-      // ZIP it
-      const timestamps = data.chart.result[0].timestamp;
-      const quotes = data.chart.result[0].indicators.quote[0];
+        //console.log("Yahoo timestamps: " + timestamps);
 
-      //console.log("Yahoo timestamps: " + timestamps);
+        const zipped: ExchangeRate[] = timestamps.map((ts: number, index: number) => {
+          const date = new Date(ts * 1000);
+          return {
+            timestamp: ts,
+            date: `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`,
+            open: quotes.open[index],
+            close: quotes.close[index],
+            high: quotes.high[index],
+            low: quotes.low[index]
+          }
+        });
+        exchangeRates = exchangeRates.concat(exchangeRates, zipped);
+      }
+    } else {
+      for (const date of dates) {
+        console.log("Fetching exchange rates by specific dates...");
+        const oDate = new Date(date);
+        let unixDate = Math.floor(oDate.getTime() / 1000);
+        let data;
+        const url = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?period1=${unixDate}&period2=${unixDate}&interval=1d`;
+        data = await this.get(url);
 
-      const zipped: ExchangeRate[] = timestamps.map((ts: number, index: number) => {
-        const date = new Date(ts * 1000);
-        //console.log("Timestamp: " + ts + ", Index: " + index + "Date: " + date);
-        return {
-          timestamp: ts,
-          date: `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`,
-          open: quotes.open[index],
-          close: quotes.close[index],
-          high: quotes.high[index],
-          low: quotes.low[index]
-        }
-      });
-      exchangeRates = exchangeRates.concat(exchangeRates, zipped);
+        // ZIP it
+        const timestamps = data.chart.result[0].timestamp;
+        const quotes = data.chart.result[0].indicators.quote[0];
+
+        const zipped: ExchangeRate[] = timestamps.map((ts: number, index: number) => {
+          const date = new Date(ts * 1000);
+          return {
+            timestamp: ts,
+            date: `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`,
+            open: quotes.open[index],
+            close: quotes.close[index],
+            high: quotes.high[index],
+            low: quotes.low[index]
+          }
+        });
+        exchangeRates = exchangeRates.concat(exchangeRates, zipped);
+      }
     }
 
-
-    // console.log("Exchange Rates [Batch]: " + JSON.stringify(exchangeRates));
-
-    // console.log("Mass Exchange Rate: " + JSON.stringify(zipped));
     return exchangeRates;
   }
 
