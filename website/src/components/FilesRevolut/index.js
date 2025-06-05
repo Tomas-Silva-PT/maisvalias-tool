@@ -97,7 +97,7 @@ export default function FilesRevolut({ setFiscalData, setStep }) {
       setError(true);
       const end = performance.now();
       console.log(
-        `onFilesSelected duration: ${((end - start) / 1000).toFixed(3)} seconds`
+        `Duração do processamento: ${((end - start) / 1000).toFixed(3)} seconds`
       );
       return;
     }
@@ -205,7 +205,7 @@ export default function FilesRevolut({ setFiscalData, setStep }) {
 
     const end = performance.now();
     console.log(
-      `onFilesSelected duration: ${((end - start) / 1000).toFixed(3)} seconds`
+      `Duração do processamento: ${((end - start) / 1000).toFixed(3)} seconds`
     );
   }
 

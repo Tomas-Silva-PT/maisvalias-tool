@@ -85,7 +85,7 @@ class YahooFinance {
   }
 
   static async getExchangeRateBatch(fromCurrency: string, toCurrency: string, dates: string[]): Promise<ExchangeRate[]> {
-    console.log("Getting exchange rate batch...");
+    // console.log("Getting exchange rate batch...");
     const ticker = `${fromCurrency}${toCurrency}=X`;
 
     let exchangeRates: ExchangeRate[] = [];
