@@ -141,4 +141,4 @@ Deste modo, o total de encargos seria:
 
 O total de encargos seria: `60€ + 50€ + 13.33€ = 123.33€`.
 
-Este raciocínio aplica-se tanto para os [encargos](./terminologia#-encargos) como para os [impostos retidos na fonte](./terminologia#-impostos-retidos-na-fonte).
+Este raciocínio aplica-se tanto para os [encargos](./terminologia#-encargos) como para os [impostos retidos na fonte](./terminologia#%EF%B8%8F-impostos-retidos-na-fonte).

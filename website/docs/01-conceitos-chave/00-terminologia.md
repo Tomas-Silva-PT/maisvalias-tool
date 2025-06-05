@@ -28,7 +28,7 @@ Também conhecido como o valor de venda, é o montante total recebido pela venda
 Valor de Realização = Valor de 1 ação * Nº de ações vendidas
 ```
 
-Na verdade no valor de realização também são incluídos custos associados com a venda, como por exemplo [encargos](#-encargos) ou [impostos](#-impostos-retidos-na-fonte).
+Na verdade no valor de realização também são incluídos custos associados com a venda, como por exemplo [encargos](#-encargos) ou [impostos](#%EF%B8%8F-impostos-retidos-na-fonte).
 
 ## 💵 Valor de Aquisição
 Também conhecido como o valor de compra, é o montante total gasto na compra de um ativo. Calcula-se multiplicando o número de ações compradas pelo preço unitária da ação.
