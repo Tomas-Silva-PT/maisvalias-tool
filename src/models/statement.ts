@@ -84,7 +84,7 @@ class Statement {
             }
         }
 
-        console.log("Exchange rates to fetch:", JSON.stringify(exchangeRatesToFetch));
+        // console.log("Exchange rates to fetch:", JSON.stringify(exchangeRatesToFetch));
 
         // console.log("Taxes without exchange rate:" + JSON.stringify(taxesWithoutExchangeRate));
         // console.log("Fees without exchange rate:" + JSON.stringify(feesWithoutExchangeRate));
