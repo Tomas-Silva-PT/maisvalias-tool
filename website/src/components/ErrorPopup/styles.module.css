@@ -73,16 +73,78 @@
 }
 
 .button {
-  background: linear-gradient(to right, #444, #666);
-  color: white;
+  background: linear-gradient(
+    to right,
+    var(--ifm-color-secondary) 53%,
+    var(--ifm-color-primary-lighter) 89%
+  );
+  padding: 0.5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
   border-radius: 0.5rem;
-  font-size: 1rem;
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row wrap;
+  color: white;
+  text-shadow: 0px 0px 5px rgb(0, 0, 0);
   cursor: pointer;
+  z-index: 1;
   text-align: center;
 }
 
 .button:hover {
   cursor: pointer;
-  background: linear-gradient(to right, #999999, #4e4e4e);
+  background: linear-gradient(to left ,var(--ifm-color-secondary) 53%, var(--ifm-color-primary-lighter) 89%);
   color: white;
+}
+
+.errorDetails {
+  margin-top: 0rem;
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.errorDetails * {
+  margin-top: 0rem;
+}
+
+.toggleButton {
+  background: linear-gradient(
+    to right,
+    rgb(87, 87, 87) 20%,
+    rgb(146, 146, 146) 89%
+  );
+  padding: 0.5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  border-radius: 0.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row wrap;
+  color: white;
+  text-shadow: 0px 0px 5px rgb(0, 0, 0);
+  cursor: pointer;
+  z-index: 1;
+  text-align: center;
+}
+
+.detailsContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.textarea {
+  width: 100%;
+  font-family: monospace;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  resize: vertical;
 }
