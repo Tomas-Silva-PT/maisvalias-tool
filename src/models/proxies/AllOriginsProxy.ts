@@ -1,4 +1,4 @@
-import { BaseProxy } from "./BaseProxy";
+import { BaseProxy } from "./BaseProxy.js";
 
 class AllOriginsProxy extends BaseProxy {
 
