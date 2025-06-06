@@ -5,7 +5,9 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npx tsc"
+    "build:build": "npx tsc -p tsconfig.build.json",
+    "build:website": "npx tsc -p tsconfig.website.json",
+    "build": "npm run build:build && npm run build:website"
   },
   "keywords": [],
   "author": "",

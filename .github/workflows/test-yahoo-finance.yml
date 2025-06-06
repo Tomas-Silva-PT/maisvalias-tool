@@ -27,12 +27,12 @@ jobs:
     
     - name: Build codebase
       working-directory: src/
-      run: npm run build
+      run: npm run build:build
 
     - name: Run Yahoo Finance Test - Get Exchange Rate
-      working-directory: website/src/maisvalias-tool/
+      working-directory: build/
       run: node tests/test-yahoo-finance-exchange-rate.js
 
     - name: Run Yahoo Finance Test - Search Stock
-      working-directory: website/src/maisvalias-tool/
+      working-directory: build/
       run: node tests/test-yahoo-finance-search.js
