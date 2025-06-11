@@ -23,21 +23,26 @@ Quando o utilizador tiver o histórico de transações disponível, enviá-lo-á
 
 1. A ferramenta extrai os dados necessários do histórico, normalmente num ficheiro **.csv**. 📄  
 2. O **parser** analisa e padroniza os dados para que possam ser utilizados na próxima etapa. 🔍  
-3. O resultado desta fase é um **extrato padronizado**, contendo todas as informações essenciais para o próximo passo.  
+3. O resultado desta fase é um **extrato padronizado**, contendo todas as informações essenciais para o próximo passo.
 
-Este processo está representado pelo passo **5**.  
+---
+
+## 📊 Calculator  
+
+Com os dados extraídos e padronizados pelo **parser**, entra em ação o **calculator** no passo **5**:  
+
+- Realiza os cálculos necessários para determinar as **mais-valias**. 💰  
 
 ---
 
 ## 📊 Formatter  
 
-Com os dados extraídos e padronizados pelo **parser**, entra em ação o **formatter** no passo **6**:  
+Com os calculados feitos pelo **calculator**, entra em ação o **formatter** no passo **6**:  
 
-- Realiza os cálculos necessários para determinar as **mais-valias**. 💰  
 - Formata os dados conforme o exigido pela **Autoridade Tributária e Aduaneira (AT)**. 🏛️  
 - Gera uma **tabela estruturada**, pronta para revisão e utilização.  
 
-O resultado final será entregue ao investidor no passo **7**, permitindo-lhe confirmar os dados e utilizá-los conforme necessário. ✅  
+O resultado final será entregue ao investidor no passo **7** e **8**, permitindo-lhe confirmar os dados e utilizá-los conforme necessário. ✅  
 
 ---
 
