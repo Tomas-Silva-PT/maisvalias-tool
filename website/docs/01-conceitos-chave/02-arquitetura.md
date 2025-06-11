@@ -35,7 +35,7 @@ Com os dados extraídos e padronizados pelo **parser**, entra em ação o **calc
 
 ---
 
-## 📊 Formatter  
+## 🧾 Formatter  
 
 Com os calculados feitos pelo **calculator**, entra em ação o **formatter** no passo **6**:  
 
