@@ -5,8 +5,12 @@ import { ArrowRight, Upload, X } from "lucide-react";
 
 import { Statement } from "../../maisvalias-tool/models/statement.js";
 import { Trading212Parser } from "../../maisvalias-tool/parsers/trading212parser.js";
-import { PTCapitalGainsFormatter } from "../../maisvalias-tool/formatters/pt/irs/capital_gains_formatter.js";
-import { PTDividendsFormatter } from "../../maisvalias-tool/formatters/pt/irs/dividends_formatter.js";
+import { PTCapitalGainsFormatter } from "../../maisvalias-tool/formatters/pt/irs/irs_capital_gains_formatter.js";
+import { PTDividendsFormatter } from "../../maisvalias-tool/formatters/pt/irs/irs_dividends_formatter.js";
+import { DividendsFormatter } from "../../maisvalias-tool/formatters/pt/dividends_formatter.js";
+
+import { FIFOCalculator } from "../../maisvalias-tool/calculators/FIFOCalculator.js";
+import { DividendsCalculator } from "../../maisvalias-tool/calculators/DividendsCalculator.js";
 
 import ErrorPopup from "@site/src/components/ErrorPopup";
 
@@ -37,48 +41,53 @@ export default function FilesTrading212({ setFiscalData, setStep }) {
     if (errorType === "filesUploaded") {
       content = (
         <>
-            <h3>Falha ao processar os ficheiros</h3>
-            <span>
-              Os ficheiros não são compatíveis com o formato esperado.
-            </span>
-            <p>
-              Por favor verifica quais os ficheiros corretos através da{" "}
-              <a href="docs/corretoras/trading212" target="_blank">
-                documentação
-              </a>{" "}
-              e tenta novamente.
-            </p>
-            <p>
-              Se o problema persistir,{" "}
-              <a href="./about#como-nos-contactar" target="_blank">
-                contacta-nos
-              </a>
-              .
-            </p>
+          <h3>Falha ao processar os ficheiros</h3>
+          <span>Os ficheiros não são compatíveis com o formato esperado.</span>
+          <p>
+            Por favor verifica quais os ficheiros corretos através da{" "}
+            <a href="docs/corretoras/trading212" target="_blank">
+              documentação
+            </a>{" "}
+            e tenta novamente.
+          </p>
+          <p>
+            Se o problema persistir,{" "}
+            <a href="./about#como-nos-contactar" target="_blank">
+              contacta-nos
+            </a>
+            .
+          </p>
         </>
       );
     } else if (errorType === "fetchingData") {
       content = (
         <>
-            <h3>Falha ao calcular as mais-valias</h3>
-            <span>
-              Não conseguimos obter as informações necessárias para o cálculo
-              das mais-valias.
-            </span>
-            <p>Por favor tenta novamente mais tarde.</p>
-            <p>
-              Se o problema persistir,{" "}
-              <a href="./about#como-nos-contactar" target="_blank">
-                contacta-nos
-              </a>
-              .
-            </p>
+          <h3>Falha ao calcular as mais-valias</h3>
+          <span>
+            Não conseguimos obter as informações necessárias para o cálculo das
+            mais-valias.
+          </span>
+          <p>Por favor tenta novamente mais tarde.</p>
+          <p>
+            Se o problema persistir,{" "}
+            <a href="./about#como-nos-contactar" target="_blank">
+              contacta-nos
+            </a>
+            .
+          </p>
         </>
       );
     }
 
     return (
-      <ErrorPopup title="Erro" closeFunction={() => {setErrorType(null); setError(null);}} error={error}>
+      <ErrorPopup
+        title="Erro"
+        closeFunction={() => {
+          setErrorType(null);
+          setError(null);
+        }}
+        error={error}
+      >
         {content}
       </ErrorPopup>
     );
@@ -117,8 +126,9 @@ export default function FilesTrading212({ setFiscalData, setStep }) {
 
     const parser = new Trading212Parser();
     const statement = new Statement([]);
-    const formatterCapitalGains = new PTCapitalGainsFormatter();
-    const formatterDividends = new PTDividendsFormatter();
+    const formatterIRSCapitalGains = new PTCapitalGainsFormatter();
+    const formatterIRSDividends = new PTDividendsFormatter();
+    const formatterUserDividends = new DividendsFormatter();
 
     const filePromises = files.map((file) => {
       return new Promise((resolve, reject) => {
@@ -159,8 +169,19 @@ export default function FilesTrading212({ setFiscalData, setStep }) {
       statement.addTransactions(transaction);
     });
 
+    let capitalGains;
+    let dividends;
+
     try {
       await statement.fetchData();
+      let capitalGainsCalculator = new FIFOCalculator();
+      let dividendsCalculator = new DividendsCalculator();
+      capitalGains = await capitalGainsCalculator.calculate(
+        capitalGainsCalculator.match(statement.getTransactions())
+      );
+      dividends = await dividendsCalculator.calculate(
+        statement.getTransactions()
+      );
     } catch (error) {
       setError(error);
       dispatchError("fetchingData");
@@ -171,21 +192,21 @@ export default function FilesTrading212({ setFiscalData, setStep }) {
       return;
     }
 
-    let capitalGains = await formatterCapitalGains.format(statement);
-    let dividends = await formatterDividends.format(statement);
+    let capitalGainsFormattedForIRS =
+      formatterIRSCapitalGains.format(capitalGains);
+    let dividendsFormattedForIRS = formatterIRSDividends.format(dividends);
+    let dividendsFormattedForUser = formatterUserDividends.format(dividends);
 
-    let toUserDividends = dividends["toUser"];
-
-    if (!toUserDividends) {
+    if (!dividendsFormattedForIRS) {
       console.warn(
         "toUserDividends is undefined. Check formatterDividends output."
       );
     }
 
-    let filteredCapitalGainsYears = capitalGains.map((gain) =>
+    let filteredCapitalGainsYears = capitalGainsFormattedForIRS.map((gain) =>
       Number(gain["Ano de Realização"])
     );
-    let filteredDividendsYears = toUserDividends.map((div) =>
+    let filteredDividendsYears = dividendsFormattedForUser.map((div) =>
       Number(div["Ano rendimento"])
     );
 
@@ -197,7 +218,7 @@ export default function FilesTrading212({ setFiscalData, setStep }) {
 
     let data = years.reduce((acc, curr) => {
       if (!acc[curr]) acc[curr] = {};
-      acc[curr]["capitalGains"] = capitalGains.filter(
+      acc[curr]["capitalGains"] = capitalGainsFormattedForIRS.filter(
         (gain) => gain["Ano de Realização"] == curr
       );
       acc[curr]["dividends"] = {};
@@ -205,10 +226,10 @@ export default function FilesTrading212({ setFiscalData, setStep }) {
         acc[curr]["dividends"]["toUser"] = {};
       if (!acc[curr]["dividends"]["toIRS"])
         acc[curr]["dividends"]["toIRS"] = {};
-      acc[curr]["dividends"]["toUser"] = dividends["toUser"].filter(
+      acc[curr]["dividends"]["toUser"] = dividendsFormattedForUser.filter(
         (div) => div["Ano rendimento"] == curr
       );
-      acc[curr]["dividends"]["toIRS"] = dividends["toIRS"].filter(
+      acc[curr]["dividends"]["toIRS"] = dividendsFormattedForIRS.filter(
         (div) => div["Ano rendimento"] == curr
       );
       return acc;

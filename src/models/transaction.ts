@@ -49,4 +49,28 @@ class Transaction {
 
 }
 
-export { Transaction };
+type MatchedTransaction = {
+    buy: Transaction;
+    sell: Transaction;
+    shares: number;
+}
+
+type RealizedTransaction = {
+    buy: Transaction;
+    sell: Transaction;
+    fees: number;
+    taxes: number;
+    realizedValue: number;
+    acquiredValue: number;
+    currency: string;
+}
+
+type DividendTransaction = {
+    transaction: Transaction;
+    amount: number;
+    fees: number;
+    taxes: number;
+    currency: string;
+}
+
+export { Transaction, MatchedTransaction, RealizedTransaction, DividendTransaction };

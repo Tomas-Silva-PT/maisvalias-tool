@@ -5,10 +5,13 @@ import { ArrowRight, Upload, X } from "lucide-react";
 
 import { Statement } from "../../maisvalias-tool/models/statement.js";
 import { RevolutParser } from "../../maisvalias-tool/parsers/revolutparser.js";
-import { PTCapitalGainsFormatter } from "../../maisvalias-tool/formatters/pt/irs/capital_gains_formatter.js";
-import { PTDividendsFormatter } from "../../maisvalias-tool/formatters/pt/irs/dividends_formatter.js";
+import { PTCapitalGainsFormatter } from "../../maisvalias-tool/formatters/pt/irs/irs_capital_gains_formatter.js";
+import { PTDividendsFormatter } from "../../maisvalias-tool/formatters/pt/irs/irs_dividends_formatter.js";
+import { DividendsFormatter } from "../../maisvalias-tool/formatters/pt/dividends_formatter.js";
 
 import ErrorPopup from "@site/src/components/ErrorPopup";
+import { FIFOCalculator } from "../../maisvalias-tool/calculators/FIFOCalculator.js";
+import { DividendsCalculator } from "../../maisvalias-tool/calculators/DividendsCalculator.js";
 
 const broker = [
   {
@@ -27,7 +30,68 @@ const broker = [
 export default function FilesRevolut({ setFiscalData, setStep }) {
   const [operationFiles, setOperationFiles] = useState([]);
   const [profitLossFiles, setProfitLossFiles] = useState([]);
-  const [showError, setError] = useState(false);
+  const [errorType, setErrorType] = useState(null);
+  const [error, setError] = useState(null);
+
+  function renderError(error) {
+    if (!errorType) return null;
+
+    let content;
+
+    if (errorType === "filesUploaded") {
+      content = (
+        <>
+          <h3>Falha ao processar os ficheiros</h3>
+          <span>Os ficheiros não são compatíveis com o formato esperado.</span>
+          <p>
+            Por favor verifica quais os ficheiros corretos através da{" "}
+            <a href="docs/corretoras/revolut" target="_blank">
+              documentação
+            </a>{" "}
+            e tenta novamente.
+          </p>
+          <p>
+            Se o problema persistir,{" "}
+            <a href="./about#como-nos-contactar" target="_blank">
+              contacta-nos
+            </a>
+            .
+          </p>
+        </>
+      );
+    } else if (errorType === "fetchingData") {
+      content = (
+        <>
+          <h3>Falha ao calcular as mais-valias</h3>
+          <span>
+            Não conseguimos obter as informações necessárias para o cálculo das
+            mais-valias.
+          </span>
+          <p>Por favor tenta novamente mais tarde.</p>
+          <p>
+            Se o problema persistir,{" "}
+            <a href="./about#como-nos-contactar" target="_blank">
+              contacta-nos
+            </a>
+            .
+          </p>
+        </>
+      );
+    }
+
+    return (
+      <ErrorPopup
+        title="Erro"
+        closeFunction={() => {
+          setErrorType(null);
+          setError(null);
+        }}
+        error={error}
+      >
+        {content}
+      </ErrorPopup>
+    );
+  }
 
   function removeOperationFile(index) {
     setOperationFiles((prev) => prev.filter((_, i) => i !== index));
@@ -62,8 +126,9 @@ export default function FilesRevolut({ setFiscalData, setStep }) {
 
     const parser = new RevolutParser();
     const statement = new Statement([]);
-    const formatterCapitalGains = new PTCapitalGainsFormatter();
-    const formatterDividends = new PTDividendsFormatter();
+    const formatterIRSCapitalGains = new PTCapitalGainsFormatter();
+    const formatterIRSDividends = new PTDividendsFormatter();
+    const formatterUserDividends = new DividendsFormatter();
 
     const profitLossPromises = profitLossFiles.map((file) => {
       return new Promise((resolve, reject) => {
@@ -94,7 +159,8 @@ export default function FilesRevolut({ setFiscalData, setStep }) {
     } catch (error) {
       contentStep22.classList.add(clsx(styles.contentStep2Error));
       loader.style.display = "none";
-      setError(true);
+      setError(error);
+      setErrorType("filesUploaded");
       const end = performance.now();
       console.log(
         `Duração do processamento: ${((end - start) / 1000).toFixed(3)} seconds`
@@ -109,9 +175,6 @@ export default function FilesRevolut({ setFiscalData, setStep }) {
           const data = e.target.result;
           try {
             const transactions = parser.parse(data);
-            if (transactions.length === 0) {
-              reject();
-            }
             resolve(transactions);
           } catch (e) {
             console.error(e);
@@ -136,7 +199,8 @@ export default function FilesRevolut({ setFiscalData, setStep }) {
     } catch (error) {
       contentStep21.classList.add(clsx(styles.contentStep2Error));
       loader.style.display = "none";
-      setError(true);
+      setError(error);
+      setErrorType("filesUploaded");
       const end = performance.now();
       console.log(
         `Duração do processamento: ${((end - start) / 1000).toFixed(3)} seconds`
@@ -148,22 +212,44 @@ export default function FilesRevolut({ setFiscalData, setStep }) {
       statement.addTransactions(transaction);
     });
 
-    await statement.fetchData();
-    let capitalGains = await formatterCapitalGains.format(statement);
-    let dividends = await formatterDividends.format(statement);
+    let capitalGains;
+    let dividends;
 
-    let toUserDividends = dividends["toUser"];
+    try {
+      await statement.fetchData();
+      let capitalGainsCalculator = new FIFOCalculator();
+      let dividendsCalculator = new DividendsCalculator();
+      capitalGains = await capitalGainsCalculator.calculate(
+        capitalGainsCalculator.match(statement.getTransactions())
+      );
+      dividends = await dividendsCalculator.calculate(
+        statement.getTransactions()
+      );
+    } catch (error) {
+      setError(error);
+      setErrorType("fetchingData");
+      const end = performance.now();
+      console.log(
+        `Duração do processamento: ${((end - start) / 1000).toFixed(3)} seconds`
+      );
+      return;
+    }
 
-    if (!toUserDividends) {
+    let capitalGainsFormattedForIRS =
+      formatterIRSCapitalGains.format(capitalGains);
+    let dividendsFormattedForIRS = formatterIRSDividends.format(dividends);
+    let dividendsFormattedForUser = formatterUserDividends.format(dividends);
+
+    if (!dividendsFormattedForUser) {
       console.warn(
         "toUserDividends is undefined. Check formatterDividends output."
       );
     }
 
-    let filteredCapitalGainsYears = capitalGains.map((gain) =>
+    let filteredCapitalGainsYears = capitalGainsFormattedForIRS.map((gain) =>
       Number(gain["Ano de Realização"])
     );
-    let filteredDividendsYears = toUserDividends.map((div) =>
+    let filteredDividendsYears = dividendsFormattedForUser.map((div) =>
       Number(div["Ano rendimento"])
     );
 
@@ -175,7 +261,7 @@ export default function FilesRevolut({ setFiscalData, setStep }) {
 
     let data = years.reduce((acc, curr) => {
       if (!acc[curr]) acc[curr] = {};
-      acc[curr]["capitalGains"] = capitalGains.filter(
+      acc[curr]["capitalGains"] = capitalGainsFormattedForIRS.filter(
         (gain) => gain["Ano de Realização"] == curr
       );
       acc[curr]["dividends"] = {};
@@ -183,10 +269,10 @@ export default function FilesRevolut({ setFiscalData, setStep }) {
         acc[curr]["dividends"]["toUser"] = {};
       if (!acc[curr]["dividends"]["toIRS"])
         acc[curr]["dividends"]["toIRS"] = {};
-      acc[curr]["dividends"]["toUser"] = dividends["toUser"].filter(
+      acc[curr]["dividends"]["toUser"] = dividendsFormattedForUser.filter(
         (div) => div["Ano rendimento"] == curr
       );
-      acc[curr]["dividends"]["toIRS"] = dividends["toIRS"].filter(
+      acc[curr]["dividends"]["toIRS"] = dividendsFormattedForIRS.filter(
         (div) => div["Ano rendimento"] == curr
       );
       return acc;
@@ -195,7 +281,8 @@ export default function FilesRevolut({ setFiscalData, setStep }) {
     loader.style.display = "none";
 
     if (Object.entries(data).length === 0) {
-      setError(true);
+      setErrorType("filesUploaded");
+      contentStep21.classList.add(clsx(styles.contentStep2Error));
     } else {
       contentStep21.classList.remove(clsx(styles.contentStep2Error));
       contentStep22.classList.remove(clsx(styles.contentStep2Error));
@@ -285,26 +372,7 @@ export default function FilesRevolut({ setFiscalData, setStep }) {
           <ArrowRight />
         </div>
       )}
-      {showError && (
-        <ErrorPopup title="Erro" closeFunction={() => setError(false)}>
-          <h3>Falha ao processar os ficheiros</h3>
-          <span>Os ficheiros não são compatíveis com o formato esperado.</span>
-          <p>
-            Por favor verifica quais os ficheiros corretos através da{" "}
-            <a href="docs/corretoras/revolut" target="_blank">
-              documentação
-            </a>{" "}
-            e tenta novamente.
-          </p>
-          <p>
-            Se o problema persistir,{" "}
-            <a href="./about#como-nos-contactar" target="_blank">
-              contacta-nos
-            </a>
-            .
-          </p>
-        </ErrorPopup>
-      )}
+      {renderError(error)}
     </>
   );
 }

@@ -7,7 +7,7 @@ type DividendForUser = {
   "Imposto Pago no Estrangeiro - No país da fonte": number;
 };
 
-type Dividend = {
+type DividendToIRS = {
     "Ano rendimento": string,
     "Código Rendimento":
       string,
@@ -16,4 +16,4 @@ type Dividend = {
     "Imposto Pago no Estrangeiro - No país da fonte": number,
 }
 
-export { Dividend, DividendForUser };
+export { DividendToIRS , DividendForUser };
