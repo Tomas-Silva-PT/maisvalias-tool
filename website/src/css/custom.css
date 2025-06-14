@@ -29,10 +29,18 @@
 
   --ifm-color-text: black;
   --ifm-inverse-color-text: white;
+
+  --primary-color: #0d6efd;
+  --success-color: #198754;
+  --danger-color: #dc3545;
+  --warning-color: #ffc107;
+  --inactive-color: #d4d4d4;
+
+  --card-color: white;
 }
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
-[data-theme='dark'] {
+[data-theme="dark"] {
   --ifm-color-primary: #25c2a0;
   --ifm-color-primary-dark: #21af90;
   --ifm-color-primary-darker: #1fa588;
@@ -52,6 +60,8 @@
 
   --ifm-color-text: white;
   --ifm-inverse-color-text: black;
+
+  --card-color: rgba(255, 255, 255, 0.04);
 }
 
 .header-github-link:hover {
@@ -63,20 +73,18 @@
   width: 28px;
   height: 28px;
   display: flex;
-  background: url('../../static/img/icons8-github.svg') no-repeat;
+  background: url("../../static/img/icons8-github.svg") no-repeat;
   background-size: contain;
 }
-
-
 
 .navbar {
   background-color: var(--ifm-color-primary-lighter);
   box-shadow: none;
-  text-shadow: 
-  1px 1px 1px rgba(0, 0, 0, var(--ifm-navbar-text-outline-opacity)), /* Stronger, more visible shadow */
-  -1px -1px 1px rgba(0, 0, 0, var(--ifm-navbar-text-outline-opacity)),
-  1px -1px 1px rgba(0, 0, 0, var(--ifm-navbar-text-outline-opacity)),
-  -1px 1px 1px rgba(0, 0, 0, var(--ifm-navbar-text-outline-opacity));
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, var(--ifm-navbar-text-outline-opacity)),
+    /* Stronger, more visible shadow */ -1px -1px 1px
+      rgba(0, 0, 0, var(--ifm-navbar-text-outline-opacity)),
+    1px -1px 1px rgba(0, 0, 0, var(--ifm-navbar-text-outline-opacity)),
+    -1px 1px 1px rgba(0, 0, 0, var(--ifm-navbar-text-outline-opacity));
   color: var(--ifm-navbar-text-color);
 }
 
@@ -100,11 +108,11 @@
 
 @keyframes heroFadeIn {
   from {
-      transform: translateY(-50%);
-      opacity: 0; /* Start with opacity 0 (invisible) */
+    transform: translateY(-50%);
+    opacity: 0; /* Start with opacity 0 (invisible) */
   }
   to {
-      opacity: 1; /* End with opacity 1 (fully visible) */
+    opacity: 1; /* End with opacity 1 (fully visible) */
   }
 }
 
@@ -114,11 +122,11 @@
 
 @keyframes featureFadeIn {
   from {
-      transform: translateX(-50%);
-      opacity: 0; /* Start with opacity 0 (invisible) */
+    transform: translateX(-50%);
+    opacity: 0; /* Start with opacity 0 (invisible) */
   }
   to {
-      opacity: 1; /* End with opacity 1 (fully visible) */
+    opacity: 1; /* End with opacity 1 (fully visible) */
   }
 }
 
@@ -177,42 +185,125 @@
   width: 50px;
   height: 50px;
   display: grid;
-  background: radial-gradient(farthest-side, currentColor calc(100% - 6px),#0000 calc(100% - 5px) 0);
-  -webkit-mask: radial-gradient(farthest-side,#0000 calc(100% - 13px),#000 calc(100% - 12px));
-  mask: radial-gradient(farthest-side,#0000 calc(100% - 13px),#000 calc(100% - 12px));
+  background: radial-gradient(
+    farthest-side,
+    currentColor calc(100% - 6px),
+    #0000 calc(100% - 5px) 0
+  );
+  -webkit-mask: radial-gradient(
+    farthest-side,
+    #0000 calc(100% - 13px),
+    #000 calc(100% - 12px)
+  );
+  mask: radial-gradient(
+    farthest-side,
+    #0000 calc(100% - 13px),
+    #000 calc(100% - 12px)
+  );
   border-radius: 50%;
   animation: s9 4s infinite linear, blink 3s infinite alternate;
 }
 .custom-loader::before,
-.custom-loader::after {    
-  content:"";
+.custom-loader::after {
+  content: "";
   grid-area: 1/1;
-  background:
-    linear-gradient(currentColor 0 0) center,
+  background: linear-gradient(currentColor 0 0) center,
     linear-gradient(currentColor 0 0) center;
-  background-size: 100% 10px,10px 100%;
+  background-size: 100% 10px, 10px 100%;
   background-repeat: no-repeat;
 }
 .custom-loader::after {
-   transform: rotate(45deg);
+  transform: rotate(45deg);
 }
 
 .custom-loader-text {
-  animation: floating 3s infinite ease; 
+  animation: floating 3s infinite ease;
 }
 
-@keyframes s9 { 
-  100%{transform: rotate(1turn);}
+@keyframes s9 {
+  100% {
+    transform: rotate(1turn);
+  }
 }
 
 @keyframes blink {
-  0% { opacity: 1; }
-  50% { opacity: 0.5; }
-  100% { opacity: 1; }
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 @keyframes floating {
-  0% { transform: translate(0,  0px); }
-  50%  { transform: translate(0, 3px); }
-  100%   { transform: translate(0, -0px); }
+  0% {
+    transform: translate(0, 0px);
+  }
+  50% {
+    transform: translate(0, 3px);
+  }
+  100% {
+    transform: translate(0, -0px);
+  }
+}
+
+/* Tooltip */
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black;
+}
+
+.tooltip .tooltipContent {
+  visibility: hidden;
+  width: fit-content;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 0%;
+  opacity: 0;
+  translate: -45%;
+  transition: opacity 0.3s;
+  font-family: var(--ifm-font-family-base);
+  font-weight: lighter;
+  white-space: nowrap;
+  font-size: calc(0.5rem + 0.3vw);
+  padding: 0.3rem;
+}
+
+.tooltip .tooltipContent::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+
+.tooltip:hover .tooltipContent {
+  visibility: visible;
+  opacity: 1;
+}
+
+.tooltipContent > * {
+  margin-bottom: 0.2rem;
+}
+
+.tooltipContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: end;
+  gap: 0.5rem;
 }

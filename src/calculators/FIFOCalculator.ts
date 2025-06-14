@@ -81,7 +81,7 @@ class FIFOCalculator implements CapitalGainsCalculator {
 
             // Cálculo do valor de realização (valor de venda)
             let sellUnitValue = sellGrossAmount / sellTransaction.shares;
-            let realizedValue = sellUnitValue * shares;
+            let realizedValue = sellUnitValue * shares; // não inclui despesas e encargos
 
             // Converter o montante da compra para a moeda da declaração
             let buyNetAmount = 0;
@@ -146,14 +146,16 @@ class FIFOCalculator implements CapitalGainsCalculator {
             let buyGrossAmount = buyNetAmount + buyFeesAmount + buyTaxesAmount;
 
             // Cálculo do valor de aquisição (valor de compra)
-            let buyUnitValue = buyGrossAmount / buyTransaction.shares;
-            let acquiredValue = buyUnitValue * shares;
+            let buyUnitValue = buyNetAmount / buyTransaction.shares;
+            let acquiredValue = buyUnitValue * shares; // não inclui despesas e encargos
 
             realizedTransactions.push({
                 buy: buyTransaction,
                 sell: sellTransaction,
-                fees: Math.round((sellCompensationFeesAmount + buyCompensationFeesAmount) * 100) / 100,
-                taxes: Math.round((sellCompensationTaxesAmount + buyCompensationTaxesAmount) * 100) / 100,
+                buyFees: Math.round((buyCompensationFeesAmount) * 100) / 100,
+                sellFees: Math.round((sellCompensationFeesAmount) * 100) / 100,
+                buyTaxes: Math.round((buyCompensationTaxesAmount) * 100) / 100,
+                sellTaxes: Math.round((sellCompensationTaxesAmount) * 100) / 100,
                 realizedValue: Math.round(realizedValue * 100) / 100,
                 acquiredValue: Math.round(acquiredValue * 100) / 100,
                 currency: currency,

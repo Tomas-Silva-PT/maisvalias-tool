@@ -16,8 +16,8 @@ class PTCapitalGainsFormatter {
       const sell = realizedTransaction.sell;
       const realizedValue = realizedTransaction.realizedValue;
       const acquiredValue = realizedTransaction.acquiredValue;
-      const fees = realizedTransaction.fees;
-      const taxes = realizedTransaction.taxes;
+      const fees = realizedTransaction.buyFees + realizedTransaction.sellFees;
+      const taxes = realizedTransaction.buyTaxes + realizedTransaction.sellTaxes;
 
 
       let code : string = "";

@@ -4,68 +4,73 @@
 // There are various equivalent ways to declare your Docusaurus config.
 // See: https://docusaurus.io/docs/api/docusaurus-config
 
-import {themes as prismThemes} from 'prism-react-renderer';
+import { themes as prismThemes } from "prism-react-renderer";
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'maisvalias-tool',
-  tagline: 'Descobre rapidamente as mais valias e dividendos que precisas de declarar no IRS',
-  favicon: '/img/favicon.ico',
+  title: "maisvalias-tool",
+  tagline:
+    "Descobre rapidamente as mais valias e dividendos que precisas de declarar no IRS",
+  favicon: "/img/favicon.ico",
 
   // Set the production url of your site here
-  url: 'https://Tomas-Silva-PT.github.io',
+  url: "https://Tomas-Silva-PT.github.io",
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/maisvalias-tool/',
+  baseUrl: "/maisvalias-tool/",
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'Tomas-Silva-PT', // Usually your GitHub org/user name.
-  projectName: 'maisvalias-tool', // Usually your repo name.
+  organizationName: "Tomas-Silva-PT", // Usually your GitHub org/user name.
+  projectName: "maisvalias-tool", // Usually your repo name.
   deploymentBranch: "gh-pages",
-  
-  onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'warn',
+
+  onBrokenLinks: "throw",
+  onBrokenMarkdownLinks: "warn",
+
+  stylesheets: [
+    "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css",
+  ],
 
   // Even if you don't use internationalization, you can use this field to set
   // useful metadata like html lang. For example, if your site is Chinese, you
   // may want to replace "en" with "zh-Hans".
   i18n: {
-    defaultLocale: 'en',
-    locales: ['en'],
+    defaultLocale: "en",
+    locales: ["en"],
   },
 
   presets: [
     [
-      'classic',
+      "classic",
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
-          sidebarPath: './sidebars.js',
+          sidebarPath: "./sidebars.js",
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+            "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/",
         },
         blog: {
           showReadingTime: true,
           feedOptions: {
-            type: ['rss', 'atom'],
+            type: ["rss", "atom"],
             xslt: true,
           },
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+            "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/",
           // Useful options to enforce blogging best practices
-          onInlineTags: 'warn',
-          onInlineAuthors: 'warn',
-          onUntruncatedBlogPosts: 'warn',
+          onInlineTags: "warn",
+          onInlineAuthors: "warn",
+          onUntruncatedBlogPosts: "warn",
         },
         theme: {
-          customCss: './src/css/custom.css',
+          customCss: "./src/css/custom.css",
         },
       }),
     ],
@@ -75,96 +80,104 @@ const config = {
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       metadata: [
-        {name:'google-site-verification', content: 'agaUECWdm1BmOf_WHRHxdk8c8ap2-q6XCU22-o84kAU'},
+        {
+          name: "google-site-verification",
+          content: "agaUECWdm1BmOf_WHRHxdk8c8ap2-q6XCU22-o84kAU",
+        },
       ],
+      colorMode: {
+        defaultMode: "light",
+        disableSwitch: false,
+        respectPrefersColorScheme: false,
+      },
       // Replace with your project's social card
-      image: 'img/maisvaliastool-social-card.png',
+      image: "img/maisvaliastool-social-card.png",
       navbar: {
-        title: 'maisvalias-tool',
+        title: "maisvalias-tool",
         logo: {
-          alt: 'maisvalias-tool logo',
-          src: 'img/logo.png',
+          alt: "maisvalias-tool logo",
+          src: "img/logo.png",
         },
         items: [
           {
-            type: 'docSidebar',
-            sidebarId: 'tutorialSidebar',
-            position: 'left',
-            label: 'Documentação',
+            type: "docSidebar",
+            sidebarId: "tutorialSidebar",
+            position: "left",
+            label: "Documentação",
           },
-          {to: '/about', label: 'Sobre Nós', position: 'left'},
-          {to: '/donate', label: 'Donativo', position: 'left'},
-          {to: '/faq', label: 'FAQ', position: 'left'},
-          {to: '/livedemo', label: 'Demonstração', position: 'left'},
+          { to: "/about", label: "Sobre Nós", position: "left" },
+          { to: "/donate", label: "Donativo", position: "left" },
+          { to: "/faq", label: "FAQ", position: "left" },
+          { to: "/livedemo", label: "Demonstração", position: "left" },
           {
             href: "https://github.com/Tomas-Silva-PT/maisvalias-tool",
             className: "header-github-link",
             "aria-label": "GitHub repository",
             position: "right",
-        },
+          },
         ],
       },
       footer: {
-        style: 'dark',
+        style: "dark",
         links: [
           {
-            title: 'Documentação',
+            title: "Documentação",
             items: [
               {
-                label: 'Documentação',
-                to: '/docs/intro',
+                label: "Documentação",
+                to: "/docs/intro",
               },
               {
-                label: 'Conceitos chave',
-                to: '/docs/category/conceitos-chave',
+                label: "Conceitos chave",
+                to: "/docs/category/conceitos-chave",
               },
               {
-                label: 'Corretoras suportadas',
-                to: '/docs/category/corretoras-suportadas',
+                label: "Corretoras suportadas",
+                to: "/docs/category/corretoras-suportadas",
               },
               {
-                label: 'Funcionalidades',
-                to: '/docs/category/funcionalidades',
+                label: "Funcionalidades",
+                to: "/docs/category/funcionalidades",
               },
             ],
           },
           {
-            title: 'Mais',
+            title: "Mais",
             items: [
               {
-                label: 'GitHub',
-                href: 'https://github.com/Tomas-Silva-PT/maisvalias-tool',
+                label: "GitHub",
+                href: "https://github.com/Tomas-Silva-PT/maisvalias-tool",
               },
               {
-                label: 'Comunidade',
-                href: 'https://github.com/Tomas-Silva-PT/maisvalias-tool/discussions'
+                label: "Comunidade",
+                href: "https://github.com/Tomas-Silva-PT/maisvalias-tool/discussions",
               },
               {
-                label: 'Contribuir',
-                href: 'https://github.com/Tomas-Silva-PT/maisvalias-tool/blob/main/CONTRIBUTING.md'
+                label: "Contribuir",
+                href: "https://github.com/Tomas-Silva-PT/maisvalias-tool/blob/main/CONTRIBUTING.md",
               },
             ],
           },
           {
-            title: 'Legal',
+            title: "Legal",
             items: [
               {
-                label: 'Termos de responsabilidade',
-                href: 'https://github.com/Tomas-Silva-PT/maisvalias-tool/blob/main/DISCLAIMER.md'
+                label: "Termos de responsabilidade",
+                href: "https://github.com/Tomas-Silva-PT/maisvalias-tool/blob/main/DISCLAIMER.md",
               },
               {
-                label: 'Privacidade',
-                href: 'https://github.com/Tomas-Silva-PT/maisvalias-tool/blob/main/PRIVACY.md'
+                label: "Privacidade",
+                href: "https://github.com/Tomas-Silva-PT/maisvalias-tool/blob/main/PRIVACY.md",
               },
             ],
           },
           {
-            title: 'Contactos',
+            title: "Contactos",
             items: [
               {
-                label: 'Email',
-                href: 'mailto:escapetools.software.solutions@gmail.com'
-              }
+                label: "Email",
+                href: "mailto:escapetools.software.solutions@gmail.com",
+              },
             ],
           },
         ],
@@ -175,25 +188,24 @@ const config = {
         darkTheme: prismThemes.dracula,
       },
     }),
-    themes: [
-      // ... Your other themes.
-      [
-        require.resolve("@easyops-cn/docusaurus-search-local"),
-        /** @type {import("@easyops-cn/docusaurus-search-local").PluginOptions} */
-        ({
-          // ... Your options.
-          // `hashed` is recommended as long-term-cache of index file is possible.
-          hashed: true,
-  
-          // For Docs using Chinese, it is recomended to set:
-          // language: ["en", "zh"],
-  
-          // If you're using `noIndex: true`, set `forceIgnoreNoIndex` to enable local index:
-          // forceIgnoreNoIndex: true,
-        }),
-      ],
+  themes: [
+    // ... Your other themes.
+    [
+      require.resolve("@easyops-cn/docusaurus-search-local"),
+      /** @type {import("@easyops-cn/docusaurus-search-local").PluginOptions} */
+      ({
+        // ... Your options.
+        // `hashed` is recommended as long-term-cache of index file is possible.
+        hashed: true,
+
+        // For Docs using Chinese, it is recomended to set:
+        // language: ["en", "zh"],
+
+        // If you're using `noIndex: true`, set `forceIgnoreNoIndex` to enable local index:
+        // forceIgnoreNoIndex: true,
+      }),
     ],
-    
+  ],
 };
 
 export default config;

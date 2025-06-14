@@ -64,25 +64,6 @@ class RevolutParser implements Parser {
       this.isins?.push({ ticker, isin });
     }
 
-    // const rows = fileData.split("\n").map((row) => row.split(","));
-    // rows.shift();
-
-    // const headers = rows.shift();
-    // if (!headers) {
-    //   throw new Error("Invalid file data: no headers found");
-    // }
-
-    // for (const row of rows) {
-    //   const record = Object.fromEntries(headers.map((h, i) => [h, row[i]]));
-    //   if (!record["Date acquired"]) continue;
-    //   if(record["Date acquired"] === "Date") {
-
-    //   }
-    //   const ticker = record["Symbol"];
-    //   const isin = record["ISIN"];
-    //   this.isins?.push({ ticker, isin });
-    // }
-
     this.isins = this.isins.filter(
       (item, index, self) =>
         index ===

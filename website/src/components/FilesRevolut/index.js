@@ -3,15 +3,8 @@ import styles from "./styles.module.css";
 import React, { useEffect, useState } from "react";
 import { ArrowRight, Upload, X } from "lucide-react";
 
-import { Statement } from "../../maisvalias-tool/models/statement.js";
 import { RevolutParser } from "../../maisvalias-tool/parsers/revolutparser.js";
-import { PTCapitalGainsFormatter } from "../../maisvalias-tool/formatters/pt/irs/irs_capital_gains_formatter.js";
-import { PTDividendsFormatter } from "../../maisvalias-tool/formatters/pt/irs/irs_dividends_formatter.js";
-import { DividendsFormatter } from "../../maisvalias-tool/formatters/pt/dividends_formatter.js";
-
 import ErrorPopup from "@site/src/components/ErrorPopup";
-import { FIFOCalculator } from "../../maisvalias-tool/calculators/FIFOCalculator.js";
-import { DividendsCalculator } from "../../maisvalias-tool/calculators/DividendsCalculator.js";
 
 const broker = [
   {
@@ -27,7 +20,7 @@ const broker = [
   },
 ];
 
-export default function FilesRevolut({ setFiscalData, setStep }) {
+export default function FilesRevolut({ setFiscalData }) {
   const [operationFiles, setOperationFiles] = useState([]);
   const [profitLossFiles, setProfitLossFiles] = useState([]);
   const [errorType, setErrorType] = useState(null);
@@ -125,10 +118,6 @@ export default function FilesRevolut({ setFiscalData, setStep }) {
       return;
 
     const parser = new RevolutParser();
-    const statement = new Statement([]);
-    const formatterIRSCapitalGains = new PTCapitalGainsFormatter();
-    const formatterIRSDividends = new PTDividendsFormatter();
-    const formatterUserDividends = new DividendsFormatter();
 
     const profitLossPromises = profitLossFiles.map((file) => {
       return new Promise((resolve, reject) => {
@@ -152,18 +141,23 @@ export default function FilesRevolut({ setFiscalData, setStep }) {
     });
 
     let contentStep22 = document.getElementById("contentStep2-2");
+    let contentStep21 = document.getElementById("contentStep2-1");
 
     try {
       await Promise.all(profitLossPromises);
       contentStep22.classList.remove(clsx(styles.contentStep2Error));
     } catch (error) {
       contentStep22.classList.add(clsx(styles.contentStep2Error));
+      contentStep21.classList.remove(clsx(styles.contentStep2Error));
       loader.style.display = "none";
       setError(error);
       setErrorType("filesUploaded");
       const end = performance.now();
       console.log(
-        `Duração do processamento: ${((end - start) / 1000).toFixed(3)} seconds`
+        `Duração do processamento dos ficheiros: ${(
+          (end - start) /
+          1000
+        ).toFixed(3)} seconds`
       );
       return;
     }
@@ -191,7 +185,6 @@ export default function FilesRevolut({ setFiscalData, setStep }) {
     });
 
     let transactions = [];
-    let contentStep21 = document.getElementById("contentStep2-1");
 
     try {
       transactions = await Promise.all(operationsPromises);
@@ -203,91 +196,25 @@ export default function FilesRevolut({ setFiscalData, setStep }) {
       setErrorType("filesUploaded");
       const end = performance.now();
       console.log(
-        `Duração do processamento: ${((end - start) / 1000).toFixed(3)} seconds`
+        `Duração do processamento dos ficheiros: ${(
+          (end - start) /
+          1000
+        ).toFixed(3)} seconds`
       );
       return;
     }
 
-    transactions.forEach((transaction) => {
-      statement.addTransactions(transaction);
-    });
-
-    let capitalGains;
-    let dividends;
-
-    try {
-      await statement.fetchData();
-      let capitalGainsCalculator = new FIFOCalculator();
-      let dividendsCalculator = new DividendsCalculator();
-      capitalGains = await capitalGainsCalculator.calculate(
-        capitalGainsCalculator.match(statement.getTransactions())
-      );
-      dividends = await dividendsCalculator.calculate(
-        statement.getTransactions()
-      );
-    } catch (error) {
-      setError(error);
-      setErrorType("fetchingData");
-      const end = performance.now();
-      console.log(
-        `Duração do processamento: ${((end - start) / 1000).toFixed(3)} seconds`
-      );
-      return;
-    }
-
-    let capitalGainsFormattedForIRS =
-      formatterIRSCapitalGains.format(capitalGains);
-    let dividendsFormattedForIRS = formatterIRSDividends.format(dividends);
-    let dividendsFormattedForUser = formatterUserDividends.format(dividends);
-
-    if (!dividendsFormattedForUser) {
-      console.warn(
-        "toUserDividends is undefined. Check formatterDividends output."
-      );
-    }
-
-    let filteredCapitalGainsYears = capitalGainsFormattedForIRS.map((gain) =>
-      Number(gain["Ano de Realização"])
-    );
-    let filteredDividendsYears = dividendsFormattedForUser.map((div) =>
-      Number(div["Ano rendimento"])
-    );
-
-    const years = [
-      ...new Set([...filteredCapitalGainsYears, ...filteredDividendsYears]),
-    ];
-
-    years.sort((a, b) => a - b);
-
-    let data = years.reduce((acc, curr) => {
-      if (!acc[curr]) acc[curr] = {};
-      acc[curr]["capitalGains"] = capitalGainsFormattedForIRS.filter(
-        (gain) => gain["Ano de Realização"] == curr
-      );
-      acc[curr]["dividends"] = {};
-      if (!acc[curr]["dividends"]["toUser"])
-        acc[curr]["dividends"]["toUser"] = {};
-      if (!acc[curr]["dividends"]["toIRS"])
-        acc[curr]["dividends"]["toIRS"] = {};
-      acc[curr]["dividends"]["toUser"] = dividendsFormattedForUser.filter(
-        (div) => div["Ano rendimento"] == curr
-      );
-      acc[curr]["dividends"]["toIRS"] = dividendsFormattedForIRS.filter(
-        (div) => div["Ano rendimento"] == curr
-      );
-      return acc;
-    }, {});
-
-    loader.style.display = "none";
-
-    if (Object.entries(data).length === 0) {
+    if (
+      transactions.filter((transaction) => transaction.length !== 0).length ===
+      0
+    ) {
+      loader.style.display = "none";
       setErrorType("filesUploaded");
       contentStep21.classList.add(clsx(styles.contentStep2Error));
     } else {
       contentStep21.classList.remove(clsx(styles.contentStep2Error));
       contentStep22.classList.remove(clsx(styles.contentStep2Error));
-      setFiscalData(data);
-      setStep((step) => step + 1);
+      setFiscalData(transactions);
     }
 
     const end = performance.now();

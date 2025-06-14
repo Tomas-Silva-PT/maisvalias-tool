@@ -58,8 +58,10 @@ type MatchedTransaction = {
 type RealizedTransaction = {
     buy: Transaction;
     sell: Transaction;
-    fees: number;
-    taxes: number;
+    buyFees: number;
+    sellFees: number;
+    buyTaxes: number;
+    sellTaxes: number;
     realizedValue: number;
     acquiredValue: number;
     currency: string;

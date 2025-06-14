@@ -1,0 +1,185 @@
+* {
+  box-sizing: border-box;
+}
+
+h4 {
+  font-size: calc(1.275rem + 0.3vw);
+}
+
+.container {
+  width: 100%;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+
+  justify-content: center;
+  align-items: center;
+
+  font-size: 1rem;
+}
+
+.textCenter {
+  text-align: center;
+}
+
+.textMuted {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  opacity: 0.6;
+}
+
+/* Cards */
+
+.cardBody {
+  padding: 1rem;
+}
+
+.cardHeader {
+  --vertical-padding: 0.5rem;
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
+  background: linear-gradient(
+      191deg,
+      rgba(43, 200, 169, 0) 20%,
+      var(--ifm-color-secondary) 89%
+    ),
+    var(--ifm-color-primary-lighter);
+  padding: 1rem;
+  padding-bottom: var(--vertical-padding);
+  padding-top: var(--vertical-padding);
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: white;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.cardContainer {
+  width: 100%;
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+.card {
+  background: var(--card-color);
+  border: none;
+  border-radius: 0.75rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.1);
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+
+.card-header {
+  border-radius: 0.75rem 0.75rem 0 0 !important;
+  font-weight: 600;
+}
+
+/* Statistics Cards */
+.card.borderSuccess {
+  border-bottom: 4px solid var(--success-color) !important;
+}
+
+.textSuccess {
+  color: var(--success-color) !important;
+}
+
+.card.borderDanger {
+  border-bottom: 4px solid var(--danger-color) !important;
+}
+
+.textDanger {
+  color: var(--danger-color) !important;
+}
+
+.card.borderPrimary {
+  border-bottom: 4px solid var(--primary-color) !important;
+}
+
+.textPrimary {
+  color: var(--primary-color) !important;
+}
+
+.card.borderWarning {
+  border-bottom: 4px solid var(--warning-color) !important;
+}
+
+.textWarning {
+  color: var(--warning-color) !important;
+}
+
+/* Table */
+
+.tableResponsive {
+  overflow-x: auto;
+}
+
+.table {
+  border-radius: 0.5rem;
+  overflow: hidden;
+  width: 100%;
+  display: table;
+}
+
+.table th,
+.table td {
+  font-weight: 600;
+  background-color: var(--light-color);
+  border-right: none;
+  border-left: none;
+  border-top: none;
+  border-top-width: 0px;
+  border: 0px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+table thead tr {
+  border: 0px;
+}
+
+.tableHover tbody tr:hover {
+  background-color: rgba(13, 110, 253, 0.05);
+}
+
+.textEnd {
+  text-align: right;
+  cursor: pointer;
+}
+
+.textSuccess {
+  color: var(--success-color) !important;
+}
+
+.textDanger {
+  color: var(--danger-color) !important;
+}
+
+.textPrimary {
+  color: var(--primary-color) !important;
+}
+
+.textWarning {
+  color: var(--warning-color) !important;
+}
+
+@media (max-width: 960px) {
+  .table th,
+  .table td {
+    font-size: 0.875rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .table th,
+  .table td {
+    font-size: 0.7rem;
+  }
+}

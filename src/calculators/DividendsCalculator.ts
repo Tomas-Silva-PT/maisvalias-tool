@@ -71,9 +71,9 @@ class DividendsCalculator {
 
             dividends.push({
                 transaction: transaction,
-                amount: totalGrossAmount,
-                fees: totalFeesAmount,
-                taxes: totalTaxAmount,
+                amount: Math.round(totalGrossAmount * 100) / 100,
+                fees: Math.round(totalFeesAmount * 100) / 100,
+                taxes: Math.round(totalTaxAmount * 100) / 100,
                 currency: currency
             })
         }

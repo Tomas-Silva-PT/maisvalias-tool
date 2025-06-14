@@ -6,7 +6,8 @@ https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2
 Preenchimento do Anexo J: 
 https://taofinance.pt/irs-anexo-j-declaracao-de-mais-valias-obtidas-no-estrangeiro/
 https://taofinance.pt/como-declarar-dividendos-de-acoes/#declarar-dividendos-estrangeiro
-
+https://www.doutorfinancas.pt/impostos/acoes-etf-e-fundos-de-investimento-mais-valias-em-irs/
+https://info.portaldasfinancas.gov.pt/pt/informacao_fiscal/codigos_tributarios/cirs_rep/Pages/irs10.aspx
 
 https://www.alphavantage.co/support/#api-key
 0OI0PY4I1W4Z2T6B

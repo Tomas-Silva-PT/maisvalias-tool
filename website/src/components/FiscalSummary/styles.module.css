@@ -1,0 +1,115 @@
+* {
+  box-sizing: border-box;
+}
+
+h4 {
+  font-size: calc(1.275rem + 0.3vw);
+}
+
+.container {
+  width: 100%;
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+
+  justify-content: center;
+  align-items: center;
+
+  font-size: 1rem;
+}
+
+.textCenter {
+  text-align: center;
+}
+
+/* Cards */
+
+.cardBody {
+  padding: 1rem;
+}
+
+.cardContainer {
+  width: calc(100% / 5);
+  padding-left: 2rem;
+  padding-right: 2rem;
+  margin-bottom: 2rem;
+  height: 166px;
+}
+
+.card {
+  background: var(--card-color);
+  border: none;
+  border-radius: 0.75rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.1);
+  height: 100%;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+
+.card-header {
+  border-radius: 0.75rem 0.75rem 0 0 !important;
+  font-weight: 600;
+}
+
+/* Statistics Cards */
+.card.borderSuccess {
+  border-bottom: 4px solid var(--success-color) !important;
+}
+
+.textSuccess {
+  color: var(--success-color) !important;
+}
+
+.card.borderDanger {
+  border-bottom: 4px solid var(--danger-color) !important;
+}
+
+.textDanger {
+  color: var(--danger-color) !important;
+}
+
+.card.borderPrimary {
+  border-bottom: 4px solid var(--primary-color) !important;
+}
+
+.textPrimary {
+  color: var(--primary-color) !important;
+}
+
+.card.borderWarning {
+  border-bottom: 4px solid var(--warning-color) !important;
+}
+
+.textWarning {
+  color: var(--warning-color) !important;
+}
+
+@media (max-width: 960px) {
+  .container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .container > :last-child {
+    grid-column: 1 / -1;
+  }
+
+  .cardContainer {
+    width: auto;
+    height: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
