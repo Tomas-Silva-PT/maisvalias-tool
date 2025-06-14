@@ -18,7 +18,7 @@ import { DividendsCalculator } from "../../maisvalias-tool/calculators/Dividends
 import { PTCapitalGainsFormatter } from "../../maisvalias-tool/formatters/pt/irs/irs_capital_gains_formatter.js";
 import { PTDividendsFormatter } from "../../maisvalias-tool/formatters/pt/irs/irs_dividends_formatter.js";
 import { DividendsFormatter } from "../../maisvalias-tool/formatters/pt/dividends_formatter.js";
-import { FiscalSummaryCalculator } from "../../maisvalias-tool/calculators/FiscalSummaryCalculator.js";
+import { FiscalSummaryCalculator } from "../../maisvalias-tool/calculators/fiscalSummaryCalculator.js";
 
 const disclaimerMessage =
   "O maisvalias-tool é uma ferramenta independente, cujos resultados produzidos não têm caráter vinculativo. Como tal é essencial que haja uma verificação manual dos resultados. Consulta a legislação em vigor e a Autoridade Tributária e Aduaneira sempre que necessário. Consulta os termos de responsabilidade para saberes mais.";
