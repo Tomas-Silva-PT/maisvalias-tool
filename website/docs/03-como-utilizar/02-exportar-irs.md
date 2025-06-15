@@ -43,9 +43,13 @@ Se já tiveres completado a [etapa anterior](#1-fazer-download-da-declaração-d
 
 Se ainda não tiveres obtido os resultados do processamento dos teus investimentos por parte da ferramenta, vê [Calcular mais-valias e dividendos](/docs/como-utilizar/calcular-mais-valias).
 
-Dependendo do ano fiscal ao qual tens de declarar os rendimentos, escolhe a opção _Preencher declaração_:
+Primeiro seleciona o ano fiscal ao qual tens de declarar os rendimentos:
 
 ![step](../../static/img/funcionalidades/02/step8.png)
+
+De seguida, escolhe a opção _`Preencher declaração`_:
+
+![step](../../static/img/funcionalidades/02/step8_1.png)
 
 :::info
 
