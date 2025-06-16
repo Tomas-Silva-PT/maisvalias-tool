@@ -11,7 +11,7 @@ A ferramenta **maisvalias-tool** tem como objetivo auxiliar investidores na orga
 
 Para quem utiliza corretoras para efetuar os seus investimentos poderá utilizar esta ferramenta para transformar o histórico de compras e vendas no formato requerido pela _Autoridade Tributária e Aduaneira (AT)_ no momento de preenchimento da declaração anual de rendimentos.
 
-[![Vê a demonstração](./assets/maisvalias-tool-demo.gif)](./assets/maisvalias-tool-demo.gif)
+<!-- [![Vê a demonstração](./assets/maisvalias-tool-demo.gif)](./assets/maisvalias-tool-demo.gif) -->
 
 ## Documentação
 
