@@ -2,7 +2,7 @@
 
 Queres descobrir a magia por detrás do **maisvalias-tool**? ✨ 
 
-Então relaxa, chegaste ao sítio certo! Vamos lá para desvendar os seus segredos! 😄
+Então relaxa, chegaste ao sítio certo! Vamos lá para desvendar os seus segredos!
 
 :::info
 
@@ -12,7 +12,7 @@ Antes de procederes, recomendo-te a leres a página [Terminologia](./terminologi
 
 Para explicar o algoritmo base penso que a melhor forma é dando um exemplo, neste caso iremos apenas considerar mais-valias obtidas da compra e venda de ações/ETFs.
 
-## 🧑 Cenário
+## Cenário
 
 Imaginando que, todos os anos, desde 2020, faço uma compra de 100€ do ETF _VUAA_.
 No final do ano de 2024, por motivos pessoais, fiz uma venda correspondente a 2 ações do ETF.
@@ -32,7 +32,7 @@ O meu extrato de transações, de forma simplista e com valores hipotéticos, se
 
 No ano de 2025, em que terei de preencher a declaração referente às mais valias de 2024, terei de referir a mais valia que obtive com a venda das duas ações do ETF.
 
-## 🔍 Determinar que ações foram vendidas
+## Determinar que ações foram vendidas
 
 Agora é importante identificar quais foram as ações vendidas, porque, dependendo de quanto tempo já as detínhamos, isso pode trazer-nos alguns benefícios fiscais.
 
@@ -41,7 +41,7 @@ Isto significa que a venda das 2 ações devem ser [compensadas](./terminologia#
 
 Neste caso particular, teremos de utilizar as compras de 2020, 2021 e 2022 para compensar a venda, já que a soma das ações compradas nesses anos, dá `1 + 0.8 + 0.2 = 2`. Neste caso apenas declaramos a venda de 0.2 das 0.6 ações compradas em 2022.
 
-## 💰 Calcular as mais-valias
+## Calcular as mais-valias
 
 Agora que temos as compras e vendas identificadas, já podemos proceder ao cálculo das mais-valias.
 Para tal, temos de identificar o [valor de aquisição](./terminologia#-valor-de-aquisição) e o [valor de realização](./terminologia#-valor-de-realização) para cada [compensação](./terminologia#-compensações) identificada.
@@ -72,7 +72,7 @@ Assim sendo, para cada [compensação](./terminologia#-compensações), o respet
 | 2021 | 0.8 |  0.8 | 100€ * 0.8 / 0.8 = 100€ |
 | 2022 | 0.6 |  0.2 | 100€ * 0.2 / 0.6 = 33.33€ |
 
-## 📝 Declarar no IRS
+## Declarar no IRS
 
 Neste caso a declaração das mais valias teria de ter a seguinte informação, de **forma simplista**:
 
@@ -97,7 +97,7 @@ Sendo assim a mais-valia foi de:
 * Valor total de compra: `100€ + 100€ + 33.33€ = 233.33€`
 * Mais valia: `1000€ - 233.33 = 766.67€`
 
-## 💸 Encargos e Impostos
+## Encargos e Impostos
 
 Não sei se reparaste, mas até aqui não foi mencionado no cálculo os custos vindos da compra e venda das ações.
 

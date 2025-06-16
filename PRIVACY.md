@@ -10,6 +10,6 @@ As duas **únicas situações em que há comunicação com um servidor externo**
 2. **Identificação do tipo de ativo (Ação ou ETF)**, pois isto influencia a maneira como deve ser declarado no IRS.
 
 Nestes casos, a ferramenta consulta serviços públicos para obter a informação necessária.
-Dito isto, **apenas é enviado para os serviços a data e a moeda** necessária para obter a taxa de câmbio (ex.: `USD` em `2024-06-10`), assim como o **ticker** do ativo (ex.: `VUAA`) para a ferramenta saber se é uma ação ou ETF.
+Dito isto, **apenas é enviado para os serviços a data e a moeda** necessária para obter a taxa de câmbio (ex.: `USD` em `2024-06-10`), assim como o **ISIN** do ativo (ex.: `IE00BFMXXD54`) para a ferramenta saber se é uma ação ou ETF.
 
 Ao utilizar esta ferramenta, o utilizador reconhece que leu, compreendeu e concorda com os termos acima descritos.

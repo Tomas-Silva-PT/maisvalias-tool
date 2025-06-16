@@ -48,6 +48,7 @@ const brokers = [
     name: "Trading212",
     logo: "/img/brokers/trading212.png",
     active: true,
+    visible: true,
     docs: [
       {
         message: "Não sabes onde encontrar os ficheiros?",
@@ -59,21 +60,25 @@ const brokers = [
     name: "eToro",
     logo: "/img/brokers/etoro.png",
     active: false,
+    visible: false,
   },
   {
     name: "XTB",
     logo: "/img/brokers/xtb.png",
     active: false,
+    visible: false,
   },
   {
     name: "Degiro",
     logo: "/img/brokers/degiro.png",
     active: false,
+    visible: false,
   },
   {
     name: "Revolut",
     logo: "/img/brokers/revolut.png",
     active: true,
+    visible: true,
     docs: [
       {
         message: "Não sabes onde encontrar os ficheiros?",
@@ -374,7 +379,7 @@ export default function LiveDemoForm() {
       <>
         <div className={clsx(styles.contentStep1)}>
           {brokers.map((broker) => (
-            <div
+            broker.visible === true && <div
               className={
                 broker.active === true
                   ? clsx(
@@ -394,11 +399,16 @@ export default function LiveDemoForm() {
                   🚧 Em breve
                 </div>
               )}
-              <img
+              {/* <img
                 style={{ width: "100%", height: "auto" }}
                 alt={broker.name}
                 src={useBaseUrl(broker.logo)}
-              />
+              /> */}
+              <p
+                className={clsx(styles.contentStep1BrokerName)}
+              >
+                {broker.name}
+              </p>
             </div>
           ))}
         </div>
