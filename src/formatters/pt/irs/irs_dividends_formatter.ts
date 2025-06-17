@@ -4,7 +4,7 @@ import { DividendTransaction } from "../../../models/transaction.js";
 class PTDividendsFormatter {
   constructor() { }
 
-  format(dividends : DividendTransaction[]): DividendToIRS[] {
+  format(dividends: DividendTransaction[]): DividendToIRS[] {
     let result: DividendToIRS[] = [];
 
     const dividendsByAsset: Record<string, Record<string, DividendTransaction[]>> = {};
@@ -36,9 +36,14 @@ class PTDividendsFormatter {
         );
 
         totalNetAmount = parseFloat(totalNetAmount.toFixed(2));
-        totalGrossAmount = Math.round((totalNetAmount + totalExpenses)*100)/100;
+        totalGrossAmount = Math.round((totalNetAmount + totalExpenses) * 100) / 100;
 
-        const countryDomiciled = yearGroup[0].transaction.asset.countryDomiciled;
+        let countryDomiciled = yearGroup[0].transaction.asset.countryDomiciled;
+
+        // Para ações domiciliadas em Portugal e adquiridas em corretoras estrangeiras, o país da fonte deve ser o da corretora
+        if (countryDomiciled?.code === "620") {
+          countryDomiciled = yearGroup[0].transaction.broker.country;
+        }
 
         const dividendForIRS: DividendToIRS = {
           "Ano rendimento": yearGroup[0].transaction.date.substring(0, 4),
@@ -65,7 +70,7 @@ class PTDividendsFormatter {
       }
       return acc;
     }, []);
-    
+
     return result;
 
   }
