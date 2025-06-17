@@ -379,39 +379,40 @@ export default function LiveDemoForm() {
     return (
       <>
         <div className={clsx(styles.contentStep1)}>
-          {brokers.map((broker) => (
-            broker.visible === true && <div
-              className={
-                broker.active === true
-                  ? clsx(
-                      styles.contentStep1Broker,
-                      styles.contentStep1BrokerActive
-                    )
-                  : clsx(styles.contentStep1Broker)
-              }
-              onClick={() => {
-                if (broker.active === true) {
-                  onBrokerSelected(broker);
-                }
-              }}
-            >
-              {broker.active === false && (
-                <div className={clsx(styles.contentStep1BrokerInactive)}>
-                  🚧 Em breve
-                </div>
-              )}
-              {/* <img
+          {brokers.map(
+            (broker) =>
+              broker.visible === true && (
+                <div
+                  className={
+                    broker.active === true
+                      ? clsx(
+                          styles.contentStep1Broker,
+                          styles.contentStep1BrokerActive
+                        )
+                      : clsx(styles.contentStep1Broker)
+                  }
+                  onClick={() => {
+                    if (broker.active === true) {
+                      onBrokerSelected(broker);
+                    }
+                  }}
+                >
+                  {broker.active === false && (
+                    <div className={clsx(styles.contentStep1BrokerInactive)}>
+                      🚧 Em breve
+                    </div>
+                  )}
+                  {/* <img
                 style={{ width: "100%", height: "auto" }}
                 alt={broker.name}
                 src={useBaseUrl(broker.logo)}
               /> */}
-              <p
-                className={clsx(styles.contentStep1BrokerName)}
-              >
-                {broker.name}
-              </p>
-            </div>
-          ))}
+                  <p className={clsx(styles.contentStep1BrokerName)}>
+                    {broker.name}
+                  </p>
+                </div>
+              )
+          )}
         </div>
       </>
     );
@@ -426,6 +427,7 @@ export default function LiveDemoForm() {
         {broker.name === "Revolut" && (
           <FilesRevolut setFiscalData={setGainsAndDividends} />
         )}
+        {renderError(error)}
       </>
     );
   }

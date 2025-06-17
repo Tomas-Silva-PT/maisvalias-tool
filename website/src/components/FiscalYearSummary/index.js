@@ -152,7 +152,7 @@ export default function FiscalYearSummary({ year, fiscalData }) {
                   >
                     <i
                       style={{ width: "100%", textAlign: "center" }}
-                      class="fa-solid fa-user"
+                      className="fa-solid fa-user"
                     ></i>
                   </div>
                   <div
@@ -208,7 +208,7 @@ export default function FiscalYearSummary({ year, fiscalData }) {
                   <td className={clsx(styles.textEnd, "tooltipContainer")}>
                     {data.acquiredValue}€
                     {data.buy.netAmountCurrency !== "EUR" && (
-                      <i class="fa-solid fa-circle-info tooltip">
+                      <i className="fa-solid fa-circle-info tooltip">
                         <div className="tooltipContent">
                           <div>
                             Moeda original:{" "}
@@ -235,7 +235,7 @@ export default function FiscalYearSummary({ year, fiscalData }) {
                   <td className={clsx(styles.textEnd, "tooltipContainer")}>
                     {data.realizedValue}€
                     {data.sell.netAmountCurrency !== "EUR" && (
-                      <i class="fa-solid fa-circle-info tooltip">
+                      <i className="fa-solid fa-circle-info tooltip">
                         <div className="tooltipContent">
                           <div>
                             Moeda original:{" "}
@@ -416,7 +416,7 @@ export default function FiscalYearSummary({ year, fiscalData }) {
                   >
                     <i
                       style={{ width: "100%", textAlign: "center" }}
-                      class="fa-solid fa-user"
+                      className="fa-solid fa-user"
                     ></i>
                   </div>
                   <div
@@ -466,7 +466,7 @@ export default function FiscalYearSummary({ year, fiscalData }) {
                   <td className={clsx(styles.textEnd, "tooltipContainer")}>
                     <span>{data.amount}€</span>
                     {data.transaction.netAmountCurrency !== "EUR" && (
-                      <i class="fa-solid fa-circle-info tooltip">
+                      <i className="fa-solid fa-circle-info tooltip">
                         <div className="tooltipContent">
                           <div>
                             Moeda original:{" "}
@@ -604,7 +604,7 @@ export default function FiscalYearSummary({ year, fiscalData }) {
                   >
                     <i
                       style={{ width: "100%", textAlign: "center" }}
-                      class="fa-solid fa-user"
+                      className="fa-solid fa-user"
                     ></i>
                   </div>
                   <div
@@ -753,7 +753,7 @@ export default function FiscalYearSummary({ year, fiscalData }) {
                   >
                     <i
                       style={{ width: "100%", textAlign: "center" }}
-                      class="fa-solid fa-user"
+                      className="fa-solid fa-user"
                     ></i>
                   </div>
                   <div
@@ -1027,8 +1027,8 @@ export default function FiscalYearSummary({ year, fiscalData }) {
                   </div>
                   <p
                     style={{
-                      "font-style": "italic",
-                      "font-weight": "bold",
+                      "fontStyle": "italic",
+                      "fontWeight": "bold",
                       padding: "1rem",
                     }}
                   >
