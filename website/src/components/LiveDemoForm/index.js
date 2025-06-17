@@ -206,6 +206,7 @@ export default function LiveDemoForm() {
         statement.getTransactions()
       );
     } catch (error) {
+      console.error(error);
       setError(error);
       loader.style.display = "none";
       setErrorType("fetchingData");
