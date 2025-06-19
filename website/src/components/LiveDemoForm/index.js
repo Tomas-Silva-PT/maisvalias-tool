@@ -15,9 +15,12 @@ import FiscalYearSummary from "@site/src/components/FiscalYearSummary";
 import { Statement } from "../../maisvalias-tool/models/statement.js";
 import { FIFOCalculator } from "../../maisvalias-tool/calculators/FIFOCalculator.js";
 import { DividendsCalculator } from "../../maisvalias-tool/calculators/DividendsCalculator.js";
+import { DividendsFormatter } from "../../maisvalias-tool/formatters/pt/dividends_formatter.js";
+import { ExcelDividendsFormatter } from "../../maisvalias-tool/formatters/pt/exceL_dividends_formatter.js";
 import { PTCapitalGainsFormatter } from "../../maisvalias-tool/formatters/pt/irs/irs_capital_gains_formatter.js";
 import { PTDividendsFormatter } from "../../maisvalias-tool/formatters/pt/irs/irs_dividends_formatter.js";
-import { DividendsFormatter } from "../../maisvalias-tool/formatters/pt/dividends_formatter.js";
+import { CapitalGainsFormatter } from "../../maisvalias-tool/formatters/pt/capital_gains_formatter.js";
+import { ExcelCapitalGainsFormatter } from "../../maisvalias-tool/formatters/pt/exceL_capital_gains_formatter.js";
 import { FiscalSummaryCalculator } from "../../maisvalias-tool/calculators/fiscalSummaryCalculator.js";
 
 const disclaimerMessage =
@@ -131,19 +134,19 @@ export default function LiveDemoForm() {
     setHelpDialogVisible(shouldShowHelp);
     setFiscalYear(null);
 
-    if(step === 3) {
+    if (step === 3) {
       const fiscalSummaryElement = document.getElementById(fiscalSummaryId);
       if (fiscalSummaryElement) {
         smoothFocus(fiscalSummaryElement, "center");
       }
     }
-    if(step === 2) {
+    if (step === 2) {
       const contentStep2Element = document.getElementById(contentStep2Id);
       if (contentStep2Element) {
         smoothFocus(contentStep2Element, "center");
       }
     }
-    if(step === 1) {
+    if (step === 1) {
       const contentStep1Element = document.getElementById(contentStep1Id);
       if (contentStep1Element) {
         smoothFocus(contentStep1Element, "center");
@@ -225,9 +228,13 @@ export default function LiveDemoForm() {
   async function setGainsAndDividends(transactions) {
     const loader = document.getElementById("custom-loader-container");
     const start = performance.now();
-    const formatterIRSCapitalGains = new PTCapitalGainsFormatter();
     const formatterIRSDividends = new PTDividendsFormatter();
     const formatterUserDividends = new DividendsFormatter();
+    const formatterExcelDividends = new ExcelDividendsFormatter();
+
+    const formatterIRSCapitalGains = new PTCapitalGainsFormatter();
+    const formatterUserCapitalGains = new CapitalGainsFormatter();
+    const formatterExcelCapitalGains = new ExcelCapitalGainsFormatter();
 
     const statement = new Statement([]);
     transactions.forEach((transaction) => {
@@ -310,10 +317,17 @@ export default function LiveDemoForm() {
 
       fiscalReport.byYear[year].capitalGains.irs =
         formatterIRSCapitalGains.format(yearCapitalGains);
+      fiscalReport.byYear[year].capitalGains.user =
+        formatterUserCapitalGains.format(yearCapitalGains);
+      fiscalReport.byYear[year].capitalGains.excel =
+        formatterExcelCapitalGains.format(yearCapitalGains);
+
       fiscalReport.byYear[year].dividends.irs =
         formatterIRSDividends.format(yearDividends);
       fiscalReport.byYear[year].dividends.user =
         formatterUserDividends.format(yearDividends);
+      fiscalReport.byYear[year].dividends.excel =
+        formatterExcelDividends.format(yearDividends);
     }
 
     setFiscalData(fiscalReport);
@@ -478,7 +492,10 @@ export default function LiveDemoForm() {
     return (
       <>
         <div id={props.id} className={clsx(styles.contentStep3)}>
-          <FiscalSummary id={fiscalSummaryId} fiscalData={fiscalData}></FiscalSummary>
+          <FiscalSummary
+            id={fiscalSummaryId}
+            fiscalData={fiscalData}
+          ></FiscalSummary>
           <FiscalYearsSummary
             id={fiscalYearsSummaryId}
             setFiscalYear={setFiscalYear}

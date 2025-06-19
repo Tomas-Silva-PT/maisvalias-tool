@@ -18,8 +18,12 @@ export default function FiscalYearSummary({ id, year, fiscalData }) {
     column: null,
     order: "asc",
   };
-  const [sortCapitalGainsConfig, setCapitalGainsSortConfig] = useState(defaultCapitalGainsSortConfig);
-  const [sortDividendsConfig, setDividendsSortConfig] = useState(defaultDividendsSortConfig);
+  const [sortCapitalGainsConfig, setCapitalGainsSortConfig] = useState(
+    defaultCapitalGainsSortConfig
+  );
+  const [sortDividendsConfig, setDividendsSortConfig] = useState(
+    defaultDividendsSortConfig
+  );
   const [sortConfig, setSortConfig] = useState(defaultSortConfig);
   const [activeTab, setActiveTab] = useState(0);
   const [tableMenuActiveTab, setTableMenuActiveTab] = useState(0);
@@ -123,41 +127,31 @@ export default function FiscalYearSummary({ id, year, fiscalData }) {
     ) / 100;
 
   const sortedCapitalGainsData = Object.entries(
-    fiscalData.byYear[year].capitalGains.raw
+    fiscalData.byYear[year].capitalGains.user
   ).sort((capitalGainA, capitalGainB) => {
     const { column, order } = sortCapitalGainsConfig;
     if (column === null) return 0;
 
     const valuesA = [
-      capitalGainA[1].buy.asset.ticker,
-      capitalGainA[1].buy.date,
-      capitalGainA[1].realizedValue,
-      capitalGainA[1].buyFees + capitalGainA[1].buyTaxes,
-      capitalGainA[1].sell.date,
-      capitalGainA[1].acquiredValue,
-      capitalGainA[1].sellFees + capitalGainA[1].sellTaxes,
-      capitalGainA[1].realizedValue -
-        capitalGainA[1].acquiredValue -
-        (capitalGainA[1].sellFees +
-          capitalGainA[1].buyFees +
-          capitalGainA[1].sellTaxes +
-          capitalGainA[1].buyTaxes),
+      capitalGainA[1]["Ticker"],
+      capitalGainA[1]["Aquisição"]["Data"],
+      capitalGainA[1]["Aquisição"]["Valor"],
+      capitalGainA[1]["Aquisição"]["Despesas"],
+      capitalGainA[1]["Realização"]["Data"],
+      capitalGainA[1]["Realização"]["Valor"],
+      capitalGainA[1]["Realização"]["Despesas"],
+      capitalGainA[1]["Balanço"],
     ];
 
     const valuesB = [
-      capitalGainB[1].buy.asset.ticker,
-      capitalGainB[1].buy.date,
-      capitalGainB[1].realizedValue,
-      capitalGainB[1].buyFees + capitalGainB[1].buyTaxes,
-      capitalGainB[1].sell.date,
-      capitalGainB[1].acquiredValue,
-      capitalGainB[1].sellFees + capitalGainB[1].sellTaxes,
-      capitalGainB[1].realizedValue -
-        capitalGainB[1].acquiredValue -
-        (capitalGainB[1].sellFees +
-          capitalGainB[1].buyFees +
-          capitalGainB[1].sellTaxes +
-          capitalGainB[1].buyTaxes),
+      capitalGainB[1]["Ticker"],
+      capitalGainB[1]["Aquisição"]["Data"],
+      capitalGainB[1]["Aquisição"]["Valor"],
+      capitalGainB[1]["Aquisição"]["Despesas"],
+      capitalGainB[1]["Realização"]["Data"],
+      capitalGainB[1]["Realização"]["Valor"],
+      capitalGainB[1]["Realização"]["Despesas"],
+      capitalGainB[1]["Balanço"],
     ];
 
     const valA = valuesA[column];
@@ -186,8 +180,9 @@ export default function FiscalYearSummary({ id, year, fiscalData }) {
                   <div
                     onClick={() => setTableMenuActiveTab(0)}
                     className={
-                      tableMenuActiveTab === 0 &&
-                      clsx(styles.tableMenuActionActive)
+                      tableMenuActiveTab === 0
+                        ? clsx(styles.tableMenuActionActive)
+                        : ""
                     }
                   >
                     <i
@@ -220,7 +215,9 @@ export default function FiscalYearSummary({ id, year, fiscalData }) {
                 >
                   {label}
                   {sortCapitalGainsConfig.column === index && (
-                    <span>{sortCapitalGainsConfig.order === "asc" ? " 🔼" : " 🔽"}</span>
+                    <span>
+                      {sortCapitalGainsConfig.order === "asc" ? " 🔼" : " 🔽"}
+                    </span>
                   )}
                 </th>
               ))}
@@ -228,36 +225,29 @@ export default function FiscalYearSummary({ id, year, fiscalData }) {
           </thead>
           <tbody>
             {sortedCapitalGainsData.map(([year, data], index) => {
-              let balance =
-                Math.round(
-                  (data.realizedValue -
-                    data.acquiredValue -
-                    data.buyFees -
-                    data.buyTaxes -
-                    data.sellFees -
-                    data.sellTaxes) *
-                    100
-                ) / 100;
-
               return (
                 <tr className={clsx(styles.textEnd)} key={index}>
                   <td className={clsx(styles.textEnd)}>
-                    <strong>{data.buy.asset.ticker}</strong>
+                    <strong>{data["Ticker"]}</strong>
                   </td>
-                  <td className={clsx(styles.textEnd)}>{data.buy.date}</td>
+                  <td className={clsx(styles.textEnd)}>
+                    {data["Aquisição"]["Data"]}
+                  </td>
                   <td className={clsx(styles.textEnd, "tooltipContainer")}>
-                    {data.acquiredValue}€
-                    {data.buy.netAmountCurrency !== "EUR" && (
+                    {data["Aquisição"]["Valor"]}€
+                    {data["Aquisição"]["Moeda Original"] !== "EUR" && (
                       <i className="fa-solid fa-circle-info tooltip">
                         <div className="tooltipContent">
                           <div>
                             Moeda original:{" "}
-                            <strong>{data.buy.netAmountCurrency}</strong>
+                            <strong>
+                              {data["Aquisição"]["Moeda Original"]}
+                            </strong>
                           </div>
                           <div>
                             Taxa de câmbio:{" "}
                             <strong>
-                              {Math.round(data.buy.exchangeRate * 1000) / 1000}
+                              {data["Aquisição"]["Taxa de Câmbio"]}
                             </strong>
                           </div>
                         </div>
@@ -265,26 +255,28 @@ export default function FiscalYearSummary({ id, year, fiscalData }) {
                     )}
                   </td>
                   <td className={clsx(styles.textEnd)}>
-                    {Math.round((data.buyFees + data.buyTaxes) * 100) / 100 ===
-                    0
+                    {data["Aquisição"]["Despesas"] === 0
                       ? "-"
-                      : Math.round((data.buyFees + data.buyTaxes) * 100) / 100 +
-                        "€"}
+                      : data["Aquisição"]["Despesas"] + "€"}
                   </td>
-                  <td className={clsx(styles.textEnd)}>{data.sell.date}</td>
+                  <td className={clsx(styles.textEnd)}>
+                    {data["Realização"]["Data"]}
+                  </td>
                   <td className={clsx(styles.textEnd, "tooltipContainer")}>
-                    {data.realizedValue}€
-                    {data.sell.netAmountCurrency !== "EUR" && (
+                    {data["Realização"]["Valor"]}€
+                    {data["Realização"]["Moeda Original"] !== "EUR" && (
                       <i className="fa-solid fa-circle-info tooltip">
                         <div className="tooltipContent">
                           <div>
                             Moeda original:{" "}
-                            <strong>{data.sell.netAmountCurrency}</strong>
+                            <strong>
+                              {data["Realização"]["Moeda Original"]}
+                            </strong>
                           </div>
                           <div>
                             Taxa de câmbio:{" "}
                             <strong>
-                              {Math.round(data.sell.exchangeRate * 1000) / 1000}
+                              {data["Realização"]["Taxa de Câmbio"]}
                             </strong>
                           </div>
                         </div>
@@ -292,24 +284,20 @@ export default function FiscalYearSummary({ id, year, fiscalData }) {
                     )}
                   </td>
                   <td className={clsx(styles.textEnd)}>
-                    {Math.round((data.sellFees + data.sellTaxes) * 100) /
-                      100 ===
-                    0
+                    {data["Realização"]["Despesas"] === 0
                       ? "-"
-                      : Math.round((data.sellFees + data.sellTaxes) * 100) /
-                          100 +
-                        "€"}
+                      : data["Realização"]["Despesas"] + "€"}
                   </td>
                   <td
                     className={
-                      balance > 0
+                      data["Balanço"] > 0
                         ? clsx(styles.textEnd, styles.textSuccess)
-                        : balance < 0
+                        : data["Balanço"] < 0
                         ? clsx(styles.textEnd, styles.textDanger)
                         : clsx(styles.textEnd, styles.textWarning)
                     }
                   >
-                    <strong>{balance}€</strong>
+                    <strong>{data["Balanço"]}€</strong>
                   </td>
                 </tr>
               );
@@ -403,25 +391,25 @@ export default function FiscalYearSummary({ id, year, fiscalData }) {
   }
 
   const sortedDividendsData = Object.entries(
-    fiscalData.byYear[year].dividends.raw
+    fiscalData.byYear[year].dividends.user
   ).sort((dividendA, dividendB) => {
     const { column, order } = sortDividendsConfig;
     if (column === null) return 0;
 
     const valuesA = [
-      dividendA[1].transaction.asset.ticker,
-      dividendA[1].transaction.date,
-      dividendA[1].amount,
-      dividendA[1].fees + dividendA[1].taxes,
-      dividendA[1].amount - dividendA[1].fees - dividendA[1].taxes,
+      dividendA[1]["Ticker"],
+      dividendA[1]["Data"],
+      dividendA[1]["Valor"],
+      dividendA[1]["Despesas"],
+      dividendA[1]["Balanço"],
     ];
 
     const valuesB = [
-      dividendB[1].transaction.asset.ticker,
-      dividendB[1].transaction.date,
-      dividendB[1].amount,
-      dividendB[1].fees + dividendB[1].taxes,
-      dividendB[1].amount - dividendB[1].fees - dividendB[1].taxes,
+      dividendB[1]["Ticker"],
+      dividendB[1]["Data"],
+      dividendB[1]["Valor"],
+      dividendB[1]["Despesas"],
+      dividendB[1]["Balanço"],
     ];
 
     const valA = valuesA[column];
@@ -484,7 +472,9 @@ export default function FiscalYearSummary({ id, year, fiscalData }) {
                 >
                   {label}
                   {sortDividendsConfig.column === index && (
-                    <span>{sortDividendsConfig.order === "asc" ? " 🔼" : " 🔽"}</span>
+                    <span>
+                      {sortDividendsConfig.order === "asc" ? " 🔼" : " 🔽"}
+                    </span>
                   )}
                 </th>
               ))}
@@ -492,55 +482,42 @@ export default function FiscalYearSummary({ id, year, fiscalData }) {
           </thead>
           <tbody>
             {sortedDividendsData.map(([year, data], index) => {
-              let balance =
-                Math.round((data.amount - data.fees - data.taxes) * 100) / 100;
-
               return (
                 <tr key={index}>
                   <td className={clsx(styles.textEnd)}>
-                    <strong>{data.transaction.asset.ticker}</strong>
+                    <strong>{data["Ticker"]}</strong>
                   </td>
-                  <td className={clsx(styles.textEnd)}>
-                    {data.transaction.date}
-                  </td>
+                  <td className={clsx(styles.textEnd)}>{data["Data"]}</td>
                   <td className={clsx(styles.textEnd, "tooltipContainer")}>
-                    <span>{data.amount}€</span>
-                    {data.transaction.netAmountCurrency !== "EUR" && (
+                    <span>{data["Valor"]}€</span>
+                    {data["Moeda Original"] !== "EUR" && (
                       <i className="fa-solid fa-circle-info tooltip">
                         <div className="tooltipContent">
                           <div>
                             Moeda original:{" "}
-                            <strong>
-                              {data.transaction.netAmountCurrency}
-                            </strong>
+                            <strong>{data["Moeda Original"]}</strong>
                           </div>
                           <div>
                             Taxa de câmbio:{" "}
-                            <strong>
-                              {Math.round(
-                                data.transaction.exchangeRate * 1000
-                              ) / 1000}
-                            </strong>
+                            <strong>{data["Taxa de Câmbio"]}</strong>
                           </div>
                         </div>
                       </i>
                     )}
                   </td>
                   <td className={clsx(styles.textEnd)}>
-                    {Math.round((data.fees + data.taxes) * 100) / 100 === 0
-                      ? "-"
-                      : Math.round((data.fees + data.taxes) * 100) / 100 + "€"}
+                    {data["Despesas"] === 0 ? "-" : data["Despesas"] + "€"}
                   </td>
                   <td
                     className={
-                      balance > 0
+                      data["Balanço"] > 0
                         ? clsx(styles.textEnd, styles.textSuccess)
-                        : balance < 0
+                        : data["Balanço"] < 0
                         ? clsx(styles.textEnd, styles.textDanger)
                         : clsx(styles.textEnd, styles.textWarning)
                     }
                   >
-                    <strong>{balance}€</strong>
+                    <strong>{data["Balanço"]}€</strong>
                   </td>
                 </tr>
               );
@@ -988,14 +965,25 @@ export default function FiscalYearSummary({ id, year, fiscalData }) {
   function exportToExcel(year) {
     console.log("Exporting to Excel...");
     const wsCapitalGains = XLSX.utils.json_to_sheet(
-      fiscalData.byYear[year].capitalGains.irs
+      fiscalData.byYear[year].capitalGains.excel
+    );
+    const wsCapitalGainsIRS = XLSX.utils.json_to_sheet(
+      fiscalData.byYear[year].capitalGains.irs.map(
+        ({ transaction, ...rest }) => rest
+      )
     );
     const wsDividends = XLSX.utils.json_to_sheet(
+      fiscalData.byYear[year].dividends.excel
+    );
+    const wsDividendsIRS = XLSX.utils.json_to_sheet(
       fiscalData.byYear[year].dividends.irs
     );
+
     const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, wsCapitalGains, "Mais valias");
-    XLSX.utils.book_append_sheet(wb, wsDividends, "Dividendos");
+    XLSX.utils.book_append_sheet(wb, wsCapitalGains, "Mais valias - Balanço");
+    XLSX.utils.book_append_sheet(wb, wsCapitalGainsIRS, "Mais valias - IRS");
+    XLSX.utils.book_append_sheet(wb, wsDividends, "Dividendos - Balanço");
+    XLSX.utils.book_append_sheet(wb, wsDividendsIRS, "Dividendos - IRS");
     XLSX.writeFile(wb, `maisvalias-tool-${year}.xlsx`);
   }
 

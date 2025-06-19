@@ -25,7 +25,7 @@ class PTDividendsFormatter {
         let totalNetAmount = 0;
         let totalGrossAmount = 0;
 
-        totalNetAmount = yearGroup.reduce((total, transaction) => { return total + transaction.amount; }, 0);
+        totalGrossAmount = yearGroup.reduce((total, transaction) => { return total + transaction.amount; }, 0);
         totalFeesAmount = yearGroup.reduce((total, transaction) => { return total + transaction.fees; }, 0);
         totalTaxAmount = yearGroup.reduce((total, transaction) => { return total + transaction.taxes; }, 0);
 
@@ -35,8 +35,7 @@ class PTDividendsFormatter {
           (totalFeesAmount + totalTaxAmount).toFixed(2)
         );
 
-        totalNetAmount = parseFloat(totalNetAmount.toFixed(2));
-        totalGrossAmount = Math.round((totalNetAmount + totalExpenses) * 100) / 100;
+        totalGrossAmount = Math.round((totalGrossAmount) * 100) / 100;
 
         let countryDomiciled = yearGroup[0].transaction.asset.countryDomiciled;
 

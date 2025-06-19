@@ -1,8 +1,8 @@
-import { CapitalGain } from "../../../models/capitalgain";
+import { CapitalGainToIRS } from "../../../models/capitalgain";
 import { DividendToIRS } from "../../../models/dividend";
 
 class PTIRSFormatter {
-  static async format(xml : string, capitalGains : CapitalGain[], dividends : DividendToIRS[]) {
+  static async format(xml : string, capitalGains : CapitalGainToIRS[], dividends : DividendToIRS[]) {
     xml = xml.replace(/^\uFEFF/, "").trimStart(); // strip the BOM (UTF-8 Byte Order Mark)
     if (
       typeof window !== "undefined" &&
@@ -16,7 +16,7 @@ class PTIRSFormatter {
     }
   }
 
-  static async _formatBrowserVersion(xml : string, capitalGains : CapitalGain[], dividends : DividendToIRS[]) {
+  static async _formatBrowserVersion(xml : string, capitalGains : CapitalGainToIRS[], dividends : DividendToIRS[]) {
     const parser = new DOMParser();
 
     const xmlDoc = parser.parseFromString(xml, "text/xml");
@@ -182,7 +182,7 @@ class PTIRSFormatter {
     return xmlString;
   }
 
-  static async _formatServerVersion(xml : string, capitalGains : CapitalGain[], dividends : DividendToIRS[]) {
+  static async _formatServerVersion(xml : string, capitalGains : CapitalGainToIRS[], dividends : DividendToIRS[]) {
     // Node.js (dynamic import to avoid bundling errors in browser)
     const { DOMParser, XMLSerializer } = await import("@xmldom/xmldom");
     const parser = new DOMParser();

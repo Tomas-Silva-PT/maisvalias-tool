@@ -1,15 +1,12 @@
-import { FIFOCalculator } from "../../../calculators/FIFOCalculator.js";
-import { CapitalGainsCalculator } from "../../../calculators/CapitalGainsCalculator.js";
-import { CapitalGain } from "../../../models/capitalgain.js";
-import { Statement } from "../../../models/statement.js";
+import { CapitalGainToIRS } from "../../../models/capitalgain.js";
 import { RealizedTransaction } from "../../../models/transaction.js";
 
 class PTCapitalGainsFormatter {
   constructor() { }
 
-  format(transactions: RealizedTransaction[]): CapitalGain[] {
+  format(transactions: RealizedTransaction[]): CapitalGainToIRS[] {
 
-    let capitalGains: CapitalGain[] = [];
+    let capitalGains: CapitalGainToIRS[] = [];
 
     for (const realizedTransaction of transactions) {
       const buy = realizedTransaction.buy;
@@ -54,7 +51,7 @@ class PTCapitalGainsFormatter {
       const impostoRetido = taxes;
       const paisContraparte = `${sell.broker.country.code} - ${sell.broker.country.namePt}`;
 
-      let capitalGain: CapitalGain = {
+      let capitalGain: CapitalGainToIRS = {
         transaction: realizedTransaction,
         Ticker: ticker,
         "País da fonte": paisFonte,
