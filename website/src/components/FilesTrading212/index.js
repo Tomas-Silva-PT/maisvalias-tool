@@ -9,7 +9,7 @@ import ErrorPopup from "@site/src/components/ErrorPopup";
 
 const broker = [
   {
-    name: "Trading212",
+    name: "Trading 212",
     logo: "/img/brokers/trading212.png",
     active: true,
     docs: [
@@ -27,7 +27,7 @@ export default function FilesTrading212({ id, setFiscalData }) {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    if(files.length > 0) {
+    if (files.length > 0) {
       // Scroll to the submit button after files are selected
       const submitButton = document.getElementById("submitFilesButton");
       if (submitButton) {
@@ -180,7 +180,10 @@ export default function FilesTrading212({ id, setFiscalData }) {
       return;
     }
 
-    if (transactions.filter((transaction) => transaction.length !== 0).length === 0) {
+    if (
+      transactions.filter((transaction) => transaction.length !== 0).length ===
+      0
+    ) {
       dispatchError("filesUploaded");
     } else {
       dispatchSuccess();
@@ -226,20 +229,24 @@ export default function FilesTrading212({ id, setFiscalData }) {
                 </div>
               ))}
             </div>
-            <div
-              id="submitFilesButton"
-              className={clsx(styles.contentStep2Process)}
-              onClick={onFilesSelected}
-            >
-              <div className={clsx(styles.contentStep2ProcessText)}>
-                Processar {files.length} ficheiro
-                {files.length !== 1 ? "s" : ""}
-              </div>
-              <ArrowRight />
-            </div>
           </>
         )}
       </div>
+      {files.length > 0 && (
+        <>
+          <div
+            id="submitFilesButton"
+            className={clsx(styles.contentStep2Process)}
+            onClick={onFilesSelected}
+          >
+            <div className={clsx(styles.contentStep2ProcessText)}>
+              Processar {files.length} ficheiro
+              {files.length !== 1 ? "s" : ""}
+            </div>
+            <ArrowRight />
+          </div>
+        </>
+      )}
       {renderError(error)}
     </div>
   );

@@ -6,8 +6,8 @@ import { ArrowRight } from "lucide-react";
 
 export default function FiscalYearsSummary({ id, setFiscalYear, fiscalData }) {
   const [sortConfig, setSortConfig] = useState({
-    column: null,
-    order: "asc",
+    column: 0,
+    order: "desc",
   });
 
   const handleSort = (columnIndex) => {
@@ -20,7 +20,7 @@ export default function FiscalYearsSummary({ id, setFiscalYear, fiscalData }) {
 
   const sortedData = Object.entries(fiscalData.byYear).sort(
     ([yearA, dataA], [yearB, dataB]) => {
-      const { column, order } = sortConfig;
+      let { column, order } = sortConfig;
       if (column === null) return 0;
 
       const valuesA = [

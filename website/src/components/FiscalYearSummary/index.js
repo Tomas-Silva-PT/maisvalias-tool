@@ -6,10 +6,21 @@ import { PTIRSFormatter } from "../../maisvalias-tool/formatters/pt/irs/irs_xml_
 import ErrorPopup from "@site/src/components/ErrorPopup";
 
 export default function FiscalYearSummary({ id, year, fiscalData }) {
-  const [sortConfig, setSortConfig] = useState({
+  const defaultCapitalGainsSortConfig = {
+    column: 4,
+    order: "desc",
+  };
+  const defaultDividendsSortConfig = {
+    column: 1,
+    order: "desc",
+  };
+  const defaultSortConfig = {
     column: null,
     order: "asc",
-  });
+  };
+  const [sortCapitalGainsConfig, setCapitalGainsSortConfig] = useState(defaultCapitalGainsSortConfig);
+  const [sortDividendsConfig, setDividendsSortConfig] = useState(defaultDividendsSortConfig);
+  const [sortConfig, setSortConfig] = useState(defaultSortConfig);
   const [activeTab, setActiveTab] = useState(0);
   const [tableMenuActiveTab, setTableMenuActiveTab] = useState(0);
   const [IRSdialogVisible, setIRSdialogVisible] = useState(false);
@@ -27,8 +38,26 @@ export default function FiscalYearSummary({ id, year, fiscalData }) {
 
   function changeTab(tabIdx) {
     setActiveTab(tabIdx);
-    setSortConfig({ column: null, order: "asc" });
+    setCapitalGainsSortConfig(defaultCapitalGainsSortConfig);
+    setDividendsSortConfig(defaultDividendsSortConfig);
+    setSortConfig(defaultSortConfig);
   }
+
+  const handleCapitalGainsSort = (columnIndex) => {
+    setCapitalGainsSortConfig((prev) => {
+      const isSameColumn = prev.column === columnIndex;
+      const newOrder = isSameColumn && prev.order === "asc" ? "desc" : "asc";
+      return { column: columnIndex, order: newOrder };
+    });
+  };
+
+  const handleDividendsSort = (columnIndex) => {
+    setDividendsSortConfig((prev) => {
+      const isSameColumn = prev.column === columnIndex;
+      const newOrder = isSameColumn && prev.order === "asc" ? "desc" : "asc";
+      return { column: columnIndex, order: newOrder };
+    });
+  };
 
   const handleSort = (columnIndex) => {
     setSortConfig((prev) => {
@@ -96,7 +125,7 @@ export default function FiscalYearSummary({ id, year, fiscalData }) {
   const sortedCapitalGainsData = Object.entries(
     fiscalData.byYear[year].capitalGains.raw
   ).sort((capitalGainA, capitalGainB) => {
-    const { column, order } = sortConfig;
+    const { column, order } = sortCapitalGainsConfig;
     if (column === null) return 0;
 
     const valuesA = [
@@ -186,12 +215,12 @@ export default function FiscalYearSummary({ id, year, fiscalData }) {
               {capitalGainsColumns.map((label, index) => (
                 <th
                   key={index}
-                  onClick={() => handleSort(index)}
+                  onClick={() => handleCapitalGainsSort(index)}
                   className={clsx(styles.textEnd, styles.clickable)}
                 >
                   {label}
-                  {sortConfig.column === index && (
-                    <span>{sortConfig.order === "asc" ? " 🔼" : " 🔽"}</span>
+                  {sortCapitalGainsConfig.column === index && (
+                    <span>{sortCapitalGainsConfig.order === "asc" ? " 🔼" : " 🔽"}</span>
                   )}
                 </th>
               ))}
@@ -376,7 +405,7 @@ export default function FiscalYearSummary({ id, year, fiscalData }) {
   const sortedDividendsData = Object.entries(
     fiscalData.byYear[year].dividends.raw
   ).sort((dividendA, dividendB) => {
-    const { column, order } = sortConfig;
+    const { column, order } = sortDividendsConfig;
     if (column === null) return 0;
 
     const valuesA = [
@@ -450,12 +479,12 @@ export default function FiscalYearSummary({ id, year, fiscalData }) {
               {dividendsColumns.map((label, index) => (
                 <th
                   key={index}
-                  onClick={() => handleSort(index)}
+                  onClick={() => handleDividendsSort(index)}
                   className={clsx(styles.textEnd, styles.clickable)}
                 >
                   {label}
-                  {sortConfig.column === index && (
-                    <span>{sortConfig.order === "asc" ? " 🔼" : " 🔽"}</span>
+                  {sortDividendsConfig.column === index && (
+                    <span>{sortDividendsConfig.order === "asc" ? " 🔼" : " 🔽"}</span>
                   )}
                 </th>
               ))}
