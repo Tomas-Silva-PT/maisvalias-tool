@@ -233,26 +233,28 @@ export default function FiscalYearSummary({ id, year, fiscalData }) {
                   <td className={clsx(styles.textEnd)}>
                     {data["Aquisição"]["Data"]}
                   </td>
-                  <td className={clsx(styles.textEnd, "tooltipContainer")}>
-                    {data["Aquisição"]["Valor"]}€
-                    {data["Aquisição"]["Moeda Original"] !== "EUR" && (
-                      <i className="fa-solid fa-circle-info tooltip">
-                        <div className="tooltipContent">
-                          <div>
-                            Moeda original:{" "}
-                            <strong>
-                              {data["Aquisição"]["Moeda Original"]}
-                            </strong>
+                  <td className={clsx(styles.textEnd)}>
+                    <div className="tooltipContainer">
+                      {data["Aquisição"]["Valor"]}€
+                      {data["Aquisição"]["Moeda Original"] !== "EUR" && (
+                        <i className="fa-solid fa-circle-info tooltip">
+                          <div className="tooltipContent">
+                            <div>
+                              Moeda original:{" "}
+                              <strong>
+                                {data["Aquisição"]["Moeda Original"]}
+                              </strong>
+                            </div>
+                            <div>
+                              Taxa de câmbio:{" "}
+                              <strong>
+                                {data["Aquisição"]["Taxa de Câmbio"]}
+                              </strong>
+                            </div>
                           </div>
-                          <div>
-                            Taxa de câmbio:{" "}
-                            <strong>
-                              {data["Aquisição"]["Taxa de Câmbio"]}
-                            </strong>
-                          </div>
-                        </div>
-                      </i>
-                    )}
+                        </i>
+                      )}
+                    </div>
                   </td>
                   <td className={clsx(styles.textEnd)}>
                     {data["Aquisição"]["Despesas"] === 0
@@ -262,26 +264,28 @@ export default function FiscalYearSummary({ id, year, fiscalData }) {
                   <td className={clsx(styles.textEnd)}>
                     {data["Realização"]["Data"]}
                   </td>
-                  <td className={clsx(styles.textEnd, "tooltipContainer")}>
-                    {data["Realização"]["Valor"]}€
-                    {data["Realização"]["Moeda Original"] !== "EUR" && (
-                      <i className="fa-solid fa-circle-info tooltip">
-                        <div className="tooltipContent">
-                          <div>
-                            Moeda original:{" "}
-                            <strong>
-                              {data["Realização"]["Moeda Original"]}
-                            </strong>
+                  <td className={clsx(styles.textEnd)}>
+                    <div className="tooltipContainer">
+                      {data["Realização"]["Valor"]}€
+                      {data["Realização"]["Moeda Original"] !== "EUR" && (
+                        <i className="fa-solid fa-circle-info tooltip">
+                          <div className="tooltipContent">
+                            <div>
+                              Moeda original:{" "}
+                              <strong>
+                                {data["Realização"]["Moeda Original"]}
+                              </strong>
+                            </div>
+                            <div>
+                              Taxa de câmbio:{" "}
+                              <strong>
+                                {data["Realização"]["Taxa de Câmbio"]}
+                              </strong>
+                            </div>
                           </div>
-                          <div>
-                            Taxa de câmbio:{" "}
-                            <strong>
-                              {data["Realização"]["Taxa de Câmbio"]}
-                            </strong>
-                          </div>
-                        </div>
-                      </i>
-                    )}
+                        </i>
+                      )}
+                    </div>
                   </td>
                   <td className={clsx(styles.textEnd)}>
                     {data["Realização"]["Despesas"] === 0
@@ -488,22 +492,24 @@ export default function FiscalYearSummary({ id, year, fiscalData }) {
                     <strong>{data["Ticker"]}</strong>
                   </td>
                   <td className={clsx(styles.textEnd)}>{data["Data"]}</td>
-                  <td className={clsx(styles.textEnd, "tooltipContainer")}>
-                    <span>{data["Valor"]}€</span>
-                    {data["Moeda Original"] !== "EUR" && (
-                      <i className="fa-solid fa-circle-info tooltip">
-                        <div className="tooltipContent">
-                          <div>
-                            Moeda original:{" "}
-                            <strong>{data["Moeda Original"]}</strong>
+                  <td className={clsx(styles.textEnd)}>
+                    <div className="tooltipContainer">
+                      <span>{data["Valor"]}€</span>
+                      {data["Moeda Original"] !== "EUR" && (
+                        <i className="fa-solid fa-circle-info tooltip">
+                          <div className="tooltipContent">
+                            <div>
+                              Moeda original:{" "}
+                              <strong>{data["Moeda Original"]}</strong>
+                            </div>
+                            <div>
+                              Taxa de câmbio:{" "}
+                              <strong>{data["Taxa de Câmbio"]}</strong>
+                            </div>
                           </div>
-                          <div>
-                            Taxa de câmbio:{" "}
-                            <strong>{data["Taxa de Câmbio"]}</strong>
-                          </div>
-                        </div>
-                      </i>
-                    )}
+                        </i>
+                      )}
+                    </div>
                   </td>
                   <td className={clsx(styles.textEnd)}>
                     {data["Despesas"] === 0 ? "-" : data["Despesas"] + "€"}
@@ -665,18 +671,20 @@ export default function FiscalYearSummary({ id, year, fiscalData }) {
                   <td className={clsx(styles.textEnd)}>
                     {data["Código Rendimento"]}
                   </td>
-                  <td className={clsx(styles.textEnd, "tooltipContainer")}>
-                    <span>{data["País da fonte"]}</span>
-                    {!data["País da fonte"] && (
-                      <i className="fa-solid fa-triangle-exclamation tooltip">
-                        <div className="tooltipContent">
-                          <div>
-                            Não encontrámos o país de fonte. Verifica a consola
-                            do navegador para mais detalhes.
+                  <td className={clsx(styles.textEnd)}>
+                    <div className="tooltipContainer">
+                      <span>{data["País da fonte"]}</span>
+                      {!data["País da fonte"] && (
+                        <i className="fa-solid fa-triangle-exclamation tooltip">
+                          <div className="tooltipContent">
+                            <div>
+                              Não encontrámos o país de fonte. Verifica a
+                              consola do navegador para mais detalhes.
+                            </div>
                           </div>
-                        </div>
-                      </i>
-                    )}
+                        </i>
+                      )}
+                    </div>
                   </td>
                   <td className={clsx(styles.textEnd)}>
                     {Math.round(data["Rendimento Bruto"] * 100) / 100 === 0
@@ -827,36 +835,39 @@ export default function FiscalYearSummary({ id, year, fiscalData }) {
                   <td className={clsx(styles.textEnd)}>
                     <strong>{data["Ticker"]}</strong>
                   </td>
-                  <td className={clsx(styles.textEnd, "tooltipContainer")}>
-                    <span>{data["País da fonte"]}</span>
-                    {!data["País da fonte"] && (
-                      <i className="fa-solid fa-triangle-exclamation tooltip">
-                        <div className="tooltipContent">
-                          <div>
-                            Não encontrámos o país para o ISIN:{" "}
-                            <strong>
-                              {
-                                capitalGains.find(
-                                  (item) =>
-                                    item.sell.asset.ticker === data["Ticker"]
-                                ).sell.asset.isin
-                              }
-                            </strong>
+                  <td className={clsx(styles.textEnd)}>
+                    <div className="tooltipContainer">
+                      <span>{data["País da fonte"]}</span>
+                      {!data["País da fonte"] && (
+                        <i className="fa-solid fa-triangle-exclamation tooltip">
+                          <div className="tooltipContent">
+                            <div>
+                              Não encontrámos o país para o ISIN:{" "}
+                              <strong>
+                                {
+                                  capitalGains.find(
+                                    (item) =>
+                                      item.sell.asset.ticker === data["Ticker"]
+                                  ).sell.asset.isin
+                                }
+                              </strong>
+                            </div>
                           </div>
-                        </div>
-                      </i>
-                    )}
-                    {isPortugueseCountry && (
-                      <i className="fa-solid fa-circle-info tooltip">
-                        <div className="tooltipContent">
-                          <div>
-                            Para empresas domiciliadas em Portugal obtidas em
-                            corretoras estrangeiras, assume-se o{" "}
-                            <u>país de domicilio da corretora</u>.
+                        </i>
+                      )}
+
+                      {isPortugueseCountry && (
+                        <i className="fa-solid fa-circle-info tooltip">
+                          <div className="tooltipContent">
+                            <div>
+                              Para empresas domiciliadas em Portugal obtidas em
+                              corretoras estrangeiras, assume-se o{" "}
+                              <u>país de domicilio da corretora</u>.
+                            </div>
                           </div>
-                        </div>
-                      </i>
-                    )}
+                        </i>
+                      )}
+                    </div>
                   </td>
                   <td className={clsx(styles.textEnd)}>
                     <span>{data["Código"]}</span>
