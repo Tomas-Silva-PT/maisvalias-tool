@@ -1,4 +1,7 @@
+import { RealizedTransaction } from "./transaction.js";
+
 type CapitalGain = {
+  transaction: RealizedTransaction;
   Ticker: string;
   "País da fonte": string;
   Código: string;

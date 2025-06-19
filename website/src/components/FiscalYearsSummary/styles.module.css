@@ -170,6 +170,12 @@ table thead tr {
   color: var(--warning-color) !important;
 }
 
+.alignChildrenCenter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 @media (max-width: 960px) {
   .table th,
   .table td {

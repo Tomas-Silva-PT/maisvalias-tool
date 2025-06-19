@@ -55,6 +55,7 @@ class PTCapitalGainsFormatter {
       const paisContraparte = `${sell.broker.country.code} - ${sell.broker.country.namePt}`;
 
       let capitalGain: CapitalGain = {
+        transaction: realizedTransaction,
         Ticker: ticker,
         "País da fonte": paisFonte,
         Código: codigo,

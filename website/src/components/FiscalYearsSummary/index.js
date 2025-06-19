@@ -1,6 +1,8 @@
 import { useState } from "react";
 import clsx from "clsx";
 import styles from "./styles.module.css";
+import { ArrowRight } from "lucide-react";
+
 
 export default function FiscalYearsSummary({ id, setFiscalYear, fiscalData }) {
   const [sortConfig, setSortConfig] = useState({
@@ -75,6 +77,7 @@ export default function FiscalYearsSummary({ id, setFiscalYear, fiscalData }) {
                       "Dividendos",
                       "Despesas",
                       "Balanço",
+                      ""
                     ].map((label, index) => (
                       <th
                         key={index}
@@ -106,7 +109,7 @@ export default function FiscalYearsSummary({ id, setFiscalYear, fiscalData }) {
                     return (
                       <tr key={year} onClick={() => setFiscalYear(year)}>
                         <td className={clsx(styles.textEnd)}>
-                          <strong>{year}</strong>
+                          <strong><u>{year}</u></strong>
                         </td>
                         <td className={clsx(styles.textEnd)}>
                           <strong>{data.summary.numTransactions}</strong>
@@ -132,6 +135,11 @@ export default function FiscalYearsSummary({ id, setFiscalYear, fiscalData }) {
                           className={clsx(styles.textEnd, styles.textPrimary)}
                         >
                           {balance}€
+                        </td>
+                        <td
+                          className={clsx(styles.textEnd, styles.alignChildrenCenter)}
+                        >
+                          <ArrowRight />
                         </td>
                       </tr>
                     );

@@ -865,9 +865,31 @@ export default function FiscalYearSummary({ id, year, fiscalData }) {
                     <span>{data["Dia de Aquisição"]}</span>
                   </td>
                   <td className={clsx(styles.textEnd)}>
-                    <span>
-                      {Math.round(data["Valor de Aquisição"] * 100) / 100}€
-                    </span>
+                    <div className="tooltipContainer">
+                      <span>
+                        {Math.round(data["Valor de Aquisição"] * 100) / 100}€
+                      </span>
+                      {data.transaction.buy.netAmountCurrency !== "EUR" && (
+                        <i className="fa-solid fa-circle-info tooltip">
+                          <div className="tooltipContent">
+                            <div>
+                              Moeda original:{" "}
+                              <strong>
+                                {data.transaction.buy.netAmountCurrency}
+                              </strong>
+                            </div>
+                            <div>
+                              Taxa de câmbio:{" "}
+                              <strong>
+                                {Math.round(
+                                  data.transaction.buy.exchangeRate * 1000
+                                ) / 1000}
+                              </strong>
+                            </div>
+                          </div>
+                        </i>
+                      )}
+                    </div>
                   </td>
                   <td className={clsx(styles.textEnd)}>
                     <span>{data["Ano de Realização"]}</span>
@@ -879,9 +901,31 @@ export default function FiscalYearSummary({ id, year, fiscalData }) {
                     <span>{data["Dia de Realização"]}</span>
                   </td>
                   <td className={clsx(styles.textEnd)}>
-                    <span>
-                      {Math.round(data["Valor de Realização"] * 100) / 100}€
-                    </span>
+                    <div className="tooltipContainer">
+                      <span>
+                        {Math.round(data["Valor de Realização"] * 100) / 100}€
+                      </span>
+                      {data.transaction.buy.netAmountCurrency !== "EUR" && (
+                        <i className="fa-solid fa-circle-info tooltip">
+                          <div className="tooltipContent">
+                            <div>
+                              Moeda original:{" "}
+                              <strong>
+                                {data.transaction.sell.netAmountCurrency}
+                              </strong>
+                            </div>
+                            <div>
+                              Taxa de câmbio:{" "}
+                              <strong>
+                                {Math.round(
+                                  data.transaction.sell.exchangeRate * 1000
+                                ) / 1000}
+                              </strong>
+                            </div>
+                          </div>
+                        </i>
+                      )}
+                    </div>
                   </td>
                   <td className={clsx(styles.textEnd)}>
                     {Math.round(data["Despesas e Encargos"] * 100) / 100 === 0
