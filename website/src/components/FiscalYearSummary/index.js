@@ -1,7 +1,7 @@
 import { useState } from "react";
 import clsx from "clsx";
 import styles from "./styles.module.css";
-import { ArrowRight, Upload, X } from "lucide-react";
+import { ArrowRight, Underline, Upload, X } from "lucide-react";
 import { PTIRSFormatter } from "../../maisvalias-tool/formatters/pt/irs/irs_xml_formatter.js";
 import ErrorPopup from "@site/src/components/ErrorPopup";
 
@@ -651,10 +651,10 @@ export default function FiscalYearSummary({ year, fiscalData }) {
                   <td className={clsx(styles.textEnd, "tooltipContainer")}>
                     <span>{data["País da fonte"]}</span>
                     {!data["País da fonte"] && (
-                      <i class="fa-solid fa-triangle-exclamation tooltip">
+                      <i className="fa-solid fa-triangle-exclamation tooltip">
                         <div className="tooltipContent">
                           <div>
-                            Não encontrámos o país de fonte. Verifica a consola do browser para mais detalhes.
+                            Não encontrámos o país de fonte. Verifica a consola do navegador para mais detalhes.
                           </div>
                         </div>
                       </i>
@@ -798,19 +798,30 @@ export default function FiscalYearSummary({ year, fiscalData }) {
           </thead>
           <tbody>
             {sortedIRSCapitalGainsData.map(([year, data], index) => {
+              let capitalGains = fiscalData.byYear[data["Ano de Realização"]].capitalGains.raw;
+              let isPortugueseCountry = capitalGains.find((item) => item.sell.asset.ticker === data["Ticker"]).sell.asset.countryDomiciled.alpha2 === "PT";
               return (
                 <tr key={index}>
                   <td className={clsx(styles.textEnd)}>
                     <strong>{data["Ticker"]}</strong>
                   </td>
-                  <td className={clsx(styles.textEnd)}>
+                  <td className={clsx(styles.textEnd, "tooltipContainer")}>
                     <span>{data["País da fonte"]}</span>
                     {!data["País da fonte"] && (
-                      <i class="fa-solid fa-triangle-exclamation tooltip">
+                      <i className="fa-solid fa-triangle-exclamation tooltip">
                         <div className="tooltipContent">
                           <div>
                             Não encontrámos o país para o ISIN:{" "}
-                            <strong>{fiscalData.byYear[data["Ano de Realização"]].capitalGains.raw.find((item) => item.sell.asset.ticker === data["Ticker"]).sell.asset.isin}</strong>
+                            <strong>{capitalGains.find((item) => item.sell.asset.ticker === data["Ticker"]).sell.asset.isin}</strong>
+                          </div>
+                        </div>
+                      </i>
+                    )}
+                    { isPortugueseCountry && (
+                      <i className="fa-solid fa-circle-info tooltip">
+                        <div className="tooltipContent">
+                          <div>
+                            Para empresas domiciliadas em Portugal obtidas em corretoras estrangeiras, assume-se o <u>país de domicilio da corretora</u>.
                           </div>
                         </div>
                       </i>

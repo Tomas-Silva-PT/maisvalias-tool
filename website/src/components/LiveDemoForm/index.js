@@ -45,7 +45,7 @@ const steps = [
 
 const brokers = [
   {
-    name: "Trading212",
+    name: "Trading 212",
     logo: "/img/brokers/trading212.png",
     active: true,
     visible: true,
@@ -421,7 +421,7 @@ export default function LiveDemoForm() {
   function ContentStep2(props) {
     return (
       <>
-        {broker.name === "Trading212" && (
+        {broker.name === "Trading 212" && (
           <FilesTrading212 setFiscalData={setGainsAndDividends} />
         )}
         {broker.name === "Revolut" && (
