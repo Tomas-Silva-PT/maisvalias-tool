@@ -45,13 +45,22 @@ class PTDividendsFormatter {
           countryDomiciled = yearGroup[0].transaction.broker.country;
         }
 
+        const anoRendimento = yearGroup[0].transaction.date.substring(0, 4);
+        const codigoRendimento = "E11 - Dividendos ou lucros - sem retenção em Portugal";
+        let paisFonte = "";
+        if(countryDomiciled?.code) {
+          paisFonte = `${countryDomiciled?.code} - ${countryDomiciled?.namePt}`;
+        } 
+        const rendimentoBruto = totalGrossAmount;
+        const impostoPagoNoEstrangeiro = totalExpenses;
+
         const dividendForIRS: DividendToIRS = {
-          "Ano rendimento": yearGroup[0].transaction.date.substring(0, 4),
-          "Código Rendimento": "E11 - Dividendos ou lucros - sem retenção em Portugal",
-          "País da fonte": `${countryDomiciled?.code} - ${countryDomiciled?.namePt}`,
-          "Rendimento Bruto": totalGrossAmount,
-          "Imposto Pago no Estrangeiro - No país da fonte": totalExpenses,
-        }
+          "Ano rendimento": anoRendimento,
+          "Código Rendimento": codigoRendimento,
+          "País da fonte": paisFonte,
+          "Rendimento Bruto": rendimentoBruto,
+          "Imposto Pago no Estrangeiro - No país da fonte": impostoPagoNoEstrangeiro,
+        };
 
         result.push(dividendForIRS);
       }

@@ -5,9 +5,9 @@ import { Statement } from "../../../models/statement.js";
 import { RealizedTransaction } from "../../../models/transaction.js";
 
 class PTCapitalGainsFormatter {
-  constructor() {}
+  constructor() { }
 
-  format(transactions : RealizedTransaction[]): CapitalGain[] {
+  format(transactions: RealizedTransaction[]): CapitalGain[] {
 
     let capitalGains: CapitalGain[] = [];
 
@@ -20,7 +20,7 @@ class PTCapitalGainsFormatter {
       const taxes = realizedTransaction.buyTaxes + realizedTransaction.sellTaxes;
 
 
-      let code : string = "";
+      let code: string = "";
       switch (realizedTransaction.buy.asset.assetType) {
         case "EQUITY":
           code = "G01";
@@ -36,21 +36,39 @@ class PTCapitalGainsFormatter {
         countryDomiciled = buy.broker.country;
       }
 
+      const ticker = sell.asset.ticker;
+      let paisFonte = "";
+      if (countryDomiciled?.code) {
+        paisFonte = countryDomiciled.code ? `${countryDomiciled?.code} - ${countryDomiciled?.namePt}` : "";
+      }
+      const codigo = code;
+      const anoAquisicao = new Date(buy.date).getFullYear();
+      const mesAquisicao = new Date(buy.date).getMonth() + 1;
+      const diaAquisicao = new Date(buy.date).getDate(); // corrigido: getDay() retorna o dia da semana
+      const valorAquisicao = acquiredValue;
+      const anoRealizacao = new Date(sell.date).getFullYear();
+      const mesRealizacao = new Date(sell.date).getMonth() + 1;
+      const diaRealizacao = new Date(sell.date).getDate(); // corrigido: getDay() retorna o dia da semana
+      const valorRealizacao = realizedValue;
+      const despesasEncargos = fees;
+      const impostoRetido = taxes;
+      const paisContraparte = `${sell.broker.country.code} - ${sell.broker.country.namePt}`;
+
       let capitalGain: CapitalGain = {
-        Ticker: sell.asset.ticker,
-        "País da fonte": `${countryDomiciled?.code} - ${countryDomiciled?.namePt}`,
-        Código: code,
-        "Ano de Aquisição": new Date(buy.date).getFullYear(),
-        "Mês de Aquisição": new Date(buy.date).getMonth() + 1,
-        "Dia de Aquisição": new Date(buy.date).getDay(),
-        "Valor de Aquisição": acquiredValue,
-        "Ano de Realização": new Date(sell.date).getFullYear(),
-        "Mês de Realização": new Date(sell.date).getMonth() + 1,
-        "Dia de Realização": new Date(sell.date).getDay(),
-        "Valor de Realização": realizedValue,
-        "Despesas e Encargos": fees,
-        "Imposto retido no estrangeiro": taxes,
-        "País da Contraparte": `${sell.broker.country.code} - ${sell.broker.country.namePt}`,
+        Ticker: ticker,
+        "País da fonte": paisFonte,
+        Código: codigo,
+        "Ano de Aquisição": anoAquisicao,
+        "Mês de Aquisição": mesAquisicao,
+        "Dia de Aquisição": diaAquisicao,
+        "Valor de Aquisição": valorAquisicao,
+        "Ano de Realização": anoRealizacao,
+        "Mês de Realização": mesRealizacao,
+        "Dia de Realização": diaRealizacao,
+        "Valor de Realização": valorRealizacao,
+        "Despesas e Encargos": despesasEncargos,
+        "Imposto retido no estrangeiro": impostoRetido,
+        "País da Contraparte": paisContraparte,
       };
 
       capitalGains.push(capitalGain);

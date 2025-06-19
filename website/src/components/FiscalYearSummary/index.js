@@ -796,6 +796,16 @@ export default function FiscalYearSummary({ year, fiscalData }) {
                   </td>
                   <td className={clsx(styles.textEnd)}>
                     <span>{data["País da fonte"]}</span>
+                    {!data["País da fonte"] && (
+                      <i class="fa-solid fa-triangle-exclamation tooltip">
+                        <div className="tooltipContent">
+                          <div>
+                            Não encontrámos o país para o ISIN:{" "}
+                            <strong>{fiscalData.byYear[data["Ano de Realização"]].capitalGains.raw.find((item) => item.sell.asset.ticker === data["Ticker"]).sell.asset.isin}</strong>
+                          </div>
+                        </div>
+                      </i>
+                    )}
                   </td>
                   <td className={clsx(styles.textEnd)}>
                     <span>{data["Código"]}</span>

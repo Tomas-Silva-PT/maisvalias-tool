@@ -18,7 +18,13 @@ class Country {
             this.namePt = country.name_pt;
             this.nameEn = country.name_en;
         } else {
-            throw new Error(`Country with alpha_2 '${alpha2}' not found`);
+            // throw new Error(`Country with alpha_2 '${alpha2}' not found`);
+            this.code = "";
+            this.alpha2 = "";
+            this.alpha3 = "";
+            this.namePt = "";
+            this.nameEn = "";
+            console.warn(`Country with alpha_2 '${alpha2}' not found`);
         }
     }
 

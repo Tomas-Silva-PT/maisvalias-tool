@@ -260,7 +260,7 @@
 
 .tooltip .tooltipContent {
   visibility: hidden;
-  width: fit-content;
+  width: max(100px, 10vw);
   background-color: #555;
   color: #fff;
   text-align: center;
@@ -275,21 +275,25 @@
   transition: opacity 0.3s;
   font-family: var(--ifm-font-family-base);
   font-weight: lighter;
-  white-space: nowrap;
   font-size: calc(0.5rem + 0.3vw);
   padding: 0.3rem;
+
+  white-space: normal; /* Allows text to wrap */
+  word-wrap: break-word; /* Breaks long words if needed */
+  overflow-wrap: break-word; /* Modern alternative to word-wrap */
 }
 
-.tooltip .tooltipContent::after {
+/* .tooltip .tooltipContent::after {
   content: "";
   position: absolute;
   top: 100%;
   left: 50%;
+  translate: -50% 0%;
   margin-left: -5px;
   border-width: 5px;
   border-style: solid;
   border-color: #555 transparent transparent transparent;
-}
+} */
 
 .tooltip:hover .tooltipContent {
   visibility: visible;
