@@ -5,7 +5,7 @@ import { ArrowRight, Underline, Upload, X } from "lucide-react";
 import { PTIRSFormatter } from "../../maisvalias-tool/formatters/pt/irs/irs_xml_formatter.js";
 import ErrorPopup from "@site/src/components/ErrorPopup";
 
-export default function FiscalYearSummary({ year, fiscalData }) {
+export default function FiscalYearSummary({ id, year, fiscalData }) {
   const [sortConfig, setSortConfig] = useState({
     column: null,
     order: "asc",
@@ -13,6 +13,17 @@ export default function FiscalYearSummary({ year, fiscalData }) {
   const [activeTab, setActiveTab] = useState(0);
   const [tableMenuActiveTab, setTableMenuActiveTab] = useState(0);
   const [IRSdialogVisible, setIRSdialogVisible] = useState(false);
+
+  function smoothFocus(element) {
+    if (!element) return;
+
+    element.scrollIntoView({ behavior: "smooth", block: "center" });
+
+    // Delay focus slightly to let scroll animation begin
+    setTimeout(() => {
+      element.focus({ preventScroll: true });
+    }, 300); // tweak delay if needed
+  }
 
   function changeTab(tabIdx) {
     setActiveTab(tabIdx);
@@ -654,7 +665,8 @@ export default function FiscalYearSummary({ year, fiscalData }) {
                       <i className="fa-solid fa-triangle-exclamation tooltip">
                         <div className="tooltipContent">
                           <div>
-                            Não encontrámos o país de fonte. Verifica a consola do navegador para mais detalhes.
+                            Não encontrámos o país de fonte. Verifica a consola
+                            do navegador para mais detalhes.
                           </div>
                         </div>
                       </i>
@@ -798,8 +810,12 @@ export default function FiscalYearSummary({ year, fiscalData }) {
           </thead>
           <tbody>
             {sortedIRSCapitalGainsData.map(([year, data], index) => {
-              let capitalGains = fiscalData.byYear[data["Ano de Realização"]].capitalGains.raw;
-              let isPortugueseCountry = capitalGains.find((item) => item.sell.asset.ticker === data["Ticker"]).sell.asset.countryDomiciled.alpha2 === "PT";
+              let capitalGains =
+                fiscalData.byYear[data["Ano de Realização"]].capitalGains.raw;
+              let isPortugueseCountry =
+                capitalGains.find(
+                  (item) => item.sell.asset.ticker === data["Ticker"]
+                ).sell.asset.countryDomiciled.alpha2 === "PT";
               return (
                 <tr key={index}>
                   <td className={clsx(styles.textEnd)}>
@@ -812,16 +828,25 @@ export default function FiscalYearSummary({ year, fiscalData }) {
                         <div className="tooltipContent">
                           <div>
                             Não encontrámos o país para o ISIN:{" "}
-                            <strong>{capitalGains.find((item) => item.sell.asset.ticker === data["Ticker"]).sell.asset.isin}</strong>
+                            <strong>
+                              {
+                                capitalGains.find(
+                                  (item) =>
+                                    item.sell.asset.ticker === data["Ticker"]
+                                ).sell.asset.isin
+                              }
+                            </strong>
                           </div>
                         </div>
                       </i>
                     )}
-                    { isPortugueseCountry && (
+                    {isPortugueseCountry && (
                       <i className="fa-solid fa-circle-info tooltip">
                         <div className="tooltipContent">
                           <div>
-                            Para empresas domiciliadas em Portugal obtidas em corretoras estrangeiras, assume-se o <u>país de domicilio da corretora</u>.
+                            Para empresas domiciliadas em Portugal obtidas em
+                            corretoras estrangeiras, assume-se o{" "}
+                            <u>país de domicilio da corretora</u>.
                           </div>
                         </div>
                       </i>
@@ -840,7 +865,9 @@ export default function FiscalYearSummary({ year, fiscalData }) {
                     <span>{data["Dia de Aquisição"]}</span>
                   </td>
                   <td className={clsx(styles.textEnd)}>
-                    <span>{Math.round(data["Valor de Aquisição"]*100)/100}€</span>
+                    <span>
+                      {Math.round(data["Valor de Aquisição"] * 100) / 100}€
+                    </span>
                   </td>
                   <td className={clsx(styles.textEnd)}>
                     <span>{data["Ano de Realização"]}</span>
@@ -852,36 +879,23 @@ export default function FiscalYearSummary({ year, fiscalData }) {
                     <span>{data["Dia de Realização"]}</span>
                   </td>
                   <td className={clsx(styles.textEnd)}>
-                    <span>{Math.round(data["Valor de Realização"]*100)/100}€</span>
+                    <span>
+                      {Math.round(data["Valor de Realização"] * 100) / 100}€
+                    </span>
                   </td>
                   <td className={clsx(styles.textEnd)}>
-                    {Math.round(
-                      data["Despesas e Encargos"] *
-                        100
-                    ) /
-                      100 ===
-                    0
+                    {Math.round(data["Despesas e Encargos"] * 100) / 100 === 0
                       ? "-"
-                      : Math.round(
-                          data[
-                            "Despesas e Encargos"
-                          ] * 100
-                        ) /
-                          100 +
+                      : Math.round(data["Despesas e Encargos"] * 100) / 100 +
                         "€"}
                   </td>
                   <td className={clsx(styles.textEnd)}>
-                    {Math.round(
-                      data["Imposto retido no estrangeiro"] *
-                        100
-                    ) /
+                    {Math.round(data["Imposto retido no estrangeiro"] * 100) /
                       100 ===
                     0
                       ? "-"
                       : Math.round(
-                          data[
-                            "Imposto retido no estrangeiro"
-                          ] * 100
+                          data["Imposto retido no estrangeiro"] * 100
                         ) /
                           100 +
                         "€"}
@@ -1057,8 +1071,8 @@ export default function FiscalYearSummary({ year, fiscalData }) {
                   </div>
                   <p
                     style={{
-                      "fontStyle": "italic",
-                      "fontWeight": "bold",
+                      fontStyle: "italic",
+                      fontWeight: "bold",
                       padding: "1rem",
                     }}
                   >
@@ -1107,7 +1121,7 @@ export default function FiscalYearSummary({ year, fiscalData }) {
   }
 
   return (
-    <div className={clsx(styles.container)}>
+    <div id={id} className={clsx(styles.container)}>
       <div className={clsx(styles.cardContainer)}>
         <div className={clsx(styles.card)}>
           <div className={clsx(styles.cardHeader)}>
@@ -1257,7 +1271,9 @@ export default function FiscalYearSummary({ year, fiscalData }) {
               </div>
             </div>
             {activeTab === 0 && tableMenuActiveTab === 0 && capitalGainsTable()}
-            {activeTab === 0 && tableMenuActiveTab === 1 && capitalGainsIRSTable()}
+            {activeTab === 0 &&
+              tableMenuActiveTab === 1 &&
+              capitalGainsIRSTable()}
             {activeTab === 1 && tableMenuActiveTab === 0 && dividendsTable()}
             {activeTab === 1 && tableMenuActiveTab === 1 && dividendsIRSTable()}
 

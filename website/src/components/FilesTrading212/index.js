@@ -21,10 +21,31 @@ const broker = [
   },
 ];
 
-export default function FilesTrading212({ setFiscalData }) {
+export default function FilesTrading212({ id, setFiscalData }) {
   const [files, setFiles] = useState([]);
   const [errorType, setErrorType] = useState(null);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if(files.length > 0) {
+      // Scroll to the submit button after files are selected
+      const submitButton = document.getElementById("submitFilesButton");
+      if (submitButton) {
+        smoothFocus(submitButton, "center");
+      }
+    }
+  }, [files]);
+
+  function smoothFocus(element, block = "start") {
+    if (!element) return;
+
+    element.scrollIntoView({ behavior: "smooth", block: block });
+
+    // Delay focus slightly to let scroll animation begin
+    setTimeout(() => {
+      element.focus({ preventScroll: true });
+    }, 300); // tweak delay if needed
+  }
 
   function renderError(error) {
     if (!errorType) return null;
@@ -95,6 +116,7 @@ export default function FilesTrading212({ setFiscalData }) {
 
   function removeFile(index) {
     setFiles((prev) => prev.filter((_, i) => i !== index));
+    document.getElementById("file-upload").value = ""; // Clear the input value
   }
 
   function dispatchError(errorType) {
@@ -174,7 +196,7 @@ export default function FilesTrading212({ setFiscalData }) {
   }
 
   return (
-    <>
+    <div id={id}>
       <h4>Histórico de operações:</h4>
       <div id="contentStep2" className={clsx(styles.contentStep2)}>
         <Upload className={clsx(styles.contentStep2UploadIcon)} />
@@ -205,6 +227,7 @@ export default function FilesTrading212({ setFiscalData }) {
               ))}
             </div>
             <div
+              id="submitFilesButton"
               className={clsx(styles.contentStep2Process)}
               onClick={onFilesSelected}
             >
@@ -218,26 +241,6 @@ export default function FilesTrading212({ setFiscalData }) {
         )}
       </div>
       {renderError(error)}
-      {/* {showError && (
-        <ErrorPopup title="Erro" closeFunction={() => setError(false)}>
-          <h3>Falha ao processar os ficheiros</h3>
-          <span>Os ficheiros não são compatíveis com o formato esperado.</span>
-          <p>
-            Por favor verifica quais os ficheiros corretos através da{" "}
-            <a href="docs/corretoras/trading212" target="_blank">
-              documentação
-            </a>{" "}
-            e tenta novamente.
-          </p>
-          <p>
-            Se o problema persistir,{" "}
-            <a href="./about#como-nos-contactar" target="_blank">
-              contacta-nos
-            </a>
-            .
-          </p>
-        </ErrorPopup>
-      )} */}
-    </>
+    </div>
   );
 }

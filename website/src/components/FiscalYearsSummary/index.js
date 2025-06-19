@@ -2,7 +2,7 @@ import { useState } from "react";
 import clsx from "clsx";
 import styles from "./styles.module.css";
 
-export default function FiscalYearsSummary({ setFiscalYear, fiscalData }) {
+export default function FiscalYearsSummary({ id, setFiscalYear, fiscalData }) {
   const [sortConfig, setSortConfig] = useState({
     column: null,
     order: "asc",
@@ -55,7 +55,7 @@ export default function FiscalYearsSummary({ setFiscalYear, fiscalData }) {
   );
 
   return (
-    <div className={clsx(styles.container)}>
+    <div id={id} className={clsx(styles.container)}>
       <div className={clsx(styles.cardContainer)}>
         <div className={clsx(styles.card)}>
           <div className={clsx(styles.cardHeader)}>

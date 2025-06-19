@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import styles from "./styles.module.css";
 
-export default function FiscalSummary({ fiscalData }) {
+export default function FiscalSummary({ id, fiscalData }) {
   let balance =
     Math.round(
       (fiscalData.summary.gains +
@@ -23,7 +23,7 @@ export default function FiscalSummary({ fiscalData }) {
     100;
 
   return (
-    <div className={clsx(styles.container)}>
+    <div id={id} className={clsx(styles.container)}>
       <div className={clsx(styles.cardContainer)}>
         <div className={clsx(styles.card, styles.borderSuccess)}>
           <div className={clsx(styles.cardBody, styles.textCenter)}>

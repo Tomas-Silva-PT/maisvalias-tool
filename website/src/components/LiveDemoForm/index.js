@@ -99,6 +99,13 @@ export default function LiveDemoForm() {
   const [errorType, setErrorType] = useState(null);
   const [error, setError] = useState(null);
 
+  const fiscalYearSummaryId = "fiscal-year-summary";
+  const fiscalYearsSummaryId = "fiscal-years-summary";
+  const fiscalSummaryId = "fiscal-summary";
+  const contentStep1Id = "content-step-1";
+  const contentStep2Id = "content-step-2";
+  const contentStep3Id = "content-step-3";
+
   useEffect(() => {
     const script = document.createElement("script");
     script.src =
@@ -112,13 +119,48 @@ export default function LiveDemoForm() {
   }, []);
 
   useEffect(() => {
+    const fiscalYearSummary = document.getElementById(fiscalYearSummaryId);
+    smoothFocus(fiscalYearSummary);
+  }, [fiscalYear]);
+
+  useEffect(() => {
     let newProgress = ((step - 1) / 2) * 100;
     setProgress(newProgress);
 
     const shouldShowHelp = step === 2;
     setHelpDialogVisible(shouldShowHelp);
     setFiscalYear(null);
+
+    if(step === 3) {
+      const fiscalSummaryElement = document.getElementById(fiscalSummaryId);
+      if (fiscalSummaryElement) {
+        smoothFocus(fiscalSummaryElement, "center");
+      }
+    }
+    if(step === 2) {
+      const contentStep2Element = document.getElementById(contentStep2Id);
+      if (contentStep2Element) {
+        smoothFocus(contentStep2Element, "center");
+      }
+    }
+    if(step === 1) {
+      const contentStep1Element = document.getElementById(contentStep1Id);
+      if (contentStep1Element) {
+        smoothFocus(contentStep1Element, "center");
+      }
+    }
   }, [step]);
+
+  function smoothFocus(element, block = "start") {
+    if (!element) return;
+
+    element.scrollIntoView({ behavior: "smooth", block: block });
+
+    // Delay focus slightly to let scroll animation begin
+    setTimeout(() => {
+      element.focus({ preventScroll: true });
+    }, 300); // tweak delay if needed
+  }
 
   function renderError(error) {
     if (!errorType) return null;
@@ -362,9 +404,9 @@ export default function LiveDemoForm() {
       <>
         <div className={clsx(styles.content, styles.fadeIn)}>
           <h3>{description}:</h3>
-          {currStepData.num === 1 && <ContentStep1 />}
-          {currStepData.num === 2 && <ContentStep2 />}
-          {currStepData.num === 3 && <ContentStep3 />}
+          {currStepData.num === 1 && <ContentStep1 id={contentStep1Id} />}
+          {currStepData.num === 2 && <ContentStep2 id={contentStep2Id} />}
+          {currStepData.num === 3 && <ContentStep3 id={contentStep3Id} />}
         </div>
       </>
     );
@@ -378,7 +420,7 @@ export default function LiveDemoForm() {
   function ContentStep1(props) {
     return (
       <>
-        <div className={clsx(styles.contentStep1)}>
+        <div id={props.id} className={clsx(styles.contentStep1)}>
           {brokers.map(
             (broker) =>
               broker.visible === true && (
@@ -422,10 +464,10 @@ export default function LiveDemoForm() {
     return (
       <>
         {broker.name === "Trading 212" && (
-          <FilesTrading212 setFiscalData={setGainsAndDividends} />
+          <FilesTrading212 id={props.id} setFiscalData={setGainsAndDividends} />
         )}
         {broker.name === "Revolut" && (
-          <FilesRevolut setFiscalData={setGainsAndDividends} />
+          <FilesRevolut id={props.id} setFiscalData={setGainsAndDividends} />
         )}
         {renderError(error)}
       </>
@@ -435,14 +477,16 @@ export default function LiveDemoForm() {
   function ContentStep3(props) {
     return (
       <>
-        <div className={clsx(styles.contentStep3)}>
-          <FiscalSummary fiscalData={fiscalData}></FiscalSummary>
+        <div id={props.id} className={clsx(styles.contentStep3)}>
+          <FiscalSummary id={fiscalSummaryId} fiscalData={fiscalData}></FiscalSummary>
           <FiscalYearsSummary
+            id={fiscalYearsSummaryId}
             setFiscalYear={setFiscalYear}
             fiscalData={fiscalData}
           ></FiscalYearsSummary>
           {fiscalYear && (
             <FiscalYearSummary
+              id={fiscalYearSummaryId}
               year={fiscalYear}
               fiscalData={fiscalData}
             ></FiscalYearSummary>

@@ -20,11 +20,37 @@ const broker = [
   },
 ];
 
-export default function FilesRevolut({ setFiscalData }) {
+export default function FilesRevolut({ id, setFiscalData }) {
   const [operationFiles, setOperationFiles] = useState([]);
   const [profitLossFiles, setProfitLossFiles] = useState([]);
   const [errorType, setErrorType] = useState(null);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (operationFiles.length > 0 && profitLossFiles.length > 0) {
+      // Scroll to the submit button after files are selected
+      const submitButton = document.getElementById("submitFilesButton");
+      if (submitButton) {
+        smoothFocus(submitButton, "center");
+      }
+    } else if (operationFiles.length > 0) {
+      const profitLossElement = document.getElementById("file-upload-profit-loss");
+      if (profitLossElement) {
+        smoothFocus(profitLossElement, "center");
+      }
+    }
+  }, [operationFiles, profitLossFiles]);
+
+  function smoothFocus(element, block = "start") {
+    if (!element) return;
+
+    element.scrollIntoView({ behavior: "smooth", block: block });
+
+    // Delay focus slightly to let scroll animation begin
+    setTimeout(() => {
+      element.focus({ preventScroll: true });
+    }, 300); // tweak delay if needed
+  }
 
   function renderError(error) {
     if (!errorType) return null;
@@ -88,6 +114,7 @@ export default function FilesRevolut({ setFiscalData }) {
 
   function removeOperationFile(index) {
     setOperationFiles((prev) => prev.filter((_, i) => i !== index));
+    document.getElementById("file-upload-operation").value = ""; // Clear the input value
   }
 
   function onOperationFileUpload(e) {
@@ -99,6 +126,7 @@ export default function FilesRevolut({ setFiscalData }) {
 
   function removeProfitLossFile(index) {
     setProfitLossFiles((prev) => prev.filter((_, i) => i !== index));
+    document.getElementById("file-upload-profit-loss").value = ""; // Clear the input value
   }
 
   function onProfitLossFileUpload(e) {
@@ -224,18 +252,18 @@ export default function FilesRevolut({ setFiscalData }) {
   }
 
   return (
-    <>
+    <div id={id}>
       <h4>Histórico de operações:</h4>
       <div id="contentStep2-1" className={clsx(styles.contentStep2)}>
         <Upload className={clsx(styles.contentStep2UploadIcon)} />
         <input
           className={clsx(styles.contentStep2UploadInput)}
-          id="file-upload"
+          id="file-upload-operation"
           type="file"
           accept=".csv"
           onChange={onOperationFileUpload}
         />
-        <label htmlFor="file-upload">Escolher ficheiro</label>
+        <label htmlFor="file-upload-operation">Escolher ficheiro</label>
         {operationFiles.length > 0 && (
           <>
             <div className={clsx(styles.contentStep2Files)}>
@@ -262,12 +290,12 @@ export default function FilesRevolut({ setFiscalData }) {
         <Upload className={clsx(styles.contentStep2UploadIcon)} />
         <input
           className={clsx(styles.contentStep2UploadInput)}
-          id="file-upload"
+          id="file-upload-profit-loss"
           type="file"
           accept=".csv"
           onChange={onProfitLossFileUpload}
         />
-        <label htmlFor="file-upload">Escolher ficheiro</label>
+        <label htmlFor="file-upload-profit-loss">Escolher ficheiro</label>
         {profitLossFiles.length > 0 && (
           <>
             <div className={clsx(styles.contentStep2Files)}>
@@ -292,6 +320,7 @@ export default function FilesRevolut({ setFiscalData }) {
         <div
           className={clsx(styles.contentStep2Process)}
           onClick={onFilesSelected}
+          id="submitFilesButton"
         >
           <div className={clsx(styles.contentStep2ProcessText)}>
             Processar {operationFiles.length + profitLossFiles.length} ficheiros
@@ -300,6 +329,6 @@ export default function FilesRevolut({ setFiscalData }) {
         </div>
       )}
       {renderError(error)}
-    </>
+    </div>
   );
 }
