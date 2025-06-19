@@ -20,7 +20,7 @@ import { ExcelDividendsFormatter } from "../../maisvalias-tool/formatters/pt/exc
 import { PTCapitalGainsFormatter } from "../../maisvalias-tool/formatters/pt/irs/irs_capital_gains_formatter.js";
 import { PTDividendsFormatter } from "../../maisvalias-tool/formatters/pt/irs/irs_dividends_formatter.js";
 import { CapitalGainsFormatter } from "../../maisvalias-tool/formatters/pt/capital_gains_formatter.js";
-import { ExcelCapitalGainsFormatter } from "../../maisvalias-tool/formatters/pt/exceL_capital_gains_formatter.js";
+import { ExcelCapitalGainsFormatter } from "../../maisvalias-tool/formatters/pt/excel_capital_gains_formatter.js";
 import { FiscalSummaryCalculator } from "../../maisvalias-tool/calculators/fiscalSummaryCalculator.js";
 
 const disclaimerMessage =
