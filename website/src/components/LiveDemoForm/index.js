@@ -16,7 +16,7 @@ import { Statement } from "../../maisvalias-tool/models/statement.js";
 import { FIFOCalculator } from "../../maisvalias-tool/calculators/FIFOCalculator.js";
 import { DividendsCalculator } from "../../maisvalias-tool/calculators/DividendsCalculator.js";
 import { DividendsFormatter } from "../../maisvalias-tool/formatters/pt/dividends_formatter.js";
-import { ExcelDividendsFormatter } from "../../maisvalias-tool/formatters/pt/exceL_dividends_formatter.js";
+import { ExcelDividendsFormatter } from "../../maisvalias-tool/formatters/pt/excel_dividends_formatter.js";
 import { PTCapitalGainsFormatter } from "../../maisvalias-tool/formatters/pt/irs/irs_capital_gains_formatter.js";
 import { PTDividendsFormatter } from "../../maisvalias-tool/formatters/pt/irs/irs_dividends_formatter.js";
 import { CapitalGainsFormatter } from "../../maisvalias-tool/formatters/pt/capital_gains_formatter.js";
