@@ -650,6 +650,15 @@ export default function FiscalYearSummary({ year, fiscalData }) {
                   </td>
                   <td className={clsx(styles.textEnd, "tooltipContainer")}>
                     <span>{data["País da fonte"]}</span>
+                    {!data["País da fonte"] && (
+                      <i class="fa-solid fa-triangle-exclamation tooltip">
+                        <div className="tooltipContent">
+                          <div>
+                            Não encontrámos o país de fonte. Verifica a consola do browser para mais detalhes.
+                          </div>
+                        </div>
+                      </i>
+                    )}
                   </td>
                   <td className={clsx(styles.textEnd)}>
                     {Math.round(data["Rendimento Bruto"] * 100) / 100 === 0
