@@ -355,19 +355,15 @@
   -ms-user-select: none;
   user-select: none;
 }
-.checkbox-wrapper-6 .tgl + .tgl-btn:after,
-.checkbox-wrapper-6 .tgl + .tgl-btn:before {
+.checkbox-wrapper-6 .tgl + .tgl-btn:after {
   position: relative;
   display: block;
   content: "";
-  width: 45%;
-  height: 85%;
+  width: 50%;
+  height: 100%;
 }
 .checkbox-wrapper-6 .tgl + .tgl-btn:after {
   left: 0;
-}
-.checkbox-wrapper-6 .tgl + .tgl-btn:before {
-  display: none;
 }
 .checkbox-wrapper-6 .tgl:checked + .tgl-btn:after {
   left: 50%;
