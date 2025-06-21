@@ -84,35 +84,35 @@ h4 {
 
 /* Statistics Cards */
 .card.borderSuccess {
-  border-bottom: 4px solid var(--success-color) !important;
+  border-bottom: 4px solid var(--success-color) ;
 }
 
 .textSuccess {
-  color: var(--success-color) !important;
+  color: var(--success-color) ;
 }
 
 .card.borderDanger {
-  border-bottom: 4px solid var(--danger-color) !important;
+  border-bottom: 4px solid var(--danger-color) ;
 }
 
 .textDanger {
-  color: var(--danger-color) !important;
+  color: var(--danger-color) ;
 }
 
 .card.borderPrimary {
-  border-bottom: 4px solid var(--primary-color) !important;
+  border-bottom: 4px solid var(--primary-color) ;
 }
 
 .textPrimary {
-  color: var(--primary-color) !important;
+  color: var(--primary-color) ;
 }
 
 .card.borderWarning {
-  border-bottom: 4px solid var(--warning-color) !important;
+  border-bottom: 4px solid var(--warning-color) ;
 }
 
 .textWarning {
-  color: var(--warning-color) !important;
+  color: var(--warning-color) ;
 }
 
 /* Table */
@@ -149,25 +149,14 @@ table thead tr {
   background-color: rgba(13, 110, 253, 0.05);
 }
 
+.tableHover tbody tr:hover td {
+  color: var(--ifm-color-secondary);
+  fill: var(--ifm-color-secondary) !important;
+}
+
 .textEnd {
   text-align: right;
   cursor: pointer;
-}
-
-.textSuccess {
-  color: var(--success-color) !important;
-}
-
-.textDanger {
-  color: var(--danger-color) !important;
-}
-
-.textPrimary {
-  color: var(--primary-color) !important;
-}
-
-.textWarning {
-  color: var(--warning-color) !important;
 }
 
 .alignChildrenCenter {

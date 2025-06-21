@@ -2,6 +2,7 @@
 
 t212*
 data/revolut*
+data/*.xml
 reminder.txt
 *.xlsx
 maisvalias-tool/

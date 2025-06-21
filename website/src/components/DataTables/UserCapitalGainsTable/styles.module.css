@@ -183,13 +183,6 @@ h4 {
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  color: var(--ifm-color-secondary);
-  fill: var(--ifm-color-secondary);
-}
-
-.tableMenuAction:hover {
-  color: var(--ifm-color-secondary);
-  fill: var(--ifm-color-secondary);
 }
 
 .tableResponsive {
@@ -395,17 +388,6 @@ tfoot {
   background: var(--card-color);
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.tab:hover {
-  color: var(--ifm-color-secondary);
-  fill: var(--ifm-color-secondary);
-}
-
-.tabActive {
-  color: var(--ifm-color-secondary);
-  fill: var(--ifm-color-secondary);
-  border-bottom: 4px solid var(--ifm-color-secondary);
 }
 
 .tabBody {

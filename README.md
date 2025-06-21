@@ -21,7 +21,7 @@ Se estiveres interessado e quiseres saberes mais informações acerca desta ferr
 
 ### Online (recomendado)
 
-Para utilizares esta ferramenta, dirige-te à página oficial: [maisvalias-tool](https://Tomas-Silva-PT.github.io/maisvalias-tool).
+Para utilizares esta ferramenta, dirige-te à [página oficial](https://Tomas-Silva-PT.github.io/maisvalias-tool).
 
 ### Localmente
 
