@@ -18,6 +18,8 @@ export default function DialogIRSDeclaration({
   const [showError, setError] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
   const [activeTable, setActiveTable] = useState(0);
+  const [fillCapitalGains, setFillCapitalGains] = useState(true);
+  const [fillDividends, setFillDividends] = useState(true);
 
   function onFileUpload(e) {
     const files = e.target.files;
@@ -43,10 +45,24 @@ export default function DialogIRSDeclaration({
     reader.onload = (e) => {
       const xml_irs = e.target.result;
 
+      let capitalGains = fiscalData.byYear[year].capitalGains.irs;
+      let dividends = fiscalData.byYear[year].dividends.irs;
+      if (!fillCapitalGains) {
+        capitalGains = [];
+      }
+      if (!fillDividends) {
+        dividends = [];
+      }
+      if (capitalGains.length === 0 && dividends.length === 0) {
+        loader.style.display = "none";
+        setError(true);
+        return;
+      }
+
       const fullfilledIRS = PTIRSFormatter.format(
         xml_irs,
-        fiscalData.byYear[year].capitalGains.irs,
-        fiscalData.byYear[year].dividends.irs
+        capitalGains,
+        dividends
       );
 
       const contentFile = document.getElementById("contentFile");
@@ -157,6 +173,56 @@ export default function DialogIRSDeclaration({
                     Coloca aqui a tua declaração de IRS para podermos
                     preenchê-la com os dados calculados:
                   </p>
+                  <div className={clsx(styles.fileUploadOptions)}>
+                    {fiscalData.byYear[year].capitalGains.raw.length > 0 && (
+                      <div className={clsx(styles.fileUploadOption)}>
+                        <div class="checkbox-wrapper-6">
+                          <input
+                            title="Preencher mais-valias"
+                            class="tgl tgl-light"
+                            id="cb1-1"
+                            type="checkbox"
+                            checked={fillCapitalGains}
+                            onChange={() => {
+                              setFillCapitalGains(!fillCapitalGains);
+                            }}
+                          />
+                          <label class="tgl-btn" for="cb1-1"></label>
+                        </div>
+                        <span>
+                          Preencher mais-valias
+                          <span className={clsx(styles.fileUploadOptionInfo)}>
+                            {" - "}
+                            Anexo J Quadro 9.2A
+                          </span>
+                        </span>
+                      </div>
+                    )}
+                    {fiscalData.byYear[year].dividends.raw.length > 0 && (
+                      <div className={clsx(styles.fileUploadOption)}>
+                        <div class="checkbox-wrapper-6">
+                          <input
+                            title="Preencher dividendos"
+                            class="tgl tgl-light"
+                            id="cb1-2"
+                            type="checkbox"
+                            checked={fillDividends}
+                            onChange={() => {
+                              setFillDividends(!fillDividends);
+                            }}
+                          />
+                          <label class="tgl-btn" for="cb1-2"></label>
+                        </div>
+                        <span>
+                          Preencher dividendos
+                          <span className={clsx(styles.fileUploadOptionInfo)}>
+                            {" - "}
+                            Anexo J Quadro 8
+                          </span>
+                        </span>
+                      </div>
+                    )}
+                  </div>
                   <div id="contentFile" className={clsx(styles.fileContainer)}>
                     <Upload className={clsx(styles.fileUploadIcon)} />
                     <input
@@ -181,18 +247,22 @@ export default function DialogIRSDeclaration({
                             </div>
                           ))}
                         </div>
-                        <div
-                          className={clsx(styles.fileUploadSubmitButton)}
-                          onClick={onDeclarationUpload}
-                        >
+                        {(fillCapitalGains || fillDividends) && (
                           <div
-                            className={clsx(styles.fileUploadSubmitButtonText)}
+                            className={clsx(styles.fileUploadSubmitButton)}
+                            onClick={onDeclarationUpload}
                           >
-                            Processar {files.length} ficheiro
-                            {files.length !== 1 ? "s" : ""}
+                            <div
+                              className={clsx(
+                                styles.fileUploadSubmitButtonText
+                              )}
+                            >
+                              Processar {files.length} ficheiro
+                              {files.length !== 1 ? "s" : ""}
+                            </div>
+                            <ArrowRight />
                           </div>
-                          <ArrowRight />
-                        </div>
+                        )}
                       </>
                     )}
                   </div>
@@ -273,7 +343,7 @@ export default function DialogIRSDeclaration({
           </div>
         </div>
       )}
-      {showError && (
+      {showError && (fillCapitalGains || fillDividends) && (
         <ErrorPopup title="Erro" closeFunction={() => setError(false)}>
           <h3>Falha ao processar os ficheiros</h3>
           <span>Os ficheiros não são compatíveis com o formato esperado.</span>
@@ -291,6 +361,15 @@ export default function DialogIRSDeclaration({
             </a>
             .
           </p>
+        </ErrorPopup>
+      )}
+      {showError && !fillCapitalGains && !fillDividends && (
+        <ErrorPopup title="Erro" closeFunction={() => setError(false)}>
+          <h3>Nenhuma exportação escolhida</h3>
+          <span>
+            Tens de escolher alguma coisa para exportar, ou mais-valias ou
+            dividendos.
+          </span>
         </ErrorPopup>
       )}
     </>

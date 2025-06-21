@@ -282,6 +282,26 @@ h4 {
   fill: var(--ifm-color-secondary);
 }
 
+.fileUploadOptions {
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+  gap: 2rem;
+  font-size: calc(0.5rem + 0.3vw);
+  padding: 0.5rem;
+}
+
+.fileUploadOption {
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: calc(0.5rem + 0.3vw);
+  padding: 0.5rem;
+}
+
 @media (max-width: 960px) {
   .tableHeader > *:nth-child(2) {
     display: none;
@@ -296,3 +316,4 @@ h4 {
     display: none;
   }
 }
+
