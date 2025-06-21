@@ -256,14 +256,14 @@ h4 {
 .tablesHeader {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
   gap: 1rem;
   margin-bottom: 1rem;
   font-size: calc(0.5rem + 0.3vw);
 }
 .tableHeader {
-  width: calc(100% / 2);
+  width: auto;
   font-weight: bold;
   padding: 0.5rem;
   text-align: center;

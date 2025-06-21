@@ -14,10 +14,15 @@ export default function DialogIRSDeclaration({
   fiscalData,
   year,
 }) {
+  let capitalGains = fiscalData.byYear[year].capitalGains.irs;
+  let dividends = fiscalData.byYear[year].dividends.irs;
+
   const [files, setFiles] = useState([]);
   const [showError, setError] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
-  const [activeTable, setActiveTable] = useState(0);
+  const [activeTable, setActiveTable] = useState(
+    capitalGains.length === 0 ? 1 : 0
+  );
   const [fillCapitalGains, setFillCapitalGains] = useState(true);
   const [fillDividends, setFillDividends] = useState(true);
 
@@ -45,8 +50,6 @@ export default function DialogIRSDeclaration({
     reader.onload = (e) => {
       const xml_irs = e.target.result;
 
-      let capitalGains = fiscalData.byYear[year].capitalGains.irs;
-      let dividends = fiscalData.byYear[year].dividends.irs;
       if (!fillCapitalGains) {
         capitalGains = [];
       }
@@ -284,34 +287,38 @@ export default function DialogIRSDeclaration({
               {activeTab === 1 && (
                 <div className={clsx(styles.bodyContent)}>
                   <div className={clsx(styles.tablesHeader)}>
-                    <div
-                      className={
-                        activeTable === 0
-                          ? clsx(styles.tableHeaderActive, styles.tableHeader)
-                          : clsx(styles.tableHeader)
-                      }
-                      onClick={() => {
-                        setActiveTable(0);
-                      }}
-                    >
-                      <span>Anexo J Quadro 9.2A</span>
-                      <span> - </span>
-                      <span>Rendimentos de Incrementos Patrimoniais</span>
-                    </div>
-                    <div
-                      className={
-                        activeTable === 1
-                          ? clsx(styles.tableHeaderActive, styles.tableHeader)
-                          : clsx(styles.tableHeader)
-                      }
-                      onClick={() => {
-                        setActiveTable(1);
-                      }}
-                    >
-                      <span>Anexo J Quadro 8</span>
-                      <span> - </span>
-                      <span>Rendimentos de capitais</span>
-                    </div>
+                    {capitalGains.length > 0 && (
+                      <div
+                        className={
+                          activeTable === 0
+                            ? clsx(styles.tableHeaderActive, styles.tableHeader)
+                            : clsx(styles.tableHeader)
+                        }
+                        onClick={() => {
+                          setActiveTable(0);
+                        }}
+                      >
+                        <span>Anexo J Quadro 9.2A</span>
+                        <span> - </span>
+                        <span>Rendimentos de Incrementos Patrimoniais</span>
+                      </div>
+                    )}
+                    {dividends.length > 0 && (
+                      <div
+                        className={
+                          activeTable === 1
+                            ? clsx(styles.tableHeaderActive, styles.tableHeader)
+                            : clsx(styles.tableHeader)
+                        }
+                        onClick={() => {
+                          setActiveTable(1);
+                        }}
+                      >
+                        <span>Anexo J Quadro 8</span>
+                        <span> - </span>
+                        <span>Rendimentos de capitais</span>
+                      </div>
+                    )}
                   </div>
                   <div className={clsx(styles.tablesContainer)}>
                     {activeTable === 0 && (

@@ -124,7 +124,7 @@ De:
 ```javascript
 const broker = [
   {
-    name: "Trading212",
+    name: "Trading 212",
     logo: "/img/brokers/trading212.png",
     active: true,
     docs: [
@@ -179,7 +179,7 @@ Na função `ContentStep2`, adiciona o novo componente:
 function ContentStep2(props) {
     return (
       <>
-        {broker.name === "Trading212" && <FilesTrading212 setFiscalData={setFiscalData} setStep={setStep} />}
+        {broker.name === "Trading 212" && <FilesTrading212 setFiscalData={setFiscalData} setStep={setStep} />}
         {broker.name === "Revolut" && <FilesRevolut setFiscalData={setFiscalData} setStep={setStep} />}
         {broker.name === "XTB" && <FilesXTB setFiscalData={setFiscalData} setStep={setStep} />}
       </>

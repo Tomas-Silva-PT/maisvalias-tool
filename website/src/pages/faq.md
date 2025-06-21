@@ -38,7 +38,7 @@ Lembra-te de verificar sempre os resultados antes de os utilizares, já que os r
 Sim, devido aos requisitos da ferramenta, ela foi desenvolvida para fornecer automaticamente os valores a declarar de **todos os anos fiscais** em que tal declaração é necessária. A interface agrupa os resultados por ano fiscal em painéis de fácil navegação.
 
 ## Quem deve utilizar esta ferramenta?
-Esta ferramenta foi pensada para investidores com contas em corretoras como a Trading212, a Revolut, a Degiro, entre outras. Consulta a [documentação](/docs/category/corretoras-suportadas) para saberes as que são compatíveis.
+Esta ferramenta foi pensada para investidores com contas em corretoras como a Trading 212, a Revolut, a Degiro, entre outras. Consulta a [documentação](/docs/category/corretoras-suportadas) para saberes as que são compatíveis.
 
 ## Quais as limitações desta ferramenta?
 Para saberes das atuais limitações desta ferramenta, consulta a [documentação](/docs/intro#%EF%B8%8F-quais-os-pressupostos-e-limitações).

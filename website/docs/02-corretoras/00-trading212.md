@@ -1,10 +1,10 @@
-# Trading212
+# Trading 212
 
 Descobre como utilizar a ferramenta com esta corretora.
 
 Para utilizares a ferramenta `maisvalias-tool` com esta corretora, precisas de obter o histórico das transações efetuadas **desde do ano em que realizaste a primeira compra de um ativo**.
 
-O seguinte guia vai ensinar-te, passo a passo, como calcular automaticamente as tuas mais valias obtidas através da Trading212.
+O seguinte guia vai ensinar-te, passo a passo, como calcular automaticamente as tuas mais valias obtidas através da Trading 212.
 
 ## Como obter ficheiro do histórico de transações
 
@@ -26,9 +26,9 @@ O seguinte guia vai ensinar-te, passo a passo, como calcular automaticamente as 
 
 :::info
 
-A Trading212 limita o intervalo de datas, **permitindo apenas exportar 1 ano de cada vez**.
+A Trading 212 limita o intervalo de datas, **permitindo apenas exportar 1 ano de cada vez**.
 
-Assim, se utilizas a Trading212 desde 2022, **precisarás exportar o histórico ano a ano**, de 2022 até ao ano atual.
+Assim, se utilizas a Trading 212 desde 2022, **precisarás exportar o histórico ano a ano**, de 2022 até ao ano atual.
 :::
 
 ### Passo 5: Exportar histórico
@@ -41,7 +41,7 @@ Assim, se utilizas a Trading212 desde 2022, **precisarás exportar o histórico 
 
 ### Passo 6: Repetir passos anteriores, para cada ano
 
-Repete os passos anteriores para cada ano em que tens conta na Trading212.
+Repete os passos anteriores para cada ano em que tens conta na Trading 212.
 
 Se, por exemplo, tiveres criado conta em 2022, exporta o histórico de 2022, 2023, 2024, ..., até ao ano atual.
 
@@ -53,7 +53,7 @@ No site oficial, navega até à página `Demonstração`:
 
 ![step](../../static/img/brokers/trading212/steps/step1.png)
 
-De seguida, seleciona a `Trading212`:
+De seguida, seleciona a `Trading 212`:
 
 ![step](../../static/img/brokers/trading212/steps/step2.png)
 
