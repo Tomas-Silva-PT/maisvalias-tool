@@ -2,7 +2,7 @@ import { CapitalGainToIRS } from "../../../models/capitalgain";
 import { DividendToIRS } from "../../../models/dividend";
 
 class PTIRSFormatter {
-  static async format(xml : string, capitalGains : CapitalGainToIRS[], dividends : DividendToIRS[]) {
+  static async format(xml: string, capitalGains: CapitalGainToIRS[], dividends: DividendToIRS[]) {
     xml = xml.replace(/^\uFEFF/, "").trimStart(); // strip the BOM (UTF-8 Byte Order Mark)
     if (
       typeof window !== "undefined" &&
@@ -16,7 +16,7 @@ class PTIRSFormatter {
     }
   }
 
-  static async _formatBrowserVersion(xml : string, capitalGains : CapitalGainToIRS[], dividends : DividendToIRS[]) {
+  static async _formatBrowserVersion(xml: string, capitalGains: CapitalGainToIRS[], dividends: DividendToIRS[]) {
     const parser = new DOMParser();
 
     const xmlDoc = parser.parseFromString(xml, "text/xml");
@@ -102,7 +102,7 @@ class PTIRSFormatter {
       DespesasEncargos.textContent = gain["Despesas e Encargos"].toString();
       linha.appendChild(DespesasEncargos);
 
-      const ImpostoPagoNoEstrangeiro = xmlDoc.createElementNS(quadro9.namespaceURI, 
+      const ImpostoPagoNoEstrangeiro = xmlDoc.createElementNS(quadro9.namespaceURI,
         "ImpostoPagoNoEstrangeiro"
       );
       ImpostoPagoNoEstrangeiro.textContent =
@@ -119,6 +119,31 @@ class PTIRSFormatter {
       currNLinha++;
       currNumero++;
     });
+
+    let quadro9_2A_T01SomaC01 = quadro9.querySelector("AnexoJq092AT01SomaC01");
+    if (!quadro9_2A_T01SomaC01) {
+      quadro9_2A_T01SomaC01 = xmlDoc.createElementNS(quadro9.namespaceURI, "AnexoJq092AT01SomaC01");
+      quadro9_2A_T01SomaC01.textContent = (Math.round(capitalGains.reduce((acc, gain) => acc + gain["Valor de Realização"], 0) * 100) / 100).toString();
+      quadro9.appendChild(quadro9_2A_T01SomaC01);
+    }
+    let quadro9_2A_T01SomaC02 = quadro9.querySelector("AnexoJq092AT01SomaC02");
+    if (!quadro9_2A_T01SomaC02) {
+      quadro9_2A_T01SomaC02 = xmlDoc.createElementNS(quadro9.namespaceURI, "AnexoJq092AT01SomaC02");
+      quadro9_2A_T01SomaC02.textContent = (Math.round(capitalGains.reduce((acc, gain) => acc + gain["Valor de Aquisição"], 0) * 100) / 100).toString();
+      quadro9.appendChild(quadro9_2A_T01SomaC02);
+    }
+    let quadro9_2A_T01SomaC03 = quadro9.querySelector("AnexoJq092AT01SomaC03");
+    if (!quadro9_2A_T01SomaC03) {
+      quadro9_2A_T01SomaC03 = xmlDoc.createElementNS(quadro9.namespaceURI, "AnexoJq092AT01SomaC03");
+      quadro9_2A_T01SomaC03.textContent = (Math.round(capitalGains.reduce((acc, gain) => acc + gain["Despesas e Encargos"], 0) * 100) / 100).toString();
+      quadro9.appendChild(quadro9_2A_T01SomaC03);
+    }
+    let quadro9_2A_T01SomaC04 = quadro9.querySelector("AnexoJq092AT01SomaC04");
+    if (!quadro9_2A_T01SomaC04) {
+      quadro9_2A_T01SomaC04 = xmlDoc.createElementNS(quadro9.namespaceURI, "AnexoJq092AT01SomaC04");
+      quadro9_2A_T01SomaC04.textContent = (Math.round(capitalGains.reduce((acc, gain) => acc + gain["Imposto retido no estrangeiro"], 0) * 100) / 100).toString();
+      quadro9.appendChild(quadro9_2A_T01SomaC04);
+    }
 
     // Adicionar as mais valias de dividendos
     // No caso das mais valias de capital, verificar o quadro 8A
@@ -144,24 +169,24 @@ class PTIRSFormatter {
     // Adicionar as mais valias de capital
     dividends.forEach((div) => {
       // console.log("Dividendo: " + JSON.stringify(div));
-      const linha = xmlDoc.createElementNS(quadro8.namespaceURI,"AnexoJq08AT01-Linha");
+      const linha = xmlDoc.createElementNS(quadro8.namespaceURI, "AnexoJq08AT01-Linha");
       linha.setAttribute("numero", currNumero.toString());
 
-      const NLinha = xmlDoc.createElementNS(quadro8.namespaceURI,"NLinha");
+      const NLinha = xmlDoc.createElementNS(quadro8.namespaceURI, "NLinha");
       NLinha.textContent = currNLinha.toString();
       linha.appendChild(NLinha);
 
-      const CodRendimento = xmlDoc.createElementNS(quadro8.namespaceURI,"CodRendimento");
+      const CodRendimento = xmlDoc.createElementNS(quadro8.namespaceURI, "CodRendimento");
       CodRendimento.textContent = div["Código Rendimento"]
         .split("-")[0]
         .trim();
       linha.appendChild(CodRendimento);
 
-      const CodPais = xmlDoc.createElementNS(quadro8.namespaceURI,"CodPais");
+      const CodPais = xmlDoc.createElementNS(quadro8.namespaceURI, "CodPais");
       CodPais.textContent = div["País da fonte"].split("-")[0].trim();
       linha.appendChild(CodPais);
 
-      const RendimentoBruto = xmlDoc.createElementNS(quadro8.namespaceURI,"RendimentoBruto");
+      const RendimentoBruto = xmlDoc.createElementNS(quadro8.namespaceURI, "RendimentoBruto");
       RendimentoBruto.textContent = div["Rendimento Bruto"].toString();
       linha.appendChild(RendimentoBruto);
 
@@ -169,7 +194,7 @@ class PTIRSFormatter {
         "ImpostoPagoEstrangeiroPaisFonte"
       );
       ImpostoPagoEstrangeiroPaisFonte.textContent =
-      div["Imposto Pago no Estrangeiro - No país da fonte"].toString();
+        div["Imposto Pago no Estrangeiro - No país da fonte"].toString();
       linha.appendChild(ImpostoPagoEstrangeiroPaisFonte);
 
       quadro8A.appendChild(linha);
@@ -177,12 +202,35 @@ class PTIRSFormatter {
       currNumero++;
     });
 
+    let quadro8_A_T01SomaC01 = quadro8.querySelector("AnexoJq08AT01SomaC01");
+    if (!quadro8_A_T01SomaC01) {
+      quadro8_A_T01SomaC01 = xmlDoc.createElementNS(quadro8.namespaceURI, "AnexoJq08AT01SomaC01");
+      quadro8_A_T01SomaC01.textContent = (Math.round((dividends.reduce((acc, dividend) => acc + dividend["Rendimento Bruto"], 0) * 100)) / 100).toString();
+      quadro8.appendChild(quadro8_A_T01SomaC01);
+    }
+    let quadro8_A_T01SomaC02 = quadro8.querySelector("AnexoJq08AT01SomaC02");
+    if (!quadro8_A_T01SomaC02) {
+      quadro8_A_T01SomaC02 = xmlDoc.createElementNS(quadro8.namespaceURI, "AnexoJq08AT01SomaC02");
+      quadro8_A_T01SomaC02.textContent = (Math.round((dividends.reduce((acc, dividend) => acc + dividend["Imposto Pago no Estrangeiro - No país da fonte"], 0) * 100)) / 100).toString();
+      quadro8.appendChild(quadro8_A_T01SomaC02);
+    }
+    // let quadro8_A_T01SomaC03 = quadro8.querySelector("AnexoJq082AT01");
+    // if (!quadro8_A_T01SomaC03) {
+    //   quadro8_A_T01SomaC03 = xmlDoc.createElementNS(quadro8.namespaceURI, "AnexoJq082AT01");
+    //   quadro8.appendChild(quadro8_A_T01SomaC03);
+    // }
+    // let quadro8_A_T01SomaC04 = quadro8.querySelector("AnexoJq082AT01");
+    // if (!quadro8_A_T01SomaC04) {
+    //   quadro8_A_T01SomaC04 = xmlDoc.createElementNS(quadro8.namespaceURI, "AnexoJq082AT01");
+    //   quadro8.appendChild(quadro8_A_T01SomaC04);
+    // }
+
     const xmlString = new XMLSerializer().serializeToString(xmlDoc);
 
     return xmlString;
   }
 
-  static async _formatServerVersion(xml : string, capitalGains : CapitalGainToIRS[], dividends : DividendToIRS[]) {
+  static async _formatServerVersion(xml: string, capitalGains: CapitalGainToIRS[], dividends: DividendToIRS[]) {
     // Node.js (dynamic import to avoid bundling errors in browser)
     const { DOMParser, XMLSerializer } = await import("@xmldom/xmldom");
     const parser = new DOMParser();
@@ -223,7 +271,7 @@ class PTIRSFormatter {
       const linha = xmlDoc.createElement("AnexoJq092AT01-Linha");
       linha.setAttribute("numero", currNumero.toString());
 
-      const addNode = (tag : string, value : string) => {
+      const addNode = (tag: string, value: string) => {
         const node = xmlDoc.createElement(tag);
         node.textContent = value;
         linha.appendChild(node);
@@ -283,7 +331,7 @@ class PTIRSFormatter {
       const linha = xmlDoc.createElement("AnexoJq08AT01-Linha");
       linha.setAttribute("numero", currNumero.toString());
 
-      const addNode = (tag : string, value : string) => {
+      const addNode = (tag: string, value: string) => {
         const node = xmlDoc.createElement(tag);
         node.textContent = value;
         linha.appendChild(node);

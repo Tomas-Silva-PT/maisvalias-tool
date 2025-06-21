@@ -14,22 +14,6 @@ class CapitalGainsFormatter {
             const realizedValue = realizedTransaction.realizedValue;
             const acquiredValue = realizedTransaction.acquiredValue;
 
-            let code: string = "";
-            switch (realizedTransaction.buy.asset.assetType) {
-                case "EQUITY":
-                    code = "G01";
-                    break;
-                case "ETF":
-                    code = "G20";
-                    break;
-            }
-
-            let countryDomiciled = buy.asset.countryDomiciled;
-            // Para ações domiciliadas em Portugal e adquiridas em corretoras estrangeiras, o país da fonte deve ser o da corretora
-            if (countryDomiciled?.code === "620") {
-                countryDomiciled = buy.broker.country;
-            }
-
             const ticker = sell.asset.ticker;
             const dataAquisicao = buy.date
             const valorAquisicao = acquiredValue;
