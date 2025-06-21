@@ -360,8 +360,8 @@
   position: relative;
   display: block;
   content: "";
-  width: 50%;
-  height: 100%;
+  width: 45%;
+  height: 85%;
 }
 .checkbox-wrapper-6 .tgl + .tgl-btn:after {
   left: 0;
