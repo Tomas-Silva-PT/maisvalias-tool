@@ -1,3 +1,44 @@
+# [1.1.0](https://github.com/Tomas-Silva-PT/maisvalias-tool/compare/v1.0.0...v1.1.0) (2025-06-21)
+
+
+### Bug Fixes
+
+* acquisition date and realized date ([204c18d](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/204c18d46b181124cc1798ea29ccb9c7253f9289))
+* add total's columns to generated IRS XML ([936b2a7](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/936b2a769f46a994e7b8f7c8a0e43dfc9358fe14))
+* bad import ([da67dee](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/da67dee2074d7b1f1ad5f281cdd91d86aa31a631))
+* dividend missing country ([f3e95db](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/f3e95dbf818c785c0058b99347e5b764b49b023c))
+* **docs:** remove unnecessary icons ([736d4ad](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/736d4ad2827d4c0c9e4c797792b894dbd0af0d4a))
+* exchange rate for trading212 parser ([f5b8046](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/f5b80469e601052ac9ef886d15900e39f8f11f92))
+* fallback domiciled country for dividends ([28bd785](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/28bd785ea35abaadd4860b9d07c7cbb537da1221))
+* missing error dialog on step 2 ([4c6ad24](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/4c6ad245869313eb9c17cbfd3ba7b4b5d9ade8d6))
+* simplify logs ([58cb043](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/58cb043e6f32a157906fd6426c98b0f91c4acb64))
+* simplify logs (2) ([87a9cc4](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/87a9cc4ce90738c2b204b5b57512c7c3daeb2399))
+* simplify logs (3) ([a1d6f95](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/a1d6f9564cedd62b2535b57f2456987c2eed4a9b))
+* update README.md ([9fa220e](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/9fa220ead29240e842f37fe3d7fcae7f30a72cc2))
+* **website:** fix import statement ([18084e5](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/18084e5f6b98540c4b237408077e4197c163993a))
+* wrong timezone for exchange rate dates fetched from API ([e96da3a](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/e96da3a9df2814b4add5f1645ad3ab12dfc3a8c0))
+
+
+### Features
+
+* add fallback capabilities to call API ([45021d3](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/45021d3ab4bb5e0e27bcbe113faf553a26151402))
+* add new proxy for fallback api calls ([ad7497b](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/ad7497b5ef4b2d11a6aefbc0e2a287366fe33f5f))
+* add notice for capital gains domiciled country ([3f53dad](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/3f53dad9d8be4e594c46f7d06b76d8e0e65fba03))
+* enrich excel exportability ([ae1e1c3](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/ae1e1c3ea4dbb24786db3287b89b5f308cf07da5))
+* **website:** add contact to page footer ([120c708](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/120c708fcdad31ee27e31a56b46303d8999f20a3))
+* **website:** add error handling for unavailabilty of proxies ([9f1d9e9](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/9f1d9e9383521206440cdac66e9c54faf8540ead))
+* **website:** add simple error handling for livedemo ([d76e963](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/d76e963c0cb274441d1f71917361be2c76c4ee9c))
+* **website:** add smooth scrolling to livedemo ([c57fae2](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/c57fae2128d875c758d75e259a9700b7aca3f8d3))
+* **website:** enhance IRS exportability ([9b0bbd3](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/9b0bbd3c5b74a2d25889ee17d4ba34022ccdba8d))
+* **website:** toggle IRS exportability elements ([661ed34](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/661ed34a21ea1c9ae1c1c39844686bde2651388d))
+* **website:** UI overhaul ([1d49d66](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/1d49d664e855b7455f5807a224cb1c34ec990cee))
+
+
+### Performance Improvements
+
+* add logic to minimize API calls for exchange rates fetching ([66ae97b](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/66ae97b994360522e68d378d6ebe0424fd5ed408))
+* reduce API calls with batching ([5d58790](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/5d58790b3ec3dca813e622964d44047d09184789))
+
 # 1.0.0 (2025-05-25)
 
 
