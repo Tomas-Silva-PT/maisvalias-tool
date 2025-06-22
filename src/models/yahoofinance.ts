@@ -150,7 +150,7 @@ class YahooFinance {
             low: quotes.low[index]
           }
         });
-        exchangeRates = exchangeRates.concat(exchangeRates, zipped);
+        exchangeRates = exchangeRates.concat(zipped);
       }
     }
 
