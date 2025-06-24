@@ -16,7 +16,7 @@ class DividendsFormatter {
       const taxes = transaction.taxes;
       const expenses = fees + taxes;
       const originalCurrency = transaction.transaction.netAmountCurrency;
-      const exchangeRate = originalCurrency === "EUR" ? 1 : transaction.transaction.exchangeRate || 1;
+      const exchangeRate = originalCurrency === "EUR" ? 1 : Math.round((transaction.transaction.exchangeRate || 1)*1000)/1000;
 
 
       const balance = Math.round((amount - expenses) * 100) / 100;

@@ -1,0 +1,22 @@
+Income from Sells,,,,,,,,,,
+Date acquired,Date sold,Symbol,Security name,ISIN,Country,Quantity,Cost basis,Gross proceeds,Gross PnL,Currency
+2021-02-26,2021-07-19,NVDA,Nvidia,US67066G1040,US,0.02191104,12.08,15.68,3.6,USD
+2021-05-10,2021-06-04,SPOT,Spotify,LU1778762911,US,0.05278936,12.15,12.54,0.39,USD
+,,,,,,,,,,
+Other income & fees,,,,,,,,,,
+Date,Symbol,Security name,ISIN,Country,Gross amount,Withholding tax,Net Amount,Currency,,
+2021-09-10,MSFT,Microsoft dividend,US5949181045,US,0.02,$0,Ã¢ÂÂ¬0.02,EUR,,
+2021-12-10,MSFT,Microsoft dividend,US5949181045,US,0.02,$0,Ã¢ÂÂ¬0.02,EUR,,
+2022-03-11,MSFT,Microsoft dividend,US5949181045,US,0.02,$0,Ã¢ÂÂ¬0.02,EUR,,
+2022-06-10,MSFT,Microsoft dividend,US5949181045,US,0.02,$0,Ã¢ÂÂ¬0.02,EUR,,
+2022-09-12,MSFT,Microsoft dividend,US5949181045,US,0.02,$0,Ã¢ÂÂ¬0.02,EUR,,
+2022-12-09,MSFT,Microsoft dividend,US5949181045,US,0.02,$0,Ã¢ÂÂ¬0.02,EUR,,
+2023-03-13,MSFT,Microsoft dividend,US5949181045,US,0.02,$0,Ã¢ÂÂ¬0.02,EUR,,
+2023-06-09,MSFT,Microsoft dividend,US5949181045,US,0.02,$0,Ã¢ÂÂ¬0.02,EUR,,
+2023-09-15,MSFT,Microsoft dividend,US5949181045,US,0.02,$0,Ã¢ÂÂ¬0.02,EUR,,
+2023-12-18,MSFT,Microsoft dividend,US5949181045,US,0.02,$0,Ã¢ÂÂ¬0.02,EUR,,
+2024-03-15,MSFT,Microsoft dividend,US5949181045,US,0.02,$0,Ã¢ÂÂ¬0.02,EUR,,
+2024-06-14,MSFT,Microsoft dividend,US5949181045,US,0.02,$0,Ã¢ÂÂ¬0.02,EUR,,
+2024-09-13,MSFT,Microsoft dividend,US5949181045,US,0.02,$0,Ã¢ÂÂ¬0.02,EUR,,
+2024-12-13,MSFT,Microsoft dividend,US5949181045,US,0.02,$0,Ã¢ÂÂ¬0.02,EUR,,
+2025-03-14,MSFT,Microsoft dividend,US5949181045,US,0.02,$0,Ã¢ÂÂ¬0.02,EUR,,

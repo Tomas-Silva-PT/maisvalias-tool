@@ -9,7 +9,7 @@ class BaseProxy implements Proxy {
     }
 
     _replaceDomain(url: string): string {
-        return 'https://api.allorigins.win/get?url=' + encodeURIComponent(url);
+        return encodeURIComponent(url);
     }
 }
 

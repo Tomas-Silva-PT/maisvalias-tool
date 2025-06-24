@@ -97,7 +97,6 @@ export default function LiveDemoForm() {
   const [progress, setProgress] = useState(0);
   const [helpDialogVisible, setHelpDialogVisible] = useState(false);
   const [fiscalData, setFiscalData] = useState({});
-  const [IRSdialogVisible, setIRSdialogVisible] = useState(false);
   const [fiscalYear, setFiscalYear] = useState(null);
   const [errorType, setErrorType] = useState(null);
   const [error, setError] = useState(null);
