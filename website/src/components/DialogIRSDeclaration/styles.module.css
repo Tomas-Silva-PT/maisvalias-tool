@@ -36,6 +36,7 @@ h4 {
 .card {
   position: relative;
   max-width: 95%;
+  max-height: 80%;
   display: flex;
   flex-direction: column;
   background: rgba(255, 255, 255, 0.15);
@@ -85,7 +86,11 @@ h4 {
 
 .content {
   padding: 1rem;
+  overflow-y: auto;
+
 }
+
+
 
 .fileUploadIcon {
   width: 3rem;
