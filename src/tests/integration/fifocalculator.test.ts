@@ -10,11 +10,11 @@ describe('FIFOCalculator', () => {
         const parser = new RevolutParser();
         const statement = new Statement([]);
 
-        const profitLossFilePath = './data/mockdata/revolut_profit_loss_statement.csv';
+        const profitLossFilePath = './data/mockdata/revolut/revolut_profit_loss_statement.csv';
         const profitLossFileData = fs.readFileSync(profitLossFilePath, 'utf8');
         parser.loadIsins(profitLossFileData)
 
-        const operationsFilePath = './data/mockdata/revolut_account_statement.csv';
+        const operationsFilePath = './data/mockdata/revolut/revolut_account_statement.csv';
         const operationsFileData = fs.readFileSync(operationsFilePath, 'utf8');
         const transactions = parser.parse(operationsFileData);
 

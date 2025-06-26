@@ -1,11 +1,11 @@
 # Trading212 files
 
-t212*
 data/revolut*
 data/*.xml
 reminder.txt
 *.xlsx
 maisvalias-tool/
+data/mockdata/trading212/ignore
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

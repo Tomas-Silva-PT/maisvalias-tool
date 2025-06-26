@@ -14,9 +14,11 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@xmldom/xmldom": "^0.9.8"
+    "@xmldom/xmldom": "^0.9.8",
+    "luxon": "^3.6.1"
   },
   "devDependencies": {
+    "@types/luxon": "^3.6.2",
     "@types/node": "^22.15.32",
     "typescript": "^5.8.3"
   }

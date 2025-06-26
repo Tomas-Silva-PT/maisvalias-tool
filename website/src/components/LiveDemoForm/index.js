@@ -6,6 +6,7 @@ import { ArrowRight, Upload, X } from "lucide-react";
 
 import FilesRevolut from "@site/src/components/FilesRevolut";
 import FilesTrading212 from "@site/src/components/FilesTrading212";
+import FilesDegiro from "@site/src/components/FilesDegiro";
 import DisclaimerPopup from "@site/src/components/DisclaimerPopup";
 import HelpDialog from "@site/src/components/HelpDialog";
 import FiscalSummary from "@site/src/components/FiscalSummary";
@@ -74,8 +75,14 @@ const brokers = [
   {
     name: "Degiro",
     logo: "/img/brokers/degiro.png",
-    active: false,
-    visible: false,
+    active: true,
+    visible: true,
+    docs: [
+      {
+        message: "Não sabes onde encontrar os ficheiros?",
+        link: "docs/corretoras/degiro",
+      },
+    ],
   },
   {
     name: "Revolut",
@@ -481,6 +488,9 @@ export default function LiveDemoForm() {
         )}
         {broker.name === "Revolut" && (
           <FilesRevolut id={props.id} setFiscalData={setGainsAndDividends} />
+        )}
+        {broker.name === "Degiro" && (
+          <FilesDegiro id={props.id} setFiscalData={setGainsAndDividends} />
         )}
         {renderError(error)}
       </>

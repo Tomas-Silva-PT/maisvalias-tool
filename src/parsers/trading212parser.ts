@@ -80,6 +80,8 @@ class Trading212Parser implements Parser {
       if (transaction.type) transactions.push(transaction);
     });
 
+    // console.log("Transactions: " + JSON.stringify(transactions));
+
     return transactions;
   }
 }
