@@ -21,6 +21,7 @@
     "@xmldom/xmldom": "^0.9.8",
     "clsx": "^2.0.0",
     "lucide-react": "^0.487.0",
+    "luxon": "^3.6.1",
     "prism-react-renderer": "^2.3.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
