@@ -1,3 +1,16 @@
+# [1.2.0](https://github.com/Tomas-Silva-PT/maisvalias-tool/compare/v1.1.0...v1.2.0) (2025-07-01)
+
+
+### Bug Fixes
+
+* add missing fees on Trading212 and Degiro ([b459b35](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/b459b35ac59b5d52598e1b58e82dfd18dc9763aa))
+* **revolut:** not taking account fees ([6322487](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/63224877ee43378bcb07c4067a3dde630388b83d))
+
+
+### Features
+
+* add broker - degiro ([cc876d6](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/cc876d6a02dcba0a829f6b98104d0b22e1d316e7))
+
 # [1.1.0](https://github.com/Tomas-Silva-PT/maisvalias-tool/compare/v1.0.0...v1.1.0) (2025-06-21)
 
 
