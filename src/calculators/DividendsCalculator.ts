@@ -1,12 +1,13 @@
 import { Currency } from "../models/currency";
 import { DividendTransaction, Transaction } from "../models/transaction";
+import { DateTime } from "luxon";
 
 class DividendsCalculator {
     async calculate(transactions: Transaction[], year?: number, currency: string = "EUR"): Promise<DividendTransaction[]> {
         const currencyConverter = new Currency();
         const dividendTransactions = transactions.filter(
             (t) =>
-                t.type === "Dividend" && (!year || t.date.startsWith(year.toString()))
+                t.type === "Dividend" && (!year || t.date.year === year)
         );
         const dividends: DividendTransaction[] = [];
 

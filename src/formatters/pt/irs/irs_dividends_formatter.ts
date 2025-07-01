@@ -12,7 +12,7 @@ class PTDividendsFormatter {
     // Agrupar dividendos por ativo e ano
     for (const dividend of dividends) {
       const isin = dividend.transaction.asset.isin;
-      const year = dividend.transaction.date.substring(0, 4);
+      const year = dividend.transaction.date.year;
       dividendsByAsset[isin] ??= {};
       dividendsByAsset[isin][year] ??= [];
       dividendsByAsset[isin][year].push(dividend);
@@ -44,7 +44,7 @@ class PTDividendsFormatter {
           countryDomiciled = yearGroup[0].transaction.broker.country;
         }
 
-        const anoRendimento = yearGroup[0].transaction.date.substring(0, 4);
+        const anoRendimento = yearGroup[0].transaction.date.year;
         const codigoRendimento = "E11 - Dividendos ou lucros - sem retenção em Portugal";
         let paisFonte = "";
         if(countryDomiciled?.code) {

@@ -278,10 +278,10 @@ export default function LiveDemoForm() {
     );
 
     let filteredCapitalGainsYears = capitalGains.map((gain) =>
-      Number(gain.sell.date.substring(0, 4))
+      Number(gain.sell.date.year)
     );
     let filteredDividendsYears = dividends.map((div) =>
-      Number(div.transaction.date.substring(0, 4))
+      Number(div.transaction.date.year)
     );
 
     const years = [
@@ -304,10 +304,10 @@ export default function LiveDemoForm() {
 
     for (const year of years) {
       let yearCapitalGains = capitalGains.filter(
-        (gain) => gain.sell.date.substring(0, 4) == year
+        (gain) => gain.sell.date.year == year
       );
       let yearDividends = dividends.filter(
-        (div) => div.transaction.date.substring(0, 4) == year
+        (div) => div.transaction.date.year == year
       );
 
       fiscalReport.byYear[year] = {};

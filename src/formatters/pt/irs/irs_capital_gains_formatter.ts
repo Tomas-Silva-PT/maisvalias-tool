@@ -39,13 +39,13 @@ class PTCapitalGainsFormatter {
         paisFonte = countryDomiciled.code ? `${countryDomiciled?.code} - ${countryDomiciled?.namePt}` : "";
       }
       const codigo = code;
-      const anoAquisicao = new Date(buy.date).getFullYear();
-      const mesAquisicao = new Date(buy.date).getMonth() + 1;
-      const diaAquisicao = new Date(buy.date).getDate(); // corrigido: getDay() retorna o dia da semana
+      const anoAquisicao = buy.date.year;
+      const mesAquisicao = buy.date.month;
+      const diaAquisicao = buy.date.day; // corrigido: getDay() retorna o dia da semana
       const valorAquisicao = acquiredValue;
-      const anoRealizacao = new Date(sell.date).getFullYear();
-      const mesRealizacao = new Date(sell.date).getMonth() + 1;
-      const diaRealizacao = new Date(sell.date).getDate(); // corrigido: getDay() retorna o dia da semana
+      const anoRealizacao = sell.date.year;
+      const mesRealizacao = sell.date.month;
+      const diaRealizacao = sell.date.day; // corrigido: getDay() retorna o dia da semana
       const valorRealizacao = realizedValue;
       const despesasEncargos = fees;
       const impostoRetido = taxes;

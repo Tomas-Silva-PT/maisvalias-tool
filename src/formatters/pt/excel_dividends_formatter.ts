@@ -24,7 +24,7 @@ class ExcelDividendsFormatter {
             const dividend: DividendToExcel = {
                 "Ticker": ticker,
                 "ISIN": isin,
-                "Data": date,
+                "Data": date.toISODate()!,
                 "Valor": amount,
                 "Despesas": expenses,
                 "Moeda Original": originalCurrency,

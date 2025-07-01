@@ -95,8 +95,7 @@ class DegiroParser implements Parser {
 
 
             const transaction = new Transaction(
-                date,
-                time,
+                utcDate,
                 type,
                 product,
                 isin,
@@ -163,8 +162,7 @@ class DegiroParser implements Parser {
 
 
             const transaction = new Transaction(
-                date,
-                time,
+                utcDate,
                 type,
                 product,
                 isin,

@@ -2,10 +2,10 @@ import { Asset } from "./asset.js";
 import { Tax } from "./tax.js";
 import { Fee } from "./fee.js";
 import { Broker } from "./brokers/broker.js";
+import { DateTime } from "luxon";
 
 class Transaction {
-    date: string;
-    time: string;
+    date: DateTime;
     type: string;
     asset: Asset;
     shares: number;
@@ -15,9 +15,8 @@ class Transaction {
     fees?: Fee[];
     broker: Broker;
     exchangeRate? : number;
-    constructor(date : string, time : string, type : string, ticker : string, isin : string, shares : number, assetCurrency : string, netAmount : number, netAmountCurrency : string, broker : Broker, taxes? : Tax[], fees? : Fee[], exchangeRate? : number) {
+    constructor(date : DateTime, type : string, ticker : string, isin : string, shares : number, assetCurrency : string, netAmount : number, netAmountCurrency : string, broker : Broker, taxes? : Tax[], fees? : Fee[], exchangeRate? : number) {
         this.date = date;
-        this.time = time;
         this.type = type;
         this.asset = new Asset(ticker, isin, assetCurrency);
         this.shares = shares;
@@ -30,13 +29,12 @@ class Transaction {
     }
 
     toString() : string {
-        return `Transaction(Date: ${this.date}, Time: ${this.time}, Ticker: ${this.asset.ticker}, ISIN: ${this.asset.isin}, Shares: ${this.shares}, Net Amount: ${this.netAmount}, Exchange Rate: ${this.exchangeRate})`;
+        return `Transaction(Date: ${this.date.toFormat("yyyy-MM-dd HH:mm:ss")}, Ticker: ${this.asset.ticker}, ISIN: ${this.asset.isin}, Shares: ${this.shares}, Net Amount: ${this.netAmount}, Exchange Rate: ${this.exchangeRate})`;
     }
 
     equals(other : Transaction) : boolean {
         return (
-            this.date === other.date &&
-            this.time === other.time &&
+            this.date.equals(other.date) &&
             this.type === other.type &&
             this.asset.equals(other.asset) &&
             this.shares === other.shares &&

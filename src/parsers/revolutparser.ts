@@ -2,6 +2,7 @@ import { Transaction } from "../models/transaction.js";
 import { Parser } from "./parser.js";
 import { Fee } from "../models/fee.js";
 import { Revolut } from "../models/brokers/revolut.js";
+import { DateTime } from "luxon";
 
 class RevolutParser implements Parser {
   isins?: Record<string, string>[];
@@ -98,9 +99,16 @@ class RevolutParser implements Parser {
       // console.log("Record: " + JSON.stringify(record));
       if (!record["Date"]) return;
 
-      const dateObj = new Date(record["Date"]);
-      const date = dateObj.toISOString().split("T")[0];
-      const time = dateObj.toLocaleTimeString("pt-PT", { hour12: false });
+      const oDate = new Date(record["Date"]);
+      const date = oDate.toISOString().split("T")[0];
+      const time = oDate.toLocaleTimeString("pt-PT", { hour12: false });
+
+      const utcDate = DateTime.fromFormat(
+        `${date} ${time}`,
+        "yyyy-MM-dd HH:mm:ss", { zone: "utc" }
+      )
+
+
       let type = record["Type"];
       // console.log("Type: " + type);
       if (type == "BUY - MARKET") type = "Buy";
@@ -117,8 +125,8 @@ class RevolutParser implements Parser {
       // console.log("Currency: " + amountCurrency);
       let exchangeRate = 1 / parseFloat(record["FX Rate"].replace("\r", "").replace(",", ".")); // Porque a taxa de câmbio vem do EUR para a moeda do ativo, e nós queremos ao contrário
       if (isNaN(exchangeRate) || exchangeRate < Number.EPSILON) exchangeRate = 1;
-      const feeAmount = Math.abs(Math.round((totalAmount - priceShare * shares)*100)/100);
-      
+      const feeAmount = Math.abs(Math.round((totalAmount - priceShare * shares) * 100) / 100);
+
       // if (ticker === "SPOT" || ticker === "NVDA") console.log(`[${ticker}] Fee Amount: ` + feeAmount);
       const fees: Fee[] = [];
       let amount = totalAmount;
@@ -131,8 +139,7 @@ class RevolutParser implements Parser {
       const isin = this.isins?.find((i) => i.ticker === ticker)?.isin;
       if (isin) {
         const transaction = new Transaction(
-          date,
-          time,
+          utcDate,
           type,
           ticker,
           isin,
@@ -151,9 +158,9 @@ class RevolutParser implements Parser {
       if (!isin && type !== "Buy") {
         throw new Error(
           "Invalid file data: no isin found for " +
-            type +
-            " of ticker " +
-            ticker
+          type +
+          " of ticker " +
+          ticker
         );
       }
     });

@@ -9,7 +9,7 @@ type DividendForUser = {
 };
 
 type DividendToIRS = {
-  "Ano rendimento": string,
+  "Ano rendimento": number,
   "Código Rendimento":
   string,
   "País da fonte": string,

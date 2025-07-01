@@ -12,7 +12,7 @@ class FIFOCalculator implements CapitalGainsCalculator {
             const shares = transaction.shares;
 
             // Verificar se a venda ocorreu no ano especificado
-            if (year && new Date(sellTransaction.date).getFullYear() !== year)
+            if (year && sellTransaction.date.year !== year)
                 continue;
 
             // Converter o montante da venda para a moeda da declaração
@@ -179,10 +179,10 @@ class FIFOCalculator implements CapitalGainsCalculator {
 
         // Order by the oldest to the most recent
         buyTransactions.sort(
-            (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+            (a, b) => a.date.toMillis() - b.date.toMillis()
         );
         sellTransactions.sort(
-            (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+            (a, b) => a.date.toMillis() - b.date.toMillis()
         );
 
         const compensations: MatchedTransaction[] = [];
@@ -192,7 +192,7 @@ class FIFOCalculator implements CapitalGainsCalculator {
             for (let buy of buyTransactions) {
                 if (buy.asset.isin !== sell.asset.isin) continue;
                 // Verificar se a compra ocorreu depois da venda, nesse caso, ignorar
-                if (new Date(buy.date) > new Date(sell.date)) continue;
+                if (buy.date.toMillis() > sell.date.toMillis()) continue;
 
                 // Calcular nº de ações da compra já compensada anteriormente
                 const alreadyCompensated = compensations

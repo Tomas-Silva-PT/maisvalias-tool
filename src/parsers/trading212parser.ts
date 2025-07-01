@@ -4,6 +4,7 @@ import { Transaction } from "../models/transaction.js";
 import { Trading212 } from "../models/brokers/trading212.js";
 import { Parser } from "./parser.js";
 import { Statement } from "../models/statement.js";
+import { DateTime } from "luxon";
 
 class Trading212Parser implements Parser {
   parse(fileData: string): Transaction[] {
@@ -21,6 +22,10 @@ class Trading212Parser implements Parser {
       if (!record["Time"]) return;
 
       const [date, time] = record["Time"].split(" ");
+      const utcDate = DateTime.fromFormat(
+        `${date} ${time}`,
+        "yyyy-MM-dd HH:mm:ss", { zone: "utc" });
+
       let type = record["Action"].toLowerCase();
       if (type.includes("buy")) type = "Buy";
       else if (type.includes("sell")) type = "Sell";
@@ -63,8 +68,7 @@ class Trading212Parser implements Parser {
       let exchangeRate = 1 / parseFloat(record["Exchange rate"]);
 
       const transaction = new Transaction(
-        date,
-        time,
+        utcDate,
         type,
         ticker,
         isin,

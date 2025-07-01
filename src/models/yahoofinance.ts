@@ -1,14 +1,21 @@
+import { DateTime } from "luxon";
 import { AllOriginsProxy } from "./proxies/AllOriginsProxy.js";
 import { Proxy } from "./proxies/Proxy.js";
 import { YahooSynoProxy } from "./proxies/YahooSynoProxy.js";
 
 type ExchangeRate = {
   "timestamp": number,
-  "date": string,
+  "date": DateTime,
   "open": number,
   "close": number,
   "high": number,
   "low": number
+}
+
+type DateInterval = {
+  year: number,
+  from: DateTime,
+  to: DateTime
 }
 
 class YahooFinance {
@@ -17,35 +24,34 @@ class YahooFinance {
   static proxies: Proxy[] = [new AllOriginsProxy(), new YahooSynoProxy()];
   static numRetriesCycles: number = 5;
 
-  static _splitIntervalByYear(dates: string[]) {
-    const result = [];
+  static _splitIntervalByYear(dates: DateTime[]) : DateInterval[] {
+    const result : DateInterval[] = [];
 
     // Sort dates
-    dates.sort();
+    dates.sort((a, b) => a.toMillis() - b.toMillis());
 
-    const startDate = new Date(dates[0]);
-    const endDate = new Date(dates[dates.length - 1]);
+    const startDate = dates[0];
+    const endDate = dates[dates.length - 1];
 
     // console.log("Start Date: " + startDate + ", End Date: " + endDate);
 
-    let current = new Date(startDate);
+    let current = startDate;
 
-    while (current <= endDate) {
-      const year = current.getFullYear();
+    while (current.toMillis() <= endDate.toMillis()) {
+      const year = current.year;
 
-      const startOfPeriod = new Date(current);
-      const endOfYear = new Date(year + 1, 0, 1); // Jan 1 of next year
-      const endOfPeriod = new Date(Math.min(endOfYear.getTime(), endDate.getTime()));
+      const startOfPeriod = current;
+      const endOfYear = DateTime.local(year + 1, 1, 1); // Jan 1 of next year
+      const endOfPeriod = endOfYear.toMillis() < endDate.toMillis() ? endOfYear : endDate;
 
       result.push({
         year,
-        from: new Date(startOfPeriod),
-        to: new Date(endOfPeriod),
+        from: startOfPeriod,
+        to: endOfPeriod,
       });
 
       // Move to the next period
-      current = new Date(endOfPeriod.getTime());
-      current.setDate(current.getDate() + 1); // next day
+      current = DateTime.fromMillis(endOfPeriod.toMillis()).plus({ days: 1 });
     }
 
     // console.log("Number of intervals: " + result.length);
@@ -84,7 +90,7 @@ class YahooFinance {
     return data;
   }
 
-  static async getExchangeRateBatch(fromCurrency: string, toCurrency: string, dates: string[]): Promise<ExchangeRate[]> {
+  static async getExchangeRateBatch(fromCurrency: string, toCurrency: string, dates: DateTime[]): Promise<ExchangeRate[]> {
     // console.log("Getting exchange rate batch...");
     const ticker = `${fromCurrency}${toCurrency}=X`;
 
@@ -98,11 +104,11 @@ class YahooFinance {
     if (intervals.length < dates.length) {
       console.log("Fetching exchange rates by intervals...");
       for (let interval of intervals) {
-        const from = new Date(interval.from.toUTCString())
-        const to = new Date(interval.to.toUTCString())
-        to.setDate(to.getDate() + 1);
-        let unixFromDate = Math.floor(from.getTime() / 1000);
-        let unixToDate = Math.floor(to.getTime() / 1000);
+        const from = interval.from;
+        const to = interval.to;
+        to.plus({ days: 1 });
+        let unixFromDate = Math.floor(from.toMillis() / 1000);
+        let unixToDate = Math.floor(to.toMillis() / 1000);
         let data;
         const url = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?period1=${unixFromDate}&period2=${unixToDate}&interval=1d`;
         data = await this.get(url);
@@ -129,8 +135,7 @@ class YahooFinance {
     } else {
       console.log("Fetching exchange rates by specific dates...");
       for (const date of dates) {
-        const oDate = new Date(date);
-        let unixDate = Math.floor(oDate.getTime() / 1000);
+        let unixDate = Math.floor(date.toMillis() / 1000);
         let data;
         const url = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?period1=${unixDate}&period2=${unixDate}&interval=1d`;
         data = await this.get(url);
@@ -157,16 +162,15 @@ class YahooFinance {
     return exchangeRates;
   }
 
-  static async getExchangeRate(fromCurrency: string, toCurrency: string, date: string): Promise<number> {
+  static async getExchangeRate(fromCurrency: string, toCurrency: string, date: DateTime): Promise<number> {
     console.log("Getting exchange rate...");
     const ticker = `${fromCurrency}${toCurrency}=X`;
     // console.log("fromCurrency: " + fromCurrency + ", toCurrency: " + toCurrency + ", date: " + date);
-    let exchangeDate = new Date(date);
-    let nextExchangeDate = new Date(date);
-    nextExchangeDate.setDate(nextExchangeDate.getDate() + 1);
+    let exchangeDate = date;
+    let nextExchangeDate = date.plus({ days: 1 });
 
-    let unixDate = Math.floor(exchangeDate.getTime() / 1000);
-    let unixNextDate = Math.floor(nextExchangeDate.getTime() / 1000);
+    let unixDate = Math.floor(exchangeDate.toMillis() / 1000);
+    let unixNextDate = Math.floor(nextExchangeDate.toMillis() / 1000);
     let data;
     let url = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?period1=${unixDate}&period2=${unixNextDate}&interval=1d`;
     data = await this.get(url);

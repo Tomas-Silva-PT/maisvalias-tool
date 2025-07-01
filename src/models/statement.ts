@@ -1,3 +1,4 @@
+import { DateTime } from "luxon";
 import { Asset } from "./asset.js";
 import { Country } from "./country.js";
 import { Currency } from "./currency.js";
@@ -8,7 +9,7 @@ import { ExchangeRate } from "./yahoofinance.js";
 
 type ExchangeRateToFetch = {
     currency: string;
-    dates: string[];
+    dates: DateTime[];
 };
 
 class Statement {
@@ -23,7 +24,7 @@ class Statement {
     pushExchangeRateToFetch(
         exchangesToFetch: ExchangeRateToFetch[],
         currency: string,
-        date: string
+        date: DateTime
     ) {
         let rate = exchangesToFetch.find((r) => r.currency === currency);
 
@@ -59,7 +60,7 @@ class Statement {
                     currenciesToCheck.push(tax.currency);
                     let key = transaction.date;
                     let value = tax;
-                    taxesWithoutExchangeRate.push({[key]: value});
+                    taxesWithoutExchangeRate.push({[key.toISODate()!]: value});
                 }
             }
 
@@ -69,7 +70,7 @@ class Statement {
                     currenciesToCheck.push(fee.currency);
                     let key = transaction.date;
                     let value = fee;
-                    feesWithoutExchangeRate.push({[key]: value});
+                    feesWithoutExchangeRate.push({[key.toISODate()!]: value});
                 }
             }
 
@@ -99,14 +100,14 @@ class Statement {
             
             transactionsWithoutExchangeRate.filter((transaction) => transaction.netAmountCurrency === rateToFetch.currency).forEach((transaction) => {
                 // console.log("Date transaction: ", transaction.date);
-                transaction.exchangeRate = exchangeRates.find((rate) => rate.date === transaction.date)?.close;
+                transaction.exchangeRate = exchangeRates.find((rate) => rate.date.equals(transaction.date))?.close;
             });
             // console.log("Adding exchange rates to taxes");
             taxesWithoutExchangeRate.filter((tax) => Object.values(tax)[0].currency === rateToFetch.currency).forEach((tax) => {
                 let taxObject = Object.values(tax)[0];
                 let date = Object.keys(tax)[0];
                 // console.log("Date tax: ", date);
-                let trueExchangeRate = exchangeRates.find((rate) => rate.date === date);
+                let trueExchangeRate = exchangeRates.find((rate) => rate.date === DateTime.fromISO(date));
                 // console.log("True Exchange Rate: ", trueExchangeRate);
                 taxObject.exchangeRate = trueExchangeRate?.close;
             });
@@ -115,7 +116,7 @@ class Statement {
                 let feeObject = Object.values(fee)[0];
                 let date = Object.keys(fee)[0];
                 // console.log("Date fee: ", date);
-                let trueExchangeRate = exchangeRates.find((rate) => rate.date === date);
+                let trueExchangeRate = exchangeRates.find((rate) => rate.date === DateTime.fromISO(date));
                 // console.log("True Exchange Rate: ", trueExchangeRate);
                 feeObject.exchangeRate = trueExchangeRate?.close;
             });
@@ -180,13 +181,7 @@ class Statement {
 
     sortTransactions(reverse: boolean = false) {
         this.transactions.sort((a, b) => {
-            if (a.date !== b.date)
-                return reverse
-                    ? b.date.localeCompare(a.date)
-                    : a.date.localeCompare(b.date);
-            return reverse
-                ? b.time.localeCompare(a.time)
-                : a.time.localeCompare(b.time);
+            return reverse ? b.date.toMillis() - a.date.toMillis() : a.date.toMillis() - b.date.toMillis();
         });
     }
 

@@ -23,7 +23,7 @@ class DividendsFormatter {
 
       const dividend: DividendForUser = {
         "Ticker": ticker,
-        "Data": date,
+        "Data": date.toISODate()!,
         "Valor": amount,
         "Despesas": expenses,
         "Moeda Original": originalCurrency,

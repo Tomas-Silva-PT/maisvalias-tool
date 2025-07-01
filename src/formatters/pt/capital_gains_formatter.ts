@@ -26,14 +26,14 @@ class CapitalGainsFormatter {
                 transaction: realizedTransaction,
                 "Ticker": ticker,
                 "Aquisição": {
-                    "Data": dataAquisicao,
+                    "Data": dataAquisicao.toISODate()!,
                     "Valor": valorAquisicao,
                     "Despesas": Math.round(despesasAquisicao * 100) / 100,
                     "Moeda Original": buy.netAmountCurrency,
                     "Taxa de Câmbio": Math.round((buy.exchangeRate || 1) * 1000) / 1000,
                 },
                 "Realização": {
-                    "Data": dataRealizacao,
+                    "Data": dataRealizacao.toISODate()!,
                     "Valor": valorRealizacao,
                     "Despesas": Math.round(despesasRealizacao * 100) / 100,
                     "Moeda Original": sell.netAmountCurrency,

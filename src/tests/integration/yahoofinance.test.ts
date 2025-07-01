@@ -1,5 +1,6 @@
 import { it, describe, expect } from 'vitest';
 import { YahooFinance } from '../../models/yahoofinance';
+import { DateTime } from 'luxon';
 
 describe('YahooFinance', () => {
     it('should be able to identify an asset as an ETF', async () => {
@@ -30,7 +31,7 @@ describe('YahooFinance', () => {
     });
 
     it('should be able to fetch exchange rate', async () => {
-        const exchangeRate = await YahooFinance.getExchangeRate('USD', 'EUR', new Date('2023-10-01').toISOString().split('T')[0]);
+        const exchangeRate = await YahooFinance.getExchangeRate('USD', 'EUR', DateTime.fromISO('2023-10-01'));
         expect(exchangeRate).toBeDefined();
         console.log("Exchange Rate timezone: ", new Date().getTimezoneOffset());
         expect(Math.round(exchangeRate * 10000) / 10000).toBe(0.9465);
@@ -42,7 +43,9 @@ describe('YahooFinance', () => {
             '2023-03-01',
             '2024-08-08',
             '2025-06-04']
-        const exchangeRate = await YahooFinance.getExchangeRateBatch('USD', 'EUR', dates); //await YahooFinance.getExchangeRate('USD', 'EUR', new Date('2023-10-01').toISOString().split('T')[0]);
+
+        const dateTimes = dates.map(dateStr => DateTime.fromISO(dateStr));
+        const exchangeRate = await YahooFinance.getExchangeRateBatch('USD', 'EUR', dateTimes); //await YahooFinance.getExchangeRate('USD', 'EUR', new Date('2023-10-01').toISOString().split('T')[0]);
         console.log(exchangeRate);
         console.log("Exchange Rate timezone: ", new Date().getTimezoneOffset());
         expect(exchangeRate).toBeDefined();
