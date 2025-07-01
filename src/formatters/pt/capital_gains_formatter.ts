@@ -42,8 +42,6 @@ class CapitalGainsFormatter {
                 "Balanço": Math.round((realizedValue - acquiredValue - despesasAquisicao - despesasRealizacao) * 100) / 100,
             };
 
-            if (capitalGain["Ticker"] === "NVDA" || capitalGain["Ticker"] === "SPOT") console.log(capitalGain);
-
             capitalGains.push(capitalGain);
 
         }
