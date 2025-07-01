@@ -9,10 +9,6 @@ import IRSDividendsTable from "@site/src/components/DataTables/IRSDividendsTable
 import UserDividendsTable from "@site/src/components/DataTables/UserDividendsTable";
 
 export default function FiscalYearSummary({ id, year, fiscalData }) {
-  const defaultDividendsSortConfig = {
-    column: 1,
-    order: "desc",
-  };
 
   const [activeTab, setActiveTab] = useState(0);
   const [tableMenuActiveTab, setTableMenuActiveTab] = useState(0);

@@ -18,11 +18,14 @@ class FIFOCalculator implements CapitalGainsCalculator {
             // Converter o montante da venda para a moeda da declaração
             let sellNetAmount = 0;
             if (sellTransaction.netAmountCurrency === currency) {
+                // console.log(`[SELL] Net amount used for ${sellTransaction.asset.ticker}`);
                 sellNetAmount = sellTransaction.netAmount;
             } else if (sellTransaction.exchangeRate) {
+                // console.log(`[SELL] Exchange rate used for ${sellTransaction.asset.ticker}: ${sellTransaction.exchangeRate}`);
                 sellNetAmount =
                     sellTransaction.netAmount * sellTransaction.exchangeRate;
             } else {
+                // console.log(`[SELL] Fetching exchange rate used for ${sellTransaction.asset.ticker}`);
                 sellNetAmount = await currencyConverter.convert(
                     sellTransaction.netAmount,
                     sellTransaction.netAmountCurrency,
@@ -76,7 +79,7 @@ class FIFOCalculator implements CapitalGainsCalculator {
                 (sellTaxesAmount * shares) /
                 sellTransaction.shares;
 
-            // Calcular o montante bruto da venda
+            // Calcular o montante bruto da venda - equivale ao montante que recebeu com a venda do ativo, antes de se retirar as comissões e outros encargos
             let sellGrossAmount = sellNetAmount + sellFeesAmount + sellTaxesAmount;
 
             // Cálculo do valor de realização (valor de venda)
@@ -86,11 +89,14 @@ class FIFOCalculator implements CapitalGainsCalculator {
             // Converter o montante da compra para a moeda da declaração
             let buyNetAmount = 0;
             if (buyTransaction.netAmountCurrency === currency) {
+                // console.log(`[BUY] Net amount used for ${buyTransaction.asset.ticker}`);
                 buyNetAmount = buyTransaction.netAmount;
             } else if (buyTransaction.exchangeRate) {
+                // console.log(`[BUY] Exchange rate used for ${buyTransaction.asset.ticker}: ${buyTransaction.exchangeRate}`);
                 buyNetAmount +=
                     buyTransaction.netAmount * buyTransaction.exchangeRate;
             } else {
+                // console.log(`[BUY] Fetching exchange rate used for ${buyTransaction.asset.ticker}`);
                 buyNetAmount = await currencyConverter.convert(
                     buyTransaction.netAmount,
                     buyTransaction.netAmountCurrency,
@@ -142,11 +148,11 @@ class FIFOCalculator implements CapitalGainsCalculator {
             let buyCompensationTaxesAmount =
                 (buyTaxesAmount * shares) / buyTransaction.shares;
 
-            // Calcular o montante bruto da compra
-            let buyGrossAmount = buyNetAmount + buyFeesAmount + buyTaxesAmount;
+            // Calcular o montante bruto da compra - equivale ao montante que custou a comprar o ativo, sem contar com comissões ou outros encargos
+            let buyGrossAmount = buyNetAmount - buyFeesAmount - buyTaxesAmount;
 
             // Cálculo do valor de aquisição (valor de compra)
-            let buyUnitValue = buyNetAmount / buyTransaction.shares;
+            let buyUnitValue = buyGrossAmount / buyTransaction.shares;
             let acquiredValue = buyUnitValue * shares; // não inclui despesas e encargos
 
             realizedTransactions.push({
@@ -161,6 +167,8 @@ class FIFOCalculator implements CapitalGainsCalculator {
                 currency: currency,
             });
         }
+
+        // console.log("Realized transactions: " + JSON.stringify(realizedTransactions));
 
         return realizedTransactions;
     }

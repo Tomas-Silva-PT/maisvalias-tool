@@ -239,9 +239,9 @@ export default function UserCapitalGainsTable({ id, year, fiscalData }) {
                 <strong>Total:</strong>
               </th>
               <th className={clsx(styles.textEnd)}>
-                {Object.entries(
+                {Math.round(Object.entries(
                   fiscalData.byYear[year].capitalGains.raw
-                ).reduce((acc, [year, data]) => acc + data.acquiredValue, 0)}
+                ).reduce((acc, [year, data]) => acc + data.acquiredValue, 0) * 100 ) / 100}
                 €
               </th>
               <th className={clsx(styles.textEnd)}>
@@ -270,9 +270,9 @@ export default function UserCapitalGainsTable({ id, year, fiscalData }) {
               </th>
               <th></th>
               <th className={clsx(styles.textEnd)}>
-                {Object.entries(
+                {Math.round(Object.entries(
                   fiscalData.byYear[year].capitalGains.raw
-                ).reduce((acc, [year, data]) => acc + data.realizedValue, 0)}
+                ).reduce((acc, [year, data]) => acc + data.realizedValue, 0) * 100 ) / 100}
                 €
               </th>
               <th className={clsx(styles.textEnd)}>

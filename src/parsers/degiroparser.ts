@@ -55,16 +55,36 @@ class DegiroParser implements Parser {
 
             const product = record[2][1]; // A Degiro não fornece o Ticker...infelizmente... :(
             const isin = record[3][1];
-            const shares = Math.abs(parseFloat(record[6][1]));
+            const shares = parseFloat(record[6][1]);
+            const type = shares > 0 ? "Buy" : "Sell";
             const price = parseFloat(record[7][1]);
             const assetCurrency = record[8][1];
             const netAmountCurrency = record[12][1];
             const exchangeRate = parseFloat(record[13][1]) || 1;
-            const feeAmount = Math.abs(parseFloat(record[14][1]) || 0);
+            let feeAmount = Math.abs(parseFloat(record[14][1]) || 0);
             const feeCurrency = record[15][1];
             const feeExchangeRate = feeCurrency === netAmountCurrency ? 1 : feeCurrency === assetCurrency ? exchangeRate : 0; // Se o custo for na mesma moeda do ativo, utiliza-se a mesma taxa de câmbio. Senão, é necessário obter a taxa de câmbio através de uma API.
-            let netAmount = parseFloat(record[11][1]);
-            if(netAmount > 0) netAmount -= feeAmount;
+            
+
+            // Obter o total custo da transação (porque a Degiro esconde taxas como a AutoFX...enfim)
+            // console.log("Account Resume: " + JSON.stringify(this.accountResume));
+            let findDescription = "";
+            if (type === "Buy") {
+                findDescription = "Levantamento de divisa";
+            }
+            else {
+                findDescription = "Crédito de divisa";
+            }
+            let totalAmount = Math.abs(parseFloat(this.accountResume.find((row) => {
+                // console.log("[ROW] Date: " + row[0][1] + " Time: " + row[1][1] + " ISIN: " + row[4][1] + " Description: " + row[5][1] + " Amount: " + row[8][1]);
+                // console.log("[TRANSACTION] Date: " + record[0][1] + " Time: " + record[1][1] + " ISIN: " + isin + " Description: " + findDescription);
+                // console.log("Equals: " + row[0][1] === record[0][1] && row[1][1] === record[1][1] && row[4][1] === isin && row[5][1] === findDescription)
+                return row[0][1] === record[0][1] && row[1][1] === record[1][1] && row[4][1] === isin && row[5][1] === findDescription;
+            })?.[8][1] || "0"));
+            if(totalAmount) {
+                feeAmount += Math.abs(totalAmount - Math.abs(parseFloat(record[11][1]))); 
+            }
+            let netAmount = type === "Buy" ? Math.abs(parseFloat(record[11][1])) + Math.abs(feeAmount) || 0 : Math.abs(parseFloat(record[11][1])) - Math.abs(feeAmount) || 0;
 
             if (Math.abs(netAmount) < Number.EPSILON) {
                 throw new Error("Invalid file data: zero as an amount is not allowed");
@@ -72,7 +92,7 @@ class DegiroParser implements Parser {
 
             const fees = feeAmount ? [new Fee("Custos de transação", feeAmount, feeCurrency, feeExchangeRate)] : [];
 
-            const type = netAmount < 0 ? "Buy" : "Sell";
+
 
             const transaction = new Transaction(
                 date,
@@ -80,7 +100,7 @@ class DegiroParser implements Parser {
                 type,
                 product,
                 isin,
-                shares,
+                Math.abs(shares),
                 assetCurrency,
                 Math.abs(netAmount),
                 netAmountCurrency,

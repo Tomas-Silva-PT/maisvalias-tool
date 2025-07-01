@@ -31,63 +31,63 @@ describe('DividendsCalculator', () => {
         expect(dividends.length).toBe(15);
 
         let exchangeRate = Math.round((dividends[0].transaction.exchangeRate || 1) * 1000) / 1000;
-        expect(exchangeRate).toBe(0.846);
+        expect(exchangeRate).toBe(0.845);
         expect(dividends[0].amount).toBe(0.03);
 
         exchangeRate = Math.round((dividends[1].transaction.exchangeRate || 1) * 1000) / 1000;
-        expect(exchangeRate).toBe(0.885);
+        expect(exchangeRate).toBe(0.886);
         expect(dividends[1].amount).toBe(0.03);
 
         exchangeRate = Math.round((dividends[2].transaction.exchangeRate || 1) * 1000) / 1000;
-        expect(exchangeRate).toBe(0.908);
+        expect(exchangeRate).toBe(0.909);
         expect(dividends[2].amount).toBe(0.03);
 
         exchangeRate = Math.round((dividends[3].transaction.exchangeRate || 1) * 1000) / 1000;
-        expect(exchangeRate).toBe(0.942);
+        expect(exchangeRate).toBe(0.94);
         expect(dividends[3].amount).toBe(0.03);
 
         exchangeRate = Math.round((dividends[4].transaction.exchangeRate || 1) * 1000) / 1000;
-        expect(exchangeRate).toBe(0.993);
+        expect(exchangeRate).toBe(0.99);
         expect(dividends[4].amount).toBe(0.03);
 
         exchangeRate = Math.round((dividends[5].transaction.exchangeRate || 1) * 1000) / 1000;
-        expect(exchangeRate).toBe(0.947);
+        expect(exchangeRate).toBe(0.945);
         expect(dividends[5].amount).toBe(0.03);
 
         exchangeRate = Math.round((dividends[6].transaction.exchangeRate || 1) * 1000) / 1000;
-        expect(exchangeRate).toBe(0.936);
+        expect(exchangeRate).toBe(0.932);
         expect(dividends[6].amount).toBe(0.03);
 
         exchangeRate = Math.round((dividends[7].transaction.exchangeRate || 1) * 1000) / 1000;
-        expect(exchangeRate).toBe(0.927);
+        expect(exchangeRate).toBe(0.926);
         expect(dividends[7].amount).toBe(0.03);
 
         exchangeRate = Math.round((dividends[8].transaction.exchangeRate || 1) * 1000) / 1000;
-        expect(exchangeRate).toBe(0.94);
+        expect(exchangeRate).toBe(0.936);
         expect(dividends[8].amount).toBe(0.03);
 
         exchangeRate = Math.round((dividends[9].transaction.exchangeRate || 1) * 1000) / 1000;
-        expect(exchangeRate).toBe(0.918);
+        expect(exchangeRate).toBe(0.914);
         expect(dividends[9].amount).toBe(0.03);
 
         exchangeRate = Math.round((dividends[10].transaction.exchangeRate || 1) * 1000) / 1000;
-        expect(exchangeRate).toBe(0.919);
+        expect(exchangeRate).toBe(0.916);
         expect(dividends[10].amount).toBe(0.03);
 
         exchangeRate = Math.round((dividends[11].transaction.exchangeRate || 1) * 1000) / 1000;
-        expect(exchangeRate).toBe(0.931);
+        expect(exchangeRate).toBe(0.933);
         expect(dividends[11].amount).toBe(0.03);
 
         exchangeRate = Math.round((dividends[12].transaction.exchangeRate || 1) * 1000) / 1000;
-        expect(exchangeRate).toBe(0.903);
+        expect(exchangeRate).toBe(0.9);
         expect(dividends[12].amount).toBe(0.03);
 
         exchangeRate = Math.round((dividends[13].transaction.exchangeRate || 1) * 1000) / 1000;
-        expect(exchangeRate).toBe(0.955);
+        expect(exchangeRate).toBe(0.949);
         expect(dividends[13].amount).toBe(0.03);
 
         exchangeRate = Math.round((dividends[14].transaction.exchangeRate || 1) * 1000) / 1000;
-        expect(exchangeRate).toBe(0.921);
+        expect(exchangeRate).toBe(0.917);
         expect(dividends[14].amount).toBe(0.03);
 
     });

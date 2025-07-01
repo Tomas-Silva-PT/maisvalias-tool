@@ -31,13 +31,13 @@ describe('FIFOCalculator', () => {
         expect(capitalGains).toBeDefined();
         expect(capitalGains.length).toBe(2);
 
-        expect(capitalGains[0].realizedValue).toBe(10.33);
-        expect(capitalGains[0].acquiredValue).toBe(9.98);
+        expect(capitalGains[0].realizedValue).toBe(10.29);
+        expect(capitalGains[0].acquiredValue).toBe(9.99);
         let exchangeRate = Math.round((capitalGains[0].sell.exchangeRate!)*1000)/1000;
-        expect(exchangeRate).toBe(0.824);
+        expect(exchangeRate).toBe(0.821);
         
-        expect(capitalGains[1].realizedValue).toBe(13.26);
-        expect(capitalGains[1].acquiredValue).toBe(9.93);
+        expect(capitalGains[1].realizedValue).toBe(13.27);
+        expect(capitalGains[1].acquiredValue).toBe(10);
         exchangeRate = Math.round((capitalGains[1].sell.exchangeRate!)*1000)/1000;
         expect(exchangeRate).toBe(0.846);
 

@@ -117,14 +117,13 @@ class RevolutParser implements Parser {
       // console.log("Currency: " + amountCurrency);
       let exchangeRate = 1 / parseFloat(record["FX Rate"].replace("\r", "").replace(",", ".")); // Porque a taxa de câmbio vem do EUR para a moeda do ativo, e nós queremos ao contrário
       if (isNaN(exchangeRate) || exchangeRate < Number.EPSILON) exchangeRate = 1;
-      // console.log("Exchange Rate: " + exchangeRate);
       const feeAmount = Math.abs(Math.round((totalAmount - priceShare * shares)*100)/100);
       
       // if (ticker === "SPOT" || ticker === "NVDA") console.log(`[${ticker}] Fee Amount: ` + feeAmount);
       const fees: Fee[] = [];
       let amount = totalAmount;
       if (feeAmount >= 0.01) {
-        amount = totalAmount - feeAmount;
+        // amount = totalAmount - feeAmount;
         const fee = new Fee("Fee", feeAmount, amountCurrency, exchangeRate);
         fees.push(fee);
       }

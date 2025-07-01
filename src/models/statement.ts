@@ -48,7 +48,7 @@ class Statement {
 
             let currenciesToCheck : string[] = [];
 
-            if (netAmountCurrency !== this.baseCurrency && (!exchangeRate || exchangeRate !== 1)) {
+            if (netAmountCurrency !== this.baseCurrency && (!exchangeRate || exchangeRate === 0 || exchangeRate === 1)) {
                 currenciesToCheck.push(netAmountCurrency);
                 transactionsWithoutExchangeRate.push(transaction);
             }
