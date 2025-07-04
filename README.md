@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="/assets/images/logo-no-bg-icon.png" height="150" alt="logo">
+    <img src="/assets/images/logo-no-bg-icon.png" width="150" alt="logo">
     <h1 style="margin-top:-15px" align="center">maisvalias-tool</h1>
 </p>
 
