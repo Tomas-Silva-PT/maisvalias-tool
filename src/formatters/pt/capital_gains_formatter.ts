@@ -27,14 +27,14 @@ class CapitalGainsFormatter {
                 "Ticker": ticker,
                 "Aquisição": {
                     "Data": dataAquisicao.toISODate()!,
-                    "Valor": valorAquisicao,
+                    "Valor": valorAquisicao, // Corresponde ao valor da ordem de compra do ativo (ou seja, quanto é que o vendedor recebeu pela tua compra)
                     "Despesas": Math.round(despesasAquisicao * 100) / 100,
                     "Moeda Original": buy.netAmountCurrency,
                     "Taxa de Câmbio": Math.round((buy.exchangeRate || 1) * 1000) / 1000,
                 },
                 "Realização": {
                     "Data": dataRealizacao.toISODate()!,
-                    "Valor": valorRealizacao,
+                    "Valor": valorRealizacao, // Corresponde ao valor da ordem de venda do ativo (ou seja, quanto é que o comprador pagou pela tua venda)
                     "Despesas": Math.round(despesasRealizacao * 100) / 100,
                     "Moeda Original": sell.netAmountCurrency,
                     "Taxa de Câmbio": Math.round((sell.exchangeRate || 1) * 1000) / 1000,
