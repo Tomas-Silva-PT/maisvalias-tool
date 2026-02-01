@@ -1,3 +1,15 @@
+# [1.3.0](https://github.com/Tomas-Silva-PT/maisvalias-tool/compare/v1.2.0...v1.3.0) (2026-02-01)
+
+
+### Bug Fixes
+
+* add comments to clarify the meaning of acquisition and realization values ([ab32127](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/ab321277bdd866522804aee7aa301f17dce28b2c))
+
+
+### Features
+
+* add broker - strike ([0b7fe09](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/0b7fe0984406c58fc4ecc6f7ad5e860d6e9626c4))
+
 # [1.2.0](https://github.com/Tomas-Silva-PT/maisvalias-tool/compare/v1.1.0...v1.2.0) (2025-07-01)
 
 
