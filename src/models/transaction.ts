@@ -20,7 +20,7 @@ class Transaction {
         this.type = type;
         this.asset = new Asset(ticker, isin, assetCurrency);
         this.shares = shares;
-        this.netAmount = netAmount;
+        this.netAmount = netAmount; // Em caso de compra, corresponde ao valor pago pelo ativo + despesas e encargos (custo de compra final); em caso de venda, corresponde ao valor recebido pela venda do ativo - despesas e encargos (receita líquida).
         this.netAmountCurrency = netAmountCurrency;
         this.taxes = taxes;
         this.fees = fees;

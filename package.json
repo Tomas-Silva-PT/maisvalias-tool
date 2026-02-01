@@ -9,7 +9,11 @@
   "type": "module",
   "scripts": {
     "test": "vitest",
-    "test:ui": "vitest --ui"
+    "test:ui": "vitest --ui",
+    "start": "cd website && npm run start",
+    "build:build": "cd src && npx tsc -p tsconfig.build.json",
+    "build:website": "cd src && npx tsc -p tsconfig.website.json",
+    "build": "npm run build:build && npm run build:website"
   },
   "keywords": [],
   "author": "",

@@ -1,0 +1,4 @@
+Reference,Date & Time (UTC),Transaction Type,Amount EUR,Fee EUR,Amount BTC,Fee BTC,BTC Price,Cost Basis (EUR),Destination,Description,Transaction Hash,Note
+1927aba6-b869-4ded-ab8a-02ee97f1c9e6,Jan 10 2026 10:04:08,Deposit,5.00,,,,,,,,,
+e594dba1-3377-4137-a353-b2c982a66b57,Jan 10 2026 10:04:24,Purchase,-5.00,0.05,0.00006344,,78026.48,5.00,,,,
+8a13a40d-6351-44b4-bf75-8deb27f5994c,Jan 13 2026 19:36:08,Sale,5.05,0.05,-0.00006344,,80390.92,,,,,

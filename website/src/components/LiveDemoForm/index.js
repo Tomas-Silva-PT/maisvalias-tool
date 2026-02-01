@@ -7,6 +7,7 @@ import { ArrowRight, Upload, X } from "lucide-react";
 import FilesRevolut from "@site/src/components/FilesRevolut";
 import FilesTrading212 from "@site/src/components/FilesTrading212";
 import FilesDegiro from "@site/src/components/FilesDegiro";
+import FilesStrike from "@site/src/components/FilesStrike";
 import DisclaimerPopup from "@site/src/components/DisclaimerPopup";
 import HelpDialog from "@site/src/components/HelpDialog";
 import FiscalSummary from "@site/src/components/FiscalSummary";
@@ -96,6 +97,18 @@ const brokers = [
       },
     ],
   },
+  {
+    name: "Strike",
+    logo: "/img/brokers/strike.png",
+    active: true,
+    visible: true,
+    docs: [
+      {
+        message: "Não sabes onde encontrar os ficheiros?",
+        link: "docs/corretoras/strike",
+      },
+    ],
+  },
 ];
 
 export default function LiveDemoForm() {
@@ -171,65 +184,65 @@ export default function LiveDemoForm() {
     }, 300); // tweak delay if needed
   }
 
-  function renderError(error) {
-    if (!errorType) return null;
+  // function renderError(error) {
+  //   if (!errorType) return null;
 
-    let content;
+  //   let content;
 
-    if (errorType === "filesUploaded") {
-      content = (
-        <>
-          <h3>Falha ao processar os ficheiros</h3>
-          <span>Os ficheiros não são compatíveis com o formato esperado.</span>
-          <p>
-            Por favor verifica quais os ficheiros corretos através da{" "}
-            <a href="docs/corretoras/trading212" target="_blank">
-              documentação
-            </a>{" "}
-            e tenta novamente.
-          </p>
-          <p>
-            Se o problema persistir,{" "}
-            <a href="./about#como-nos-contactar" target="_blank">
-              contacta-nos
-            </a>
-            .
-          </p>
-        </>
-      );
-    } else if (errorType === "fetchingData") {
-      content = (
-        <>
-          <h3>Falha ao calcular as mais-valias</h3>
-          <span>
-            Não conseguimos obter as informações necessárias para o cálculo das
-            mais-valias.
-          </span>
-          <p>Por favor tenta novamente mais tarde.</p>
-          <p>
-            Se o problema persistir,{" "}
-            <a href="./about#como-nos-contactar" target="_blank">
-              contacta-nos
-            </a>
-            .
-          </p>
-        </>
-      );
-    }
+  //   if (errorType === "filesUploaded") {
+  //     content = (
+  //       <>
+  //         <h3>Falha ao processar os ficheiros</h3>
+  //         <span>Os ficheiros não são compatíveis com o formato esperado.</span>
+  //         <p>
+  //           Por favor verifica quais os ficheiros corretos através da{" "}
+  //           <a href="docs/corretoras/trading212" target="_blank">
+  //             documentação
+  //           </a>{" "}
+  //           e tenta novamente.
+  //         </p>
+  //         <p>
+  //           Se o problema persistir,{" "}
+  //           <a href="./about#como-nos-contactar" target="_blank">
+  //             contacta-nos
+  //           </a>
+  //           .
+  //         </p>
+  //       </>
+  //     );
+  //   } else if (errorType === "fetchingData") {
+  //     content = (
+  //       <>
+  //         <h3>Falha ao calcular as mais-valias</h3>
+  //         <span>
+  //           Não conseguimos obter as informações necessárias para o cálculo das
+  //           mais-valias.
+  //         </span>
+  //         <p>Por favor tenta novamente mais tarde.</p>
+  //         <p>
+  //           Se o problema persistir,{" "}
+  //           <a href="./about#como-nos-contactar" target="_blank">
+  //             contacta-nos
+  //           </a>
+  //           .
+  //         </p>
+  //       </>
+  //     );
+  //   }
 
-    return (
-      <ErrorPopup
-        title="Erro"
-        closeFunction={() => {
-          setErrorType(null);
-          setError(null);
-        }}
-        error={error}
-      >
-        {content}
-      </ErrorPopup>
-    );
-  }
+  //   return (
+  //     <ErrorPopup
+  //       title="Erro"
+  //       closeFunction={() => {
+  //         setErrorType(null);
+  //         setError(null);
+  //       }}
+  //       error={error}
+  //     >
+  //       {content}
+  //     </ErrorPopup>
+  //   );
+  // }
 
   async function setGainsAndDividends(transactions) {
     const loader = document.getElementById("custom-loader-container");
@@ -492,7 +505,10 @@ export default function LiveDemoForm() {
         {broker.name === "Degiro" && (
           <FilesDegiro id={props.id} setFiscalData={setGainsAndDividends} />
         )}
-        {renderError(error)}
+        {broker.name === "Strike" && (
+          <FilesStrike id={props.id} setFiscalData={setGainsAndDividends} />
+        )}
+        {/* {renderError(error)} */}
       </>
     );
   }
@@ -517,7 +533,7 @@ export default function LiveDemoForm() {
               fiscalData={fiscalData}
             ></FiscalYearSummary>
           )}
-          {renderError(error)}
+          {/* {renderError(error)} */}
         </div>
       </>
     );
