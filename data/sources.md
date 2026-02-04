@@ -34,3 +34,9 @@ Proxies
 https://allorigins.win/
 
 https://github.com/Freeboard/thingproxy
+
+
+
+Como declarar crypto:
+
+https://www.youtube.com/watch?v=MeIdTWB_W8U

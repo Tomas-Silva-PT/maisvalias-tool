@@ -28,5 +28,14 @@ type DividendToExcel = {
   "Balanço": number;
 };
 
+type DividendAnexoJQuadro8 = {
+  "Ano rendimento": number,
+  "Código Rendimento":
+  string,
+  "País da fonte": string,
+  "Rendimento Bruto": number,
+  "Imposto Pago no Estrangeiro - No país da fonte": number,
+}
 
-export { DividendToIRS, DividendForUser, DividendToExcel };
+
+export { DividendToIRS, DividendForUser, DividendToExcel, DividendAnexoJQuadro8  };

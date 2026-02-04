@@ -73,4 +73,6 @@ type DividendTransaction = {
     currency: string;
 }
 
-export { Transaction, MatchedTransaction, RealizedTransaction, DividendTransaction };
+type TaxEvent = RealizedTransaction | DividendTransaction;
+
+export { Transaction, MatchedTransaction, RealizedTransaction, DividendTransaction, TaxEvent };
