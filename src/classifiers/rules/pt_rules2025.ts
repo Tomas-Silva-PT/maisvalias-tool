@@ -1,22 +1,21 @@
 import { DividendTransaction, MatchedTransaction, TaxEvent } from "../../models/transaction";
-import { PTDestination } from "../destinations/pt_destinations";
+import { PTDestinations } from "../destinations/pt_destinations";
 import { Rule } from "./rule";
 
-const PTIRSRules2025: Rule<PTDestination>[] = [
+const PTIRSRules2025: Rule[] = [
     // Add rules here
     {
-        destination: "ANEXO_J_QUADRO_8A", 
+        destination: PTDestinations.ANEXO_J_QUADRO_8A, 
         condition: (e : TaxEvent ) => isDividendEvent(e) && isForeignDividend(e)
     },
     {
-        destination: "ANEXO_J_QUADRO_92A",
+        destination: PTDestinations.ANEXO_J_QUADRO_92A,
         condition: (e : TaxEvent ) => isCapitalGainEvent(e) && isForeignCapitalGain(e)
     },
 ];
 
 /**
  * Returns true if the tax event is a capital gain event and false otherwise.
- * A capital gain event is an event that has a "realizedValue", "buy", and "sell" property.
  * @param event The tax event to check.
  * @returns True if the tax event is a capital gain event, false otherwise.
  */
@@ -27,7 +26,6 @@ function isCapitalGainEvent(event: TaxEvent): event is TaxEvent & MatchedTransac
 
 /**
  * Returns true if the tax event is a dividend event and false otherwise.
- * A dividend event is an event that has an amount property.
  * @param event The tax event to check.
  * @returns True if the tax event is a dividend event, false otherwise.
  */

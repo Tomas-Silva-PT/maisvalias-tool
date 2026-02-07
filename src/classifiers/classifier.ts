@@ -1,12 +1,18 @@
 import { TaxEvent } from "../models/transaction";
-import { Classification } from "./classifications/classification";
+import { Classifications } from "./classifications/classification";
 import { Rule } from "./rules/rule";
 
-class Classifier<D> {
-    constructor(private rules: Rule<D>[]) {}
+class Classifier {
+    constructor(private rules: Rule[]) {}
 
-    classify(taxEvents: TaxEvent[]): Classification<D> {
-        const result: Classification<D> = new Map();
+    /**
+     * Classify the given tax events into their respective categories.
+     *
+     * @param taxEvents The tax events to classify.
+     * @returns A map where the keys are the category names and the values are arrays of tax events that belong to those categories.
+     */
+    classify(taxEvents: TaxEvent[]): Classifications {
+        const result: Classifications = new Map();
 
         for (const rule of this.rules) {
             result.set(rule.destination, []);

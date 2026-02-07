@@ -1,6 +1,7 @@
 import { TaxEvent } from "../../models/transaction";
+import { Destination } from "../destinations/destination";
 
 
-type Classification<D> = Map<D, TaxEvent[]>;
+type Classifications = Map<Destination, TaxEvent[]>;
 
-export { Classification };
+export { Classifications };
