@@ -389,6 +389,7 @@ tfoot {
   grid-template-columns: repeat(3, 1fr);
   margin-top: 1.5rem;
   margin-bottom: 1.5rem;
+  gap: 1rem;
 }
 
 .tab {

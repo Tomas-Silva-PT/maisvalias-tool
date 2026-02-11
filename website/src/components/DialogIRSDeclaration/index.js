@@ -143,7 +143,7 @@ export default function DialogIRSDeclaration({
                 <p className="custom-loader-text">Calculando...</p>
               </div>
               <div className={clsx(styles.tabsContainer)}>
-                <div
+                {/* <div
                   className={
                     activeTab === 0
                       ? clsx(styles.activeTab, styles.tab)
@@ -155,8 +155,8 @@ export default function DialogIRSDeclaration({
                 >
                   <i class="fa-solid fa-gear"></i>
                   <span>Preencher automaticamente</span>
-                </div>
-                <div
+                </div> */}
+                {/* <div
                   className={
                     activeTab === 1
                       ? clsx(styles.activeTab, styles.tab)
@@ -168,7 +168,7 @@ export default function DialogIRSDeclaration({
                 >
                   <i class="fa-solid fa-pen"></i>
                   <span>Preencher manualmente</span>
-                </div>
+                </div> */}
               </div>
               {activeTab === 0 && (
                 <div id="declaration-upload">

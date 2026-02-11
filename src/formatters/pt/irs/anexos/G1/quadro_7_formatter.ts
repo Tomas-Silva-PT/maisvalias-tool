@@ -1,12 +1,13 @@
-import { CapitalGainToIRS } from "../../../models/capitalgain.js";
-import { RealizedTransaction } from "../../../models/transaction.js";
+import { AnexoG1Quadro7 } from "../../../../../models/irs/panel.js";
+import { RealizedTransaction } from "../../../../../models/transaction.js";
+import { IRSFormatter } from "../../IRSFormatter.js";
 
-class PTCapitalGainsFormatter {
+class PTAnexoG1Quadro7Formatter implements IRSFormatter<RealizedTransaction, AnexoG1Quadro7> {
   constructor() { }
 
-  format(transactions: RealizedTransaction[]): CapitalGainToIRS[] {
+  format(transactions: RealizedTransaction[]): AnexoG1Quadro7[] {
 
-    let capitalGains: CapitalGainToIRS[] = [];
+    let capitalGains: AnexoG1Quadro7[] = [];
 
     for (const realizedTransaction of transactions) {
       const buy = realizedTransaction.buy;
@@ -16,29 +17,16 @@ class PTCapitalGainsFormatter {
       const fees = realizedTransaction.buyFees + realizedTransaction.sellFees;
       const taxes = realizedTransaction.buyTaxes + realizedTransaction.sellTaxes;
 
-
-      let code: string = "";
-      switch (realizedTransaction.buy.asset.assetType) {
-        case "EQUITY":
-          code = "G01";
-          break;
-        case "ETF":
-          code = "G20";
-          break;
-      }
-
       let countryDomiciled = buy.asset.countryDomiciled;
       // Para ações domiciliadas em Portugal e adquiridas em corretoras estrangeiras, o país da fonte deve ser o da corretora
       if (countryDomiciled?.code === "620") {
         countryDomiciled = buy.broker.country;
       }
 
-      const ticker = sell.asset.ticker;
       let paisFonte = "";
       if (countryDomiciled?.code) {
         paisFonte = countryDomiciled.code ? `${countryDomiciled?.code} - ${countryDomiciled?.namePt}` : "";
       }
-      const codigo = code;
       const anoAquisicao = buy.date.year;
       const mesAquisicao = buy.date.month;
       const diaAquisicao = buy.date.day; // corrigido: getDay() retorna o dia da semana
@@ -51,11 +39,9 @@ class PTCapitalGainsFormatter {
       const impostoRetido = taxes;
       const paisContraparte = `${sell.broker.country.code} - ${sell.broker.country.namePt}`;
 
-      let capitalGain: CapitalGainToIRS = {
-        transaction: realizedTransaction,
-        Ticker: ticker,
-        "País da fonte": paisFonte,
-        Código: codigo,
+      let capitalGain: AnexoG1Quadro7 = {
+        "Titular": "A", // Ver nas sources o preenchimento do quadro 7 do Anexo G1
+        "País": paisFonte,
         "Ano de Aquisição": anoAquisicao,
         "Mês de Aquisição": mesAquisicao,
         "Dia de Aquisição": diaAquisicao,
@@ -65,7 +51,6 @@ class PTCapitalGainsFormatter {
         "Dia de Realização": diaRealizacao,
         "Valor de Realização": valorRealizacao,
         "Despesas e Encargos": despesasEncargos,
-        "Imposto retido no estrangeiro": impostoRetido,
         "País da Contraparte": paisContraparte,
       };
 
@@ -77,6 +62,11 @@ class PTCapitalGainsFormatter {
     return capitalGains;
 
   }
+
+  toXML(xmlDoc: Document, events: RealizedTransaction[]): string {
+    return "";
+  }
+
 }
 
-export { PTCapitalGainsFormatter };
+export { PTAnexoG1Quadro7Formatter };

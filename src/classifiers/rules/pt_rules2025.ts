@@ -2,8 +2,17 @@ import { DividendTransaction, MatchedTransaction, TaxEvent } from "../../models/
 import { PTDestinations } from "../destinations/pt_destinations";
 import { Rule } from "./rule";
 
+// Note: the order of the rules matters, as they are applied sequentially.
 const PTIRSRules2025: Rule[] = [
     // Add rules here
+    {
+        destination: PTDestinations.ANEXO_J_QUADRO_94A,
+        condition: (e : TaxEvent ) => isCapitalGainEvent(e) && !isCapitalGainHoldForMoreThanOneYear(e) && isCrypto(e)
+    },
+    {
+        destination: PTDestinations.ANEXO_G1_QUADRO_7,
+        condition: (e : TaxEvent ) => isCapitalGainEvent(e) && isCapitalGainHoldForMoreThanOneYear(e) && isCrypto(e)
+    },
     {
         destination: PTDestinations.ANEXO_J_QUADRO_8A, 
         condition: (e : TaxEvent ) => isDividendEvent(e) && isForeignDividend(e)
@@ -57,6 +66,32 @@ function isForeignDividend(event: DividendTransaction): boolean {
     return "transaction" in event && event.transaction.broker.country.alpha2 !== "PT";
 }
 
+/**
+ * Returns true if the matched transaction is a capital gain event
+ * where the asset was held for more than one year, and false otherwise.
+ * @param event The matched transaction to check.
+ * @returns True if the matched transaction is a capital gain event
+ * where the asset was held for more than one year, false otherwise.
+ */
+function isCapitalGainHoldForMoreThanOneYear(event: MatchedTransaction): boolean {
+    const buyDate = event.buy.date;
+    const sellDate = event.sell.date;
+
+    const differenceInYears = sellDate.diff(buyDate, "years").days;
+
+    return differenceInYears >= 365;
+}
+
+/**
+ * Returns true if the matched transaction is a cryptocurrency
+ * event, and false otherwise.
+ * @param event The matched transaction to check.
+ * @returns True if the matched transaction is a cryptocurrency
+ * event, false otherwise.
+ */
+function isCrypto(event: MatchedTransaction): boolean {
+    return event.sell.asset.assetType === "CRYPTOCURRENCY";
+}
 
 
 export { PTIRSRules2025 };

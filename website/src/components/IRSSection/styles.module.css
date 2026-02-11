@@ -379,9 +379,10 @@ tfoot {
 
 .tabsContainer {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   margin-top: 1.5rem;
   margin-bottom: 1.5rem;
+  gap: 1rem;
 }
 
 .tab {

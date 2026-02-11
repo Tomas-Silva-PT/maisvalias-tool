@@ -40,3 +40,19 @@ https://github.com/Freeboard/thingproxy
 Como declarar crypto:
 
 https://www.youtube.com/watch?v=MeIdTWB_W8U
+https://www.youtube.com/shorts/epl5jUngfIA
+https://www.youtube.com/watch?v=nfdQl5JKTZg
+https://www.youtube.com/watch?v=9CW2ppIUDQ0&t=24s
+https://tax-wizard.eu/es/p/portugal-tax?utm_source=chatgpt.com#anexo-j
+https://cryptobooks.tax/pt-PT/blog/tributacao-cripto-portugal
+
+Formato dos quadros do IRS:
+
+Anexo J
+https://info.portaldasfinancas.gov.pt/pt/apoio_contribuinte/modelos_formularios/irs/Documents/Mod_3_anexo_J.pdf
+
+Anexo G
+https://info.portaldasfinancas.gov.pt/pt/apoio_contribuinte/modelos_formularios/irs/Documents/Mod_3_anexo_G.pdf
+
+Anexo G1
+https://info.portaldasfinancas.gov.pt/pt/apoio_contribuinte/modelos_formularios/irs/Documents/Mod_3_anexo_G1.pdf

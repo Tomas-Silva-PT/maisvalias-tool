@@ -4,7 +4,7 @@ import fs from "fs";
 import { StrikeParser } from '../../parsers/strikeparser.js';
 
 describe('StrikeParser', () => {
-    it('should parse Strike transaction file correctly', () => {
+    it('should parse Strike transaction file correctly', async () => {
         const parser = new StrikeParser();
         const statement = new Statement([]);
 
@@ -15,6 +15,8 @@ describe('StrikeParser', () => {
         transactions.forEach(transaction => {
             statement.addTransaction(transaction);
         });
+
+        await statement.fetchData();
 
         console.log("Parsed Transactions: ", statement.getTransactions());
 
