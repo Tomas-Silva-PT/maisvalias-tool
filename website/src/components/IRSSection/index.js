@@ -8,18 +8,14 @@ import { PTIRSFormatterRegistry } from "../../maisvalias-tool/formatters/pt/irs/
 export default function IRSSection({ id, year, fiscalData }) {
   const capitalGains = fiscalData.byYear[year].capitalGains.raw;
   const dividends = fiscalData.byYear[year].dividends.raw;
-  console.log("Raw tax events for year", year, { capitalGains, dividends });
 
   // Classify transactions into IRS panels
   const classifier = new Classifier(PTIRSRules2025);
   const taxEvents = [...capitalGains, ...dividends];
-  console.log("Classifying tax events for year", year, taxEvents);
   const classifications = classifier.classify(taxEvents);
-  console.log("Classifications for year", year, classifications);
 
   const panels = Array.from(classifications.keys());
   const classifiedTaxEvents = Array.from(classifications.values());
-  console.log("Classified tax events for year", year, classifications);
 
   // Map panel code → tax events
   const panelEventsMap = {};

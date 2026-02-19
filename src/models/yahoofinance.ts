@@ -21,7 +21,7 @@ type DateInterval = {
 class YahooFinance {
   static corsProblem = false;
 
-  static proxies: Proxy[] = [new AllOriginsProxy(), new YahooSynoProxy()];
+  static proxies: Proxy[] = [new YahooSynoProxy(), new AllOriginsProxy()];
   static numRetriesCycles: number = 5;
 
   static _splitIntervalByYear(dates: DateTime[]) : DateInterval[] {

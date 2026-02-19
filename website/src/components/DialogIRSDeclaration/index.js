@@ -1,12 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import clsx from "clsx";
 import styles from "./styles.module.css";
-import { ArrowRight, Underline, Upload, X } from "lucide-react";
-import { PTIRSFormatter } from "../../maisvalias-tool/formatters/pt/irs/irs_xml_formatter.js";
-import ErrorPopup from "@site/src/components/ErrorPopup";
+import { ArrowRight, Upload, X } from "lucide-react";
 
-import IRSDividendsTable from "@site/src/components/DataTables/IRSDividendsTable";
-import IRSCapitalGainsTable from "@site/src/components/DataTables/IRSCapitalGainsTable";
+import { PTIRSFormatter } from "../../maisvalias-tool/formatters/pt/irs/pt_irs_formatter.js";
+import { Classifier } from "../../maisvalias-tool/classifiers/classifier.js";
+import { PTIRSRules2025 } from "../../maisvalias-tool/classifiers/rules/pt_rules2025.js";
+
+import ErrorPopup from "@site/src/components/ErrorPopup";
 
 export default function DialogIRSDeclaration({
   visible,
@@ -14,17 +15,38 @@ export default function DialogIRSDeclaration({
   fiscalData,
   year,
 }) {
-  let capitalGains = fiscalData.byYear[year].capitalGains.irs;
-  let dividends = fiscalData.byYear[year].dividends.irs;
+  let capitalGains = fiscalData.byYear[year].capitalGains.raw;
+  let dividends = fiscalData.byYear[year].dividends.raw;
+
+  // Classify transactions into IRS panels
+  const classifier = new Classifier(PTIRSRules2025);
+  const taxEvents = [...capitalGains, ...dividends];
+  const classifications = classifier.classify(taxEvents);
+
+  const panels = Array.from(classifications.keys());
+  // const classifiedTaxEvents = Array.from(classifications.values());
 
   const [files, setFiles] = useState([]);
   const [showError, setError] = useState(false);
-  const [activeTab, setActiveTab] = useState(0);
-  const [activeTable, setActiveTable] = useState(
-    capitalGains.length === 0 ? 1 : 0
-  );
-  const [fillCapitalGains, setFillCapitalGains] = useState(true);
-  const [fillDividends, setFillDividends] = useState(true);
+  const [selectedPanels, setSelectedPanels] = useState(new Set());
+
+  useEffect(() => {
+    setSelectedPanels(new Set(panels.map((p) => p.code)));
+  }, [year]);
+
+  function togglePanel(code) {
+    setSelectedPanels((prev) => {
+      const newSet = new Set(prev);
+
+      if (newSet.has(code)) {
+        newSet.delete(code);
+      } else {
+        newSet.add(code);
+      }
+
+      return newSet;
+    });
+  }
 
   function onFileUpload(e) {
     const files = e.target.files;
@@ -35,13 +57,11 @@ export default function DialogIRSDeclaration({
     setVisible(false);
     setFiles([]);
     setError(false);
-    setActiveTab(0);
-    setActiveTable(0);
   }
 
   function onDeclarationUpload(e) {
     const loader = document.getElementById(
-      "declaration-custom-loader-container"
+      "declaration-custom-loader-container",
     );
     loader.style.display = "flex";
 
@@ -50,22 +70,22 @@ export default function DialogIRSDeclaration({
     reader.onload = (e) => {
       const xml_irs = e.target.result;
 
-      if (!fillCapitalGains) {
-        capitalGains = [];
-      }
-      if (!fillDividends) {
-        dividends = [];
-      }
-      if (capitalGains.length === 0 && dividends.length === 0) {
+      if (taxEvents.length === 0) {
         loader.style.display = "none";
         setError(true);
         return;
       }
 
+      // Filtrar apenas os painéis selecionados
+      const filteredClassifications = new Map(
+        Array.from(classifications.entries()).filter(([destination]) =>
+          selectedPanels.has(destination.code),
+        ),
+      );
+
       const fullfilledIRS = PTIRSFormatter.format(
         xml_irs,
-        capitalGains,
-        dividends
+        filteredClassifications,
       );
 
       const contentFile = document.getElementById("contentFile");
@@ -142,204 +162,99 @@ export default function DialogIRSDeclaration({
                 <div className="custom-loader"></div>
                 <p className="custom-loader-text">Calculando...</p>
               </div>
-              <div className={clsx(styles.tabsContainer)}>
-                {/* <div
-                  className={
-                    activeTab === 0
-                      ? clsx(styles.activeTab, styles.tab)
-                      : clsx(styles.tab)
-                  }
-                  onClick={() => {
-                    setActiveTab(0);
-                  }}
-                >
-                  <i class="fa-solid fa-gear"></i>
-                  <span>Preencher automaticamente</span>
-                </div> */}
-                {/* <div
-                  className={
-                    activeTab === 1
-                      ? clsx(styles.activeTab, styles.tab)
-                      : clsx(styles.tab)
-                  }
-                  onClick={() => {
-                    setActiveTab(1);
-                  }}
-                >
-                  <i class="fa-solid fa-pen"></i>
-                  <span>Preencher manualmente</span>
-                </div> */}
-              </div>
-              {activeTab === 0 && (
-                <div id="declaration-upload">
-                  <p>
-                    Coloca aqui a tua declaração de IRS para podermos
-                    preenchê-la com os dados calculados:
-                  </p>
-                  <div className={clsx(styles.fileUploadOptions)}>
-                    {fiscalData.byYear[year].capitalGains.raw.length > 0 && (
+
+              <div id="declaration-upload">
+                <p>
+                  Coloca aqui a tua declaração de IRS para podermos preenchê-la
+                  com os dados calculados:
+                </p>
+                <div className={clsx(styles.fileUploadOptions)}>
+                  {panels.map((panel) => {
+                    const isChecked = selectedPanels.has(panel.code);
+
+                    return (
                       <div className={clsx(styles.fileUploadOption)}>
-                        <div class="checkbox-wrapper-6">
+                        <div className="checkbox-wrapper-6">
                           <input
-                            title="Preencher mais-valias"
-                            class="tgl tgl-light"
-                            id="cb1-1"
+                            title="Preencher"
+                            className="tgl tgl-light"
+                            id={`cb-${panel.code}`}
                             type="checkbox"
-                            checked={fillCapitalGains}
-                            onChange={() => {
-                              setFillCapitalGains(!fillCapitalGains);
-                            }}
+                            checked={isChecked}
+                            onChange={() => togglePanel(panel.code)}
                           />
-                          <label class="tgl-btn" for="cb1-1"></label>
+                          <label
+                            className="tgl-btn"
+                            htmlFor={`cb-${panel.code}`}
+                          ></label>
                         </div>
                         <span>
-                          Preencher mais-valias
+                          Preencher
                           <span className={clsx(styles.fileUploadOptionInfo)}>
                             {" - "}
-                            Anexo J Quadro 9.2A
+                            {panel.title}
                           </span>
                         </span>
                       </div>
-                    )}
-                    {fiscalData.byYear[year].dividends.raw.length > 0 && (
-                      <div className={clsx(styles.fileUploadOption)}>
-                        <div class="checkbox-wrapper-6">
-                          <input
-                            title="Preencher dividendos"
-                            class="tgl tgl-light"
-                            id="cb1-2"
-                            type="checkbox"
-                            checked={fillDividends}
-                            onChange={() => {
-                              setFillDividends(!fillDividends);
-                            }}
-                          />
-                          <label class="tgl-btn" for="cb1-2"></label>
-                        </div>
-                        <span>
-                          Preencher dividendos
-                          <span className={clsx(styles.fileUploadOptionInfo)}>
-                            {" - "}
-                            Anexo J Quadro 8
-                          </span>
-                        </span>
-                      </div>
-                    )}
-                  </div>
-                  <div id="contentFile" className={clsx(styles.fileContainer)}>
-                    <Upload className={clsx(styles.fileUploadIcon)} />
-                    <input
-                      className={clsx(styles.fileUploadInput)}
-                      id="file-upload"
-                      type="file"
-                      accept=".xml"
-                      onChange={onFileUpload}
-                    />
-                    <label htmlFor="file-upload">Escolher ficheiro</label>
-                    {files.length > 0 && (
-                      <>
-                        <div className={clsx(styles.fileUploadFiles)}>
-                          {files.map((file, index) => (
-                            <div
-                              key={index}
-                              className={clsx(styles.fileUploadFile)}
-                            >
-                              <div className={clsx(styles.fileUploadFileNames)}>
-                                {file.name}
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                        {(fillCapitalGains || fillDividends) && (
+                    );
+                  })}
+                </div>
+                <div id="contentFile" className={clsx(styles.fileContainer)}>
+                  <Upload className={clsx(styles.fileUploadIcon)} />
+                  <input
+                    className={clsx(styles.fileUploadInput)}
+                    id="file-upload"
+                    type="file"
+                    accept=".xml"
+                    onChange={onFileUpload}
+                  />
+                  <label htmlFor="file-upload">Escolher ficheiro</label>
+                  {files.length > 0 && (
+                    <>
+                      <div className={clsx(styles.fileUploadFiles)}>
+                        {files.map((file, index) => (
                           <div
-                            className={clsx(styles.fileUploadSubmitButton)}
-                            onClick={onDeclarationUpload}
+                            key={index}
+                            className={clsx(styles.fileUploadFile)}
                           >
-                            <div
-                              className={clsx(
-                                styles.fileUploadSubmitButtonText
-                              )}
-                            >
-                              Processar {files.length} ficheiro
-                              {files.length !== 1 ? "s" : ""}
+                            <div className={clsx(styles.fileUploadFileNames)}>
+                              {file.name}
                             </div>
-                            <ArrowRight />
                           </div>
-                        )}
-                      </>
-                    )}
-                  </div>
-                  <p
-                    style={{
-                      fontStyle: "italic",
-                      fontWeight: "bold",
-                      padding: "1rem",
-                    }}
-                  >
-                    Nota: A declaração não deve conter erros e deve estar num
-                    estado em que não precises de preencher mais nenhuma
-                    informação sem ser os ganhos com investimentos. A declaração
-                    que aqui colocares deve ser a obtida no portal das finanças
-                    através da opção "Guardar".
-                  </p>
+                        ))}
+                      </div>
+                      {selectedPanels.size > 0 && (
+                        <div
+                          className={clsx(styles.fileUploadSubmitButton)}
+                          onClick={onDeclarationUpload}
+                        >
+                          <div
+                            className={clsx(styles.fileUploadSubmitButtonText)}
+                          >
+                            Processar {files.length} ficheiro
+                            {files.length !== 1 ? "s" : ""}
+                          </div>
+                          <ArrowRight />
+                        </div>
+                      )}
+                    </>
+                  )}
                 </div>
-              )}
-              {activeTab === 1 && (
-                <div className={clsx(styles.bodyContent)}>
-                  <div className={clsx(styles.tablesHeader)}>
-                    {capitalGains.length > 0 && (
-                      <div
-                        className={
-                          activeTable === 0
-                            ? clsx(styles.tableHeaderActive, styles.tableHeader)
-                            : clsx(styles.tableHeader)
-                        }
-                        onClick={() => {
-                          setActiveTable(0);
-                        }}
-                      >
-                        <span>Anexo J Quadro 9.2A</span>
-                        <span> - </span>
-                        <span>Rendimentos de Incrementos Patrimoniais</span>
-                      </div>
-                    )}
-                    {dividends.length > 0 && (
-                      <div
-                        className={
-                          activeTable === 1
-                            ? clsx(styles.tableHeaderActive, styles.tableHeader)
-                            : clsx(styles.tableHeader)
-                        }
-                        onClick={() => {
-                          setActiveTable(1);
-                        }}
-                      >
-                        <span>Anexo J Quadro 8</span>
-                        <span> - </span>
-                        <span>Rendimentos de capitais</span>
-                      </div>
-                    )}
-                  </div>
-                  <div className={clsx(styles.tablesContainer)}>
-                    {activeTable === 0 && (
-                      <div className={clsx(styles.table)}>
-                        <IRSCapitalGainsTable
-                          fiscalData={fiscalData}
-                          year={year}
-                        />
-                      </div>
-                    )}
-                    {activeTable === 1 && (
-                      <div className={clsx(styles.table)}>
-                        <IRSDividendsTable
-                          fiscalData={fiscalData}
-                          year={year}
-                        />
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )}
+                <p
+                  style={{
+                    fontStyle: "italic",
+                    fontWeight: "bold",
+                    padding: "1rem",
+                  }}
+                >
+                  Nota: A declaração não deve conter erros e deve estar num
+                  estado em que não precises de preencher mais nenhuma
+                  informação sem ser os ganhos com investimentos. A declaração
+                  que aqui colocares deve ser a obtida no portal das finanças
+                  através da opção "Guardar".
+                </p>
+              </div>
+
               <div id="declaration-download" style={{ display: "none" }}>
                 <p>
                   A tua declaração foi preenchida e descarregada para o teu
@@ -350,7 +265,7 @@ export default function DialogIRSDeclaration({
           </div>
         </div>
       )}
-      {showError && (fillCapitalGains || fillDividends) && (
+      {showError && selectedPanels.size > 0 && (
         <ErrorPopup title="Erro" closeFunction={() => setError(false)}>
           <h3>Falha ao processar os ficheiros</h3>
           <span>Os ficheiros não são compatíveis com o formato esperado.</span>
@@ -370,7 +285,7 @@ export default function DialogIRSDeclaration({
           </p>
         </ErrorPopup>
       )}
-      {showError && !fillCapitalGains && !fillDividends && (
+      {showError && selectedPanels.size === 0 && (
         <ErrorPopup title="Erro" closeFunction={() => setError(false)}>
           <h3>Nenhuma exportação escolhida</h3>
           <span>

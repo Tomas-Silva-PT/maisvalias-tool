@@ -14,13 +14,17 @@ class Classifier {
     classify(taxEvents: TaxEvent[]): Classifications {
         const result: Classifications = new Map();
 
-        for (const rule of this.rules) {
-            result.set(rule.destination, []);
-        }
+        // If you want to ensure that all categories are present in the result, even if they have no matching events, you can initialize the map with empty arrays for each category:
+        // for (const rule of this.rules) {
+        //     result.set(rule.destination, []);
+        // }
 
         for (const taxEvent of taxEvents) {
             for (const rule of this.rules) {
                 if (rule.condition(taxEvent)) {
+                    if (!result.has(rule.destination)) { // Initialize the category if it doesn't exist, which means only classifications with at least one tax event will be included in the result
+                        result.set(rule.destination, []);
+                    }
                     result.get(rule.destination)?.push(taxEvent);
                     break; // Assuming one transaction matches only one rule
                 }
