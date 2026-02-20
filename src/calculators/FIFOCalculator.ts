@@ -1,9 +1,10 @@
 import { Currency } from "../models/currency";
-import { MatchedTransaction, RealizedTransaction, Transaction } from "../models/transaction";
+import { CapitalGainEvent } from "../models/taxevent";
+import { MatchedTransaction, Transaction, transactionEquals } from "../models/transaction";
 import { CapitalGainsCalculator } from "./CapitalGainsCalculator";
 class FIFOCalculator implements CapitalGainsCalculator {
-    async calculate(transactions: MatchedTransaction[], year?: number, currency: string = "EUR"): Promise<RealizedTransaction[]> {
-        const realizedTransactions: RealizedTransaction[] = [];
+    async calculate(transactions: MatchedTransaction[], year?: number, currency: string = "EUR"): Promise<CapitalGainEvent[]> {
+        const realizedTransactions: CapitalGainEvent[] = [];
         const currencyConverter = new Currency();
 
         for (const transaction of transactions) {
@@ -17,18 +18,18 @@ class FIFOCalculator implements CapitalGainsCalculator {
 
             // Converter o montante da venda para a moeda da declaração
             let sellNetAmount = 0;
-            if (sellTransaction.netAmountCurrency === currency) {
+            if (sellTransaction.currency === currency) {
                 // console.log(`[SELL] Net amount used for ${sellTransaction.asset.ticker}`);
-                sellNetAmount = sellTransaction.netAmount;
+                sellNetAmount = sellTransaction.amount;
             } else if (sellTransaction.exchangeRate) {
                 // console.log(`[SELL] Exchange rate used for ${sellTransaction.asset.ticker}: ${sellTransaction.exchangeRate}`);
                 sellNetAmount =
-                    sellTransaction.netAmount * sellTransaction.exchangeRate;
+                    sellTransaction.amount * sellTransaction.exchangeRate;
             } else {
                 // console.log(`[SELL] Fetching exchange rate used for ${sellTransaction.asset.ticker}`);
                 sellNetAmount = await currencyConverter.convert(
-                    sellTransaction.netAmount,
-                    sellTransaction.netAmountCurrency,
+                    sellTransaction.amount,
+                    sellTransaction.currency,
                     currency,
                     sellTransaction.date
                 );
@@ -54,7 +55,7 @@ class FIFOCalculator implements CapitalGainsCalculator {
             }
 
             let sellCompensationFeesAmount =
-                (sellFeesAmount * shares) / sellTransaction.shares;
+                (sellFeesAmount * shares) / sellTransaction.shares!!;
 
             // Converter os impostos da venda para a moeda da declaração
             let sellTaxesAmount = 0;
@@ -77,29 +78,29 @@ class FIFOCalculator implements CapitalGainsCalculator {
 
             let sellCompensationTaxesAmount =
                 (sellTaxesAmount * shares) /
-                sellTransaction.shares;
+                sellTransaction.shares!!;
 
             // Calcular o montante bruto da venda - equivale ao montante que recebeu com a venda do ativo, antes de se retirar as comissões e outros encargos
             let sellGrossAmount = sellNetAmount + sellFeesAmount + sellTaxesAmount;
 
             // Cálculo do valor de realização (valor de venda)
-            let sellUnitValue = sellGrossAmount / sellTransaction.shares;
+            let sellUnitValue = sellGrossAmount / sellTransaction.shares!!;
             let realizedValue = sellUnitValue * shares; // não inclui despesas e encargos
 
             // Converter o montante da compra para a moeda da declaração
             let buyNetAmount = 0;
-            if (buyTransaction.netAmountCurrency === currency) {
+            if (buyTransaction.currency === currency) {
                 // console.log(`[BUY] Net amount used for ${buyTransaction.asset.ticker}`);
-                buyNetAmount = buyTransaction.netAmount;
+                buyNetAmount = buyTransaction.amount;
             } else if (buyTransaction.exchangeRate) {
                 // console.log(`[BUY] Exchange rate used for ${buyTransaction.asset.ticker}: ${buyTransaction.exchangeRate}`);
                 buyNetAmount +=
-                    buyTransaction.netAmount * buyTransaction.exchangeRate;
+                    buyTransaction.amount * buyTransaction.exchangeRate;
             } else {
                 // console.log(`[BUY] Fetching exchange rate used for ${buyTransaction.asset.ticker}`);
                 buyNetAmount = await currencyConverter.convert(
-                    buyTransaction.netAmount,
-                    buyTransaction.netAmountCurrency,
+                    buyTransaction.amount,
+                    buyTransaction.currency,
                     currency,
                     buyTransaction.date
                 );
@@ -125,7 +126,7 @@ class FIFOCalculator implements CapitalGainsCalculator {
             }
 
             let buyCompensationFeesAmount =
-                (buyFeesAmount * shares) / buyTransaction.shares;
+                (buyFeesAmount * shares) / buyTransaction.shares!!;
 
             // Converter os impostos da compra para a moeda da declaração
             let buyTaxesAmount = 0;
@@ -146,16 +147,17 @@ class FIFOCalculator implements CapitalGainsCalculator {
                 }
             }
             let buyCompensationTaxesAmount =
-                (buyTaxesAmount * shares) / buyTransaction.shares;
+                (buyTaxesAmount * shares) / buyTransaction.shares!!;
 
             // Calcular o montante bruto da compra - equivale ao montante que custou a comprar o ativo, sem contar com comissões ou outros encargos
             let buyGrossAmount = buyNetAmount - buyFeesAmount - buyTaxesAmount;
 
             // Cálculo do valor de aquisição (valor de compra)
-            let buyUnitValue = buyGrossAmount / buyTransaction.shares;
+            let buyUnitValue = buyGrossAmount / buyTransaction.shares!!;
             let acquiredValue = buyUnitValue * shares; // não inclui despesas e encargos
 
             realizedTransactions.push({
+                kind: "capitalGain",
                 buy: buyTransaction,
                 sell: sellTransaction,
                 buyFees: Math.round((buyCompensationFeesAmount) * 100) / 100,
@@ -187,20 +189,20 @@ class FIFOCalculator implements CapitalGainsCalculator {
 
         const compensations: MatchedTransaction[] = [];
         for (let sell of sellTransactions) {
-            let remainingSharesForCompensation = sell.shares;
+            let remainingSharesForCompensation = sell.shares!!;
 
             for (let buy of buyTransactions) {
-                if (buy.asset.isin !== sell.asset.isin) continue;
+                if (buy.asset!!.isin !== sell.asset!!.isin) continue;
                 // Verificar se a compra ocorreu depois da venda, nesse caso, ignorar
                 if (buy.date.toMillis() > sell.date.toMillis()) continue;
 
                 // Calcular nº de ações da compra já compensada anteriormente
                 const alreadyCompensated = compensations
-                    .filter((c) => c.buy.equals(buy))
+                    .filter((c) => transactionEquals(c.buy, buy))
                     .reduce((sum, c) => sum + c.shares, 0);
 
                 // Calcular nº de ações da compra que faltam compensar
-                const availableShares = buy.shares - alreadyCompensated;
+                const availableShares = buy.shares!! - alreadyCompensated;
                 if (availableShares < Number.EPSILON) continue;
 
                 // Calcular nº de ações da venda que podem ser compensadas

@@ -1,11 +1,11 @@
 import { AnexoG1Quadro7 } from "../../../../../models/irs/panel.js";
-import { RealizedTransaction } from "../../../../../models/transaction.js";
+import { CapitalGainEvent } from "../../../../../models/taxevent.js";
 import { IRSFormatter } from "../../IRSFormatter.js";
 
-class PTAnexoG1Quadro7Formatter implements IRSFormatter<RealizedTransaction, AnexoG1Quadro7> {
+class PTAnexoG1Quadro7Formatter implements IRSFormatter<CapitalGainEvent, AnexoG1Quadro7> {
   constructor() { }
 
-  format(transactions: RealizedTransaction[]): AnexoG1Quadro7[] {
+  format(transactions: CapitalGainEvent[]): AnexoG1Quadro7[] {
 
     let capitalGains: AnexoG1Quadro7[] = [];
 
@@ -17,7 +17,7 @@ class PTAnexoG1Quadro7Formatter implements IRSFormatter<RealizedTransaction, Ane
       const fees = realizedTransaction.buyFees + realizedTransaction.sellFees;
       const taxes = realizedTransaction.buyTaxes + realizedTransaction.sellTaxes;
 
-      let countryDomiciled = buy.asset.countryDomiciled;
+      let countryDomiciled = buy.asset!!.countryDomiciled;
       // Para ações domiciliadas em Portugal e adquiridas em corretoras estrangeiras, o país da fonte deve ser o da corretora
       if (countryDomiciled?.code === "620") {
         countryDomiciled = buy.broker.country;
@@ -63,7 +63,7 @@ class PTAnexoG1Quadro7Formatter implements IRSFormatter<RealizedTransaction, Ane
 
   }
 
-  toXML(xmlDoc: Document, events: RealizedTransaction[]): string {
+  toXML(xmlDoc: Document, events: CapitalGainEvent[]): string {
     return "";
   }
 

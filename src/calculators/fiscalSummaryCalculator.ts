@@ -1,9 +1,9 @@
 import { FiscalSummary } from "../models/fiscalSummary";
-import { DividendTransaction, RealizedTransaction } from "../models/transaction";
+import { CapitalGainEvent, IncomeEvent } from "../models/taxevent";
 
 class FiscalSummaryCalculator {
 
-    calculate(capitalGains: RealizedTransaction[], dividends: DividendTransaction[]): FiscalSummary {
+    calculate(capitalGains: CapitalGainEvent[], dividends: IncomeEvent[]): FiscalSummary {
         const summary: FiscalSummary = {
             currency: "EUR",
             dividends: 0,

@@ -1,18 +1,18 @@
 import { AnexoJQuadro8A } from "../../../../../models/irs/panel.js";
-import { DividendTransaction } from "../../../../../models/transaction.js";
+import { IncomeEvent } from "../../../../../models/taxevent.js";
 import { IRSFormatter } from "../../IRSFormatter.js";
 
-class PTAnexoJQuadro8AFormatter implements IRSFormatter<DividendTransaction, AnexoJQuadro8A> {
+class PTAnexoJQuadro8AFormatter implements IRSFormatter<IncomeEvent, AnexoJQuadro8A> {
   constructor() { }
 
-  format(dividends: DividendTransaction[]): AnexoJQuadro8A[] {
+  format(dividends: IncomeEvent[]): AnexoJQuadro8A[] {
     let result: AnexoJQuadro8A[] = [];
 
-    const dividendsByAsset: Record<string, Record<string, DividendTransaction[]>> = {};
+    const dividendsByAsset: Record<string, Record<string, IncomeEvent[]>> = {};
 
     // Agrupar dividendos por ativo e ano
     for (const dividend of dividends) {
-      const isin = dividend.transaction.asset.isin;
+      const isin = dividend.transaction.asset!!.isin;
       const year = dividend.transaction.date.year;
       dividendsByAsset[isin] ??= {};
       dividendsByAsset[isin][year] ??= [];
@@ -38,7 +38,7 @@ class PTAnexoJQuadro8AFormatter implements IRSFormatter<DividendTransaction, Ane
 
         totalGrossAmount = Math.round((totalGrossAmount) * 100) / 100;
 
-        let countryDomiciled = yearGroup[0].transaction.asset.countryDomiciled;
+        let countryDomiciled = yearGroup[0].transaction.asset!!.countryDomiciled;
 
         // Para ações domiciliadas em Portugal e adquiridas em corretoras estrangeiras, o país da fonte deve ser o da corretora
         if (countryDomiciled?.code === "620") {
@@ -84,7 +84,7 @@ class PTAnexoJQuadro8AFormatter implements IRSFormatter<DividendTransaction, Ane
 
   }
 
-  toXML(xmlDoc: Document, events: DividendTransaction[]): void {
+  toXML(xmlDoc: Document, events: IncomeEvent[]): void {
     const anexoJ = xmlDoc.querySelector("AnexoJ");
     if (!anexoJ) {
       throw new Error("O Anexo J não foi encontrado na declaração IRS.");

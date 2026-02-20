@@ -1,7 +1,7 @@
-import { RealizedTransaction } from "./transaction.js";
+import { CapitalGainEvent } from "./taxevent";
 
 type CapitalGainForUser = {
-  transaction: RealizedTransaction;
+  transaction: CapitalGainEvent;
   "Ticker": string;
   "Realização": {
     "Data": string;
@@ -21,7 +21,7 @@ type CapitalGainForUser = {
 };
 
 type CapitalGainToIRS = {
-  transaction: RealizedTransaction;
+  transaction: CapitalGainEvent;
   Ticker: string;
   "País da fonte": string;
   Código: string;

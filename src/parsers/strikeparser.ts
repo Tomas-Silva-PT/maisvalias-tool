@@ -1,8 +1,9 @@
 import { DateTime } from "luxon";
-import { Transaction } from "../models/transaction";
+import { Transaction, TransactionType } from "../models/transaction";
 import { Parser } from "./parser";
 import { Strike } from "../models/brokers/strike";
 import { Fee } from "../models/fee";
+import { Asset } from "../models/asset";
 
 class StrikeParser implements Parser {
   parse(fileData: string): Transaction[] {
@@ -22,9 +23,9 @@ class StrikeParser implements Parser {
 
         const utcDate = DateTime.fromFormat(record["Date & Time (UTC)"], "LLL dd yyyy HH:mm:ss", { zone: "utc" });
 
-        let type = record["Transaction Type"].toLowerCase();
-        if (type.includes("purchase")) type = "Buy";
-        else if (type.includes("sale")) type = "Sell";
+        let type : TransactionType;
+        if (record["Transaction Type"].toLowerCase().includes("purchase")) type = "Buy";
+        else if (record["Transaction Type"].toLowerCase().includes("sale")) type = "Sell";
         else return;
 
         if(record["Description"] != "") return; // If it has a description, it's has either been cancelled or it was a target order, not a completed transaction.
@@ -41,20 +42,32 @@ class StrikeParser implements Parser {
         const fee = new Fee("Fee", parseFloat(record["Fee EUR"]), "EUR");
         fees.push(fee);
 
-        const transaction = new Transaction(
-          utcDate,
-          type,
-          ticker,
-          isin,
-          shares,
-          assetCurrency,
-          amount,
-          amountCurrency,
-          new Strike(),
-          undefined,
-          fees,
-          undefined // Assumes every transaction is in EUR, so no exchange rate needed
-        );
+        // const transaction = new Transaction(
+        //   utcDate,
+        //   type,
+        //   ticker,
+        //   isin,
+        //   shares,
+        //   assetCurrency,
+        //   amount,
+        //   amountCurrency,
+        //   new Strike(),
+        //   undefined,
+        //   fees,
+        //   undefined // Assumes every transaction is in EUR, so no exchange rate needed
+        // );
+        const transaction: Transaction = {
+                date: utcDate,
+                type: type,
+                asset: new Asset(ticker, isin, assetCurrency),
+                shares: shares,
+                amount: amount,
+                currency: amountCurrency,
+                broker: new Strike(),
+                taxes: undefined,
+                fees: fees,
+                exchangeRate: undefined // Assumes every transaction is in EUR, so no exchange rate needed
+            };
 
         if(transaction.type) transactions.push(transaction);
 

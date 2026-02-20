@@ -4,6 +4,7 @@ import { Degiro } from "../models/brokers/degiro";
 import { Tax } from "../models/tax";
 import { Fee } from "../models/fee";
 import { DateTime } from "luxon";
+import { Asset } from "../models/asset";
 
 class DegiroParser implements Parser {
 
@@ -64,7 +65,7 @@ class DegiroParser implements Parser {
             let feeAmount = Math.abs(parseFloat(record[14][1]) || 0);
             const feeCurrency = record[15][1];
             const feeExchangeRate = feeCurrency === netAmountCurrency ? 1 : feeCurrency === assetCurrency ? exchangeRate : 0; // Se o custo for na mesma moeda do ativo, utiliza-se a mesma taxa de câmbio. Senão, é necessário obter a taxa de câmbio através de uma API.
-            
+
 
             // Obter o total custo da transação (porque a Degiro esconde taxas como a AutoFX...enfim)
             // console.log("Account Resume: " + JSON.stringify(this.accountResume));
@@ -81,8 +82,8 @@ class DegiroParser implements Parser {
                 // console.log("Equals: " + row[0][1] === record[0][1] && row[1][1] === record[1][1] && row[4][1] === isin && row[5][1] === findDescription)
                 return row[0][1] === record[0][1] && row[1][1] === record[1][1] && row[4][1] === isin && row[5][1] === findDescription;
             })?.[8][1] || "0"));
-            if(totalAmount) {
-                feeAmount += Math.abs(totalAmount - Math.abs(parseFloat(record[11][1]))); 
+            if (totalAmount) {
+                feeAmount += Math.abs(totalAmount - Math.abs(parseFloat(record[11][1])));
             }
             let netAmount = type === "Buy" ? Math.abs(parseFloat(record[11][1])) + Math.abs(feeAmount) || 0 : Math.abs(parseFloat(record[11][1])) - Math.abs(feeAmount) || 0;
 
@@ -94,20 +95,32 @@ class DegiroParser implements Parser {
 
 
 
-            const transaction = new Transaction(
-                utcDate,
-                type,
-                product,
-                isin,
-                Math.abs(shares),
-                assetCurrency,
-                Math.abs(netAmount),
-                netAmountCurrency,
-                new Degiro(),
-                undefined,
-                fees,
-                exchangeRate
-            );
+            // const transaction = new Transaction(
+            //     utcDate,
+            //     type,
+            //     product,
+            //     isin,
+            //     Math.abs(shares),
+            //     assetCurrency,
+            //     Math.abs(netAmount),
+            //     netAmountCurrency,
+            //     new Degiro(),
+            //     undefined,
+            //     fees,
+            //     exchangeRate
+            // );
+            const transaction: Transaction = {
+                date: utcDate,
+                type: type,
+                asset: new Asset(product, isin, ""),
+                shares: Math.abs(shares),
+                amount: netAmount,
+                currency: netAmountCurrency,
+                broker: new Degiro(),
+                taxes: undefined,
+                fees: fees,
+                exchangeRate: exchangeRate
+            };
             if (transaction.type || !date || !time) transactions.push(transaction);
         });
 
@@ -161,20 +174,32 @@ class DegiroParser implements Parser {
             }
 
 
-            const transaction = new Transaction(
-                utcDate,
+            // const transaction = new Transaction(
+            //     utcDate,
+            //     type,
+            //     product,
+            //     isin,
+            //     0,
+            //     "",
+            //     netAmount,
+            //     netAmountCurrency,
+            //     new Degiro(),
+            //     taxes,
+            //     undefined,
+            //     exchangeRate
+            // );
+            const transaction: Transaction = {
+                date: utcDate,
                 type,
-                product,
-                isin,
-                0,
-                "",
-                netAmount,
-                netAmountCurrency,
-                new Degiro(),
-                taxes,
-                undefined,
-                exchangeRate
-            );
+                asset: new Asset(product, isin, ""),
+                // shares: 0, // In dividend transaction the shares are not relevant
+                amount: netAmount,
+                currency: netAmountCurrency,
+                broker: new Degiro(),
+                taxes: taxes,
+                fees: undefined,
+                exchangeRate: exchangeRate
+            };
             if (transaction.type || !date || !time) transactions.push(transaction);
         });
 

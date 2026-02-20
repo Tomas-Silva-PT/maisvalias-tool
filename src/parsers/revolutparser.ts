@@ -1,8 +1,9 @@
-import { Transaction } from "../models/transaction.js";
+import { Transaction, TransactionType } from "../models/transaction.js";
 import { Parser } from "./parser.js";
 import { Fee } from "../models/fee.js";
 import { Revolut } from "../models/brokers/revolut.js";
 import { DateTime } from "luxon";
+import { Asset } from "../models/asset.js";
 
 class RevolutParser implements Parser {
   isins?: Record<string, string>[];
@@ -108,12 +109,11 @@ class RevolutParser implements Parser {
         "yyyy-MM-dd HH:mm:ss", { zone: "utc" }
       )
 
-
-      let type = record["Type"];
+      let type : TransactionType;
       // console.log("Type: " + type);
-      if (type == "BUY - MARKET") type = "Buy";
-      else if (type == "SELL - MARKET") type = "Sell";
-      else if (type == "DIVIDEND") type = "Dividend";
+      if (record["Type"] == "BUY - MARKET") type = "Buy";
+      else if (record["Type"] == "SELL - MARKET") type = "Sell";
+      else if (record["Type"] == "DIVIDEND") type = "Dividend";
       else return;
 
       const ticker = record["Ticker"];
@@ -138,20 +138,32 @@ class RevolutParser implements Parser {
 
       const isin = this.isins?.find((i) => i.ticker === ticker)?.isin;
       if (isin) {
-        const transaction = new Transaction(
-          utcDate,
-          type,
-          ticker,
-          isin,
-          shares,
-          assetCurrency,
-          amount,
-          amountCurrency,
-          new Revolut(),
-          undefined,
-          fees,
-          exchangeRate
-        );
+        // const transaction = new Transaction(
+        //   utcDate,
+        //   type,
+        //   ticker,
+        //   isin,
+        //   shares,
+        //   assetCurrency,
+        //   amount,
+        //   amountCurrency,
+        //   new Revolut(),
+        //   undefined,
+        //   fees,
+        //   exchangeRate
+        // );
+        const transaction: Transaction = {
+                date: utcDate,
+                type: type,
+                asset: new Asset(ticker, isin, assetCurrency),
+                shares: shares,
+                amount: amount,
+                currency: amountCurrency,
+                broker: new Revolut(),
+                taxes: undefined,
+                fees: fees,
+                exchangeRate: exchangeRate
+            };
         // console.log("Transaction: " + JSON.stringify(transaction));
         if (transaction.type) transactions.push(transaction);
       }

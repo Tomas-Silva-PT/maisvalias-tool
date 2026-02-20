@@ -1,10 +1,10 @@
 import { CapitalGainToExcel } from "../../models/capitalgain.js";
-import { RealizedTransaction } from "../../models/transaction.js";
+import { CapitalGainEvent } from "../../models/taxevent.js";
 
 class ExcelCapitalGainsFormatter {
     constructor() { }
 
-    format(transactions: RealizedTransaction[]): CapitalGainToExcel[] {
+    format(transactions: CapitalGainEvent[]): CapitalGainToExcel[] {
 
         let capitalGains: CapitalGainToExcel[] = [];
 
@@ -14,18 +14,18 @@ class ExcelCapitalGainsFormatter {
             const realizedValue = realizedTransaction.realizedValue;
             const acquiredValue = realizedTransaction.acquiredValue;
 
-            const ticker = sell.asset.ticker;
-            const isin = sell.asset.isin;
+            const ticker = sell.asset!!.ticker;
+            const isin = sell.asset!!.isin;
             const dataAquisicao = buy.date
             const valorAquisicao = acquiredValue;
             const despesasAquisicao = Math.round((realizedTransaction.buyFees + realizedTransaction.buyTaxes) * 100) / 100;
-            const taxaCambioAquisicao = buy.netAmountCurrency === "EUR" ? 1 : Math.round((buy.exchangeRate || 1) * 1000) / 1000
-            const moedaOriginalAquisicao = buy.netAmountCurrency;
+            const taxaCambioAquisicao = buy.currency === "EUR" ? 1 : Math.round((buy.exchangeRate || 1) * 1000) / 1000
+            const moedaOriginalAquisicao = buy.currency;
             const dataRealizacao = sell.date
             const valorRealizacao = realizedValue;
             const despesasRealizacao = Math.round((realizedTransaction.sellFees + realizedTransaction.sellTaxes) * 100) / 100;
-            const taxaCambioRealizacao = sell.netAmountCurrency === "EUR" ? 1 : Math.round((sell.exchangeRate || 1) * 1000) / 1000
-            const moedaOriginalRealizacao = sell.netAmountCurrency;
+            const taxaCambioRealizacao = sell.currency === "EUR" ? 1 : Math.round((sell.exchangeRate || 1) * 1000) / 1000
+            const moedaOriginalRealizacao = sell.currency;
             const balance = Math.round((realizedValue - acquiredValue - despesasAquisicao - despesasRealizacao) * 100) / 100;
 
             const capitalGain: CapitalGainToExcel = {

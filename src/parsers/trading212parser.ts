@@ -1,10 +1,11 @@
 import { Fee } from "../models/fee.js";
 import { Tax } from "../models/tax.js";
-import { Transaction } from "../models/transaction.js";
+import { Transaction, TransactionType } from "../models/transaction.js";
 import { Trading212 } from "../models/brokers/trading212.js";
 import { Parser } from "./parser.js";
 import { Statement } from "../models/statement.js";
 import { DateTime } from "luxon";
+import { Asset } from "../models/asset.js";
 
 class Trading212Parser implements Parser {
   parse(fileData: string): Transaction[] {
@@ -26,10 +27,10 @@ class Trading212Parser implements Parser {
         `${date} ${time}`,
         "yyyy-MM-dd HH:mm:ss", { zone: "utc" });
 
-      let type = record["Action"].toLowerCase();
-      if (type.includes("buy")) type = "Buy";
-      else if (type.includes("sell")) type = "Sell";
-      else if (type.includes("dividend")) type = "Dividend";
+      let type : TransactionType;
+      if (record["Action"].toLowerCase().includes("buy")) type = "Buy";
+      else if (record["Action"].toLowerCase().includes("sell")) type = "Sell";
+      else if (record["Action"].toLowerCase().includes("dividend")) type = "Dividend";
       else return;
 
       const ticker = record["Ticker"];
@@ -67,20 +68,32 @@ class Trading212Parser implements Parser {
 
       let exchangeRate = 1 / parseFloat(record["Exchange rate"]);
 
-      const transaction = new Transaction(
-        utcDate,
-        type,
-        ticker,
-        isin,
-        shares,
-        assetCurrency,
-        amount,
-        amountCurrency,
-        new Trading212(),
-        taxes,
-        fees,
-        exchangeRate
-      );
+      // const transaction = new Transaction(
+      //   utcDate,
+      //   type,
+      //   ticker,
+      //   isin,
+      //   shares,
+      //   assetCurrency,
+      //   amount,
+      //   amountCurrency,
+      //   new Trading212(),
+      //   taxes,
+      //   fees,
+      //   exchangeRate
+      // );
+      const transaction: Transaction = {
+        date: utcDate,
+        type: type,
+        asset: new Asset(ticker, isin, assetCurrency),
+        shares: shares,
+        amount: amount,
+        currency: amountCurrency,
+        broker: new Trading212(),
+        taxes: taxes,
+        fees: fees,
+        exchangeRate: exchangeRate
+      };
       if (transaction.type) transactions.push(transaction);
     });
 

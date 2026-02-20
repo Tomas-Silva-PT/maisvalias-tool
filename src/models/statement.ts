@@ -4,7 +4,7 @@ import { Country } from "./country.js";
 import { Currency } from "./currency.js";
 import { Fee } from "./fee.js";
 import { Tax } from "./tax.js";
-import { Transaction } from "./transaction.js";
+import { Transaction, transactionEquals } from "./transaction.js";
 import { ExchangeRate } from "./yahoofinance.js";
 
 type ExchangeRateToFetch = {
@@ -45,12 +45,12 @@ class Statement {
         let feesWithoutExchangeRate : Record<string, Fee>[] = [];
 
         for (const transaction of this.transactions) {
-            const { netAmountCurrency, exchangeRate, date, taxes = [], fees = [] } = transaction;
+            const { currency, exchangeRate, date, taxes = [], fees = [] } = transaction;
 
             let currenciesToCheck : string[] = [];
 
-            if (netAmountCurrency !== this.baseCurrency && (!exchangeRate || exchangeRate === 0 || exchangeRate === 1)) {
-                currenciesToCheck.push(netAmountCurrency);
+            if (currency !== this.baseCurrency && (!exchangeRate || exchangeRate === 0 || exchangeRate === 1)) {
+                currenciesToCheck.push(currency);
                 transactionsWithoutExchangeRate.push(transaction);
             }
 
@@ -98,7 +98,7 @@ class Statement {
             const exchangeRates : ExchangeRate[] = await Currency.getExchangeRates(rateToFetch.currency, this.baseCurrency, rateToFetch.dates);
             //  console.log("Exchange Rates: ", JSON.stringify(exchangeRates));
             
-            transactionsWithoutExchangeRate.filter((transaction) => transaction.netAmountCurrency === rateToFetch.currency).forEach((transaction) => {
+            transactionsWithoutExchangeRate.filter((transaction) => transaction.currency === rateToFetch.currency).forEach((transaction) => {
                 // console.log("Date transaction: ", transaction.date);
                 transaction.exchangeRate = exchangeRates.find((rate) => rate.date.equals(transaction.date))?.close;
             });
@@ -134,7 +134,7 @@ class Statement {
     async fetchAssetTypes() {
         const isins : string[] = [];
         for (let transaction of this.transactions) {
-            const isin = transaction.asset.isin;
+            const isin = transaction.asset!!.isin;
             if (isins.includes(isin)) continue;
             isins.push(isin);
         }
@@ -148,16 +148,16 @@ class Statement {
         console.log(`[END] Fetching asset types... (took ${((end - start) / 1000).toFixed(3)} seconds)`);
 
         for (let transaction of this.transactions) {
-            const isin = transaction.asset.isin;
+            const isin = transaction.asset!!.isin;
             const assetType = assetTypes[isin];
-            transaction.asset.assetType = assetType;
+            transaction.asset!!.assetType = assetType;
         }
     }
 
     fetchCountries() {
         for (let transaction of this.transactions) {
-            const isin = transaction.asset.isin;
-            transaction.asset.countryDomiciled = new Country(isin.substring(0, 2));
+            const isin = transaction.asset!!.isin;
+            transaction.asset!!.countryDomiciled = new Country(isin.substring(0, 2));
         }
     }
 
@@ -169,7 +169,7 @@ class Statement {
     }
 
     addTransaction(transaction: Transaction): void {
-        if (!this.transactions.some((t) => t.equals(transaction))) {
+        if (!this.transactions.some((t) => transactionEquals(t, transaction) )) {
             this.transactions.push(transaction);
             this.sortTransactions();
         }

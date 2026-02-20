@@ -1,11 +1,11 @@
 import { AnexoJQuadro92A } from "../../../../../models/irs/panel.js";
-import { RealizedTransaction } from "../../../../../models/transaction.js";
+import { CapitalGainEvent } from "../../../../../models/taxevent.js";
 import { IRSFormatter } from "../../IRSFormatter.js";
 
-class PTAnexoJQuadro92AFormatter implements IRSFormatter<RealizedTransaction, AnexoJQuadro92A> {
+class PTAnexoJQuadro92AFormatter implements IRSFormatter<CapitalGainEvent, AnexoJQuadro92A> {
   constructor() { }
 
-  format(transactions: RealizedTransaction[]): AnexoJQuadro92A[] {
+  format(transactions: CapitalGainEvent[]): AnexoJQuadro92A[] {
 
     let capitalGains: AnexoJQuadro92A[] = [];
 
@@ -19,7 +19,7 @@ class PTAnexoJQuadro92AFormatter implements IRSFormatter<RealizedTransaction, An
 
 
       let code: string = "";
-      switch (realizedTransaction.buy.asset.assetType) {
+      switch (realizedTransaction.buy.asset!!.assetType) {
         case "EQUITY":
           code = "G01";
           break;
@@ -28,13 +28,13 @@ class PTAnexoJQuadro92AFormatter implements IRSFormatter<RealizedTransaction, An
           break;
       }
 
-      let countryDomiciled = buy.asset.countryDomiciled;
+      let countryDomiciled = buy.asset!!.countryDomiciled;
       // Para ações domiciliadas em Portugal e adquiridas em corretoras estrangeiras, o país da fonte deve ser o da corretora
       if (countryDomiciled?.code === "620") {
         countryDomiciled = buy.broker.country;
       }
 
-      const ticker = sell.asset.ticker;
+      const ticker = sell.asset!!.ticker;
       let paisFonte = "";
       if (countryDomiciled?.code) {
         paisFonte = countryDomiciled.code ? `${countryDomiciled?.code} - ${countryDomiciled?.namePt}` : "";
@@ -77,7 +77,7 @@ class PTAnexoJQuadro92AFormatter implements IRSFormatter<RealizedTransaction, An
 
   }
 
-  toXML(xmlDoc: Document, events: RealizedTransaction[]): void {
+  toXML(xmlDoc: Document, events: CapitalGainEvent[]): void {
     const anexoJ = xmlDoc.querySelector("AnexoJ");
     if (!anexoJ) throw new Error("Falta AnexoJ");
 

@@ -1,15 +1,16 @@
 import { Currency } from "../models/currency";
-import { DividendTransaction, Transaction } from "../models/transaction";
+import { IncomeEvent } from "../models/taxevent";
+import { Transaction } from "../models/transaction";
 import { DateTime } from "luxon";
 
 class DividendsCalculator {
-    async calculate(transactions: Transaction[], year?: number, currency: string = "EUR"): Promise<DividendTransaction[]> {
+    async calculate(transactions: Transaction[], year?: number, currency: string = "EUR"): Promise<IncomeEvent[]> {
         const currencyConverter = new Currency();
         const dividendTransactions = transactions.filter(
             (t) =>
                 t.type === "Dividend" && (!year || t.date.year === year)
         );
-        const dividends: DividendTransaction[] = [];
+        const dividends: IncomeEvent[] = [];
 
         for (const transaction of dividendTransactions) {
             const fees = transaction.fees;
@@ -54,15 +55,15 @@ class DividendsCalculator {
                 }
             }
 
-            if (transaction.netAmountCurrency === currency) {
-                totalNetAmount += transaction.netAmount;
+            if (transaction.currency === currency) {
+                totalNetAmount += transaction.amount;
             } else if (transaction.exchangeRate) {
-                totalNetAmount += transaction.netAmount * transaction.exchangeRate;
+                totalNetAmount += transaction.amount * transaction.exchangeRate;
             } else {
                 console.log("Converting dividend amount");
                 totalNetAmount += await currencyConverter.convert(
-                    transaction.netAmount,
-                    transaction.netAmountCurrency,
+                    transaction.amount,
+                    transaction.currency,
                     currency,
                     transaction.date
                 );
@@ -71,6 +72,7 @@ class DividendsCalculator {
             totalGrossAmount = totalNetAmount + (totalFeesAmount + totalTaxAmount);
 
             dividends.push({
+                kind: "dividend",
                 transaction: transaction,
                 amount: Math.round(totalGrossAmount * 100) / 100,
                 fees: Math.round(totalFeesAmount * 100) / 100,

@@ -1,4 +1,4 @@
-import { DividendTransaction, MatchedTransaction, TaxEvent } from "../../models/transaction";
+import { CapitalGainEvent, TaxEvent } from "../../models/taxevent";
 import { PTDestinations } from "../destinations/pt_destinations";
 import { Rule } from "./rule";
 
@@ -29,8 +29,8 @@ const PTIRSRules2025: Rule[] = [
  * @returns True if the tax event is a capital gain event, false otherwise.
  */
 
-function isCapitalGainEvent(event: TaxEvent): event is TaxEvent & MatchedTransaction {
-    return "realizedValue" in event && "buy" in event && "sell" in event;
+function isCapitalGainEvent(event: TaxEvent) {
+    return event.kind === "capitalGain";
 }
 
 /**
@@ -38,8 +38,17 @@ function isCapitalGainEvent(event: TaxEvent): event is TaxEvent & MatchedTransac
  * @param event The tax event to check.
  * @returns True if the tax event is a dividend event, false otherwise.
  */
-function isDividendEvent(event: TaxEvent): event is TaxEvent & DividendTransaction {
-    return "amount" in event;
+function isDividendEvent(event: TaxEvent) {
+    return event.kind === "dividend";
+}
+
+/**
+ * Returns true if the tax event is an interest event and false otherwise.
+ * @param event The tax event to check.
+ * @returns True if the tax event is an interest event, false otherwise.
+ */
+function isInterestEvent(event: TaxEvent) {
+    return event.kind === "interest";
 }
 
 /**
@@ -50,8 +59,8 @@ function isDividendEvent(event: TaxEvent): event is TaxEvent & DividendTransacti
  * @param event The matched transaction to check.
  * @returns True if the matched transaction is a foreign capital gain event, false otherwise.
  */
-function isForeignCapitalGain(event: MatchedTransaction): boolean {
-    return event.sell.broker.country.alpha2 !== "PT";
+function isForeignCapitalGain(event: TaxEvent): boolean {
+    return event.kind === "capitalGain" && event.sell.broker.country.alpha2 !== "PT";
 }
 
 /**
@@ -62,8 +71,8 @@ function isForeignCapitalGain(event: MatchedTransaction): boolean {
  * @param event The dividend transaction to check.
  * @returns True if the dividend transaction is a foreign dividend event, false otherwise.
  */
-function isForeignDividend(event: DividendTransaction): boolean {
-    return "transaction" in event && event.transaction.broker.country.alpha2 !== "PT";
+function isForeignDividend(event: TaxEvent): boolean {
+    return event.kind === "dividend" && event.transaction.broker.country.alpha2 !== "PT";
 }
 
 /**
@@ -73,11 +82,11 @@ function isForeignDividend(event: DividendTransaction): boolean {
  * @returns True if the matched transaction is a capital gain event
  * where the asset was held for more than one year, false otherwise.
  */
-function isCapitalGainHoldForMoreThanOneYear(event: MatchedTransaction): boolean {
+function isCapitalGainHoldForMoreThanOneYear(event: CapitalGainEvent): boolean {
     const buyDate = event.buy.date;
     const sellDate = event.sell.date;
 
-    const differenceInYears = sellDate.diff(buyDate, "years").days;
+    const differenceInYears = sellDate.diff(buyDate, "days").days;
 
     return differenceInYears >= 365;
 }
@@ -89,8 +98,8 @@ function isCapitalGainHoldForMoreThanOneYear(event: MatchedTransaction): boolean
  * @returns True if the matched transaction is a cryptocurrency
  * event, false otherwise.
  */
-function isCrypto(event: MatchedTransaction): boolean {
-    return event.sell.asset.assetType === "CRYPTOCURRENCY";
+function isCrypto(event: TaxEvent): boolean {
+    return event.kind == "capitalGain" && event.sell.asset!!.assetType === "CRYPTOCURRENCY";
 }
 
 

@@ -1,10 +1,10 @@
 import { CapitalGainForUser } from "../../models/capitalgain.js";
-import { RealizedTransaction } from "../../models/transaction.js";
+import { CapitalGainEvent } from "../../models/taxevent.js";
 
 class CapitalGainsFormatter {
     constructor() { }
 
-    format(transactions: RealizedTransaction[]): CapitalGainForUser[] {
+    format(transactions: CapitalGainEvent[]): CapitalGainForUser[] {
 
         let capitalGains: CapitalGainForUser[] = [];
 
@@ -14,7 +14,7 @@ class CapitalGainsFormatter {
             const realizedValue = realizedTransaction.realizedValue;
             const acquiredValue = realizedTransaction.acquiredValue;
 
-            const ticker = sell.asset.ticker;
+            const ticker = sell.asset!!.ticker;
             const dataAquisicao = buy.date
             const valorAquisicao = acquiredValue;
             const despesasAquisicao = realizedTransaction.buyFees + realizedTransaction.buyTaxes;
@@ -29,14 +29,14 @@ class CapitalGainsFormatter {
                     "Data": dataAquisicao.toISODate()!,
                     "Valor": valorAquisicao, // Corresponde ao valor da ordem de compra do ativo (ou seja, quanto é que o vendedor recebeu pela tua compra)
                     "Despesas": Math.round(despesasAquisicao * 100) / 100,
-                    "Moeda Original": buy.netAmountCurrency,
+                    "Moeda Original": buy.currency,
                     "Taxa de Câmbio": Math.round((buy.exchangeRate || 1) * 1000) / 1000,
                 },
                 "Realização": {
                     "Data": dataRealizacao.toISODate()!,
                     "Valor": valorRealizacao, // Corresponde ao valor da ordem de venda do ativo (ou seja, quanto é que o comprador pagou pela tua venda)
                     "Despesas": Math.round(despesasRealizacao * 100) / 100,
-                    "Moeda Original": sell.netAmountCurrency,
+                    "Moeda Original": sell.currency,
                     "Taxa de Câmbio": Math.round((sell.exchangeRate || 1) * 1000) / 1000,
                 },
                 "Balanço": Math.round((realizedValue - acquiredValue - despesasAquisicao - despesasRealizacao) * 100) / 100,

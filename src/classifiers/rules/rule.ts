@@ -1,4 +1,4 @@
-import { TaxEvent } from "../../models/transaction";
+import { TaxEvent } from "../../models/taxevent";
 import { Destination } from "../destinations/destination";
 
 type Rule = {
