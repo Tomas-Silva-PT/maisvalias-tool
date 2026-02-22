@@ -15,14 +15,7 @@ export default function DialogIRSDeclaration({
   fiscalData,
   year,
 }) {
-  let capitalGains = fiscalData.byYear[year].capitalGains.raw;
-  let dividends = fiscalData.byYear[year].dividends.raw;
-  let interestGains = fiscalData.byYear[year].interestGains.raw;
-
-  // Classify transactions into IRS panels
-  const classifier = new Classifier(PTIRSRules2025);
-  const taxEvents = [...capitalGains, ...dividends, ...interestGains];
-  const classifications = classifier.classify(taxEvents);
+  const classifications = fiscalData.byYear[year].classifications;
 
   const panels = Array.from(classifications.keys());
   // const classifiedTaxEvents = Array.from(classifications.values());

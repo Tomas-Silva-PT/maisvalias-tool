@@ -7,4 +7,13 @@ type InterestGainForUser = {
   "Balanço": number;
 };
 
-export { InterestGainForUser };
+type InterestGainToExcel = {
+  "Data": string;
+  "Valor": number;
+  "Despesas": number;
+  "Moeda Original": string;
+  "Taxa de Câmbio": number;
+  "Balanço": number;
+};
+
+export { InterestGainForUser, InterestGainToExcel };

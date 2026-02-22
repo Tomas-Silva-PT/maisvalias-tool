@@ -40,13 +40,23 @@ class PTAnexoJQuadro8AFormatter implements IRSFormatter<IncomeEvent, AnexoJQuadr
 
         let countryDomiciled = yearGroup[0].transaction.asset!!.countryDomiciled;
 
-        // Para ações domiciliadas em Portugal e adquiridas em corretoras estrangeiras, o país da fonte deve ser o da corretora
-        if (countryDomiciled?.code === "620") {
+        // Para ações domiciliadas em Portugal ou juros adquiridas em corretoras estrangeiras, o país da fonte deve ser o da corretora
+        if (!countryDomiciled?.code || countryDomiciled?.code === "620") {
           countryDomiciled = yearGroup[0].transaction.broker.country;
         }
 
         const anoRendimento = yearGroup[0].transaction.date.year;
-        const codigoRendimento = "E11 - Dividendos ou lucros - sem retenção em Portugal";
+        let codigoRendimento;
+        switch (yearGroup[0].kind) {
+          case "dividend":
+            codigoRendimento = "E11 - Dividendos ou lucros - sem retenção em Portugal"
+            break;
+          case "interest":
+            codigoRendimento = "E21 - Juros sem retenção em Portugal"
+            break;
+        }
+
+
         let paisFonte = "";
         if (countryDomiciled?.code) {
           paisFonte = `${countryDomiciled?.code} - ${countryDomiciled?.namePt}`;

@@ -1,19 +1,10 @@
 import { useState } from "react";
 import clsx from "clsx";
 import styles from "./styles.module.css";
-import { PTIRSRules2025 } from "../../maisvalias-tool/classifiers/rules/pt_rules2025.js";
-import { Classifier } from "../../maisvalias-tool/classifiers/classifier.js";
 import { PTIRSFormatterRegistry } from "../../maisvalias-tool/formatters/pt/irs/pt_irs_formatter.js";
 
 export default function IRSSection({ id, year, fiscalData }) {
-  const capitalGains = fiscalData.byYear[year].capitalGains.raw;
-  const interestGains = fiscalData.byYear[year].interestGains.raw;
-  const dividends = fiscalData.byYear[year].dividends.raw;
-
-  // Classify transactions into IRS panels
-  const classifier = new Classifier(PTIRSRules2025);
-  const taxEvents = [...capitalGains, ...dividends, ...interestGains];
-  const classifications = classifier.classify(taxEvents);
+  const classifications = fiscalData.byYear[year].classifications;
 
   const panels = Array.from(classifications.keys());
   const classifiedTaxEvents = Array.from(classifications.values());

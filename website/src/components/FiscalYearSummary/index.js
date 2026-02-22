@@ -6,9 +6,9 @@ import UserCapitalGainsTable from "@site/src/components/DataTables/UserCapitalGa
 import UserInterestGainsTable from "@site/src/components/DataTables/UserInterestGainsTable";
 import UserDividendsTable from "@site/src/components/DataTables/UserDividendsTable";
 import IRSSection from "../IRSSection";
+import { PTIRSFormatterRegistry } from "../../maisvalias-tool/formatters/pt/irs/pt_irs_formatter";
 
 export default function FiscalYearSummary({ id, year, fiscalData }) {
-
   const [activeTab, setActiveTab] = useState(0);
   const [tableMenuActiveTab, setTableMenuActiveTab] = useState(0);
   const [IRSdialogVisible, setIRSdialogVisible] = useState(false);
@@ -31,25 +31,40 @@ export default function FiscalYearSummary({ id, year, fiscalData }) {
   function exportToExcel(year) {
     console.log("Exporting to Excel...");
     const wsCapitalGains = XLSX.utils.json_to_sheet(
-      fiscalData.byYear[year].capitalGains.excel
+      fiscalData.byYear[year].capitalGains.excel,
     );
-    const wsCapitalGainsIRS = XLSX.utils.json_to_sheet(
-      fiscalData.byYear[year].capitalGains.irs.map(
-        ({ transaction, ...rest }) => rest
-      )
-    );
+    // const wsCapitalGainsIRS = XLSX.utils.json_to_sheet(
+    //   fiscalData.byYear[year].capitalGains.irs.map(
+    //     ({ transaction, ...rest }) => rest
+    //   )
+    // );
     const wsDividends = XLSX.utils.json_to_sheet(
-      fiscalData.byYear[year].dividends.excel
+      fiscalData.byYear[year].dividends.excel,
     );
-    const wsDividendsIRS = XLSX.utils.json_to_sheet(
-      fiscalData.byYear[year].dividends.irs
+    // const wsDividendsIRS = XLSX.utils.json_to_sheet(
+    //   fiscalData.byYear[year].dividends.irs
+    // );
+
+    const wsInterestGains = XLSX.utils.json_to_sheet(
+      fiscalData.byYear[year].interestGains.excel,
     );
+    // const wsInterestGainsIRS = XLSX.utils.json_to_sheet(
+    //   fiscalData.byYear[year].interestGains.irs
+    // );
 
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, wsCapitalGains, "Mais valias - Balanço");
-    XLSX.utils.book_append_sheet(wb, wsCapitalGainsIRS, "Mais valias - IRS");
+    // XLSX.utils.book_append_sheet(wb, wsCapitalGainsIRS, "Mais valias - IRS");
     XLSX.utils.book_append_sheet(wb, wsDividends, "Dividendos - Balanço");
-    XLSX.utils.book_append_sheet(wb, wsDividendsIRS, "Dividendos - IRS");
+    // XLSX.utils.book_append_sheet(wb, wsDividendsIRS, "Dividendos - IRS");
+    XLSX.utils.book_append_sheet(wb, wsInterestGains, "Juros - Balanço");
+    // XLSX.utils.book_append_sheet(wb, wsInterestGainsIRS, "Juros - IRS");
+    const classifications = fiscalData.byYear[year].classifications;
+    for (const [panel, taxEvents] of classifications) {
+      const classifiedTaxEvents = PTIRSFormatterRegistry.getFormatter(panel.code).format(taxEvents);
+      const wsClassifications = XLSX.utils.json_to_sheet(classifiedTaxEvents);
+      XLSX.utils.book_append_sheet(wb, wsClassifications, `${panel.title}`);
+    }
     XLSX.writeFile(wb, `maisvalias-tool-${year}.xlsx`);
   }
 
@@ -182,7 +197,7 @@ export default function FiscalYearSummary({ id, year, fiscalData }) {
                           fiscalData.byYear[year].summary.losses -
                           fiscalData.byYear[year].summary.fees -
                           fiscalData.byYear[year].summary.taxes) *
-                          100
+                          100,
                       ) / 100}
                       €
                     </h4>
@@ -195,9 +210,7 @@ export default function FiscalYearSummary({ id, year, fiscalData }) {
                 onClick={() => changeTab(0)}
                 className={clsx(
                   styles.tab,
-                  activeTab === 0
-                    ? clsx(styles.tabActive)
-                    : ""
+                  activeTab === 0 ? clsx(styles.tabActive) : "",
                 )}
               >
                 <div className={clsx(styles.tabBody, styles.textCenter)}>
@@ -211,9 +224,7 @@ export default function FiscalYearSummary({ id, year, fiscalData }) {
                 onClick={() => changeTab(1)}
                 className={clsx(
                   styles.tab,
-                  activeTab === 1
-                    ? clsx(styles.tabActive)
-                    : ""
+                  activeTab === 1 ? clsx(styles.tabActive) : "",
                 )}
               >
                 <div className={clsx(styles.tabBody, styles.textCenter)}>
@@ -225,9 +236,7 @@ export default function FiscalYearSummary({ id, year, fiscalData }) {
                 onClick={() => changeTab(2)}
                 className={clsx(
                   styles.tab,
-                  activeTab === 2
-                    ? clsx(styles.tabActive)
-                    : ""
+                  activeTab === 2 ? clsx(styles.tabActive) : "",
                 )}
               >
                 <div className={clsx(styles.tabBody, styles.textCenter)}>
@@ -239,18 +248,18 @@ export default function FiscalYearSummary({ id, year, fiscalData }) {
                 onClick={() => changeTab(3)}
                 className={clsx(
                   styles.tab,
-                  activeTab === 3
-                    ? clsx(styles.tabActive)
-                    : ""
+                  activeTab === 3 ? clsx(styles.tabActive) : "",
                 )}
               >
                 <div className={clsx(styles.tabBody, styles.textCenter)}>
-                  <i className={clsx(styles.tabIcon, "fa-solid fa-landmark")}></i>
+                  <i
+                    className={clsx(styles.tabIcon, "fa-solid fa-landmark")}
+                  ></i>
                   <span className={clsx(styles.tabTitle)}>IRS</span>
                 </div>
               </div>
             </div>
-            
+
             {activeTab === 0 && tableMenuActiveTab === 0 && (
               <UserCapitalGainsTable fiscalData={fiscalData} year={year} />
             )}
@@ -263,12 +272,9 @@ export default function FiscalYearSummary({ id, year, fiscalData }) {
               <UserInterestGainsTable fiscalData={fiscalData} year={year} />
             )}
 
-
             {activeTab === 3 && (
               <IRSSection fiscalData={fiscalData} year={year} />
             )}
-
-
           </div>
         </div>
       </div>

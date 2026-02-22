@@ -22,6 +22,9 @@ import { InterestGainsFormatter } from "../../maisvalias-tool/formatters/pt/inte
 import { ExcelCapitalGainsFormatter } from "../../maisvalias-tool/formatters/pt/excel_capital_gains_formatter.js";
 import { FiscalSummaryCalculator } from "../../maisvalias-tool/calculators/fiscalSummaryCalculator.js";
 import { InterestGainsCalculator } from "../../maisvalias-tool/calculators/InterestGainsCalculator.js";
+import { ExcelInterestGainsFormatter } from "../../maisvalias-tool/formatters/pt/excel/excel_interest_gains_formatter.js";
+import { Classifier } from "../../maisvalias-tool/classifiers/classifier.js";
+import { PTIRSRules2025 } from "../../maisvalias-tool/classifiers/rules/pt_rules2025.js";
 
 const disclaimerMessage =
   "O maisvalias-tool é uma ferramenta independente, cujos resultados produzidos não têm caráter vinculativo. Como tal é essencial que haja uma verificação manual dos resultados. Consulta a legislação em vigor e a Autoridade Tributária e Aduaneira sempre que necessário. Consulta os termos de responsabilidade para saberes mais.";
@@ -192,6 +195,7 @@ export default function LiveDemoForm() {
 
     const formatterExcelCapitalGains = new ExcelCapitalGainsFormatter();
     const formatterExcelDividends = new ExcelDividendsFormatter();
+    const formatterExcelInterestGains = new ExcelInterestGainsFormatter();
 
     const statement = new Statement([]);
     transactions.forEach((transaction) => {
@@ -303,6 +307,13 @@ export default function LiveDemoForm() {
         formatterExcelCapitalGains.format(yearCapitalGains);
       fiscalReport.byYear[year].dividends.excel =
         formatterExcelDividends.format(yearDividends);
+      fiscalReport.byYear[year].interestGains.excel =
+        formatterExcelInterestGains.format(yearInterestGains);
+
+      const classifier = new Classifier(PTIRSRules2025);
+      const taxEvents = [...yearCapitalGains, ...yearDividends, ...yearInterestGains];
+      const classifications = classifier.classify(taxEvents);
+      fiscalReport.byYear[year].classifications = classifications;
     }
 
     setFiscalData(fiscalReport);
