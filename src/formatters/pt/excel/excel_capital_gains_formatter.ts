@@ -1,5 +1,5 @@
-import { CapitalGainToExcel } from "../../models/capitalgain.js";
-import { CapitalGainEvent } from "../../models/taxevent.js";
+import { CapitalGainToExcel } from "../../../models/capitalgain.js";
+import { CapitalGainEvent } from "../../../models/taxevent.js";
 
 class ExcelCapitalGainsFormatter {
     constructor() { }

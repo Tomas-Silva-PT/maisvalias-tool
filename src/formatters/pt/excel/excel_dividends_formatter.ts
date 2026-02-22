@@ -1,5 +1,5 @@
-import { DividendToExcel } from "../../models/dividend.js";
-import { IncomeEvent } from "../../models/taxevent.js";
+import { DividendToExcel } from "../../../models/dividend.js";
+import { IncomeEvent } from "../../../models/taxevent.js";
 
 class ExcelDividendsFormatter {
     constructor() { }

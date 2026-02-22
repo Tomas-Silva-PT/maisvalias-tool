@@ -3,7 +3,6 @@ import { Tax } from "../models/tax.js";
 import { Transaction, TransactionType } from "../models/transaction.js";
 import { Trading212 } from "../models/brokers/trading212.js";
 import { Parser } from "./parser.js";
-import { Statement } from "../models/statement.js";
 import { DateTime } from "luxon";
 import { Asset } from "../models/asset.js";
 
@@ -31,6 +30,7 @@ class Trading212Parser implements Parser {
       if (record["Action"].toLowerCase().includes("buy")) type = "Buy";
       else if (record["Action"].toLowerCase().includes("sell")) type = "Sell";
       else if (record["Action"].toLowerCase().includes("dividend")) type = "Dividend";
+      else if (record["Action"].toLowerCase().includes("interest on cash")) type = "Interest";
       else return;
 
       const ticker = record["Ticker"];

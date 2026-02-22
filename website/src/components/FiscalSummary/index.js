@@ -62,6 +62,17 @@ export default function FiscalSummary({ id, fiscalData }) {
         </div>
       </div>
       <div className={clsx(styles.cardContainer)}>
+        <div className={clsx(styles.card, styles.borderWarning)}>
+          <div className={clsx(styles.cardBody, styles.textCenter)}>
+            <i className={clsx(styles.textWarning, "fas fa-coins fa-2x")}></i>
+            <h4 className={clsx(styles.textWarning)}>
+              {fiscalData.summary.interests}€
+            </h4>
+            <small>Total de Juros</small>
+          </div>
+        </div>
+      </div>
+      <div className={clsx(styles.cardContainer)}>
         <div className={clsx(styles.card, styles.borderDanger)}>
           <div className={clsx(styles.cardBody, styles.textCenter)}>
             <i

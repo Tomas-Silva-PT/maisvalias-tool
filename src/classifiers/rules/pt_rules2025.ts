@@ -15,11 +15,11 @@ const PTIRSRules2025: Rule[] = [
     },
     {
         destination: PTDestinations.ANEXO_J_QUADRO_8A, 
-        condition: (e : TaxEvent ) => isDividendEvent(e) && isForeignDividend(e)
+        condition: (e : TaxEvent ) => ( isDividendEvent(e) || isInterestEvent(e) ) && isForeignBroker(e)
     },
     {
         destination: PTDestinations.ANEXO_J_QUADRO_92A,
-        condition: (e : TaxEvent ) => isCapitalGainEvent(e) && isForeignCapitalGain(e)
+        condition: (e : TaxEvent ) => isCapitalGainEvent(e) && isForeignBroker(e)
     },
 ];
 
@@ -52,27 +52,24 @@ function isInterestEvent(event: TaxEvent) {
 }
 
 /**
- * Returns true if the matched transaction is a foreign capital gain event
- * and false otherwise.
- * A foreign capital gain event is a capital gain event where the broker
- * that sold the asset is not based in Portugal.
- * @param event The matched transaction to check.
- * @returns True if the matched transaction is a foreign capital gain event, false otherwise.
+ * Returns true if the tax event was executed by a foreign broker and false otherwise.
+ * 
+ * This function checks if the broker associated with the tax event is a foreign broker.
+ * A foreign broker is defined as a broker whose country is not Portugal.
+ * 
+ * @param event The tax event to check.
+ * @returns True if the tax event was executed by a foreign broker, false otherwise.
  */
-function isForeignCapitalGain(event: TaxEvent): boolean {
-    return event.kind === "capitalGain" && event.sell.broker.country.alpha2 !== "PT";
-}
+function isForeignBroker(event: TaxEvent): boolean {
+    switch (event.kind) {
+        case "capitalGain":
+            return event.sell.broker.country.alpha2 !== "PT";
+        case "dividend":
+        case "interest":
+            return event.transaction.broker.country.alpha2 !== "PT";
+    }
 
-/**
- * Returns true if the dividend transaction is a foreign dividend event
- * and false otherwise.
- * A foreign dividend event is a dividend event where the broker
- * that distributed the dividend is not based in Portugal.
- * @param event The dividend transaction to check.
- * @returns True if the dividend transaction is a foreign dividend event, false otherwise.
- */
-function isForeignDividend(event: TaxEvent): boolean {
-    return event.kind === "dividend" && event.transaction.broker.country.alpha2 !== "PT";
+    return false;
 }
 
 /**

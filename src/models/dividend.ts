@@ -8,15 +8,6 @@ type DividendForUser = {
   "Balanço": number;
 };
 
-type DividendToIRS = {
-  "Ano rendimento": number,
-  "Código Rendimento":
-  string,
-  "País da fonte": string,
-  "Rendimento Bruto": number,
-  "Imposto Pago no Estrangeiro - No país da fonte": number,
-}
-
 type DividendToExcel = {
   "Ticker": string;
   "ISIN": string;
@@ -31,4 +22,4 @@ type DividendToExcel = {
 
 
 
-export { DividendToIRS, DividendForUser, DividendToExcel  };
+export { DividendForUser, DividendToExcel  };

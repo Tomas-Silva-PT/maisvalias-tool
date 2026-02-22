@@ -20,24 +20,6 @@ type CapitalGainForUser = {
   "Balanço": number;
 };
 
-type CapitalGainToIRS = {
-  transaction: CapitalGainEvent;
-  Ticker: string;
-  "País da fonte": string;
-  Código: string;
-  "Ano de Aquisição": number;
-  "Mês de Aquisição": number;
-  "Dia de Aquisição": number;
-  "Valor de Aquisição": number;
-  "Ano de Realização": number;
-  "Mês de Realização": number;
-  "Dia de Realização": number;
-  "Valor de Realização": number;
-  "Despesas e Encargos": number;
-  "Imposto retido no estrangeiro": number;
-  "País da Contraparte": string;
-};
-
 type CapitalGainToExcel = {
   "Ticker": string;
   "ISIN": string;
@@ -56,4 +38,4 @@ type CapitalGainToExcel = {
 
 
 
-export { CapitalGainForUser, CapitalGainToIRS, CapitalGainToExcel };
+export { CapitalGainForUser, CapitalGainToExcel };

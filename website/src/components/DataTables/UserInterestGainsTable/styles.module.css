@@ -159,7 +159,7 @@ h4 {
 .tableMenu {
   margin-left: 0.5rem;
   display: flex;
-  justify-content: end;
+  justify-content: start;
   align-items: center;
   gap: 1rem;
   color: var(--ifm-color-text);
@@ -183,13 +183,6 @@ h4 {
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  color: var(--ifm-color-secondary);
-  fill: var(--ifm-color-secondary);
-}
-
-.tableMenuAction:hover {
-  color: var(--ifm-color-secondary);
-  fill: var(--ifm-color-secondary);
 }
 
 .tableResponsive {
@@ -386,27 +379,15 @@ tfoot {
 
 .tabsContainer {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   margin-top: 1.5rem;
   margin-bottom: 1.5rem;
-  gap: 1rem;
 }
 
 .tab {
   background: var(--card-color);
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.tab:hover {
-  color: var(--ifm-color-secondary);
-  fill: var(--ifm-color-secondary);
-}
-
-.tabActive {
-  color: var(--ifm-color-secondary);
-  fill: var(--ifm-color-secondary);
-  border-bottom: 4px solid var(--ifm-color-secondary);
 }
 
 .tabBody {

@@ -1,8 +1,6 @@
 import clsx from "clsx";
 import styles from "./styles.module.css";
-import React, { useEffect, useState } from "react";
-import useBaseUrl from "@docusaurus/useBaseUrl";
-import { ArrowRight, Upload, X } from "lucide-react";
+import { useEffect, useState } from "react";
 
 import FilesRevolut from "@site/src/components/FilesRevolut";
 import FilesTrading212 from "@site/src/components/FilesTrading212";
@@ -20,8 +18,10 @@ import { DividendsCalculator } from "../../maisvalias-tool/calculators/Dividends
 import { DividendsFormatter } from "../../maisvalias-tool/formatters/pt/dividends_formatter.js";
 import { ExcelDividendsFormatter } from "../../maisvalias-tool/formatters/pt/excel_dividends_formatter.js";
 import { CapitalGainsFormatter } from "../../maisvalias-tool/formatters/pt/capital_gains_formatter.js";
+import { InterestGainsFormatter } from "../../maisvalias-tool/formatters/pt/interest_gains_formatter.js";
 import { ExcelCapitalGainsFormatter } from "../../maisvalias-tool/formatters/pt/excel_capital_gains_formatter.js";
 import { FiscalSummaryCalculator } from "../../maisvalias-tool/calculators/fiscalSummaryCalculator.js";
+import { InterestGainsCalculator } from "../../maisvalias-tool/calculators/InterestGainsCalculator.js";
 
 const disclaimerMessage =
   "O maisvalias-tool é uma ferramenta independente, cujos resultados produzidos não têm caráter vinculativo. Como tal é essencial que haja uma verificação manual dos resultados. Consulta a legislação em vigor e a Autoridade Tributária e Aduaneira sempre que necessário. Consulta os termos de responsabilidade para saberes mais.";
@@ -182,76 +182,16 @@ export default function LiveDemoForm() {
     }, 300); // tweak delay if needed
   }
 
-  // function renderError(error) {
-  //   if (!errorType) return null;
-
-  //   let content;
-
-  //   if (errorType === "filesUploaded") {
-  //     content = (
-  //       <>
-  //         <h3>Falha ao processar os ficheiros</h3>
-  //         <span>Os ficheiros não são compatíveis com o formato esperado.</span>
-  //         <p>
-  //           Por favor verifica quais os ficheiros corretos através da{" "}
-  //           <a href="docs/corretoras/trading212" target="_blank">
-  //             documentação
-  //           </a>{" "}
-  //           e tenta novamente.
-  //         </p>
-  //         <p>
-  //           Se o problema persistir,{" "}
-  //           <a href="./about#como-nos-contactar" target="_blank">
-  //             contacta-nos
-  //           </a>
-  //           .
-  //         </p>
-  //       </>
-  //     );
-  //   } else if (errorType === "fetchingData") {
-  //     content = (
-  //       <>
-  //         <h3>Falha ao calcular as mais-valias</h3>
-  //         <span>
-  //           Não conseguimos obter as informações necessárias para o cálculo das
-  //           mais-valias.
-  //         </span>
-  //         <p>Por favor tenta novamente mais tarde.</p>
-  //         <p>
-  //           Se o problema persistir,{" "}
-  //           <a href="./about#como-nos-contactar" target="_blank">
-  //             contacta-nos
-  //           </a>
-  //           .
-  //         </p>
-  //       </>
-  //     );
-  //   }
-
-  //   return (
-  //     <ErrorPopup
-  //       title="Erro"
-  //       closeFunction={() => {
-  //         setErrorType(null);
-  //         setError(null);
-  //       }}
-  //       error={error}
-  //     >
-  //       {content}
-  //     </ErrorPopup>
-  //   );
-  // }
-
   async function setGainsAndDividends(transactions) {
     const loader = document.getElementById("custom-loader-container");
     const start = performance.now();
-    const formatterIRSDividends = new PTDividendsFormatter();
-    const formatterUserDividends = new DividendsFormatter();
-    const formatterExcelDividends = new ExcelDividendsFormatter();
 
-    const formatterIRSCapitalGains = new PTCapitalGainsFormatter();
     const formatterUserCapitalGains = new CapitalGainsFormatter();
+    const formatterUserDividends = new DividendsFormatter();
+    const formatterUserInterestGains = new InterestGainsFormatter();
+
     const formatterExcelCapitalGains = new ExcelCapitalGainsFormatter();
+    const formatterExcelDividends = new ExcelDividendsFormatter();
 
     const statement = new Statement([]);
     transactions.forEach((transaction) => {
@@ -259,17 +199,23 @@ export default function LiveDemoForm() {
     });
 
     let capitalGains;
+    let interestGains;
     let dividends;
+
     let capitalGainsCalculator = new FIFOCalculator();
     let dividendsCalculator = new DividendsCalculator();
+    let interestGainsCalculator = new InterestGainsCalculator();
 
     try {
       await statement.fetchData();
       capitalGains = await capitalGainsCalculator.calculate(
-        capitalGainsCalculator.match(statement.getTransactions())
+        capitalGainsCalculator.match(statement.getTransactions()),
       );
       dividends = await dividendsCalculator.calculate(
-        statement.getTransactions()
+        statement.getTransactions(),
+      );
+      interestGains = await interestGainsCalculator.calculate(
+        statement.getTransactions(),
       );
     } catch (error) {
       console.error(error);
@@ -278,25 +224,32 @@ export default function LiveDemoForm() {
       setErrorType("fetchingData");
       const end = performance.now();
       console.log(
-        `Duração do processamento: ${((end - start) / 1000).toFixed(3)} seconds`
+        `Duração do processamento: ${((end - start) / 1000).toFixed(3)} seconds`,
       );
       return;
     }
 
     const end = performance.now();
     console.log(
-      `Duração do cálculo: ${((end - start) / 1000).toFixed(3)} seconds`
+      `Duração do cálculo: ${((end - start) / 1000).toFixed(3)} seconds`,
     );
 
     let filteredCapitalGainsYears = capitalGains.map((gain) =>
-      Number(gain.sell.date.year)
+      Number(gain.sell.date.year),
     );
     let filteredDividendsYears = dividends.map((div) =>
-      Number(div.transaction.date.year)
+      Number(div.transaction.date.year),
+    );
+    let filteredInterestGainsYears = interestGains.map((interest) =>
+      Number(interest.transaction.date.year),
     );
 
     const years = [
-      ...new Set([...filteredCapitalGainsYears, ...filteredDividendsYears]),
+      ...new Set([
+        ...filteredCapitalGainsYears,
+        ...filteredDividendsYears,
+        ...filteredInterestGainsYears,
+      ]),
     ];
 
     years.sort((a, b) => a - b);
@@ -310,39 +263,44 @@ export default function LiveDemoForm() {
 
     fiscalReport.summary = fiscalSummaryCalculator.calculate(
       capitalGains,
-      dividends
+      dividends,
+      interestGains,
     );
 
     for (const year of years) {
       let yearCapitalGains = capitalGains.filter(
-        (gain) => gain.sell.date.year == year
+        (gain) => gain.sell.date.year == year,
       );
       let yearDividends = dividends.filter(
-        (div) => div.transaction.date.year == year
+        (div) => div.transaction.date.year == year,
+      );
+      let yearInterestGains = interestGains.filter(
+        (interest) => interest.transaction.date.year == year,
       );
 
       fiscalReport.byYear[year] = {};
       fiscalReport.byYear[year].summary = fiscalSummaryCalculator.calculate(
         yearCapitalGains,
-        yearDividends
+        yearDividends,
+        yearInterestGains,
       );
       fiscalReport.byYear[year].capitalGains = {};
       fiscalReport.byYear[year].dividends = {};
+      fiscalReport.byYear[year].interestGains = {};
 
       fiscalReport.byYear[year].capitalGains.raw = yearCapitalGains;
       fiscalReport.byYear[year].dividends.raw = yearDividends;
+      fiscalReport.byYear[year].interestGains.raw = yearInterestGains;
 
-      fiscalReport.byYear[year].capitalGains.irs =
-        formatterIRSCapitalGains.format(yearCapitalGains);
       fiscalReport.byYear[year].capitalGains.user =
         formatterUserCapitalGains.format(yearCapitalGains);
-      fiscalReport.byYear[year].capitalGains.excel =
-        formatterExcelCapitalGains.format(yearCapitalGains);
-
-      fiscalReport.byYear[year].dividends.irs =
-        formatterIRSDividends.format(yearDividends);
       fiscalReport.byYear[year].dividends.user =
         formatterUserDividends.format(yearDividends);
+      fiscalReport.byYear[year].interestGains.user =
+        formatterUserInterestGains.format(yearInterestGains);
+
+      fiscalReport.byYear[year].capitalGains.excel =
+        formatterExcelCapitalGains.format(yearCapitalGains);
       fiscalReport.byYear[year].dividends.excel =
         formatterExcelDividends.format(yearDividends);
     }
@@ -402,7 +360,7 @@ export default function LiveDemoForm() {
             styles.headerStep,
             currStep >= num
               ? styles.headerStepActive
-              : styles.headerStepInactive
+              : styles.headerStepInactive,
           )}
           onClick={(e) => setCurrStepNum(e)}
         >
@@ -460,7 +418,7 @@ export default function LiveDemoForm() {
                     broker.active === true
                       ? clsx(
                           styles.contentStep1Broker,
-                          styles.contentStep1BrokerActive
+                          styles.contentStep1BrokerActive,
                         )
                       : clsx(styles.contentStep1Broker)
                   }
@@ -484,7 +442,7 @@ export default function LiveDemoForm() {
                     {broker.name}
                   </p>
                 </div>
-              )
+              ),
           )}
         </div>
       </>
@@ -506,7 +464,6 @@ export default function LiveDemoForm() {
         {broker.name === "Strike" && (
           <FilesStrike id={props.id} setFiscalData={setGainsAndDividends} />
         )}
-        {/* {renderError(error)} */}
       </>
     );
   }

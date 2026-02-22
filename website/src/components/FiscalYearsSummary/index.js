@@ -29,6 +29,7 @@ export default function FiscalYearsSummary({ id, setFiscalYear, fiscalData }) {
         dataA.summary.gains,
         dataA.summary.losses,
         dataA.summary.dividends,
+        dataA.summary.interests,
         dataA.summary.fees + dataA.summary.taxes,
         dataA.summary.gains - dataA.summary.losses,
       ];
@@ -39,6 +40,7 @@ export default function FiscalYearsSummary({ id, setFiscalYear, fiscalData }) {
         dataB.summary.gains,
         dataB.summary.losses,
         dataB.summary.dividends,
+        dataB.summary.interests,
         dataB.summary.fees + dataB.summary.taxes,
         dataB.summary.gains - dataB.summary.losses,
       ];
@@ -75,6 +77,7 @@ export default function FiscalYearsSummary({ id, setFiscalYear, fiscalData }) {
                       "Ganhos",
                       "Perdas",
                       "Dividendos",
+                      "Juros",
                       "Despesas",
                       "Balanço",
                       ""
@@ -99,7 +102,8 @@ export default function FiscalYearsSummary({ id, setFiscalYear, fiscalData }) {
                     let balance =
                       Math.round(
                         (data.summary.gains +
-                          data.summary.dividends -
+                          data.summary.dividends +
+                          data.summary.interests -
                           data.summary.losses -
                           data.summary.fees -
                           data.summary.taxes) *
@@ -127,7 +131,11 @@ export default function FiscalYearsSummary({ id, setFiscalYear, fiscalData }) {
                         >
                           {data.summary.dividends}€
                         </td>
-
+                        <td
+                          className={clsx(styles.textEnd, styles.textWarning)}
+                        >
+                          {data.summary.interests}€
+                        </td>
                         <td className={clsx(styles.textEnd, styles.textDanger)}>
                           {Math.round((data.summary.taxes + data.summary.fees) * 100) / 100}€
                         </td>
