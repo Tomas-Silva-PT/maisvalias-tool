@@ -6,22 +6,25 @@ import { Classifier } from '../../classifiers/classifier.js';
 import { DividendsCalculator } from '../../calculators/DividendsCalculator.js';
 import { PTIRSRules2025 } from '../../classifiers/rules/pt_rules2025.js';
 import fs from "fs";
+import { ParserEngine } from '../../parsers/parserengine.js';
+import { CSVParser } from '../../parsers/csvparser.js';
 
 describe('Classifier', () => {
     it('should classify transactions correctly', async () => {
         const dividendsCalculator = new DividendsCalculator();
         const capitalGainsCalculator = new FIFOCalculator();
-        const parser = new RevolutParser();
+        const brokerParser = new RevolutParser();
+        const parserEngine = new ParserEngine(new CSVParser(";"), brokerParser);
         const statement = new Statement([]);
 
         // Get capital gains and dividends
         const profitLossFilePath = './data/mockdata/revolut/revolut_profit_loss_statement.csv';
         const profitLossFileData = fs.readFileSync(profitLossFilePath, 'utf8');
-        parser.loadIsins(profitLossFileData);
+        brokerParser.loadIsins(profitLossFileData);
 
         const operationsFilePath = './data/mockdata/revolut/revolut_account_statement.csv';
         const operationsFileData = fs.readFileSync(operationsFilePath, 'utf8');
-        const transactions = parser.parse(operationsFileData);
+        const transactions = parserEngine.parse(operationsFileData);
 
         transactions.forEach(transaction => {
             statement.addTransaction(transaction);

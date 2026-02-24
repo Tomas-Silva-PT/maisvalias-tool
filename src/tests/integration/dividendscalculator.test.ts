@@ -3,20 +3,23 @@ import { RevolutParser } from '../../parsers/revolutparser.js';
 import { Statement } from '../../models/statement.js';
 import fs from "fs";
 import { DividendsCalculator } from '../../calculators/DividendsCalculator.js';
+import { CSVParser } from '../../parsers/csvparser.js';
+import { ParserEngine } from '../../parsers/parserengine.js';
 
 describe('DividendsCalculator', () => {
     it('should calculate dividends correctly', async () => {
         const calculator = new DividendsCalculator();
-        const parser = new RevolutParser();
+        const brokerParser = new RevolutParser();
+        const parserEngine = new ParserEngine(new CSVParser(";"), brokerParser);
         const statement = new Statement([]);
 
         const profitLossFilePath = './data/mockdata/revolut/revolut_profit_loss_statement.csv';
         const profitLossFileData = fs.readFileSync(profitLossFilePath, 'utf8');
-        parser.loadIsins(profitLossFileData)
+        brokerParser.loadIsins(profitLossFileData)
 
         const operationsFilePath = './data/mockdata/revolut/revolut_account_statement.csv';
         const operationsFileData = fs.readFileSync(operationsFilePath, 'utf8');
-        const transactions = parser.parse(operationsFileData);
+        const transactions = parserEngine.parse(operationsFileData);
 
         transactions.forEach(transaction => {
             statement.addTransaction(transaction);

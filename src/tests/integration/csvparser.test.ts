@@ -14,8 +14,8 @@ describe('CSVParser', () => {
 
         expect(brokerRecords).toBeDefined();
         expect(brokerRecords.length).toBe(30);
-        expect(brokerRecords[0]).toHaveProperty("Date");
-        expect(brokerRecords[0]).toHaveProperty("Ticker");
-        expect(brokerRecords[0]).toHaveProperty("Total Amount");
+        expect(brokerRecords[0][0][0]).toBe("Date");
+        expect(brokerRecords[0][1][0]).toBe("Ticker");
+        expect(brokerRecords[0][2][0]).toBe("Type");
     });
 });
