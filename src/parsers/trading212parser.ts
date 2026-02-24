@@ -2,23 +2,19 @@ import { Fee } from "../models/fee.js";
 import { Tax } from "../models/tax.js";
 import { Transaction, TransactionType } from "../models/transaction.js";
 import { Trading212 } from "../models/brokers/trading212.js";
-import { Parser } from "./parser.js";
+import { BrokerParser } from "./parser.js";
 import { DateTime } from "luxon";
 import { Asset } from "../models/asset.js";
+import { BrokerRecord, BrokerRecordRow } from "../models/brokerRecord.js";
 
-class Trading212Parser implements Parser {
-  parse(fileData: string): Transaction[] {
+class Trading212Parser implements BrokerParser {
+
+  parse(records: BrokerRecordRow[]): Transaction[] {
     const transactions: Transaction[] = [];
-    const data = fileData;
-    const rows = data.split("\n").map((row) => row.split(","));
-    const headers = rows.shift();
 
-    if (!headers) {
-      throw new Error("Invalid file data: no headers found");
-    }
+    const oRecords : BrokerRecord[] = records.map((record) => Object.fromEntries(record));
 
-    rows.forEach((row) => {
-      const record = Object.fromEntries(headers.map((h, i) => [h, row[i]]));
+    oRecords.forEach((record) => {
       if (!record["Time"]) return;
 
       const [date, time] = record["Time"].split(" ");
@@ -68,20 +64,6 @@ class Trading212Parser implements Parser {
 
       let exchangeRate = 1 / parseFloat(record["Exchange rate"]);
 
-      // const transaction = new Transaction(
-      //   utcDate,
-      //   type,
-      //   ticker,
-      //   isin,
-      //   shares,
-      //   assetCurrency,
-      //   amount,
-      //   amountCurrency,
-      //   new Trading212(),
-      //   taxes,
-      //   fees,
-      //   exchangeRate
-      // );
       const transaction: Transaction = {
         date: utcDate,
         type: type,

@@ -5,6 +5,8 @@ import { ArrowRight, Upload, X } from "lucide-react";
 
 import { DegiroParser } from "../../maisvalias-tool/parsers/degiroparser.js";
 import ErrorPopup from "@site/src/components/ErrorPopup";
+import { CSVParser } from "../../maisvalias-tool/parsers/csvparser.js";
+import { ParserEngine } from "../../maisvalias-tool/parsers/parserengine.js";
 
 const broker = [
   {
@@ -145,7 +147,9 @@ export default function FilesDegiro({ id, setFiscalData }) {
     if (accountFiles.length === 0 || transactionFiles.length === 0 || !broker)
       return;
 
-    const parser = new DegiroParser();
+    const brokerParser = new DegiroParser();
+    const fileParser = new CSVParser();
+    const parserEngine = new ParserEngine(fileParser, brokerParser);
 
     const accountPromises = accountFiles.map((file) => {
       return new Promise((resolve, reject) => {
@@ -153,10 +157,10 @@ export default function FilesDegiro({ id, setFiscalData }) {
         reader.onload = (e) => {
           const data = e.target.result;
           try {
-            parser.loadAccountResume(data);
+            brokerParser.loadAccountResume(data);
             resolve();
           } catch (e) {
-            reject();
+            reject(e);
           }
         };
 
@@ -196,11 +200,11 @@ export default function FilesDegiro({ id, setFiscalData }) {
         reader.onload = (e) => {
           const data = e.target.result;
           try {
-            const transactions = parser.parse(data);
+            const transactions = parserEngine.parse(data);
             resolve(transactions);
           } catch (e) {
             console.error(e);
-            reject();
+            reject(e);
           }
         };
 

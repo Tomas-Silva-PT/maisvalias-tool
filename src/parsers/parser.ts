@@ -1,7 +1,14 @@
+import { BrokerRecord, BrokerRecordRow } from "../models/brokerRecord.js";
 import { Transaction } from "../models/transaction.js";
 
-interface Parser {
-    parse(fileData : string) : Transaction[];
+interface BrokerParser {
+    parse(records : BrokerRecordRow[]) : Transaction[];
 }
 
-export { Parser };
+interface FileParser {
+    parse(file: string | ArrayBuffer): BrokerRecordRow[];
+}
+
+type FileType = string | ArrayBuffer;
+
+export { BrokerParser, FileParser, FileType };

@@ -1,11 +1,12 @@
 import { Transaction, TransactionType } from "../models/transaction.js";
-import { Parser } from "./parser.js";
+import { BrokerParser } from "./parser.js";
 import { Fee } from "../models/fee.js";
 import { Revolut } from "../models/brokers/revolut.js";
 import { DateTime } from "luxon";
 import { Asset } from "../models/asset.js";
+import { BrokerRecord, BrokerRecordRow } from "../models/brokerRecord.js";
 
-class RevolutParser implements Parser {
+class RevolutParser implements BrokerParser {
   isins?: Record<string, string>[];
   loadIsins(fileData: string): void {
     this.isins = [];
@@ -80,23 +81,16 @@ class RevolutParser implements Parser {
 
     // console.log("Isins loaded: " + JSON.stringify(this.isins));
   }
-  parse(fileData: string): Transaction[] {
+
+  parse(records: BrokerRecordRow[]): Transaction[] {
     if (!this.isins) {
       throw new Error("Isins not loaded");
     }
     const transactions: Transaction[] = [];
-    // console.log("File data: " + fileData);
-    const rows = fileData.replace("\r", "").split("\n").map((row) => row.split(";"));
-    const headers = rows.shift();
-    // console.log("ISINS: " + JSON.stringify(this.isins));
-    // console.log("Headers: " + headers);
 
-    if (!headers) {
-      throw new Error("Invalid file data: no headers found");
-    }
+    const oRecords : BrokerRecord[] = records.map((record) => Object.fromEntries(record));
 
-    rows.forEach((row) => {
-      const record = Object.fromEntries(headers.map((h, i) => [h, row[i]]));
+    oRecords.forEach((record) => {
       // console.log("Record: " + JSON.stringify(record));
       if (!record["Date"]) return;
 
@@ -138,20 +132,7 @@ class RevolutParser implements Parser {
 
       const isin = this.isins?.find((i) => i.ticker === ticker)?.isin;
       if (isin) {
-        // const transaction = new Transaction(
-        //   utcDate,
-        //   type,
-        //   ticker,
-        //   isin,
-        //   shares,
-        //   assetCurrency,
-        //   amount,
-        //   amountCurrency,
-        //   new Revolut(),
-        //   undefined,
-        //   fees,
-        //   exchangeRate
-        // );
+
         const transaction: Transaction = {
                 date: utcDate,
                 type: type,

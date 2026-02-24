@@ -1,12 +1,13 @@
 import { Transaction } from "../models/transaction";
-import { Parser } from "./parser";
+import { BrokerParser } from "./parser";
 import { Degiro } from "../models/brokers/degiro";
 import { Tax } from "../models/tax";
 import { Fee } from "../models/fee";
 import { DateTime } from "luxon";
 import { Asset } from "../models/asset";
+import { BrokerRecord, BrokerRecordRow } from "../models/brokerRecord";
 
-class DegiroParser implements Parser {
+class DegiroParser implements BrokerParser {
 
     accountResume: [string, string][][] = [];
 
@@ -25,24 +26,16 @@ class DegiroParser implements Parser {
         });
     }
 
-    parse(fileData: string): Transaction[] {
+  parse(records: BrokerRecordRow[]): Transaction[] {
         const transactions: Transaction[] = [];
-        const data = fileData;
-        const rows = data.split("\n").map((row) => row.split(","));
-        const headers = rows.shift();
-
-        if (!headers) {
-            throw new Error("[Parse] Invalid file data: no headers found");
-        }
-
+       
         if (!this.accountResume) {
             throw new Error("[Parse] Missing Account Resume");
         }
 
-        rows.forEach((row) => {
-            // const record = Object.fromEntries(headers.map((h, i) => [h, row[i]]));
-            const record = headers.map((h, i) => [h, row[i]]);
+        console.log("Broker records: " + JSON.stringify(records));
 
+        records.forEach((record) => {
             let date = record[0][1];
             let time = record[1][1];
 
@@ -93,22 +86,6 @@ class DegiroParser implements Parser {
 
             const fees = feeAmount ? [new Fee("Custos de transação", feeAmount, feeCurrency, feeExchangeRate)] : [];
 
-
-
-            // const transaction = new Transaction(
-            //     utcDate,
-            //     type,
-            //     product,
-            //     isin,
-            //     Math.abs(shares),
-            //     assetCurrency,
-            //     Math.abs(netAmount),
-            //     netAmountCurrency,
-            //     new Degiro(),
-            //     undefined,
-            //     fees,
-            //     exchangeRate
-            // );
             const transaction: Transaction = {
                 date: utcDate,
                 type: type,

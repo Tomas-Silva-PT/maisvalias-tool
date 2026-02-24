@@ -5,6 +5,8 @@ import { ArrowRight, Upload, X } from "lucide-react";
 
 import { RevolutParser } from "../../maisvalias-tool/parsers/revolutparser.js";
 import ErrorPopup from "@site/src/components/ErrorPopup";
+import { CSVParser } from "../../maisvalias-tool/parsers/csvparser.js";
+import { ParserEngine } from "../../maisvalias-tool/parsers/parserengine.js";
 
 const broker = [
   {
@@ -145,7 +147,9 @@ export default function FilesRevolut({ id, setFiscalData }) {
     if (profitLossFiles.length === 0 || operationFiles.length === 0 || !broker)
       return;
 
-    const parser = new RevolutParser();
+    const brokerParser = new RevolutParser();
+    const fileParser = new CSVParser(";");
+    const parserEngine = new ParserEngine(fileParser, brokerParser);
 
     const profitLossPromises = profitLossFiles.map((file) => {
       return new Promise((resolve, reject) => {
@@ -153,10 +157,10 @@ export default function FilesRevolut({ id, setFiscalData }) {
         reader.onload = (e) => {
           const data = e.target.result;
           try {
-            parser.loadIsins(data);
+            brokerParser.loadIsins(data);
             resolve();
           } catch (e) {
-            reject();
+            reject(e);
           }
         };
 
@@ -196,11 +200,11 @@ export default function FilesRevolut({ id, setFiscalData }) {
         reader.onload = (e) => {
           const data = e.target.result;
           try {
-            const transactions = parser.parse(data);
+            const transactions = parserEngine.parse(data);
             resolve(transactions);
           } catch (e) {
             console.error(e);
-            reject();
+            reject(e);
           }
         };
 

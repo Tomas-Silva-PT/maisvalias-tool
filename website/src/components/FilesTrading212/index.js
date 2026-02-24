@@ -6,6 +6,8 @@ import { ArrowRight, Upload, X } from "lucide-react";
 import { Trading212Parser } from "../../maisvalias-tool/parsers/trading212parser.js";
 
 import ErrorPopup from "@site/src/components/ErrorPopup";
+import { ParserEngine } from "../../maisvalias-tool/parsers/parserengine.js";
+import { CSVParser } from "../../maisvalias-tool/parsers/csvparser.js";
 
 const broker = [
   {
@@ -139,7 +141,9 @@ export default function FilesTrading212({ id, setFiscalData }) {
 
     if (files.length === 0 || !broker) return;
 
-    const parser = new Trading212Parser();
+    const brokerParser = new Trading212Parser();
+    const fileParser = new CSVParser();
+    const parserEngine = new ParserEngine(fileParser, brokerParser);
     // const statement = new Statement([]);
 
     const filePromises = files.map((file) => {
@@ -148,10 +152,10 @@ export default function FilesTrading212({ id, setFiscalData }) {
         reader.onload = (e) => {
           const data = e.target.result;
           try {
-            const transactions = parser.parse(data);
+            const transactions = parserEngine.parse(data);
             resolve(transactions);
           } catch (error) {
-            reject();
+            reject(error);
           }
         };
 

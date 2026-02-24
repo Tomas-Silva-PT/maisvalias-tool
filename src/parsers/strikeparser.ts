@@ -1,23 +1,19 @@
 import { DateTime } from "luxon";
 import { Transaction, TransactionType } from "../models/transaction";
-import { Parser } from "./parser";
+import { BrokerParser } from "./parser";
 import { Strike } from "../models/brokers/strike";
 import { Fee } from "../models/fee";
 import { Asset } from "../models/asset";
+import { BrokerRecord, BrokerRecordRow } from "../models/brokerRecord";
 
-class StrikeParser implements Parser {
-  parse(fileData: string): Transaction[] {
+class StrikeParser implements BrokerParser {
+
+  parse(records: BrokerRecordRow[]): Transaction[] {
     const transactions: Transaction[] = [];
-    const data = fileData;
-    const rows = data.split("\n").map((row) => row.split(","));
-    const headers = rows.shift();
 
-    if (!headers) {
-      throw new Error("Invalid file data: no headers found");
-    }
+    const oRecords : BrokerRecord[] = records.map((record) => Object.fromEntries(record));
 
-    rows.forEach((row) => {
-        const record = Object.fromEntries(headers.map((h, i) => [h, row[i]]));
+    oRecords.forEach((record) => {
         // Empty row, ignore it
         if(!record["Date & Time (UTC)"]) return;
 
@@ -42,20 +38,7 @@ class StrikeParser implements Parser {
         const fee = new Fee("Fee", parseFloat(record["Fee EUR"]), "EUR");
         fees.push(fee);
 
-        // const transaction = new Transaction(
-        //   utcDate,
-        //   type,
-        //   ticker,
-        //   isin,
-        //   shares,
-        //   assetCurrency,
-        //   amount,
-        //   amountCurrency,
-        //   new Strike(),
-        //   undefined,
-        //   fees,
-        //   undefined // Assumes every transaction is in EUR, so no exchange rate needed
-        // );
+
         const transaction: Transaction = {
                 date: utcDate,
                 type: type,
