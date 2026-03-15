@@ -266,8 +266,9 @@ export default function FilesRevolut({ id, setFiscalData }) {
           type="file"
           accept=".csv"
           onChange={onOperationFileUpload}
+          multiple
         />
-        <label htmlFor="file-upload-operation">Escolher ficheiro</label>
+        <label htmlFor="file-upload-operation">Escolher ficheiro(s)</label>
         {operationFiles.length > 0 && (
           <>
             <div className={clsx(styles.contentStep2Files)}>
