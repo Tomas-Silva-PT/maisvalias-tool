@@ -15,11 +15,13 @@
   "description": "",
   "dependencies": {
     "@xmldom/xmldom": "^0.9.8",
-    "luxon": "^3.6.1"
+    "luxon": "^3.6.1",
+    "papaparse": "^5.5.3"
   },
   "devDependencies": {
     "@types/luxon": "^3.6.2",
     "@types/node": "^22.15.32",
+    "@types/papaparse": "^5.5.2",
     "typescript": "^5.8.3"
   }
 }

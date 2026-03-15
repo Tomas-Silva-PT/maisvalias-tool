@@ -87,81 +87,176 @@ class RevolutParser implements BrokerParser {
       throw new Error("Isins not loaded");
     }
     const transactions: Transaction[] = [];
-
-    const oRecords : BrokerRecord[] = records.map((record) => Object.fromEntries(record));
+    const oRecords: BrokerRecord[] = records.map((record) => Object.fromEntries(record));
 
     oRecords.forEach((record) => {
-      // console.log("Record: " + JSON.stringify(record));
-      if (!record["Date"]) return;
+      const parser = RevolutParserFactory.createParser(record);
+      if (!parser) return;
+      const transaction = parser.parse(record);
+      if (!transaction) return;
 
-      const oDate = new Date(record["Date"]);
-      const date = oDate.toISOString().split("T")[0];
-      const time = oDate.toLocaleTimeString("pt-PT", { hour12: false });
-
-      const utcDate = DateTime.fromFormat(
-        `${date} ${time}`,
-        "yyyy-MM-dd HH:mm:ss", { zone: "utc" }
-      )
-
-      let type : TransactionType;
-      // console.log("Type: " + type);
-      if (record["Type"] == "BUY - MARKET") type = "Buy";
-      else if (record["Type"] == "SELL - MARKET") type = "Sell";
-      else if (record["Type"] == "DIVIDEND") type = "Dividend";
-      else return;
-
-      const ticker = record["Ticker"];
-      const shares = parseFloat(record["Quantity"].replace(",", "."));
-      const priceShare = parseFloat(record["Price per share"].replace(/[^\d,]/g, "").replace(",", "."));
-      const totalAmount = parseFloat(record["Total Amount"].replace(/[^\d,]/g, "").replace(",", "."));
-      const assetCurrency = record["Currency"];
-      const amountCurrency = record["Currency"];
-      // console.log("Currency: " + amountCurrency);
-      let exchangeRate = 1 / parseFloat(record["FX Rate"].replace("\r", "").replace(",", ".")); // Porque a taxa de câmbio vem do EUR para a moeda do ativo, e nós queremos ao contrário
-      if (isNaN(exchangeRate) || exchangeRate < Number.EPSILON) exchangeRate = 1;
-      const feeAmount = Math.abs(Math.round((totalAmount - priceShare * shares) * 100) / 100);
-
-      // if (ticker === "SPOT" || ticker === "NVDA") console.log(`[${ticker}] Fee Amount: ` + feeAmount);
-      const fees: Fee[] = [];
-      let amount = totalAmount;
-      if (feeAmount >= 0.01) {
-        // amount = totalAmount - feeAmount;
-        const fee = new Fee("Fee", feeAmount, amountCurrency, exchangeRate);
-        fees.push(fee);
+      // Fill in the ISIN for the transaction's asset, if it exists in the loaded ISINs
+      if (transaction.asset) {
+        const isin = this.isins?.find((i) => i.ticker === transaction.asset?.ticker)?.isin;
+        if (isin) {
+          transaction.asset.isin = isin;
+        }
+        if (!isin && (transaction.type === "Sell" || transaction.type === "Dividend")) {
+          throw new Error(
+            "Invalid file data: no isin found for " +
+            transaction.type +
+            " of ticker " +
+            transaction.asset?.ticker
+          );
+        }
       }
-
-      const isin = this.isins?.find((i) => i.ticker === ticker)?.isin;
-      if (isin) {
-
-        const transaction: Transaction = {
-                date: utcDate,
-                type: type,
-                asset: new Asset(ticker, isin, assetCurrency),
-                shares: shares,
-                amount: amount,
-                currency: amountCurrency,
-                broker: new Revolut(),
-                taxes: undefined,
-                fees: fees,
-                exchangeRate: exchangeRate
-            };
-        // console.log("Transaction: " + JSON.stringify(transaction));
-        if (transaction.type) transactions.push(transaction);
-      }
-      if (!isin && type !== "Buy") {
-        throw new Error(
-          "Invalid file data: no isin found for " +
-          type +
-          " of ticker " +
-          ticker
-        );
-      }
+      transactions.push(transaction);
     });
-
-    // console.log("Transactions: " + JSON.stringify(transactions));
 
     return transactions;
   }
 }
+
+
+class RevolutCapitalGainAndDividendParser {
+  parse(record: BrokerRecord): Transaction | undefined {
+    let transaction: Transaction;
+    if (!record["Date"]) return;
+
+    const oDate = new Date(record["Date"]);
+    const date = oDate.toISOString().split("T")[0];
+    const time = oDate.toLocaleTimeString("pt-PT", { hour12: false });
+
+    const utcDate = DateTime.fromFormat(
+      `${date} ${time}`,
+      "yyyy-MM-dd HH:mm:ss", { zone: "utc" }
+    )
+
+    let type: TransactionType;
+    // console.log("Type: " + type);
+    if (record["Type"] == "BUY - MARKET") type = "Buy";
+    else if (record["Type"] == "SELL - MARKET") type = "Sell";
+    else if (record["Type"] == "DIVIDEND") type = "Dividend";
+    else return;
+
+    const ticker = record["Ticker"];
+    const shares = parseFloat(record["Quantity"].replace(",", "."));
+    const priceShare = parseFloat(record["Price per share"].replace(/[^\d,]/g, "").replace(",", "."));
+    const totalAmount = parseFloat(record["Total Amount"].replace(/[^\d,]/g, "").replace(",", "."));
+    const assetCurrency = record["Currency"];
+    const amountCurrency = record["Currency"];
+    // console.log("Currency: " + amountCurrency);
+    let exchangeRate = 1 / parseFloat(record["FX Rate"].replace("\r", "").replace(",", ".")); // Porque a taxa de câmbio vem do EUR para a moeda do ativo, e nós queremos ao contrário
+    if (isNaN(exchangeRate) || exchangeRate < Number.EPSILON) exchangeRate = 1;
+    const feeAmount = Math.abs(Math.round((totalAmount - priceShare * shares) * 100) / 100);
+
+    // if (ticker === "SPOT" || ticker === "NVDA") console.log(`[${ticker}] Fee Amount: ` + feeAmount);
+    const fees: Fee[] = [];
+    let amount = totalAmount;
+    if (feeAmount >= 0.01) {
+      // amount = totalAmount - feeAmount;
+      const fee = new Fee("Fee", feeAmount, amountCurrency, exchangeRate);
+      fees.push(fee);
+    }
+
+    // const isin = this.isins?.find((i) => i.ticker === ticker)?.isin;
+    // if (isin) {
+
+    transaction = {
+      date: utcDate,
+      type: type,
+      asset: new Asset(ticker, "", assetCurrency), // O ISIN será preenchido posteriormente, após a correspondência com a lista de ISINs carregada
+      shares: shares,
+      amount: amount,
+      currency: amountCurrency,
+      broker: new Revolut(),
+      taxes: undefined,
+      fees: fees,
+      exchangeRate: exchangeRate
+    };
+    // }
+    // if (!isin && type !== "Buy") {
+    //   throw new Error(
+    //     "Invalid file data: no isin found for " +
+    //     type +
+    //     " of ticker " +
+    //     ticker
+    //   );
+    // }
+    return transaction;
+  }
+}
+
+class RevolutInterestGainParser {
+  parse(record: BrokerRecord): Transaction | undefined {
+    console.log("Parsing record: " + JSON.stringify(record));
+    let transaction: Transaction;
+    if (!record["Data"] || !record["Entrada de dinheiro"]) return;
+
+    // Como o header "Descrição" vem com caracteres manhosos, vamos identificar as linhas de juros procurando pela presença da string "Pagamento de juros" em qualquer coluna
+    if(!Object.entries(record).find(([key, value]) => value.includes("Pagamento de juros"))) return;
+
+    const date = record["Data"];
+
+    const utcDate = DateTime.fromFormat(
+      `${date}`,
+      "dd/MM/yyyy", { zone: "utc" }
+    )
+
+    let type: TransactionType;
+    type = "Interest";
+
+    const amount = parseFloat(record["Entrada de dinheiro"].replace(/[^\d.-]/g, ""));  // remove currency and commas);
+    const amountCurrency = "EUR";
+
+    transaction = {
+      date: utcDate,
+      type: type,
+      asset: undefined, // O ISIN será preenchido posteriormente, após a correspondência com a lista de ISINs carregada
+      shares: undefined,
+      amount: amount,
+      currency: amountCurrency,
+      broker: new Revolut(),
+      taxes: undefined,
+      fees: undefined,
+      exchangeRate: undefined
+    };
+
+    console.log("Parsed interest transaction: " + JSON.stringify(transaction));
+
+    return transaction;
+  }
+}
+
+class RevolutParserFactory {
+  // Rules to identify the file type based on headers
+  static fileRules = [
+    {
+      condition: (headers: string[]) => headers.includes("Ticker") && headers.includes("Type") && headers.includes("Quantity") && headers.includes("Price per share") && headers.includes("Total Amount") && headers.includes("Currency") && headers.includes("FX Rate"),
+      parser: new RevolutCapitalGainAndDividendParser()
+    },
+    {
+      condition: (headers: string[]) => headers.includes("TANB ganho") && headers.includes("Entrada de dinheiro"),
+      parser: new RevolutInterestGainParser()
+    }
+  ]
+
+  static createParser(record: BrokerRecord) {
+    // console.log("Record: " + JSON.stringify(record));
+    const headers = Object.keys(record);
+    if (!headers) {
+      throw new Error("Invalid record: no headers found");
+    }
+    const rule = this.fileRules.find(rule => rule.condition(headers));
+
+    if (!rule) {
+      throw new Error("No parser found for the given record");
+    }
+
+    return rule.parser;
+  }
+}
+
+
 
 export { RevolutParser };

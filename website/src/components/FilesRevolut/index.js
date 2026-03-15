@@ -148,7 +148,7 @@ export default function FilesRevolut({ id, setFiscalData }) {
       return;
 
     const brokerParser = new RevolutParser();
-    const fileParser = new CSVParser(";");
+    const fileParser = new CSVParser();
     const parserEngine = new ParserEngine(fileParser, brokerParser);
 
     const profitLossPromises = profitLossFiles.map((file) => {

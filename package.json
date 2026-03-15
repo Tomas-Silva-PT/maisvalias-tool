@@ -27,6 +27,7 @@
     "vitest": "^3.2.4"
   },
   "dependencies": {
-    "luxon": "^3.6.1"
+    "luxon": "^3.6.1",
+    "papaparse": "^5.5.3"
   }
 }

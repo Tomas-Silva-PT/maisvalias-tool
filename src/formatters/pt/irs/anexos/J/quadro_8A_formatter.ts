@@ -1,3 +1,4 @@
+import { parse } from "path";
 import { AnexoJQuadro8A } from "../../../../../models/irs/panel.js";
 import { IncomeEvent } from "../../../../../models/taxevent.js";
 import { IRSFormatter } from "../../IRSFormatter.js";
@@ -5,66 +6,43 @@ import { IRSFormatter } from "../../IRSFormatter.js";
 class PTAnexoJQuadro8AFormatter implements IRSFormatter<IncomeEvent, AnexoJQuadro8A> {
   constructor() { }
 
-  format(dividends: IncomeEvent[]): AnexoJQuadro8A[] {
+  format(incomeEvents: IncomeEvent[]): AnexoJQuadro8A[] {
     let result: AnexoJQuadro8A[] = [];
 
-    const dividendsByAsset: Record<string, Record<string, IncomeEvent[]>> = {};
+    for (const event of incomeEvents) {
+      const anoRendimento = event.transaction.date.year;
+      let codigoRendimento, countryDomiciled, paisFonte = "";
+      switch (event.kind) {
+        case "dividend":
+          codigoRendimento = "E11 - Dividendos ou lucros - sem retenção em Portugal"
+          countryDomiciled = event.transaction.asset!!.countryDomiciled;
 
-    // Agrupar dividendos por ativo e ano
-    for (const dividend of dividends) {
-      const isin = dividend.transaction.asset!!.isin;
-      const year = dividend.transaction.date.year;
-      dividendsByAsset[isin] ??= {};
-      dividendsByAsset[isin][year] ??= [];
-      dividendsByAsset[isin][year].push(dividend);
-    }
+          // Para ações domiciliadas em Portugal mas dividendos recebidos em corretoras estrangeiras, o país da fonte deve ser o da corretora
+          if (!countryDomiciled?.code || countryDomiciled?.code === "620") {
+            countryDomiciled = event.transaction.broker.country;
+          }
+          if (countryDomiciled?.code) {
+            paisFonte = `${countryDomiciled?.code} - ${countryDomiciled?.namePt}`;
+          }
+          break;
+        case "interest":
+          codigoRendimento = "E21 - Juros sem retenção em Portugal";
+          // Para juros adquiridas em corretoras estrangeiras, o país da fonte deve ser o da corretora
+          countryDomiciled = event.transaction.broker.country;
+          if (countryDomiciled?.code) {
+            paisFonte = `${countryDomiciled?.code} - ${countryDomiciled?.namePt}`;
+          }
+          break;
+      }
 
-    for (const assetGroup of Object.values(dividendsByAsset)) {
-      for (const yearGroup of Object.values(assetGroup)) {
-        let totalFeesAmount = 0;
-        let totalTaxAmount = 0;
-        let totalNetAmount = 0;
-        let totalGrossAmount = 0;
+      const rendimentoBruto = Math.round(event.amount*100)/100;
+      const impostos = parseFloat(event.taxes.toFixed(2));
+      const comissoes = parseFloat(event.fees.toFixed(2));
+      const impostoPagoNoEstrangeiro = parseFloat(
+        (impostos + comissoes).toFixed(2)
+      );
 
-        totalGrossAmount = yearGroup.reduce((total, transaction) => { return total + transaction.amount; }, 0);
-        totalFeesAmount = yearGroup.reduce((total, transaction) => { return total + transaction.fees; }, 0);
-        totalTaxAmount = yearGroup.reduce((total, transaction) => { return total + transaction.taxes; }, 0);
-
-        totalFeesAmount = parseFloat(totalFeesAmount.toFixed(2));
-        totalTaxAmount = parseFloat(totalTaxAmount.toFixed(2));
-        const totalExpenses = parseFloat(
-          (totalFeesAmount + totalTaxAmount).toFixed(2)
-        );
-
-        totalGrossAmount = Math.round((totalGrossAmount) * 100) / 100;
-
-        let countryDomiciled = yearGroup[0].transaction.asset!!.countryDomiciled;
-
-        // Para ações domiciliadas em Portugal ou juros adquiridas em corretoras estrangeiras, o país da fonte deve ser o da corretora
-        if (!countryDomiciled?.code || countryDomiciled?.code === "620") {
-          countryDomiciled = yearGroup[0].transaction.broker.country;
-        }
-
-        const anoRendimento = yearGroup[0].transaction.date.year;
-        let codigoRendimento;
-        switch (yearGroup[0].kind) {
-          case "dividend":
-            codigoRendimento = "E11 - Dividendos ou lucros - sem retenção em Portugal"
-            break;
-          case "interest":
-            codigoRendimento = "E21 - Juros sem retenção em Portugal"
-            break;
-        }
-
-
-        let paisFonte = "";
-        if (countryDomiciled?.code) {
-          paisFonte = `${countryDomiciled?.code} - ${countryDomiciled?.namePt}`;
-        }
-        const rendimentoBruto = totalGrossAmount;
-        const impostoPagoNoEstrangeiro = totalExpenses;
-
-        const dividendForIRS: AnexoJQuadro8A = {
+      const IRSentry: AnexoJQuadro8A = {
           "Ano rendimento": anoRendimento,
           "Código Rendimento": codigoRendimento,
           "País da fonte": paisFonte,
@@ -72,9 +50,77 @@ class PTAnexoJQuadro8AFormatter implements IRSFormatter<IncomeEvent, AnexoJQuadr
           "Imposto Pago no Estrangeiro - No país da fonte": impostoPagoNoEstrangeiro,
         };
 
-        result.push(dividendForIRS);
-      }
+      result.push(IRSentry);
     }
+
+
+    // const dividendsByAsset: Record<string, Record<string, IncomeEvent[]>> = {};
+
+    // // Agrupar dividendos por ativo e ano
+    // for (const dividend of incomeEvents) {
+    //   const isin = dividend.transaction.asset!!.isin;
+    //   const year = dividend.transaction.date.year;
+    //   dividendsByAsset[isin] ??= {};
+    //   dividendsByAsset[isin][year] ??= [];
+    //   dividendsByAsset[isin][year].push(dividend);
+    // }
+
+    // for (const assetGroup of Object.values(dividendsByAsset)) {
+    //   for (const yearGroup of Object.values(assetGroup)) {
+        // let totalFeesAmount = 0;
+        // let totalTaxAmount = 0;
+        // let totalNetAmount = 0;
+        // let totalGrossAmount = 0;
+
+        // totalGrossAmount = yearGroup.reduce((total, transaction) => { return total + transaction.amount; }, 0);
+        // totalFeesAmount = yearGroup.reduce((total, transaction) => { return total + transaction.fees; }, 0);
+        // totalTaxAmount = yearGroup.reduce((total, transaction) => { return total + transaction.taxes; }, 0);
+
+        // totalFeesAmount = parseFloat(totalFeesAmount.toFixed(2));
+        // totalTaxAmount = parseFloat(totalTaxAmount.toFixed(2));
+        // const totalExpenses = parseFloat(
+        //   (totalFeesAmount + totalTaxAmount).toFixed(2)
+        // );
+
+        // totalGrossAmount = Math.round((totalGrossAmount) * 100) / 100;
+
+        // let countryDomiciled = yearGroup[0].transaction.asset!!.countryDomiciled;
+
+        // // Para ações domiciliadas em Portugal ou juros adquiridas em corretoras estrangeiras, o país da fonte deve ser o da corretora
+        // if (!countryDomiciled?.code || countryDomiciled?.code === "620") {
+        //   countryDomiciled = yearGroup[0].transaction.broker.country;
+        // }
+
+        // const anoRendimento = yearGroup[0].transaction.date.year;
+        // let codigoRendimento;
+        // switch (yearGroup[0].kind) {
+        //   case "dividend":
+        //     codigoRendimento = "E11 - Dividendos ou lucros - sem retenção em Portugal"
+        //     break;
+        //   case "interest":
+        //     codigoRendimento = "E21 - Juros sem retenção em Portugal"
+        //     break;
+        // }
+
+
+        // let paisFonte = "";
+        // if (countryDomiciled?.code) {
+        //   paisFonte = `${countryDomiciled?.code} - ${countryDomiciled?.namePt}`;
+        // }
+        // const rendimentoBruto = totalGrossAmount;
+        // const impostoPagoNoEstrangeiro = totalExpenses;
+
+        // const dividendForIRS: AnexoJQuadro8A = {
+        //   "Ano rendimento": anoRendimento,
+        //   "Código Rendimento": codigoRendimento,
+        //   "País da fonte": paisFonte,
+        //   "Rendimento Bruto": rendimentoBruto,
+        //   "Imposto Pago no Estrangeiro - No país da fonte": impostoPagoNoEstrangeiro,
+        // };
+
+    //     result.push(dividendForIRS);
+    //   }
+    // }
 
     // Como na AT a chave de cada linha é o país da fonte e o código de rendimento, temos de agrupar dividendos segundo esses campos
     result = result.reduce((acc: AnexoJQuadro8A[], curr: AnexoJQuadro8A) => {
@@ -82,8 +128,8 @@ class PTAnexoJQuadro8AFormatter implements IRSFormatter<IncomeEvent, AnexoJQuadr
         dividend["País da fonte"] === curr["País da fonte"] &&
         dividend["Ano rendimento"] === curr["Ano rendimento"]);
       if (ref) {
-        ref["Rendimento Bruto"] += curr["Rendimento Bruto"];
-        ref["Imposto Pago no Estrangeiro - No país da fonte"] += curr["Imposto Pago no Estrangeiro - No país da fonte"];
+        ref["Rendimento Bruto"] = Math.round((ref["Rendimento Bruto"] + curr["Rendimento Bruto"] )* 100) / 100;
+        ref["Imposto Pago no Estrangeiro - No país da fonte"] = Math.round((ref["Imposto Pago no Estrangeiro - No país da fonte"] + curr["Imposto Pago no Estrangeiro - No país da fonte"] ) * 100) / 100;
       } else {
         acc.push(curr);
       }
@@ -118,9 +164,9 @@ class PTAnexoJQuadro8AFormatter implements IRSFormatter<IncomeEvent, AnexoJQuadr
     let currNLinha = 801 + quadro8A.childNodes.length;
     let currNumero = quadro8A.childNodes.length + 1;
 
-    const dividends = this.format(events);
+    const incomeEvents = this.format(events);
 
-    for (const div of dividends) {
+    for (const div of incomeEvents) {
       const linha = xmlDoc.createElementNS(
         quadro8.namespaceURI,
         "AnexoJq08AT01-Linha"
@@ -163,14 +209,14 @@ class PTAnexoJQuadro8AFormatter implements IRSFormatter<IncomeEvent, AnexoJQuadr
 
     // --- Somatórios do quadro ---
     const somaBruto = Math.round(
-      dividends.reduce(
+      incomeEvents.reduce(
         (acc, d) => acc + d["Rendimento Bruto"],
         0
       ) * 100
     ) / 100;
 
     const somaImposto = Math.round(
-      dividends.reduce(
+      incomeEvents.reduce(
         (acc, d) =>
           acc + d["Imposto Pago no Estrangeiro - No país da fonte"],
         0

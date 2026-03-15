@@ -133,7 +133,9 @@ class Statement {
 
     async fetchAssetTypes() {
         const isins : string[] = [];
-        for (let transaction of this.transactions) {
+        const filteredTransactions = this.transactions.filter((transaction) => transaction.asset?.isin);
+
+        for (let transaction of filteredTransactions) {
             const isin = transaction.asset!!.isin;
             if (isins.includes(isin)) continue;
             isins.push(isin);
@@ -147,7 +149,7 @@ class Statement {
         const end = performance.now();
         console.log(`[END] Fetching asset types... (took ${((end - start) / 1000).toFixed(3)} seconds)`);
 
-        for (let transaction of this.transactions) {
+        for (let transaction of filteredTransactions) {
             const isin = transaction.asset!!.isin;
             const assetType = assetTypes[isin];
             transaction.asset!!.assetType = assetType;
@@ -155,7 +157,8 @@ class Statement {
     }
 
     fetchCountries() {
-        for (let transaction of this.transactions) {
+        const filteredTransactions = this.transactions.filter((transaction) => transaction.asset?.isin);
+        for (let transaction of filteredTransactions) {
             const isin = transaction.asset!!.isin;
             transaction.asset!!.countryDomiciled = new Country(isin.substring(0, 2));
         }
@@ -163,6 +166,7 @@ class Statement {
 
 
     async fetchData(): Promise<void> {
+        console.log("[Statement]Transactions: " + JSON.stringify(this.transactions));
         await this.fetchExchangeRates();
         await this.fetchAssetTypes();
         this.fetchCountries();
