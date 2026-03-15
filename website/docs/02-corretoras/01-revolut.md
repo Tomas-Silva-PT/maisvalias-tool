@@ -4,6 +4,14 @@ Descobre como utilizar a ferramenta com esta corretora.
 
 Para utilizares a ferramenta `maisvalias-tool` com esta corretora, precisas de obter o histórico das transações efetuadas **desde do ano em que realizaste a primeira compra de um ativo**.
 
+De seguida é apresentado uma tabela com os eventos tributáveis que a ferramenta consegue processar:
+
+| Evento tributável | Suportado | Nota |
+|:-----------------|:----------:|:-----|
+|       Ganhos de capital         |     🟢       |       |
+|        Dividendos               |     🟢       |       |
+|        Juros                    |     🟡       |   Apenas testado para _savings account_. Ainda não foi desenvolvido para suportar _flexible monetary funds account_    |
+
 O seguinte guia vai ensinar-te, passo a passo, como calcular automaticamente as tuas mais valias obtidas através da Revolut.
 
 ## Como obter os ficheiros necessários
@@ -42,6 +50,20 @@ O seguinte guia vai ensinar-te, passo a passo, como calcular automaticamente as 
 ![step](../../static/img/brokers/revolut/steps/step13.png)
 
 ![step](../../static/img/brokers/revolut/steps/step14.png)
+
+### Passo 6: Obter juros da conta poupança de acesso imediato
+
+![step](../../static/img/brokers/revolut/steps/step14-1.png)
+
+![step](../../static/img/brokers/revolut/steps/step14-2.png)
+
+![step](../../static/img/brokers/revolut/steps/step14-3.png)
+
+![step](../../static/img/brokers/revolut/steps/step14-4.png)
+
+![step](../../static/img/brokers/revolut/steps/step14-5.png)
+
+![step](../../static/img/brokers/revolut/steps/step14-6.png)
 
 E assim tens os ficheiros necessários para utilizar a ferramenta `maisvalias-tool`.
 

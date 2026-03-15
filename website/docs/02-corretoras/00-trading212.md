@@ -4,6 +4,14 @@ Descobre como utilizar a ferramenta com esta corretora.
 
 Para utilizares a ferramenta `maisvalias-tool` com esta corretora, precisas de obter o histórico das transações efetuadas **desde do ano em que realizaste a primeira compra de um ativo**.
 
+De seguida é apresentado uma tabela com os eventos tributáveis que a ferramenta consegue processar:
+
+| Evento tributável | Suportado | Nota |
+|:-----------------|:----------:|:-----|
+|       Ganhos de capital         |     🟢       |       |
+|        Dividendos               |     🟢       |       |
+|        Juros                    |     🟢       |       |
+
 O seguinte guia vai ensinar-te, passo a passo, como calcular automaticamente as tuas mais valias obtidas através da Trading 212.
 
 ## Como obter ficheiro do histórico de transações
