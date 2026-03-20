@@ -9,178 +9,210 @@ import { BrokerRecord, BrokerRecordRow } from "../models/brokerRecord";
 
 class DegiroParser implements BrokerParser {
 
-    accountResume: [string, string][][] = [];
+    accountResume: BrokerRecordRow[] = [];
 
-    loadAccountResume(fileData: string) {
-        const data = fileData;
-        const rows = data.split("\n").map((row) => row.split(","));
-        const headers = rows.shift();
-
-        if (!headers) {
-            throw new Error("[Account resume] Invalid file data: no headers found");
-        }
-
-        rows.forEach((row) => {
-            const record = headers.map((h, i) => [h, row[i]] as [string, string]);
-            this.accountResume.push(record);
-        });
+    loadAccountResume(records: BrokerRecordRow[]) {
+        this.accountResume = records;
     }
 
-  parse(records: BrokerRecordRow[]): Transaction[] {
+    parseCapitalGain(record: BrokerRecordRow): Transaction | null {
+        let date = record[0][1];
+        let time = record[1][1];
+        let productName = record[2][1];
+        let isin = record[3][1];
+        let exchangeOfReference = record[4][1];
+        let exchange = record[5][1];
+        let shares = parseFloat(record[6][1].replace(",", ".")) || 0;
+        let price = parseFloat(record[7][1].replace(",", ".")) || 0;
+        let assetCurrency = record[8][1];
+        let grossAmount = Math.abs(parseFloat(record[9][1].replace(",", ".")) || 0);
+        let grossAmountCurrency = record[10][1];
+        let netAmount = Math.abs(parseFloat(record[11][1].replace(",", ".")) || 0); // EUR
+        let exchangeRate = parseFloat(record[12][1].replace(",", ".")) || 1;
+        let autoFXFee = Math.abs(parseFloat(record[13][1].replace(",", ".")) || 0); // EUR
+        let feeAmount = Math.abs(parseFloat(record[14][1].replace(",", ".")) || 0); // EUR
+        let totalAmount = Math.abs(parseFloat(record[15][1].replace(",", ".")) || 0); // EUR
+
+
+        if (!date || !time) return null;
+        const dutchDate = DateTime.fromFormat(`${date} ${time}`, "dd-MM-yyyy HH:mm", { zone: "Europe/Amsterdam" });
+        const utcDate = dutchDate.setZone("UTC");
+
+        date = utcDate.toISODate()!;
+        time = utcDate.toISOTime()!.split(".")[0];
+
+        const type = shares > 0 ? "Buy" : "Sell";
+
+        const fees: Fee[] = [];
+        if (autoFXFee != 0) fees.push(new Fee("Auto FX", autoFXFee, "EUR"));
+        if (feeAmount != 0) fees.push(new Fee("Custos de transação e/ou taxas de terceiros", feeAmount, "EUR"));
+
+        let totalNetAmount = Math.abs(netAmount);
+        if (type === "Buy") {
+            totalNetAmount = totalNetAmount + (autoFXFee + feeAmount);
+        } else {
+            totalNetAmount = totalNetAmount - (autoFXFee + feeAmount);
+        }
+
+
+        const transaction: Transaction = {
+            date: utcDate,
+            type: type,
+            asset: new Asset(productName, isin, assetCurrency),
+            shares: Math.abs(shares),
+            amount: totalNetAmount,
+            currency: "EUR",
+            broker: new Degiro(),
+            taxes: undefined,
+            fees: fees,
+            exchangeRate: 1
+        };
+        if (transaction.type || !date || !time) return transaction;
+        return null;
+    }
+
+    parseDividend(record: BrokerRecordRow): Transaction | null {
+        let date = record[0][1]; // Dutch Date
+        let time = record[1][1]; // Dutch Time
+        let dateValue = record[2][1];
+        let product = record[3][1];
+        let isin = record[4][1];
+        let description = record[5][1];
+        let exchangeRate = parseFloat(record[6][1].replace(",", ".")) || 1;
+        let changeCurrency = record[7][1];
+        let changeAmount = Math.abs(parseFloat(record[8][1].replace(",", ".")) || 0);
+        let balanceCurrency = record[9][1];
+        let balance = parseFloat(record[10][1].replace(",", ".")) || 0;
+        let orderId = record[11][1];
+
+        if (!date || !time) return null;
+
+        const dutchDate = DateTime.fromFormat(`${date} ${time}`, "dd-MM-yyyy HH:mm", { zone: "Europe/Amsterdam" });
+        const utcDate = dutchDate.setZone("UTC");
+
+        date = utcDate.toISODate()!;
+        time = utcDate.toISOTime()!.split(".")[0];
+
+        if (description !== 'Dividendo') {
+            return null;
+        }
+        const type = 'Dividend';
+
+        let netAmount = changeAmount;
+
+        const taxes: Tax[] = [];
+
+        // Find tax
+        const match = this.accountResume.find((row) => {
+            return row[0][1] == record[0][1] && row[1][1] == record[1][1] && row[5][1] == "Imposto sobre dividendo"
+        });
+        console.log("Matching tax for dividend: ", match);
+        if (match) {
+            const taxAmount = Math.abs(parseFloat(match[8][1].replace(",", ".")));
+            netAmount -= taxAmount;
+            const taxCurrency = match[7][1];
+            const taxExchangeRate = parseFloat(match[6][1].replace(",", ".")) || 1;
+            taxes.push(new Tax("Imposto sobre dividendo", taxAmount, taxCurrency, taxExchangeRate));
+        }
+
+        const transaction: Transaction = {
+            date: utcDate,
+            type: type,
+            asset: new Asset(product, isin, changeCurrency),
+            // shares: 0, // In dividend transaction the shares are not relevant
+            amount: Math.abs(netAmount),
+            currency: changeCurrency,
+            broker: new Degiro(),
+            taxes: taxes,
+            fees: undefined,
+            exchangeRate: exchangeRate
+        };
+        if (transaction.type || !date || !time) return transaction;
+        return null;
+    }
+
+    parseInterest(record: BrokerRecordRow): Transaction | null {
+        return null;
+    }
+
+    parse(records: BrokerRecordRow[]): Transaction[] {
         const transactions: Transaction[] = [];
-       
+
         if (!this.accountResume) {
             throw new Error("[Parse] Missing Account Resume");
         }
 
-        console.log("Broker records: " + JSON.stringify(records));
-
         records.forEach((record) => {
-            let date = record[0][1];
-            let time = record[1][1];
-
-            if (!date || !time) return;
-
-            const dutchDate = DateTime.fromFormat(`${date} ${time}`, "dd-MM-yyyy HH:mm", { zone: "Europe/Amsterdam" });
-            const utcDate = dutchDate.setZone("UTC");
-
-            date = utcDate.toISODate()!;
-            time = utcDate.toISOTime()!.split(".")[0];
-
-            const product = record[2][1]; // A Degiro não fornece o Ticker...infelizmente... :(
-            const isin = record[3][1];
-            const shares = parseFloat(record[6][1]);
-            const type = shares > 0 ? "Buy" : "Sell";
-            const price = parseFloat(record[7][1]);
-            const assetCurrency = record[8][1];
-            const netAmountCurrency = record[12][1];
-            const exchangeRate = parseFloat(record[13][1]) || 1;
-            let feeAmount = Math.abs(parseFloat(record[14][1]) || 0);
-            const feeCurrency = record[15][1];
-            const feeExchangeRate = feeCurrency === netAmountCurrency ? 1 : feeCurrency === assetCurrency ? exchangeRate : 0; // Se o custo for na mesma moeda do ativo, utiliza-se a mesma taxa de câmbio. Senão, é necessário obter a taxa de câmbio através de uma API.
-
-
-            // Obter o total custo da transação (porque a Degiro esconde taxas como a AutoFX...enfim)
-            // console.log("Account Resume: " + JSON.stringify(this.accountResume));
-            let findDescription = "";
-            if (type === "Buy") {
-                findDescription = "Levantamento de divisa";
-            }
-            else {
-                findDescription = "Crédito de divisa";
-            }
-            let totalAmount = Math.abs(parseFloat(this.accountResume.find((row) => {
-                // console.log("[ROW] Date: " + row[0][1] + " Time: " + row[1][1] + " ISIN: " + row[4][1] + " Description: " + row[5][1] + " Amount: " + row[8][1]);
-                // console.log("[TRANSACTION] Date: " + record[0][1] + " Time: " + record[1][1] + " ISIN: " + isin + " Description: " + findDescription);
-                // console.log("Equals: " + row[0][1] === record[0][1] && row[1][1] === record[1][1] && row[4][1] === isin && row[5][1] === findDescription)
-                return row[0][1] === record[0][1] && row[1][1] === record[1][1] && row[4][1] === isin && row[5][1] === findDescription;
-            })?.[8][1] || "0"));
-            if (totalAmount) {
-                feeAmount += Math.abs(totalAmount - Math.abs(parseFloat(record[11][1])));
-            }
-            let netAmount = type === "Buy" ? Math.abs(parseFloat(record[11][1])) + Math.abs(feeAmount) || 0 : Math.abs(parseFloat(record[11][1])) - Math.abs(feeAmount) || 0;
-
-            if (Math.abs(netAmount) < Number.EPSILON) {
-                throw new Error("Invalid file data: zero as an amount is not allowed");
-            }
-
-            const fees = feeAmount ? [new Fee("Custos de transação", feeAmount, feeCurrency, feeExchangeRate)] : [];
-
-            const transaction: Transaction = {
-                date: utcDate,
-                type: type,
-                asset: new Asset(product, isin, ""),
-                shares: Math.abs(shares),
-                amount: netAmount,
-                currency: netAmountCurrency,
-                broker: new Degiro(),
-                taxes: undefined,
-                fees: fees,
-                exchangeRate: exchangeRate
-            };
-            if (transaction.type || !date || !time) transactions.push(transaction);
+            let transaction = this.parseCapitalGain(record);
+            if (transaction) transactions.push(transaction);
         });
 
         // Adicionar dividendos
         this.accountResume.forEach((record) => {
-            let dutchDate = record[0][1];
-            let dutchTime = record[1][1];
-            const dateValue = record[2][1];
-            const product = record[3][1];
-            const isin = record[4][1];
-            const description = record[5][1];
-            const exchangeRate = parseFloat(record[6][1]);
-            const amountCurrency = record[7][1];
-            const amount = parseFloat(record[8][1]);
-            const balanceCurrency = record[9][1];
-            const balance = parseFloat(record[10][1]);
-            const orderId = record[11][1];
+            let transaction = this.parseDividend(record);
+            if (transaction) transactions.push(transaction);
 
-            if (!dutchDate || !dutchTime) return;
+            // let dutchDate = record[0][1];
+            // let dutchTime = record[1][1];
+            // const dateValue = record[2][1];
+            // const product = record[3][1];
+            // const isin = record[4][1];
+            // const description = record[5][1];
+            // const exchangeRate = parseFloat(record[6][1]);
+            // const amountCurrency = record[7][1];
+            // const amount = parseFloat(record[8][1]);
+            // const balanceCurrency = record[9][1];
+            // const balance = parseFloat(record[10][1]);
+            // const orderId = record[11][1];
 
-            const dutchDateTime = DateTime.fromFormat(`${dutchDate} ${dutchTime}`, "dd-MM-yyyy HH:mm", { zone: "Europe/Amsterdam" });
-            const utcDate = dutchDateTime.setZone("UTC");
+            // if (!dutchDate || !dutchTime) return;
 
-            const date = utcDate.toISODate()!;
-            const time = utcDate.toISOTime()!.split(".")[0];
+            // const dutchDateTime = DateTime.fromFormat(`${dutchDate} ${dutchTime}`, "dd-MM-yyyy HH:mm", { zone: "Europe/Amsterdam" });
+            // const utcDate = dutchDateTime.setZone("UTC");
 
-            if (description !== 'Dividendo') {
-                return;
-            }
-            const type = 'Dividend';
+            // const date = utcDate.toISODate()!;
+            // const time = utcDate.toISOTime()!.split(".")[0];
 
-            let netAmount = amount;
-            const netAmountCurrency = amountCurrency;
-            const taxes: Tax[] = [];
+            // if (description !== 'Dividendo') {
+            //     return;
+            // }
+            // const type = 'Dividend';
 
-            // Find tax
-            const match = this.accountResume.find((row) => {
-                const get = (key: string) => row.find(([k]) => k === key)?.[1];
-                return (
-                    get("Descrição") === "Imposto sobre dividendo" &&
-                    get("Data") === dutchDate &&
-                    get("Hora") === dutchTime
-                );
-            });
-            if (match) {
-                const taxAmount = Math.abs(parseFloat(match[8][1]));
-                netAmount -= taxAmount;
-                const taxCurrency = match[7][1];
-                const taxExchangeRate = parseFloat(match[6][1]);
-                taxes.push(new Tax("Imposto sobre dividendo", taxAmount, taxCurrency, taxExchangeRate));
-            }
+            // let netAmount = amount;
+            // const netAmountCurrency = amountCurrency;
+            // const taxes: Tax[] = [];
 
+            // // Find tax
+            // const match = this.accountResume.find((row) => {
+            //     const get = (key: string) => row.find(([k]) => k === key)?.[1];
+            //     return (
+            //         get("Descrição") === "Imposto sobre dividendo" &&
+            //         get("Data") === dutchDate &&
+            //         get("Hora") === dutchTime
+            //     );
+            // });
+            // if (match) {
+            //     const taxAmount = Math.abs(parseFloat(match[8][1]));
+            //     netAmount -= taxAmount;
+            //     const taxCurrency = match[7][1];
+            //     const taxExchangeRate = parseFloat(match[6][1]);
+            //     taxes.push(new Tax("Imposto sobre dividendo", taxAmount, taxCurrency, taxExchangeRate));
+            // }
 
-            // const transaction = new Transaction(
-            //     utcDate,
+            // const transaction: Transaction = {
+            //     date: utcDate,
             //     type,
-            //     product,
-            //     isin,
-            //     0,
-            //     "",
-            //     netAmount,
-            //     netAmountCurrency,
-            //     new Degiro(),
-            //     taxes,
-            //     undefined,
-            //     exchangeRate
-            // );
-            const transaction: Transaction = {
-                date: utcDate,
-                type,
-                asset: new Asset(product, isin, ""),
-                // shares: 0, // In dividend transaction the shares are not relevant
-                amount: netAmount,
-                currency: netAmountCurrency,
-                broker: new Degiro(),
-                taxes: taxes,
-                fees: undefined,
-                exchangeRate: exchangeRate
-            };
-            if (transaction.type || !date || !time) transactions.push(transaction);
+            //     asset: new Asset(product, isin, ""),
+            //     // shares: 0, // In dividend transaction the shares are not relevant
+            //     amount: netAmount,
+            //     currency: netAmountCurrency,
+            //     broker: new Degiro(),
+            //     taxes: taxes,
+            //     fees: undefined,
+            //     exchangeRate: exchangeRate
+            // };
+            // if (transaction.type || !date || !time) transactions.push(transaction);
         });
-
-        // console.log("Transactions: " + JSON.stringify(transactions));
 
         return transactions;
     }

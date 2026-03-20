@@ -157,7 +157,8 @@ export default function FilesDegiro({ id, setFiscalData }) {
         reader.onload = (e) => {
           const data = e.target.result;
           try {
-            brokerParser.loadAccountResume(data);
+            const records = fileParser.parse(data);
+            brokerParser.loadAccountResume(records);
             resolve();
           } catch (e) {
             reject(e);

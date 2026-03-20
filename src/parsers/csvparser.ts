@@ -64,12 +64,14 @@ class CSVParser implements FileParser {
     // );
     // O formato de saída é uma matriz (array de arrays: [header, value]), para manter a ordem dos campos e permitir múltiplas colunas com o mesmo nome (caso existam).
     // A Degiro, por exemplo, tem extratos com múltiplas colunas com nome vazio, o que impossibilita o uso de um objeto simples para representar os registros.
-    return nonEmptyRows.map((row) =>
+    const result : BrokerRecordRow[] = nonEmptyRows.map((row) =>
       cleanHeaders.map((h, i) => [
         h,
         row[i]?.trim() ?? ""
       ])
     );
+
+    return result;
   }
 }
 
