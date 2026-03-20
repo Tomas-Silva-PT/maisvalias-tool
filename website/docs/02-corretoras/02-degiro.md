@@ -9,7 +9,7 @@ De seguida é apresentado uma tabela com os eventos tributáveis que a ferrament
 | Evento tributável | Suportado | Nota |
 |:-----------------|:----------:|:-----|
 |       Ganhos de capital         |     🟢       |       |
-|        Dividendos               |     🔴       |       |
+|        Dividendos               |     🟢       |       |
 |        Juros                    |     🔴       |       |
 
 O seguinte guia vai ensinar-te, passo a passo, como calcular automaticamente as tuas mais valias obtidas através da Degiro.
