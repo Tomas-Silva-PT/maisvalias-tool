@@ -201,6 +201,23 @@
   box-shadow: 0px 0px 10px rgb(109, 109, 109);
 }
 
+.betaTag {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  background-color: #e63946; /* vermelho */
+  color: white;
+  font-size: 10px;
+  font-weight: bold;
+  padding: 2px 8px;
+  border-radius: 4px;
+
+  z-index: 2;
+  text-transform: uppercase;
+}
+
 .contentStep1BrokerInactive {
   position: absolute;
   width: 100%;

@@ -1,16 +1,16 @@
 import { it, describe, expect } from 'vitest';
 import { FIFOCalculator } from '../../calculators/FIFOCalculator.js';
-import { RevolutParser } from '../../parsers/revolutparser.js';
+import { RevolutParser } from '../../parsers/brokerparsers/revolutparser.js';
 import { Statement } from '../../models/statement.js';
 import fs from "fs";
 import { ParserEngine } from '../../parsers/parserengine.js';
-import { CSVParser } from '../../parsers/csvparser.js';
+import { CSVParser } from '../../parsers/fileparsers/csvparser.js';
 
 describe('FIFOCalculator', () => {
     it('should calculate capital gains correctly using FIFO', async () => {
         const calculator = new FIFOCalculator();
         const brokerParser = new RevolutParser();
-        const parserEngine = new ParserEngine(new CSVParser(";"), brokerParser);
+        const parserEngine = new ParserEngine(new CSVParser(), brokerParser);
         const statement = new Statement([]);
 
         const profitLossFilePath = './data/mockdata/revolut/revolut_profit_loss_statement.csv';
@@ -19,7 +19,7 @@ describe('FIFOCalculator', () => {
 
         const operationsFilePath = './data/mockdata/revolut/revolut_account_statement.csv';
         const operationsFileData = fs.readFileSync(operationsFilePath, 'utf8');
-        const transactions = parserEngine.parse(operationsFileData);
+        const transactions = await parserEngine.parse(operationsFileData);
 
         transactions.forEach(transaction => {
             statement.addTransaction(transaction);

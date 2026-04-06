@@ -1,10 +1,10 @@
-import { Transaction, TransactionType } from "../models/transaction.js";
-import { BrokerParser } from "./parser.js";
-import { Fee } from "../models/fee.js";
-import { Revolut } from "../models/brokers/revolut.js";
+import { Transaction, TransactionType } from "../../models/transaction.js";
+import { BrokerParser } from "../parser.js";
+import { Fee } from "../../models/fee.js";
+import { Revolut } from "../../models/brokers/revolut.js";
 import { DateTime } from "luxon";
-import { Asset } from "../models/asset.js";
-import { BrokerRecord, BrokerRecordRow } from "../models/brokerRecord.js";
+import { Asset } from "../../models/asset.js";
+import { BrokerRecord, BrokerRecordRow } from "../../models/brokerRecord.js";
 
 class RevolutParser implements BrokerParser {
   isins?: Record<string, string>[];

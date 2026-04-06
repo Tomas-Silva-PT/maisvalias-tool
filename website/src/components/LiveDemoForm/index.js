@@ -6,6 +6,7 @@ import FilesRevolut from "@site/src/components/FilesRevolut";
 import FilesTrading212 from "@site/src/components/FilesTrading212";
 import FilesDegiro from "@site/src/components/FilesDegiro";
 import FilesStrike from "@site/src/components/FilesStrike";
+import FilesTradeRepublic from "@site/src/components/FilesTradeRepublic";
 import DisclaimerPopup from "@site/src/components/DisclaimerPopup";
 import HelpDialog from "@site/src/components/HelpDialog";
 import FiscalSummary from "@site/src/components/FiscalSummary";
@@ -55,6 +56,7 @@ const brokers = [
     logo: "/img/brokers/trading212.png",
     active: true,
     visible: true,
+    beta: false,
     docs: [
       {
         message: "Não sabes onde encontrar os ficheiros?",
@@ -67,18 +69,21 @@ const brokers = [
     logo: "/img/brokers/etoro.png",
     active: false,
     visible: false,
+    beta: false,
   },
   {
     name: "XTB",
     logo: "/img/brokers/xtb.png",
     active: false,
     visible: false,
+    beta: false,
   },
   {
     name: "Degiro",
     logo: "/img/brokers/degiro.png",
     active: true,
     visible: true,
+    beta: false,
     docs: [
       {
         message: "Não sabes onde encontrar os ficheiros?",
@@ -91,6 +96,7 @@ const brokers = [
     logo: "/img/brokers/revolut.png",
     active: true,
     visible: true,
+    beta: false,
     docs: [
       {
         message: "Não sabes onde encontrar os ficheiros?",
@@ -103,10 +109,24 @@ const brokers = [
     logo: "/img/brokers/strike.png",
     active: true,
     visible: true,
+    beta: false,
     docs: [
       {
         message: "Não sabes onde encontrar os ficheiros?",
         link: "docs/corretoras/strike",
+      },
+    ],
+  },
+  {
+    name: "Trade Republic",
+    logo: "",
+    active: true,
+    visible: true,
+    beta: true,
+    docs: [
+      {
+        message: "Não sabes onde encontrar os ficheiros?",
+        link: "docs/corretoras/trade-republic",
       },
     ],
   },
@@ -311,7 +331,11 @@ export default function LiveDemoForm() {
         formatterExcelInterestGains.format(yearInterestGains);
 
       const classifier = new Classifier(PTIRSRules2025);
-      const taxEvents = [...yearCapitalGains, ...yearDividends, ...yearInterestGains];
+      const taxEvents = [
+        ...yearCapitalGains,
+        ...yearDividends,
+        ...yearInterestGains,
+      ];
       const classifications = classifier.classify(taxEvents);
       fiscalReport.byYear[year].classifications = classifications;
     }
@@ -439,6 +463,8 @@ export default function LiveDemoForm() {
                     }
                   }}
                 >
+                  {broker.beta && <div className={styles.betaTag}>BETA</div>}
+                  
                   {broker.active === false && (
                     <div className={clsx(styles.contentStep1BrokerInactive)}>
                       🚧 Em breve
@@ -474,6 +500,12 @@ export default function LiveDemoForm() {
         )}
         {broker.name === "Strike" && (
           <FilesStrike id={props.id} setFiscalData={setGainsAndDividends} />
+        )}
+        {broker.name === "Trade Republic" && (
+          <FilesTradeRepublic
+            id={props.id}
+            setFiscalData={setGainsAndDividends}
+          />
         )}
       </>
     );

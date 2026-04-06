@@ -1,11 +1,11 @@
-import { Fee } from "../models/fee.js";
-import { Tax } from "../models/tax.js";
-import { Transaction, TransactionType } from "../models/transaction.js";
-import { Trading212 } from "../models/brokers/trading212.js";
-import { BrokerParser } from "./parser.js";
+import { Fee } from "../../models/fee.js";
+import { Tax } from "../../models/tax.js";
+import { Transaction, TransactionType } from "../../models/transaction.js";
+import { Trading212 } from "../../models/brokers/trading212.js";
+import { BrokerParser } from "../parser.js";
 import { DateTime } from "luxon";
-import { Asset } from "../models/asset.js";
-import { BrokerRecord, BrokerRecordRow } from "../models/brokerRecord.js";
+import { Asset } from "../../models/asset.js";
+import { BrokerRecord, BrokerRecordRow } from "../../models/brokerRecord.js";
 
 class Trading212Parser implements BrokerParser {
 

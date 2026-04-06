@@ -2,7 +2,7 @@ import { CapitalGainEvent } from "./taxevent";
 
 type CapitalGainForUser = {
   transaction: CapitalGainEvent;
-  "Ticker": string;
+  "Simbolo": string;
   "Realização": {
     "Data": string;
     "Valor": number;

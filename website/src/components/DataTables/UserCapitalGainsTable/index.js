@@ -69,7 +69,7 @@ export default function UserCapitalGainsTable({ id, year, fiscalData }) {
     if (column === null) return 0;
 
     const valuesA = [
-      capitalGainA[1]["Ticker"],
+      capitalGainA[1]["Simbolo"],
       capitalGainA[1]["Aquisição"]["Data"],
       capitalGainA[1]["Aquisição"]["Valor"],
       capitalGainA[1]["Aquisição"]["Despesas"],
@@ -80,7 +80,7 @@ export default function UserCapitalGainsTable({ id, year, fiscalData }) {
     ];
 
     const valuesB = [
-      capitalGainB[1]["Ticker"],
+      capitalGainB[1]["Simbolo"],
       capitalGainB[1]["Aquisição"]["Data"],
       capitalGainB[1]["Aquisição"]["Valor"],
       capitalGainB[1]["Aquisição"]["Despesas"],
@@ -153,7 +153,7 @@ export default function UserCapitalGainsTable({ id, year, fiscalData }) {
             return (
               <tr className={clsx(styles.textEnd)} key={index}>
                 <td className={clsx(styles.textEnd)}>
-                  <strong>{data["Ticker"]}</strong>
+                  <strong>{data["Simbolo"]}</strong>
                 </td>
                 <td className={clsx(styles.textEnd)}>
                   {data["Aquisição"]["Data"]}

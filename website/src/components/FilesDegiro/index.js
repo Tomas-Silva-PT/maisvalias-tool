@@ -3,9 +3,9 @@ import styles from "./styles.module.css";
 import React, { useEffect, useState } from "react";
 import { ArrowRight, Upload, X } from "lucide-react";
 
-import { DegiroParser } from "../../maisvalias-tool/parsers/degiroparser.js";
+import { DegiroParser } from "../../maisvalias-tool/parsers/brokerparsers/degiroparser.js";
 import ErrorPopup from "@site/src/components/ErrorPopup";
-import { CSVParser } from "../../maisvalias-tool/parsers/csvparser.js";
+import { CSVParser } from "../../maisvalias-tool/parsers/fileparsers/csvparser.js";
 import { ParserEngine } from "../../maisvalias-tool/parsers/parserengine.js";
 
 const broker = [
@@ -154,10 +154,10 @@ export default function FilesDegiro({ id, setFiscalData }) {
     const accountPromises = accountFiles.map((file) => {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
-        reader.onload = (e) => {
+        reader.onload = async (e) => {
           const data = e.target.result;
           try {
-            const records = fileParser.parse(data);
+            const records = await fileParser.parse(data);
             brokerParser.loadAccountResume(records);
             resolve();
           } catch (e) {
@@ -198,10 +198,10 @@ export default function FilesDegiro({ id, setFiscalData }) {
     const transactionsPromises = transactionFiles.map((file) => {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
-        reader.onload = (e) => {
+        reader.onload = async (e) => {
           const data = e.target.result;
           try {
-            const transactions = parserEngine.parse(data);
+            const transactions = await parserEngine.parse(data);
             resolve(transactions);
           } catch (e) {
             console.error(e);

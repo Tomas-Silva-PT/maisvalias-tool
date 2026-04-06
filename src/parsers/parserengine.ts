@@ -6,8 +6,8 @@ class ParserEngine {
 
     }
 
-    parse(file: FileType): Transaction[] {
-        const records = this.fileParser.parse(file);
+    async parse(file: FileType): Promise<Transaction[]> {
+        const records = await this.fileParser.parse(file);
         return this.brokerParser.parse(records);
     }
 }

@@ -1,5 +1,5 @@
 type DividendForUser = {
-  "Ticker": string;
+  "Simbolo": string;
   "Data": string;
   "Valor": number;
   "Despesas": number;

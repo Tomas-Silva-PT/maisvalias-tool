@@ -3,27 +3,27 @@ import styles from "./styles.module.css";
 import React, { useEffect, useState } from "react";
 import { ArrowRight, Upload, X } from "lucide-react";
 
-import { StrikeParser } from "../../maisvalias-tool/parsers/brokerparsers/strikeparser.js";
+import { TradeRepublicParser } from "../../maisvalias-tool/parsers/brokerparsers/traderepublicparser.js";
 
 import ErrorPopup from "@site/src/components/ErrorPopup";
 import { ParserEngine } from "../../maisvalias-tool/parsers/parserengine.js";
-import { CSVParser } from "../../maisvalias-tool/parsers/fileparsers/csvparser.js";
+import { PDFParser } from "../../maisvalias-tool/parsers/fileparsers/pdfparser-browser.js";
 
 const broker = [
   {
-    name: "Strike",
-    logo: "/img/brokers/strike.png",
+    name: "Trade Republic",
+    logo: "",
     active: true,
     docs: [
       {
         message: "Não sabes onde encontrar os ficheiros?",
-        link: "docs/corretoras/strike",
+        link: "docs/corretoras/trade-republic",
       },
     ],
   },
 ];
 
-export default function FilesStrike({ id, setFiscalData }) {
+export default function FilesTradeRepublic({ id, setFiscalData }) {
   const [files, setFiles] = useState([]);
   const [errorType, setErrorType] = useState(null);
   const [error, setError] = useState(null);
@@ -61,7 +61,7 @@ export default function FilesStrike({ id, setFiscalData }) {
           <span>Os ficheiros não são compatíveis com o formato esperado.</span>
           <p>
             Por favor verifica quais os ficheiros corretos através da{" "}
-            <a href="docs/corretoras/strike" target="_blank">
+            <a href="docs/corretoras/trade-republic" target="_blank">
               documentação
             </a>{" "}
             e tenta novamente.
@@ -133,6 +133,26 @@ export default function FilesStrike({ id, setFiscalData }) {
     setErrorType(null);
   }
 
+  function readFileAsArrayBuffer(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        if (!(reader.result instanceof ArrayBuffer)) {
+          return reject(new Error("Formato de ficheiro inválido"));
+        }
+
+        resolve(reader.result);
+      };
+
+      reader.onerror = () => {
+        reject(new Error("Erro ao ler o ficheiro"));
+      };
+
+      reader.readAsArrayBuffer(file);
+    });
+  }
+
   async function onFilesSelected() {
     const start = performance.now();
 
@@ -141,64 +161,38 @@ export default function FilesStrike({ id, setFiscalData }) {
 
     if (files.length === 0 || !broker) return;
 
-    const brokerParser = new StrikeParser();
-    const fileParser = new CSVParser();
+    const brokerParser = new TradeRepublicParser();
+    const fileParser = new PDFParser();
     const parserEngine = new ParserEngine(fileParser, brokerParser);
-    // const statement = new Statement([]);
-
-    const filePromises = files.map((file) => {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = async (e) => {
-          const data = e.target.result;
-          try {
-            const transactions = await parserEngine.parse(data);
-            resolve(transactions);
-          } catch (error) {
-            reject(error);
-          }
-        };
-
-        reader.onerror = function (e) {
-          reject(e.target.error);
-        };
-
-        reader.readAsText(file);
-      });
-    });
-
-    let transactions;
 
     try {
-      transactions = await Promise.all(filePromises);
-      dispatchSuccess();
-    } catch (error) {
-      dispatchError("filesUploaded");
-      const end = performance.now();
-      console.log(
-        `Duração do processamento dos ficheiros: ${(
-          (end - start) /
-          1000
-        ).toFixed(3)} seconds`
+      const transactions = await Promise.all(
+        files.map(async (file) => {
+          const data = await readFileAsArrayBuffer(file);
+          return parserEngine.parse(data);
+        }),
       );
-      return;
-    }
 
-    if (
-      transactions.filter((transaction) => transaction.length !== 0).length ===
-      0
-    ) {
-      dispatchError("filesUploaded");
-    } else {
+      if (
+        transactions.filter((transaction) => transaction.length !== 0)
+          .length === 0
+      ) {
+        dispatchError("filesUploaded");
+        return;
+      }
+
       dispatchSuccess();
       setFiscalData(transactions);
+    } catch (error) {
+      dispatchError("filesUploaded");
+      console.error(error);
     }
 
     const end = performance.now();
     console.log(
       `Duração do processamento dos ficheiros: ${((end - start) / 1000).toFixed(
-        3
-      )} segundos`
+        3,
+      )} seconds`,
     );
   }
 
@@ -211,7 +205,7 @@ export default function FilesStrike({ id, setFiscalData }) {
           className={clsx(styles.contentStep2UploadInput)}
           id="file-upload"
           type="file"
-          accept=".csv"
+          accept=".pdf"
           onChange={onFileUpload}
           multiple
         />

@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "luxon": "^3.6.1",
-    "papaparse": "^5.5.3"
+    "papaparse": "^5.5.3",
+    "pdf-parse": "^2.4.5"
   }
 }

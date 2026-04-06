@@ -3,9 +3,9 @@ import styles from "./styles.module.css";
 import React, { useEffect, useState } from "react";
 import { ArrowRight, Upload, X } from "lucide-react";
 
-import { RevolutParser } from "../../maisvalias-tool/parsers/revolutparser.js";
+import { RevolutParser } from "../../maisvalias-tool/parsers/brokerparsers/revolutparser.js";
 import ErrorPopup from "@site/src/components/ErrorPopup";
-import { CSVParser } from "../../maisvalias-tool/parsers/csvparser.js";
+import { CSVParser } from "../../maisvalias-tool/parsers/fileparsers/csvparser.js";
 import { ParserEngine } from "../../maisvalias-tool/parsers/parserengine.js";
 
 const broker = [
@@ -197,10 +197,10 @@ export default function FilesRevolut({ id, setFiscalData }) {
     const operationsPromises = operationFiles.map((file) => {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
-        reader.onload = (e) => {
+        reader.onload = async (e) => {
           const data = e.target.result;
           try {
-            const transactions = parserEngine.parse(data);
+            const transactions = await parserEngine.parse(data);
             resolve(transactions);
           } catch (e) {
             console.error(e);

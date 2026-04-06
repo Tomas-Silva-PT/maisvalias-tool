@@ -166,7 +166,7 @@ class Statement {
 
 
     async fetchData(): Promise<void> {
-        console.log("[Statement]Transactions: " + JSON.stringify(this.transactions));
+        // console.log("[Statement]Transactions: " + JSON.stringify(this.transactions));
         await this.fetchExchangeRates();
         await this.fetchAssetTypes();
         this.fetchCountries();

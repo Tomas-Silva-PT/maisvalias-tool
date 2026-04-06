@@ -1,20 +1,20 @@
 import { it, describe, expect } from 'vitest';
 import { FIFOCalculator } from '../../calculators/FIFOCalculator.js';
-import { RevolutParser } from '../../parsers/revolutparser.js';
+import { RevolutParser } from '../../parsers/brokerparsers/revolutparser.js';
 import { Statement } from '../../models/statement.js';
 import { Classifier } from '../../classifiers/classifier.js';
 import { DividendsCalculator } from '../../calculators/DividendsCalculator.js';
 import { PTIRSRules2025 } from '../../classifiers/rules/pt_rules2025.js';
 import fs from "fs";
 import { ParserEngine } from '../../parsers/parserengine.js';
-import { CSVParser } from '../../parsers/csvparser.js';
+import { CSVParser } from '../../parsers/fileparsers/csvparser.js';
 
 describe('Classifier', () => {
     it('should classify transactions correctly', async () => {
         const dividendsCalculator = new DividendsCalculator();
         const capitalGainsCalculator = new FIFOCalculator();
         const brokerParser = new RevolutParser();
-        const parserEngine = new ParserEngine(new CSVParser(";"), brokerParser);
+        const parserEngine = new ParserEngine(new CSVParser(), brokerParser);
         const statement = new Statement([]);
 
         // Get capital gains and dividends
@@ -24,7 +24,7 @@ describe('Classifier', () => {
 
         const operationsFilePath = './data/mockdata/revolut/revolut_account_statement.csv';
         const operationsFileData = fs.readFileSync(operationsFilePath, 'utf8');
-        const transactions = parserEngine.parse(operationsFileData);
+        const transactions = await parserEngine.parse(operationsFileData);
 
         transactions.forEach(transaction => {
             statement.addTransaction(transaction);

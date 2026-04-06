@@ -1,11 +1,11 @@
-import { Transaction } from "../models/transaction";
-import { BrokerParser } from "./parser";
-import { Degiro } from "../models/brokers/degiro";
-import { Tax } from "../models/tax";
-import { Fee } from "../models/fee";
+import { Transaction } from "../../models/transaction";
+import { BrokerParser } from "../parser";
+import { Degiro } from "../../models/brokers/degiro";
+import { Tax } from "../../models/tax";
+import { Fee } from "../../models/fee";
 import { DateTime } from "luxon";
-import { Asset } from "../models/asset";
-import { BrokerRecord, BrokerRecordRow } from "../models/brokerRecord";
+import { Asset } from "../../models/asset";
+import { BrokerRecord, BrokerRecordRow } from "../../models/brokerRecord";
 
 class DegiroParser implements BrokerParser {
 

@@ -3,11 +3,11 @@ import styles from "./styles.module.css";
 import React, { useEffect, useState } from "react";
 import { ArrowRight, Upload, X } from "lucide-react";
 
-import { Trading212Parser } from "../../maisvalias-tool/parsers/trading212parser.js";
+import { Trading212Parser } from "../../maisvalias-tool/parsers/brokerparsers/trading212parser.js";
 
 import ErrorPopup from "@site/src/components/ErrorPopup";
 import { ParserEngine } from "../../maisvalias-tool/parsers/parserengine.js";
-import { CSVParser } from "../../maisvalias-tool/parsers/csvparser.js";
+import { CSVParser } from "../../maisvalias-tool/parsers/fileparsers/csvparser.js";
 
 const broker = [
   {
@@ -149,10 +149,10 @@ export default function FilesTrading212({ id, setFiscalData }) {
     const filePromises = files.map((file) => {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
-        reader.onload = (e) => {
+        reader.onload = async (e) => {
           const data = e.target.result;
           try {
-            const transactions = parserEngine.parse(data);
+            const transactions = await parserEngine.parse(data);
             resolve(transactions);
           } catch (error) {
             reject(error);

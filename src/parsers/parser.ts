@@ -6,9 +6,9 @@ interface BrokerParser {
 }
 
 interface FileParser {
-    parse(file: string | ArrayBuffer): BrokerRecordRow[];
+    parse(file: FileType): Promise<BrokerRecordRow[]>;
 }
 
-type FileType = string | ArrayBuffer;
+type FileType = string | ArrayBuffer | Buffer;
 
 export { BrokerParser, FileParser, FileType };

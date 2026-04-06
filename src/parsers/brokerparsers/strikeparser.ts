@@ -1,10 +1,10 @@
 import { DateTime } from "luxon";
-import { Transaction, TransactionType } from "../models/transaction";
-import { BrokerParser } from "./parser";
-import { Strike } from "../models/brokers/strike";
-import { Fee } from "../models/fee";
-import { Asset } from "../models/asset";
-import { BrokerRecord, BrokerRecordRow } from "../models/brokerRecord";
+import { Transaction, TransactionType } from "../../models/transaction";
+import { BrokerParser } from "../parser";
+import { Strike } from "../../models/brokers/strike";
+import { Fee } from "../../models/fee";
+import { Asset } from "../../models/asset";
+import { BrokerRecord, BrokerRecordRow } from "../../models/brokerRecord";
 
 class StrikeParser implements BrokerParser {
 

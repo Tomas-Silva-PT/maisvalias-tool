@@ -1,9 +1,9 @@
 import { it, describe, expect } from 'vitest';
 import { Statement } from '../../models/statement.js';
 import fs from "fs";
-import { StrikeParser } from '../../parsers/strikeparser.js';
+import { StrikeParser } from '../../parsers/brokerparsers/strikeparser.js';
 import { ParserEngine } from '../../parsers/parserengine.js';
-import { CSVParser } from '../../parsers/csvparser.js';
+import { CSVParser } from '../../parsers/fileparsers/csvparser.js';
 
 describe('StrikeParser', () => {
     it('should parse Strike transaction file correctly', async () => {
@@ -12,7 +12,7 @@ describe('StrikeParser', () => {
 
         const operationsFilePath = './data/mockdata/strike/2026-01.csv';
         const operationsFileData = fs.readFileSync(operationsFilePath, 'utf8');
-        const transactions = parserEngine.parse(operationsFileData);
+        const transactions = await parserEngine.parse(operationsFileData);
 
         transactions.forEach(transaction => {
             statement.addTransaction(transaction);

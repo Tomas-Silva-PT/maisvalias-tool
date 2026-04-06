@@ -54,7 +54,7 @@ export default function UserDividendsTable({ id, year, fiscalData }) {
     if (column === null) return 0;
 
     const valuesA = [
-      dividendA[1]["Ticker"],
+      dividendA[1]["Simbolo"],
       dividendA[1]["Data"],
       dividendA[1]["Valor"],
       dividendA[1]["Despesas"],
@@ -62,7 +62,7 @@ export default function UserDividendsTable({ id, year, fiscalData }) {
     ];
 
     const valuesB = [
-      dividendB[1]["Ticker"],
+      dividendB[1]["Simbolo"],
       dividendB[1]["Data"],
       dividendB[1]["Valor"],
       dividendB[1]["Despesas"],
@@ -136,7 +136,7 @@ export default function UserDividendsTable({ id, year, fiscalData }) {
             return (
               <tr key={index}>
                 <td className={clsx(styles.textEnd)}>
-                  <strong>{data["Ticker"]}</strong>
+                  <strong>{data["Simbolo"]}</strong>
                 </td>
                 <td className={clsx(styles.textEnd)}>{data["Data"]}</td>
                 <td className={clsx(styles.textEnd)}>
