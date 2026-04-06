@@ -5,8 +5,7 @@ data/*.xml
 reminder.txt
 *.xlsx
 maisvalias-tool/
-data/mockdata/trading212/ignore
-data/mockdata/traderepublic/ignore
+*ignore/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
