@@ -24,6 +24,7 @@ type Transaction = {
 }
 
 function transactionEquals(t1: Transaction, t2: Transaction): boolean {
+    
     return (
         t1.date.equals(t2.date) &&
         t1.type === t2.type &&
@@ -34,7 +35,7 @@ function transactionEquals(t1: Transaction, t2: Transaction): boolean {
         t1.amount === t2.amount &&
         t1.currency === t2.currency &&
         t1.broker.isEquals(t1.broker, t2.broker) &&
-        t1.exchangeRate === t2.exchangeRate
+        (t1.exchangeRate || t2.exchangeRate ? t1.exchangeRate === t2.exchangeRate : true)
     );
 }
 
