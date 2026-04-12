@@ -4,6 +4,13 @@ Coloca os resultados automaticamente na tua declaração de IRS.
 
 Se já tiveres retificado os resultados da ferramenta através do [guia anterior](./01-exportar-excel.md), então poderás exportar os resultados para uma declaração de IRS.
 
+:::warning
+
+Abaixo está exemplificado um preenchimento automático de mais valias que apenas sejam para preencher no Anexo J.
+Caso a ferramenta indique a necessidade de preencher outros anexos (e pretendas preenchê-los automaticamente), a declaração de IRS importada do portal das finanças terá de vir com os respetivos anexos já adicionados, mesmo que vazios.
+
+:::
+
 Segue os seguintes passos:
 
 ### _1. Fazer download da declaração de IRS_
@@ -24,6 +31,12 @@ Agora acrescenta à declaração o **anexo J**:
 ![step](../../static/img/funcionalidades/02/step3.png)
 ![step](../../static/img/funcionalidades/02/step4.png)
 ![step](../../static/img/funcionalidades/02/step5.png)
+
+:::warning
+
+Se a ferramenta indicar o preenchimento de outros anexos, como o **Anexo G1** ou **Anexo G**, e quiseres que os mesmos sejam preenchidos automaticamente, tens de os acrescentar à declaração, mesmo que estejam vazios.
+
+:::
 
 Preenche o teu número de contribuinte (NIF):
 
