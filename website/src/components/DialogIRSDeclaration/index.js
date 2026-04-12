@@ -64,7 +64,7 @@ export default function DialogIRSDeclaration({
     reader.onload = (e) => {
       const xml_irs = e.target.result;
 
-      if (taxEvents.length === 0) {
+      if (Array.from(classifications.entries()).length === 0) {
         loader.style.display = "none";
         setError(true);
         return;
