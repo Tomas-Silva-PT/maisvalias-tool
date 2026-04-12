@@ -24,14 +24,14 @@ class PTIRSFormatter {
         const parser = new DOMParser();
         const xmlDoc = parser.parseFromString(xml, "text/xml");
 
-        const anexoJ = xmlDoc.querySelector("AnexoJ");
-        if (!anexoJ) {
-            throw new Error(
-                "O Anexo J não foi encontrado na declaração IRS."
-            );
-        }
+        // const anexoJ = xmlDoc.querySelector("AnexoJ");
+        // if (!anexoJ) {
+        //     throw new Error(
+        //         "O Anexo J não foi encontrado na declaração IRS."
+        //     );
+        // }
 
-        // 👉 PONTO CRÍTICO DA ARQUITETURA
+
         for (const [destination, events] of classification) {
             const formatter = PTIRSFormatterRegistry.getFormatter(destination.code);
             formatter.toXML(xmlDoc, events);
@@ -49,12 +49,12 @@ class PTIRSFormatter {
         const parser = new DOMParser();
         const xmlDoc = parser.parseFromString(xml, "text/xml");
 
-        const anexoJ = xmlDoc.getElementsByTagName("AnexoJ")[0];
-        if (!anexoJ) {
-            throw new Error(
-                "O Anexo J não foi encontrado na declaração IRS."
-            );
-        }
+        // const anexoJ = xmlDoc.getElementsByTagName("AnexoJ")[0];
+        // if (!anexoJ) {
+        //     throw new Error(
+        //         "O Anexo J não foi encontrado na declaração IRS."
+        //     );
+        // }
 
         for (const [destination, events] of classification) {
             const formatter = PTIRSFormatterRegistry.getFormatter(destination.code);

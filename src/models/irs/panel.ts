@@ -42,7 +42,7 @@ type AnexoJQuadro8A = {
 
 type AnexoG1Quadro7 = {
   "Titular": string;
-  "País": string;
+  "País da Entidade Gestora": string;
   "Ano de Aquisição": number;
   "Mês de Aquisição": number;
   "Dia de Aquisição": number;

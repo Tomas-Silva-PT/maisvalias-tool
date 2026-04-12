@@ -63,8 +63,89 @@ class PTAnexoJQuadro94AFormatter implements IRSFormatter<CapitalGainEvent, Anexo
 
   }
 
-  toXML(xmlDoc: Document,events: CapitalGainEvent[]): string {
-    return ""; 
+  toXML(xmlDoc: Document,events: CapitalGainEvent[]): void {
+    const anexoJ = xmlDoc.querySelector("AnexoJ");
+    if (!anexoJ) throw new Error("Falta AnexoJ");
+
+    const quadro9 = anexoJ.querySelector("Quadro09");
+    if (!quadro9) throw new Error("Falta Quadro09");
+
+    let quadro9_4A = quadro9.querySelector("AnexoJq094AT01");
+    if (!quadro9_4A) {
+      quadro9_4A = xmlDoc.createElementNS(
+        quadro9.namespaceURI,
+        "AnexoJq094AT01"
+      );
+      quadro9.appendChild(quadro9_4A);
+    }
+
+    let currNLinha = 1001 + quadro9_4A.children.length; // Garante que se já houverem linhas no quadro, as novas linhas terão numeração sequencial correta
+    let currNumero = quadro9_4A.children.length + 1;
+
+    const gains = this.format(events);
+
+    for (const gain of gains) {
+      const linha = xmlDoc.createElementNS(
+        quadro9.namespaceURI,
+        "AnexoJq094AT01-Linha"
+      );
+      linha.setAttribute("numero", currNumero.toString());
+
+      const add = (tag: string, value: string) => {
+        const node = xmlDoc.createElementNS(quadro9.namespaceURI, tag);
+        node.textContent = value;
+        linha.appendChild(node);
+      };
+
+      add("NLinha", currNLinha.toString());
+      add("CodPaisFonte", gain["País da fonte"].split("-")[0].trim());
+      add("AnoRealizacao", gain["Ano de Realização"].toString());
+      add("MesRealizacao", gain["Mês de Realização"].toString());
+      add("DiaRealizacao", gain["Dia de Realização"].toString());
+      add("ValorRealizacao", gain["Valor de Realização"].toString());
+      add("AnoAquisicao", gain["Ano de Aquisição"].toString());
+      add("MesAquisicao", gain["Mês de Aquisição"].toString());
+      add("DiaAquisicao", gain["Dia de Aquisição"].toString());
+      add("ValorAquisicao", gain["Valor de Aquisição"].toString());
+      add("DespesasEncargos", gain["Despesas e Encargos"].toString());
+      add(
+        "ImpostoPagoNoEstrangeiro",
+        gain["Imposto retido no estrangeiro"].toString()
+      );
+      add(
+        "CodPaisContraparte",
+        gain["País da Contraparte"].split("-")[0].trim()
+      );
+
+      quadro9_4A.appendChild(linha);
+      currNLinha++;
+      currNumero++;
+    }
+
+    let quadro9_4A_T01SomaC01 = quadro9.querySelector("AnexoJq094AT01SomaC01");
+    if (!quadro9_4A_T01SomaC01) {
+      quadro9_4A_T01SomaC01 = xmlDoc.createElementNS(quadro9.namespaceURI, "AnexoJq094AT01SomaC01");
+      quadro9_4A_T01SomaC01.textContent = (Math.round(gains.reduce((acc, gain) => acc + gain["Valor de Realização"], 0) * 100) / 100).toString();
+      quadro9.appendChild(quadro9_4A_T01SomaC01);
+    }
+    let quadro9_4A_T01SomaC02 = quadro9.querySelector("AnexoJq094AT01SomaC02");
+    if (!quadro9_4A_T01SomaC02) {
+      quadro9_4A_T01SomaC02 = xmlDoc.createElementNS(quadro9.namespaceURI, "AnexoJq094AT01SomaC02");
+      quadro9_4A_T01SomaC02.textContent = (Math.round(gains.reduce((acc, gain) => acc + gain["Valor de Aquisição"], 0) * 100) / 100).toString();
+      quadro9.appendChild(quadro9_4A_T01SomaC02);
+    }
+    let quadro9_4A_T01SomaC03 = quadro9.querySelector("AnexoJq094AT01SomaC03");
+    if (!quadro9_4A_T01SomaC03) {
+      quadro9_4A_T01SomaC03 = xmlDoc.createElementNS(quadro9.namespaceURI, "AnexoJq094AT01SomaC03");
+      quadro9_4A_T01SomaC03.textContent = (Math.round(gains.reduce((acc, gain) => acc + gain["Despesas e Encargos"], 0) * 100) / 100).toString();
+      quadro9.appendChild(quadro9_4A_T01SomaC03);
+    }
+    let quadro9_4A_T01SomaC04 = quadro9.querySelector("AnexoJq094AT01SomaC04");
+    if (!quadro9_4A_T01SomaC04) {
+      quadro9_4A_T01SomaC04 = xmlDoc.createElementNS(quadro9.namespaceURI, "AnexoJq094AT01SomaC04");
+      quadro9_4A_T01SomaC04.textContent = (Math.round(gains.reduce((acc, gain) => acc + gain["Imposto retido no estrangeiro"], 0) * 100) / 100).toString();
+      quadro9.appendChild(quadro9_4A_T01SomaC04);
+    }
   }
 }
 
