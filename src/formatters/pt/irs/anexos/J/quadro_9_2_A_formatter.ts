@@ -66,6 +66,7 @@ class PTAnexoJQuadro92AFormatter implements IRSFormatter<CapitalGainEvent, Anexo
         "Despesas e Encargos": despesasEncargos,
         "Imposto retido no estrangeiro": impostoRetido,
         "País da Contraparte": paisContraparte,
+        "Respeita a valores mobiliários admitidos à negociação ou a partes de OIC abertos?": "Sim"
       };
 
       capitalGains.push(capitalGain);
@@ -93,8 +94,8 @@ class PTAnexoJQuadro92AFormatter implements IRSFormatter<CapitalGainEvent, Anexo
       quadro9.appendChild(quadro9_2A);
     }
 
-    let currNLinha = 951 + quadro9_2A.childNodes.length; // Garante que se já houverem linhas no quadro, as novas linhas terão numeração sequencial correta
-    let currNumero = quadro9_2A.childNodes.length + 1;
+    let currNLinha = 951 + quadro9_2A.children.length; // Garante que se já houverem linhas no quadro, as novas linhas terão numeração sequencial correta
+    let currNumero = quadro9_2A.children.length + 1;
 
     const gains = this.format(events);
 
@@ -130,6 +131,10 @@ class PTAnexoJQuadro92AFormatter implements IRSFormatter<CapitalGainEvent, Anexo
       add(
         "CodPaisContraparte",
         gain["País da Contraparte"].split("-")[0].trim()
+      );
+      add(
+        "RespeitaValoresMobiliarios",
+        gain["Respeita a valores mobiliários admitidos à negociação ou a partes de OIC abertos?"] === "Sim" ? "S" : "N"
       );
 
       quadro9_2A.appendChild(linha);

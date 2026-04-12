@@ -92,8 +92,8 @@ class PTAnexoJQuadro8AFormatter implements IRSFormatter<IncomeEvent, AnexoJQuadr
     }
 
     // Contadores de linha (padrão AT)
-    let currNLinha = 801 + quadro8A.childNodes.length;
-    let currNumero = quadro8A.childNodes.length + 1;
+    let currNLinha = 801 + quadro8A.children.length;
+    let currNumero = quadro8A.children.length + 1;
 
     const incomeEvents = this.format(events);
 

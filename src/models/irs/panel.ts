@@ -12,6 +12,7 @@ type AnexoJQuadro92A = {
   "Despesas e Encargos": number;
   "Imposto retido no estrangeiro": number;
   "País da Contraparte": string;
+  "Respeita a valores mobiliários admitidos à negociação ou a partes de OIC abertos?": string;
 };
 
 type AnexoJQuadro94A = {
