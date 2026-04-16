@@ -1,5 +1,5 @@
 import { BrokerParser } from "../parser.js";
-import { BrokerRecord, BrokerRecordRow } from "../../models/brokerRecord.js";
+import { BrokerRecord, BrokerRecordRow, BrokerSection } from "../../models/brokerRecord.js";
 import { Transaction, TransactionType } from "../../models/transaction.js";
 import { Asset } from "../../models/asset.js";
 import { DateTime } from "luxon";
@@ -9,10 +9,11 @@ import { TradeRepublic } from "../../models/brokers/traderepublic.js";
 
 class TradeRepublicParser implements BrokerParser {
 
-    parse(records: BrokerRecordRow[]): Transaction[] {
+    parse(sections: BrokerSection[]): Transaction[] {
         const transactions: Transaction[] = [];
 
-        const rows: BrokerRecord[] = records.map(r => Object.fromEntries(r));
+        const section = sections[0];
+        const rows: BrokerRecord[] = section.rows.map(r => Object.fromEntries(r));
 
         const transactionSection = this.extractTransactionSection(rows);
         const groups = this.extractTransactions(transactionSection);

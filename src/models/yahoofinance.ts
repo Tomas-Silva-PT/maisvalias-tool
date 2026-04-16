@@ -123,7 +123,7 @@ class YahooFinance {
           const date = new Date(ts * 1000);
           return {
             timestamp: ts,
-            date: `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`,
+            date: DateTime.fromISO(`${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`),
             open: quotes.open[index],
             close: quotes.close[index],
             high: quotes.high[index],

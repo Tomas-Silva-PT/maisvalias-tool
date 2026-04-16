@@ -7,6 +7,7 @@ import FilesTrading212 from "@site/src/components/FilesTrading212";
 import FilesDegiro from "@site/src/components/FilesDegiro";
 import FilesStrike from "@site/src/components/FilesStrike";
 import FilesTradeRepublic from "@site/src/components/FilesTradeRepublic";
+import FilesInteractiveBrokers from "@site/src/components/FilesInteractiveBrokers";
 import DisclaimerPopup from "@site/src/components/DisclaimerPopup";
 import HelpDialog from "@site/src/components/HelpDialog";
 import FiscalSummary from "@site/src/components/FiscalSummary";
@@ -127,6 +128,19 @@ const brokers = [
       {
         message: "Não sabes onde encontrar os ficheiros?",
         link: "docs/corretoras/trade-republic",
+      },
+    ],
+  },
+  {
+    name: "IKBR",
+    logo: "",
+    active: true,
+    visible: true,
+    beta: true,
+    docs: [
+      {
+        message: "Não sabes onde encontrar os ficheiros?",
+        link: "docs/corretoras/interactivebrokers",
       },
     ],
   },
@@ -503,6 +517,12 @@ export default function LiveDemoForm() {
         )}
         {broker.name === "Trade Republic" && (
           <FilesTradeRepublic
+            id={props.id}
+            setFiscalData={setGainsAndDividends}
+          />
+        )}
+        {broker.name === "IKBR" && (
+          <FilesInteractiveBrokers
             id={props.id}
             setFiscalData={setGainsAndDividends}
           />

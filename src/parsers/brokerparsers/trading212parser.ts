@@ -5,14 +5,15 @@ import { Trading212 } from "../../models/brokers/trading212.js";
 import { BrokerParser } from "../parser.js";
 import { DateTime } from "luxon";
 import { Asset } from "../../models/asset.js";
-import { BrokerRecord, BrokerRecordRow } from "../../models/brokerRecord.js";
+import { BrokerRecord, BrokerRecordRow, BrokerSection } from "../../models/brokerRecord.js";
 
 class Trading212Parser implements BrokerParser {
 
-  parse(records: BrokerRecordRow[]): Transaction[] {
+  parse(sections: BrokerSection[]): Transaction[] {
     const transactions: Transaction[] = [];
 
-    const oRecords : BrokerRecord[] = records.map((record) => Object.fromEntries(record));
+    const section = sections[0];
+    const oRecords : BrokerRecord[] = section.rows.map((record) => Object.fromEntries(record));
 
     oRecords.forEach((record) => {
       if (!record["Time"]) return;

@@ -4,14 +4,15 @@ import { BrokerParser } from "../parser";
 import { Strike } from "../../models/brokers/strike";
 import { Fee } from "../../models/fee";
 import { Asset } from "../../models/asset";
-import { BrokerRecord, BrokerRecordRow } from "../../models/brokerRecord";
+import { BrokerRecord, BrokerRecordRow, BrokerSection } from "../../models/brokerRecord";
 
 class StrikeParser implements BrokerParser {
 
-  parse(records: BrokerRecordRow[]): Transaction[] {
+  parse(sections: BrokerSection[]): Transaction[] {
     const transactions: Transaction[] = [];
 
-    const oRecords : BrokerRecord[] = records.map((record) => Object.fromEntries(record));
+    const section = sections[0];
+    const oRecords : BrokerRecord[] = section.rows.map((record) => Object.fromEntries(record));
 
     oRecords.forEach((record) => {
         // Empty row, ignore it

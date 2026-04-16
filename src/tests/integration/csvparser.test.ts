@@ -8,14 +8,14 @@ describe('CSVParser', () => {
 
         const operationsFilePath = './data/mockdata/revolut/revolut_account_statement.csv';
         const operationsFileData = fs.readFileSync(operationsFilePath, 'utf8');
-        const brokerRecords = await parser.parse(operationsFileData);
+        const brokerSection = await parser.parse(operationsFileData);
 
-        // console.log("Broker records: " + JSON.stringify(brokerRecords));
+        // console.log("Broker records: " + JSON.stringify(brokerSection));
 
-        expect(brokerRecords).toBeDefined();
-        expect(brokerRecords.length).toBe(30);
-        expect(brokerRecords[0][0][0]).toBe("Date");
-        expect(brokerRecords[0][1][0]).toBe("Ticker");
-        expect(brokerRecords[0][2][0]).toBe("Type");
+        expect(brokerSection).toBeDefined();
+        expect(brokerSection[0].rows.length).toBe(30);
+        expect(brokerSection[0].rows[0][0][0]).toBe("Date");
+        expect(brokerSection[0].rows[0][1][0]).toBe("Ticker");
+        expect(brokerSection[0].rows[0][2][0]).toBe("Type");
     });
 });

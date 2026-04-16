@@ -133,12 +133,14 @@ class Statement {
 
     async fetchAssetTypes() {
         const isins : string[] = [];
-        const filteredTransactions = this.transactions.filter((transaction) => transaction.asset?.isin);
+        const filteredTransactions = this.transactions.filter((transaction) => transaction.asset);
 
         for (let transaction of filteredTransactions) {
             const isin = transaction.asset!!.isin;
-            if (isins.includes(isin)) continue;
-            isins.push(isin);
+            const ticker = transaction.asset!!.ticker;
+            if (isins.includes(isin) && isins.includes(ticker)) continue;
+            if(isin) isins.push(isin);
+            if(!isin && ticker) isins.push(ticker); // If no ISIN, use the ticker
         }
 
         console.log("[START] Fetching asset types...");
@@ -151,7 +153,8 @@ class Statement {
 
         for (let transaction of filteredTransactions) {
             const isin = transaction.asset!!.isin;
-            const assetType = assetTypes[isin];
+            const ticker = transaction.asset!!.ticker;
+            const assetType = assetTypes[isin] || assetTypes[ticker];
             transaction.asset!!.assetType = assetType;
         }
     }

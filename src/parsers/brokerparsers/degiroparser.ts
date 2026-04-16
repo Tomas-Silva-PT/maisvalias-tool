@@ -5,14 +5,14 @@ import { Tax } from "../../models/tax";
 import { Fee } from "../../models/fee";
 import { DateTime } from "luxon";
 import { Asset } from "../../models/asset";
-import { BrokerRecord, BrokerRecordRow } from "../../models/brokerRecord";
+import { BrokerRecord, BrokerRecordRow, BrokerSection } from "../../models/brokerRecord";
 
 class DegiroParser implements BrokerParser {
 
     accountResume: BrokerRecordRow[] = [];
 
-    loadAccountResume(records: BrokerRecordRow[]) {
-        this.accountResume = records;
+    loadAccountResume(records: BrokerSection[]) {
+        this.accountResume = records[0].rows;
     }
 
     parseCapitalGain(record: BrokerRecordRow): Transaction | null {
@@ -135,14 +135,15 @@ class DegiroParser implements BrokerParser {
         return null;
     }
 
-    parse(records: BrokerRecordRow[]): Transaction[] {
+    parse(sections: BrokerSection[]): Transaction[] {
         const transactions: Transaction[] = [];
 
         if (!this.accountResume) {
             throw new Error("[Parse] Missing Account Resume");
         }
 
-        records.forEach((record) => {
+        const section = sections[0];
+        section.rows.forEach((record) => {
             let transaction = this.parseCapitalGain(record);
             if (transaction) transactions.push(transaction);
         });

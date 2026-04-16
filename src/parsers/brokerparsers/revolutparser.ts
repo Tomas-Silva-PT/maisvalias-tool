@@ -4,7 +4,7 @@ import { Fee } from "../../models/fee.js";
 import { Revolut } from "../../models/brokers/revolut.js";
 import { DateTime } from "luxon";
 import { Asset } from "../../models/asset.js";
-import { BrokerRecord, BrokerRecordRow } from "../../models/brokerRecord.js";
+import { BrokerRecord, BrokerRecordRow, BrokerSection } from "../../models/brokerRecord.js";
 
 class RevolutParser implements BrokerParser {
   isins?: Record<string, string>[];
@@ -82,12 +82,13 @@ class RevolutParser implements BrokerParser {
     // console.log("Isins loaded: " + JSON.stringify(this.isins));
   }
 
-  parse(records: BrokerRecordRow[]): Transaction[] {
+  parse(sections: BrokerSection[]): Transaction[] {
     if (!this.isins) {
       throw new Error("Isins not loaded");
     }
     const transactions: Transaction[] = [];
-    const oRecords: BrokerRecord[] = records.map((record) => Object.fromEntries(record));
+    const section = sections[0];
+    const oRecords: BrokerRecord[] = section.rows.map((record) => Object.fromEntries(record));
 
     oRecords.forEach((record) => {
       const parser = RevolutParserFactory.createParser(record);
