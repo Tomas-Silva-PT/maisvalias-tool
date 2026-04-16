@@ -10,8 +10,8 @@ class InteractiveBrokers implements Broker {
     country: Country;
 
     constructor() {
-        this.name = "Interactive Brokers";
-        this.country = new Country("US");
+        this.name = "Interactive Brokers Ireland Limited";
+        this.country = new Country("IE");
     }
 
     isEquals(broker1: InteractiveBrokers, broker2: InteractiveBrokers): boolean {

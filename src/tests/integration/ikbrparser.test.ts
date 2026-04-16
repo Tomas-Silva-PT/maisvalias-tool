@@ -10,7 +10,7 @@ describe('InteractiveBrokersParser', () => {
         const parserEngine = new ParserEngine(new CSVParser(), new InteractiveBrokersParser());
         const statement = new Statement([]);
 
-        const operationsFilePath = './data/mockdata/interactivebrokers/ignore/DUP475263_20260319_20260415.csv';
+        const operationsFilePath = './data/mockdata/interactivebrokers/Extrato.csv';
         const operationsFileData = fs.readFileSync(operationsFilePath, 'utf8');
         const transactions = await parserEngine.parse(operationsFileData);
         

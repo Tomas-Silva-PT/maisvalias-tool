@@ -1,0 +1,126 @@
+﻿Statement,Header,Field Name,Field Value
+Statement,Data,BrokerName,Interactive Brokers Ireland Limited
+Statement,Data,BrokerAddress,
+Statement,Data,Title,Activity Summary
+Statement,Data,Period,"March 19, 2026 - April 15, 2026"
+Statement,Data,WhenGenerated,"2026-04-16, 04:19:36 EDT"
+Disclaimer,Header,Field Name,Field Value
+Disclaimer,Data,Disclaimer,"This Activity Summary is provided as a convenience to customers who have accounts with multiple Interactive Brokers companies in multiple jurisdictions. Positions and cash shown on this Activity Summary may be held at different Interactive Brokers companies in different countries, subject to different regulatory rules and protections. This Activity Summary does not serve as your formal customer statement. Customer statements for each IB company are available under Account Management when you log in to the IB website."
+Account Information,Header,Field Name,Field Value
+Account Information,Data,Name,Zezoca In The Freaks
+Account Information,Data,Account,DUP5555555 (Custom Consolidated)
+Account Information,Data,Accounts Included,"DUP5555555, DUP5555555-P (Paxos)"
+Account Information,Data,Account Type,Individual
+Account Information,Data,Customer Type,Individual
+Account Information,Data,Account Capabilities,Margin
+Account Information,Data,Base Currency,EUR
+Net Asset Value,Header,Asset Class,Prior Total,Current Long,Current Short,Current Total,Change
+Net Asset Value,Data,Cash ,1000000,999095.63,-33891.325899368,965204.304100633,-34795.695899367
+Net Asset Value,Data,Stock,0,39066.616025,0,39066.616025,39066.616025
+Net Asset Value,Data,Interest Accruals,0,560.4,-33.874575,526.525425,526.525425
+Net Asset Value,Data,Total,1000000,1038722.646025,-33925.200474368,1004797.445550633,4797.445550633
+Net Asset Value,Header,Time Weighted Rate of Return
+Net Asset Value,Data,0.479744555%
+Change in Combined NAV,Header,Field Name,Field Value
+Change in NAV,Data,Starting Value,1000000
+Change in NAV,Data,Mark-to-Market,3732.112219928
+Change in NAV,Data,Dividends,9.578067
+Change in NAV,Data,Interest,546.81
+Change in NAV,Data,Change in Interest Accruals,526.4018606
+Change in NAV,Data,Commissions,-9.86231
+Change in NAV,Data,Other FX Translations,-7.594292069
+Change in NAV,Data,Ending Value,1004797.445550633
+Mark-to-Market Performance Summary,Header,Asset Category,Symbol,Prior Quantity,Current Quantity,Prior Price,Current Price,Mark-to-Market P/L Position,Mark-to-Market P/L Transaction,Mark-to-Market P/L Commissions,Mark-to-Market P/L Other,Mark-to-Market P/L Total,Code
+Mark-to-Market Performance Summary,Data,Stocks,MSFT,0,108.0351,--,411.2200,3568.825735715,190.046489387,-0.86231,0,3758.009915101,
+Mark-to-Market Performance Summary,Data,Stocks,QYLD,0,70,--,13.9400,-3.78,-10.92,-3,9.578067,-8.121933,
+Mark-to-Market Performance Summary,Data,Stocks,SAP,0,3,--,146.5400,-1.32,-10.74,-6,0,-18.06,
+Mark-to-Market Performance Summary,Data,P/L on FX Translation (Stocks),,,,,,,,,,-600.07,
+Mark-to-Market Performance Summary,Data,Total,,,,,,3563.725735715,168.386489387,-9.86231,9.578067,3131.756030601,
+Mark-to-Market Performance Summary,Data,Total (All Assets),,,,,,3563.725735715,168.386489387,-9.86231,9.578067,3131.756030601,
+Mark-to-Market Performance Summary,Data,Broker Interest Paid and Received,,,,,,,,,,546.81,
+Total P/L for Statement Period,,,,,,,,,,,,3678.566030601,
+Realized & Unrealized Performance Summary,Header,Asset Category,Symbol,Cost Adj.,Realized S/T Profit,Realized S/T Loss,Realized L/T Profit,Realized L/T Loss,Realized Total,Unrealized S/T Profit,Unrealized S/T Loss,Unrealized L/T Profit,Unrealized L/T Loss,Unrealized Total,Total,Code
+Realized & Unrealized Performance Summary,Data,Stocks,MSFT,0,0,0,0,0,0,3750.35270148,0,0,0,3750.35270148,3750.35270148,
+Realized & Unrealized Performance Summary,Data,Stocks,QYLD,0,0,0,0,0,0,0,-17.7,0,0,-17.7,-17.7,
+Realized & Unrealized Performance Summary,Data,Stocks,SAP,0,0,-14.34,0,0,-14.34,0,-3.72,0,0,-3.72,-18.06,
+Realized & Unrealized Performance Summary,Data,Total,,0,0,-14.34,0,0,-14.34,3750.35270148,-21.42,0,0,3728.93270148,3714.59270148,
+Realized & Unrealized Performance Summary,Data,Total (All Assets),,0,0,-14.34,0,0,-14.34,3750.35270148,-21.42,0,0,3728.93270148,3714.59270148,
+Month & Year to Date Performance Summary,Header,Asset Category,Symbol,Description,Mark-to-Market MTD,Mark-to-Market YTD,Realized S/T MTD,Realized S/T YTD,Realized L/T MTD,Realized L/T YTD
+Month & Year to Date Performance Summary,Data,Stocks,MSFT,MICROSOFT CORP,3758.00991511,3758.00991511,0,0,0,0
+Month & Year to Date Performance Summary,Data,Stocks,QYLD,GX NASDAQ 100 COV CALL UCITS,-8.121933,-8.121933,0,0,0,0
+Month & Year to Date Performance Summary,Data,Stocks,SAP,SAP SE,-18.06,-18.06,-14.34,-14.34,0,0
+Month & Year to Date Performance Summary,Data,Total,,,3731.82798211,3731.82798211,-14.34,-14.34,0,0
+Month & Year to Date Performance Summary,Data,Total (All Assets),,,3731.82798211,3731.82798211,-14.34,-14.34,0,0
+Cash Report,Header,Currency Summary,Currency,Total,Securities,Futures,Paxos,Month to Date,Year to Date,
+Cash Report,Data,Starting Cash,Base Currency Summary,1000000,1000000,0,0,,,
+Cash Report,Data,Commissions,Base Currency Summary,-9.86231,-9.86231,0,0,-9.86231,-9.86231,
+Cash Report,Data,Broker Interest Paid and Received,Base Currency Summary,546.81,546.81,0,0,546.81,546.81,
+Cash Report,Data,Trades (Sales),Base Currency Summary,432,432,0,0,432,432,
+Cash Report,Data,Trades (Purchase),Base Currency Summary,-36366.575751399,-36366.575751399,0,0,-36366.5757514,-36366.5757514,
+Cash Report,Data,Payment In Lieu of Dividends,Base Currency Summary,9.578067,9.578067,0,0,9.578067,9.578067,
+Cash Report,Data,Cash FX Translation Gain/Loss,Base Currency Summary,592.354095031,592.354095031,0,,,
+Cash Report,Data,Ending Cash,Base Currency Summary,965204.304100633,965204.304100633,0,0,,,
+Cash Report,Data,Ending Settled Cash,Base Currency Summary,964772.304100633,964772.304100633,0,0,,,
+Cash Report,Data,Starting Cash,EUR,1000000,1000000,0,0,,,
+Cash Report,Data,Commissions,EUR,-9,-9,0,0,-9,-9,
+Cash Report,Data,Deposits,EUR,0,0,0,0,0,1000000,
+Cash Report,Data,Broker Interest Paid and Received,EUR,546.81,546.81,0,0,546.81,546.81,
+Cash Report,Data,Trades (Sales),EUR,432,432,0,0,432,432,
+Cash Report,Data,Trades (Purchase),EUR,-1874.18,-1874.18,0,0,-1874.18,-1874.18,
+Cash Report,Data,Ending Cash,EUR,999095.63,999095.63,0,0,,,
+Cash Report,Data,Ending Settled Cash,EUR,998663.63,998663.63,0,0,,,
+Cash Report,Data,Starting Cash,USD,0,0,0,0,,,
+Cash Report,Data,Commissions,USD,-1,-1,0,0,-1,-1,
+Cash Report,Data,Trades (Purchase),USD,-39999.995073,-39999.995073,0,0,-39999.995073,-39999.995073,
+Cash Report,Data,Payment In Lieu of Dividends,USD,11.23,11.23,0,0,11.23,11.23,
+Cash Report,Data,Ending Cash,USD,-39989.765073,-39989.765073,0,0,,,
+Cash Report,Data,Ending Settled Cash,USD,-39989.765073,-39989.765073,0,0,,,
+Open Positions,Header,DataDiscriminator,Asset Category,Currency,Symbol,Quantity,Mult,Cost Price,Cost Basis,Close Price,Value,Unrealized P/L,Code
+Open Positions,Data,Summary,Stocks,EUR,QYLD,70,1,14.192857143,993.5,13.94,975.8,-17.7,
+Open Positions,Data,Summary,Stocks,EUR,SAP,3,1,147.78,443.34,146.54,439.62,-3.72,
+Open Positions,Total,,Stocks,EUR,,,,,1436.84,,1415.42,-21.42,
+Open Positions,Data,Summary,Stocks,USD,MSFT,108.0351,1,370.259249753,40000.995073,411.22,44426.19,4425.194928,
+Open Positions,Total,,Stocks,USD,,,,,40000.995073,,44426.19,4425.194928,
+Open Positions,Total,,Stocks,EUR,,,,,33900.843324368,,37651.196025,3750.35270148,
+Open Positions,Total,,Stocks,EUR,,,,,35337.683324367,,39066.616025,3728.93270148,
+Net Stock Position Summary,Header,Asset Category,Currency,Symbol,Description,Shares at IB,Shares Borrowed,Shares Lent,Net Shares
+Net Stock Position Summary,Data,Stocks,EUR,QYLD,GX NASDAQ 100 COV CALL UCITS,70,0,0,70
+Net Stock Position Summary,Data,Stocks,EUR,SAP,SAP SE,3,0,0,3
+Net Stock Position Summary,Data,Stocks,USD,MSFT,MICROSOFT CORP,108.0351,0,0,108.0351
+Trades,Header,DataDiscriminator,Asset Category,Currency,Account,Symbol,Date/Time,Quantity,T. Price,C. Price,Proceeds,Comm/Fee,Basis,Realized P/L,MTM P/L,Code
+Trades,Data,Order,Stocks,EUR,DUP5555555,QYLD,"2026-04-07, 09:28:34",70,14.15,13.994,-990.5,-3,993.5,0,-10.92,O
+Trades,SubTotal,,Stocks,EUR,QYLD,,,70,,,-990.5,-3,993.5,0,-10.92,
+Trades,Data,Order,Stocks,EUR,DUP5555555,SAP,"2026-04-07, 09:27:29",6,147.28,145.22,-883.68,-3,886.68,0,-12.36,O
+Trades,Data,Order,Stocks,EUR,DUP5555555,SAP,"2026-04-14, 02:00:01",-3,144,143.46,432,-3,-443.34,-14.34,1.62,C
+Trades,SubTotal,,Stocks,EUR,SAP,,,3,,,-451.68,-6,443.34,-14.34,-10.74,
+Trades,Total,,Stocks,EUR,,,,,,,-1442.18,-9,1436.84,-14.34,-21.66, 
+Trades,Data,Order,Stocks,USD,DUP5555555,MSFT,"2026-04-07, 09:31:38",108.0351,370.249993502,372.29,-39999.995073,-1,40000.995073,0,220.3923,FPA;O;P
+Trades,SubTotal,,Stocks,USD,MSFT,,,108.0351,,,-39999.995073,-1,40000.995073,0,220.3923,
+Trades,Total,,Stocks,USD,,,,,,,-39999.995073,-1,40000.995073,0,220.3923, 
+Trades,Total,,Stocks,EUR,,,,,,,-34492.395751399,-0.86231,34493.258061399,0,190.046484213, 
+Dividends,Header,Currency,Account,Date,Description,Amount
+Dividends,Data,USD,DUP5555555,2026-04-09,QYLD(IE00BM8R0J59) Payment in Lieu of Dividend (Mixed Income),11.23
+Dividends,Data,Total,,,,11.23
+Dividends,Data,Total in EUR,,,,9.578067
+Interest,Header,Currency,Account,Date,Description,Amount
+Interest,Data,EUR,DUP5555555,2026-04-06,EUR Credit Interest for Mar-2026,546.81
+Interest,Data,Total,,,,546.81
+Interest Accruals,Header,Currency,Field Name,Field Value
+Interest Accruals,Data,Base Currency Summary,Starting Accrual Balance,0
+Interest Accruals,Data,Base Currency Summary,Interest Accrued,1073.2118606
+Interest Accruals,Data,Base Currency Summary,Accrual Reversal,-546.81
+Interest Accruals,Data,Base Currency Summary,FX Translation,0.1235644
+Interest Accruals,Data,Base Currency Summary,Ending Accrual Balance,526.525425
+Interest Accruals,Data,EUR,Starting Accrual Balance,0
+Interest Accruals,Data,EUR,Interest Accrued,1107.21
+Interest Accruals,Data,EUR,Accrual Reversal,-546.81
+Interest Accruals,Data,EUR,Ending Accrual Balance,560.4
+Interest Accruals,Data,USD,Starting Accrual Balance,0
+Interest Accruals,Data,USD,Interest Accrued,-39.97
+Interest Accruals,Data,USD,Accrual Reversal,0
+Interest Accruals,Data,USD,Ending Accrual Balance,-39.97
+Interest Accruals,Data,USD,Ending Accrual Balance in EUR,-33.874575
+Financial Instrument Information,Header,Asset Category,Symbol,Description,Conid,Security ID,Underlying,Listing Exch,Multiplier,Type,Code
+Financial Instrument Information,Data,Stocks,MSFT,MICROSOFT CORP,272093,US5949181045,MSFT,NASDAQ,1,COMMON,
+Financial Instrument Information,Data,Stocks,QYLD,GX NASDAQ 100 COV CALL UCITS,599861417,IE00BM8R0J59,QYLD,BVME.ETF,1,ETF,
+Financial Instrument Information,Data,Stocks,SAP,SAP SE,14204,DE0007164600,SAP,IBIS,1,COMMON,
