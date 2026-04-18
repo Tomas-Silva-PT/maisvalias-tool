@@ -8,7 +8,7 @@ De seguida é apresentado uma tabela com os eventos tributáveis que a ferrament
 
 | Evento tributável | Suportado | Nota |
 |:-----------------|:----------:|:-----|
-|       Ganhos de capital         |     🟡       |   Funciona, mas pelo facto do extrato não apresentar o ISIN da ação, a ferramenta não consegue extrair o país de origem do ativo (importante no preenchimento dos anexos do IRS)    |
+|       Ganhos de capital         |     🟢       |       |
 |        Dividendos               |     🟡       |    Funciona, mas não apresenta eventuais impostos retidos no país de origem   |
 |        Juros                    |     🟢      |       |
 

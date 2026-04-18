@@ -18,18 +18,23 @@ class InteractiveBrokersParser implements BrokerParser {
 
     // Obter a secção correspondente às transações
     const transactionsSection = records.find(section => section.rows[0][0][0] === "Trades");
+    if (transactionsSection) {
     const parsedTransactions = this.parseTransactionsSection(transactionsSection!, assetsSection);
     transactions.push(...parsedTransactions);
+    }
 
     // Obter a secção correspondente a dividendos
     const dividendsSection = records.find(section => section.rows[0][0][0] === "Dividends");
+    if (dividendsSection) {
     const parsedDividends = this.parseDividendsSection(dividendsSection!, assetsSection);
     transactions.push(...parsedDividends);
-
+    }
     // Obter a secção correspondente a juros
     const interestsSection = records.find(section => section.rows[0][0][0] === "Interest");
+    if (interestsSection) {
     const parsedInterests = this.parseInterestSection(interestsSection!);
     transactions.push(...parsedInterests);
+    }
 
     return transactions;
   }
