@@ -11,9 +11,7 @@ class TradeRepublicParser implements BrokerParser {
 
     parse(sections: BrokerSection[]): Transaction[] {
         const transactions: Transaction[] = [];
-        console.log("Parsing sections: ", sections);
         const section = sections[0];
-        console.log("Section: ", section);
         const rows: BrokerRecord[] = section.rows.map(r => Object.fromEntries(r));
 
         const transactionSection = this.extractTransactionSection(rows);
