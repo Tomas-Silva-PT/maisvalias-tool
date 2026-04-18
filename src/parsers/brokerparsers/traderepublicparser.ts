@@ -78,7 +78,7 @@ class TradeRepublicParser implements BrokerParser {
 
                 // Enquanto a linha atual não for o início de uma nova transação (ou seja, não for um padrão de data), continuamos adicionando as linhas ao grupo atual.
                 const isSameTransaction = (line: string) => !this.isDayMonth(line);
-                while (i < rows.length && isSameTransaction(current)) {
+                while (i < rows.length && isSameTransaction(rows[i]["raw"])) {
                     transaction.push(rows[i]);
                     i++;
                 }
