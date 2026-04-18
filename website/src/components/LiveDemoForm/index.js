@@ -132,7 +132,7 @@ const brokers = [
     ],
   },
   {
-    name: "IKBR",
+    name: "IBKR",
     logo: "",
     active: true,
     visible: true,
@@ -521,7 +521,7 @@ export default function LiveDemoForm() {
             setFiscalData={setGainsAndDividends}
           />
         )}
-        {broker.name === "IKBR" && (
+        {broker.name === "IBKR" && (
           <FilesInteractiveBrokers
             id={props.id}
             setFiscalData={setGainsAndDividends}

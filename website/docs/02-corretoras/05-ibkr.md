@@ -18,23 +18,23 @@ O seguinte guia vai ensinar-te, passo a passo, como calcular automaticamente as 
 
 ### Passo 1: Aceder ao menu _Performance & Reports_
 
-![step](../../static/img/brokers/ikbr/steps/step0.png)
+![step](../../static/img/brokers/ibkr/steps/step0.png)
 
 ### Passo 2: Consultar extratos (_Statements_)
 
-![step](../../static/img/brokers/ikbr/steps/step1.png)
+![step](../../static/img/brokers/ibkr/steps/step1.png)
 
 ### Passo 3: Selecionar _Activity Statement_
 
-![step](../../static/img/brokers/ikbr/steps/step2.png)
+![step](../../static/img/brokers/ibkr/steps/step2.png)
 
 ### Passo 4: Exportar o extrato das transações
 
 
 
-![step](../../static/img/brokers/ikbr/steps/step3.png)
+![step](../../static/img/brokers/ibkr/steps/step3.png)
 
-![step](../../static/img/brokers/ikbr/steps/step4.png)
+![step](../../static/img/brokers/ibkr/steps/step4.png)
 
 ### Passo 5: Repetir passos anteriores, para cada ano
 
@@ -48,15 +48,15 @@ Agora que tens todos os ficheiros necessários, vamos ver como utilizá-los no m
 
 No site oficial, navega até à página `Demonstração`:
 
-![step](../../static/img/brokers/ikbr/steps/step5.png)
+![step](../../static/img/brokers/ibkr/steps/step5.png)
 
-De seguida, seleciona a `IKBR`:
+De seguida, seleciona a `IBKR`:
 
-![step](../../static/img/brokers/ikbr/steps/step6.png)
+![step](../../static/img/brokers/ibkr/steps/step6.png)
 
 Nos ficheiros, coloca **todos os ficheiros que exportaste na [fase anterior](#como-obter-ficheiro-do-histórico-de-transações)**:
 
-![step](../../static/img/brokers/ikbr/steps/step7.png)
+![step](../../static/img/brokers/ibkr/steps/step7.png)
 ___
 
 :::info
@@ -69,9 +69,9 @@ De qualquer modo o nome dos ficheiros não é relevante, mas sim o seu conteúdo
 
 Com os ficheiros carregados, basta dares início ao processo de cálculo:
 
-![step](../../static/img/brokers/ikbr/steps/step8.png)
+![step](../../static/img/brokers/ibkr/steps/step8.png)
 
-![step](../../static/img/brokers/ikbr/steps/step9.png)
+![step](../../static/img/brokers/ibkr/steps/step9.png)
 ___
 
 :::success

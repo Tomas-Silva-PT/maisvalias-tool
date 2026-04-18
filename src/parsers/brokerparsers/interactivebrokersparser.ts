@@ -5,7 +5,7 @@ import { BrokerParser } from "../parser.js";
 import { DateTime } from "luxon";
 import { Asset } from "../../models/asset.js";
 import { BrokerRecord, BrokerSection } from "../../models/brokerRecord.js";
-import { InteractiveBrokers } from "../../models/brokers/ikbr.js";
+import { InteractiveBrokers } from "../../models/brokers/ibkr.js";
 
 class InteractiveBrokersParser implements BrokerParser {
 
