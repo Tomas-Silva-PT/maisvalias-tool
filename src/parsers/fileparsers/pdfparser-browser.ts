@@ -1,5 +1,5 @@
 import { FileParser, FileType } from "../parser";
-import { BrokerRecordRow } from "../../models/brokerRecord";
+import { BrokerRecordRow, BrokerSection } from "../../models/brokerRecord";
 import { PDFParse } from "pdf-parse";
 
 PDFParse.setWorker(
@@ -8,7 +8,7 @@ PDFParse.setWorker(
 
 class PDFParser implements FileParser {
 
-  async parse(file: ArrayBuffer): Promise<BrokerRecordRow[]> {
+  async parse(file: ArrayBuffer): Promise<BrokerSection[]> {
 
     const parser = new PDFParse({ data: file });
 
@@ -22,7 +22,13 @@ class PDFParser implements FileParser {
       ["raw", line]
     ]);
 
-    return result;
+    const section: BrokerSection = {
+      number: 0,
+      rows: result
+    };
+
+
+    return section ? [section] : [];
   }
 
 }

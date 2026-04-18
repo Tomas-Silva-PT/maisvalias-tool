@@ -48,7 +48,7 @@ class CSVParser implements FileParser {
     let sectionCounter = 0;
 
     for (const row of rows) {
-      console.log("Processing row: ", row); 
+      // console.log("Processing row: ", row); 
       // limpar linha
       if (!row || row.every(cell => !cell || cell.trim() === "")) continue;
 
@@ -68,7 +68,7 @@ class CSVParser implements FileParser {
           rows: []
         };
 
-        console.log("New section detected: ", currentHeaders);
+        // console.log("New section detected: ", currentHeaders);
         // console.log("Current section: ", sectionCounter);
 
         sections.push(currentSection);
@@ -97,7 +97,7 @@ class CSVParser implements FileParser {
       section.number = index;
     });
 
-    console.log("Non-empty sections: ", nonEmptySections);
+    // console.log("Non-empty sections: ", nonEmptySections);
 
     return Promise.resolve(nonEmptySections);
   }

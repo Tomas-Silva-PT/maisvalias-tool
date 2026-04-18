@@ -169,7 +169,8 @@ export default function FilesTradeRepublic({ id, setFiscalData }) {
       const transactions = await Promise.all(
         files.map(async (file) => {
           const data = await readFileAsArrayBuffer(file);
-          return parserEngine.parse(data);
+          const transactions = await parserEngine.parse(data);
+          return transactions;
         }),
       );
 

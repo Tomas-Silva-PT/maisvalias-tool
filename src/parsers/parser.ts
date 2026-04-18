@@ -2,11 +2,11 @@ import { BrokerRecordRow, BrokerSection } from "../models/brokerRecord.js";
 import { Transaction } from "../models/transaction.js";
 
 interface BrokerParser {
-    parse(records : BrokerRecordRow[] | BrokerSection[]): Transaction[];
+    parse(records : BrokerSection[]): Transaction[];
 }
 
 interface FileParser {
-    parse(file: FileType): Promise<BrokerRecordRow[] | BrokerSection[]>;
+    parse(file: FileType): Promise<BrokerSection[]>;
 }
 
 type FileType = string | ArrayBuffer | Buffer;
