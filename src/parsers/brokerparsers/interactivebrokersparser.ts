@@ -12,14 +12,18 @@ class InteractiveBrokersParser implements BrokerParser {
   parse(records: BrokerSection[]): Transaction[] {
     const transactions: Transaction[] = [];
 
+    // Obter a secção correspondente aos instrumentos financeiros (onde se encontra o ISIN)
+    const assetsSection = records.find(section => section.rows[0][0][0] === "Financial Instrument Information");
+
+
     // Obter a secção correspondente às transações
     const transactionsSection = records.find(section => section.rows[0][0][0] === "Trades");
-    const parsedTransactions = this.parseTransactionsSection(transactionsSection!);
+    const parsedTransactions = this.parseTransactionsSection(transactionsSection!, assetsSection);
     transactions.push(...parsedTransactions);
 
     // Obter a secção correspondente a dividendos
     const dividendsSection = records.find(section => section.rows[0][0][0] === "Dividends");
-    const parsedDividends = this.parseDividendsSection(dividendsSection!);
+    const parsedDividends = this.parseDividendsSection(dividendsSection!, assetsSection);
     transactions.push(...parsedDividends);
 
     // Obter a secção correspondente a juros
@@ -30,7 +34,7 @@ class InteractiveBrokersParser implements BrokerParser {
     return transactions;
   }
 
-  private parseTransactionsSection(section: BrokerSection): Transaction[] {
+  private parseTransactionsSection(section: BrokerSection, assetsSection?: BrokerSection): Transaction[] {
     const transactions: Transaction[] = [];
     // console.log("Parsing transactions section: ", JSON.stringify(section));
 
@@ -51,6 +55,7 @@ class InteractiveBrokersParser implements BrokerParser {
 
 
       const ticker = record["Symbol"];
+      const isin = assetsSection?.rows.find(row => row[3][0] === "Symbol" && row[3][1] === ticker)?.[6][1] || "";
       const shares = parseFloat(record["Quantity"]);
       const amount = parseFloat(record["T. Price"]);
       const amountCurrency = record["Currency"];
@@ -67,7 +72,7 @@ class InteractiveBrokersParser implements BrokerParser {
       const transaction: Transaction = {
         date: utcDate,
         type: type,
-        asset: new Asset(ticker, "", assetCurrency),
+        asset: new Asset(ticker, isin, assetCurrency),
         shares: Math.abs(shares),
         amount: totalAmount,
         currency: amountCurrency,
@@ -83,7 +88,7 @@ class InteractiveBrokersParser implements BrokerParser {
     return transactions;
   }
 
-  private parseDividendsSection(section: BrokerSection): Transaction[] {
+  private parseDividendsSection(section: BrokerSection, assetsSection?: BrokerSection): Transaction[] {
     const transactions: Transaction[] = [];
     // console.log("Parsing dividends section: ", JSON.stringify(section));
 
@@ -100,7 +105,8 @@ class InteractiveBrokersParser implements BrokerParser {
       type = "Dividend";
 
       const ticker = record["Description"].split(" ")[0].replace("(", " ").replace(")", " ").split(" ")[0];
-      const isin = record["Description"].split(" ")[0].replace("(", " ").replace(")", " ").split(" ")[1];
+      // const isin = record["Description"].split(" ")[0].replace("(", " ").replace(")", " ").split(" ")[1];
+      const isin = assetsSection?.rows.find(row => row[3][0] === "Symbol" && row[3][1] === ticker)?.[6][1] || "";
       const amount = parseFloat(record["Amount"]);
       const amountCurrency = record["Currency"];
       const assetCurrency = record["Currency"];
@@ -111,7 +117,7 @@ class InteractiveBrokersParser implements BrokerParser {
       const transaction: Transaction = {
         date: utcDate,
         type: type,
-        asset: new Asset(ticker, isin || "", assetCurrency),
+        asset: new Asset(ticker, isin, assetCurrency),
         shares: undefined,
         amount: Math.abs(amount),
         currency: amountCurrency,
