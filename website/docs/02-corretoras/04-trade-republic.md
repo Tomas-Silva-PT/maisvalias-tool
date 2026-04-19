@@ -10,7 +10,7 @@ De seguida é apresentado uma tabela com os eventos tributáveis que a ferrament
 |:-----------------|:----------:|:-----|
 |       Ganhos de capital         |     🟢       |       |
 |        Dividendos               |     🟢       |       |
-|        Juros                    |     🟡       |   Implementado mas ainda não foi possível testar    |
+|        Juros                    |     🟢       |       |
 
 O seguinte guia vai ensinar-te, passo a passo, como calcular automaticamente as tuas mais valias obtidas através da Trade Republic.
 
@@ -26,9 +26,9 @@ O seguinte guia vai ensinar-te, passo a passo, como calcular automaticamente as 
 
 ### Passo 3: Selecionar extrato da conta
 
-![step](../../static/img/brokers/trade-republic/steps/step2.png)
+![step](../../static/img/brokers/trade-republic/steps/step2-1.png)
 
-### Passo 4: Selecionar intervalo de datas para o histórico de transações
+### Passo 4: Exportar o histórico de transações no intervalo de datas
 
 :::info
 
@@ -36,9 +36,11 @@ Preenche o intervalo máximo de datas de modo obtenhas os dados desde que criast
 
 :::
 
-![step](../../static/img/brokers/trade-republic/steps/step3.png)
+![step](../../static/img/brokers/trade-republic/steps/step3-1.png)
 
-![step](../../static/img/brokers/trade-republic/steps/step4.png)
+Agora que tens todos os ficheiros necessários, vamos ver como utilizá-los no `maisvalias-tool`.
+
+<!-- ![step](../../static/img/brokers/trade-republic/steps/step4.png)
 
 ### Passo 5: Exportar extrato
 
@@ -50,7 +52,7 @@ Confirma se as datas do extrato correspondem às do intervalo que colocaste. Por
 
 :::
 
-Agora que tens todos os ficheiros necessários, vamos ver como utilizá-los no `maisvalias-tool`.
+Agora que tens todos os ficheiros necessários, vamos ver como utilizá-los no `maisvalias-tool`. -->
 
 ## Como utilizar maisvalias-tool
 
@@ -66,7 +68,7 @@ Nos ficheiros, coloca **todos os ficheiros que exportaste na [fase anterior](#co
 
 ![step](../../static/img/brokers/trade-republic/steps/step8.png)
 ___
-![step](../../static/img/brokers/trade-republic/steps/step9.png)
+![step](../../static/img/brokers/trade-republic/steps/step9-1.png)
 
 :::info
 
@@ -78,7 +80,7 @@ De qualquer modo o nome dos ficheiros não é relevante, mas sim o seu conteúdo
 
 Com os ficheiros carregados, basta dares início ao processo de cálculo:
 
-![step](../../static/img/brokers/trade-republic/steps/step10.png)
+![step](../../static/img/brokers/trade-republic/steps/step10-1.png)
 ___
 ![step](../../static/img/brokers/trade-republic/steps/step11.png)
 

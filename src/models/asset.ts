@@ -8,15 +8,15 @@ class Asset {
     assetType: string;
     currency: string;
 
-    constructor(ticker: string, isin: string, currency: string) {
+    constructor(ticker: string, isin: string, currency: string, assetType: AssetType = "") {
         this.ticker = ticker;
         this.isin = isin;
-        this.assetType = "";
+        this.assetType = assetType;
         this.currency = currency;
     }
 
     toString(): string {
-        return `Asset(Ticker: ${this.ticker}, ISIN: ${this.isin})`;
+        return `Asset(Ticker: ${this.ticker}, ISIN: ${this.isin}, Type: ${this.assetType})`;
     }
 
     equals(other: Asset): boolean {
@@ -36,4 +36,6 @@ class Asset {
     }
 }
 
-export { Asset };
+type AssetType = "STOCK" | "ETF" | "CRYPTO" | "";
+
+export { Asset, AssetType };

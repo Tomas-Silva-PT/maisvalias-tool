@@ -7,7 +7,7 @@ import { TradeRepublicParser } from "../../maisvalias-tool/parsers/brokerparsers
 
 import ErrorPopup from "@site/src/components/ErrorPopup";
 import { ParserEngine } from "../../maisvalias-tool/parsers/parserengine.js";
-import { PDFParser } from "../../maisvalias-tool/parsers/fileparsers/pdfparser-browser.js";
+import { CSVParser } from "../../maisvalias-tool/parsers/fileparsers/csvparser.js";
 
 const broker = [
   {
@@ -133,26 +133,6 @@ export default function FilesTradeRepublic({ id, setFiscalData }) {
     setErrorType(null);
   }
 
-  function readFileAsArrayBuffer(file) {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-
-      reader.onload = () => {
-        if (!(reader.result instanceof ArrayBuffer)) {
-          return reject(new Error("Formato de ficheiro inválido"));
-        }
-
-        resolve(reader.result);
-      };
-
-      reader.onerror = () => {
-        reject(new Error("Erro ao ler o ficheiro"));
-      };
-
-      reader.readAsArrayBuffer(file);
-    });
-  }
-
   async function onFilesSelected() {
     const start = performance.now();
 
@@ -162,38 +142,62 @@ export default function FilesTradeRepublic({ id, setFiscalData }) {
     if (files.length === 0 || !broker) return;
 
     const brokerParser = new TradeRepublicParser();
-    const fileParser = new PDFParser();
+    const fileParser = new CSVParser();
     const parserEngine = new ParserEngine(fileParser, brokerParser);
 
+    const filePromises = files.map((file) => {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = async (e) => {
+          const data = e.target.result;
+          try {
+            const transactions = await parserEngine.parse(data);
+            resolve(transactions);
+          } catch (error) {
+            reject(error);
+          }
+        };
+
+        reader.onerror = function (e) {
+          reject(e.target.error);
+        };
+
+        reader.readAsText(file);
+      });
+    });
+
+    let transactions;
+
     try {
-      const transactions = await Promise.all(
-        files.map(async (file) => {
-          const data = await readFileAsArrayBuffer(file);
-          const transactions = await parserEngine.parse(data);
-          return transactions;
-        }),
-      );
-
-      if (
-        transactions.filter((transaction) => transaction.length !== 0)
-          .length === 0
-      ) {
-        dispatchError("filesUploaded");
-        return;
-      }
-
+      transactions = await Promise.all(filePromises);
       dispatchSuccess();
-      setFiscalData(transactions);
     } catch (error) {
       dispatchError("filesUploaded");
-      console.error(error);
+      const end = performance.now();
+      console.log(
+        `Duração do processamento dos ficheiros: ${(
+          (end - start) /
+          1000
+        ).toFixed(3)} seconds`,
+      );
+      return;
+    }
+
+    if (
+      transactions.filter((transaction) => transaction.length !== 0).length ===
+      0
+    ) {
+      dispatchError("filesUploaded");
+    } else {
+      dispatchSuccess();
+      setFiscalData(transactions);
     }
 
     const end = performance.now();
     console.log(
       `Duração do processamento dos ficheiros: ${((end - start) / 1000).toFixed(
         3,
-      )} seconds`,
+      )} segundos`,
     );
   }
 
@@ -206,7 +210,7 @@ export default function FilesTradeRepublic({ id, setFiscalData }) {
           className={clsx(styles.contentStep2UploadInput)}
           id="file-upload"
           type="file"
-          accept=".pdf"
+          accept=".csv"
           onChange={onFileUpload}
           multiple
         />

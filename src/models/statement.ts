@@ -133,7 +133,7 @@ class Statement {
 
     async fetchAssetTypes() {
         const isins : string[] = [];
-        const filteredTransactions = this.transactions.filter((transaction) => transaction.asset);
+        const filteredTransactions = this.transactions.filter((transaction) => transaction.asset && transaction.asset.assetType === "");
 
         for (let transaction of filteredTransactions) {
             const isin = transaction.asset!!.isin;

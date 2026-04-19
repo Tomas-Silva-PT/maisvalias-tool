@@ -1,7 +1,7 @@
 import { BrokerParser } from "../parser.js";
 import { BrokerRecord, BrokerRecordRow, BrokerSection } from "../../models/brokerRecord.js";
 import { Transaction, TransactionType } from "../../models/transaction.js";
-import { Asset } from "../../models/asset.js";
+import { Asset, AssetType } from "../../models/asset.js";
 import { DateTime } from "luxon";
 import { Fee } from "../../models/fee.js";
 import { Tax } from "../../models/tax.js";
@@ -14,162 +14,235 @@ class TradeRepublicParser implements BrokerParser {
         const section = sections[0];
         const rows: BrokerRecord[] = section.rows.map(r => Object.fromEntries(r));
 
-        const transactionSection = this.extractTransactionSection(rows);
-        const groups = this.extractTransactions(transactionSection);
+        rows.forEach((record) => {
+            if (!record["datetime"]) return;
+            const utcDate = DateTime.fromISO(record["datetime"], { zone: "utc" });
 
-        groups.forEach(group => {
-            const tx = this.parseTransaction(group);
-            if (tx) transactions.push(tx);
+            let type: TransactionType;
+            if (record["type"].toLowerCase() === "buy") type = "Buy";
+            else if (record["type"].toLowerCase() === "sell") type = "Sell";
+            else if (record["type"].toLowerCase() === "dividend") type = "Dividend";
+            else if (record["type"].toLowerCase() === "interest_payment") type = "Interest";
+            else return;
+
+            const ticker = "";
+            const isin = record["symbol"];
+            const shares = Math.abs(parseFloat(record["shares"]));
+            let amount = Math.abs(parseFloat(record["amount"]));
+            if(type === "Buy") amount += Math.abs(parseFloat(record["fee"] || "0")) + Math.abs(parseFloat(record["tax"] || "0"));
+            if(type === "Sell") amount -= Math.abs(parseFloat(record["fee"] || "0")) + Math.abs(parseFloat(record["tax"] || "0"));
+            const amountCurrency = record["currency"];
+            const assetCurrency = record["currency"];
+
+            const fees : Fee[] = [];
+            if(record["fee"] && parseFloat(record["fee"]) !== 0) {
+                fees.push(new Fee("Fee", Math.abs(parseFloat(record["fee"])), record["currency"]));
+            }
+
+            const taxes : Tax[] = [];
+            if(record["tax"] && parseFloat(record["tax"]) !== 0) {
+                taxes.push(new Tax("Tax", Math.abs(parseFloat(record["tax"])), record["currency"]));
+            }
+
+            let exchangeRate = 1; // Porque a TR fornece os valores já convertidos para a moeda de referência, então assumimos que a taxa de câmbio é 1.
+
+            const asset_class = record["asset_class"];
+
+            let assetType : AssetType;
+            switch(asset_class) {
+                case "STOCK":
+                    assetType = "STOCK";
+                    break;
+                case "FUND":
+                    assetType = "ETF";
+                    break;
+                case "CRYPTO":
+                    assetType = "CRYPTO";
+                    break;
+                default:
+                    return; // Se o tipo de ativo não for reconhecido, ignoramos esta transação.
+            }
+
+            const transaction: Transaction = {
+                date: utcDate,
+                type: type,
+                asset: new Asset(ticker, isin, assetCurrency, assetType),
+                shares: shares,
+                amount: amount,
+                currency: amountCurrency,
+                broker: new TradeRepublic(),
+                taxes: taxes,
+                fees: fees,
+                exchangeRate: exchangeRate
+            };
+            console.log("Parsed transaction: " + JSON.stringify(transaction));
+            if (transaction.type) transactions.push(transaction);
         });
 
         return transactions;
     }
 
-    // -------------------------
-    // Extração da seção de transações do extrato, ignorando outras partes como resumo de saldo, etc. O extrato da TR tem uma seção clara de "ACCOUNT TRANSACTIONS" que termina antes da seção "BALANCE OVERVIEW", então usamos isso para isolar as linhas relevantes para parsing.
-    // -------------------------
+    // parse(sections: BrokerSection[]): Transaction[] {
+    //     const transactions: Transaction[] = [];
+    //     const section = sections[0];
+    //     const rows: BrokerRecord[] = section.rows.map(r => Object.fromEntries(r));
 
-    private extractTransactionSection(rows: BrokerRecord[]): BrokerRecord[] {
-        let start = -1;
-        let end = -1;
+    //     const transactionSection = this.extractTransactionSection(rows);
+    //     const groups = this.extractTransactions(transactionSection);
 
-        for (let i = 0; i < rows.length; i++) {
-            const text = rows[i]["raw"];
+    //     groups.forEach(group => {
+    //         const tx = this.parseTransaction(group);
+    //         if (tx) transactions.push(tx);
+    //     });
 
-            if (text.includes("ACCOUNT TRANSACTIONS")) start = i;
-            if (text.includes("BALANCE OVERVIEW")) {
-                end = i;
-                break;
-            }
-        }
+    //     return transactions;
+    // }
 
-        if (start === -1 || end === -1) return [];
+    // // -------------------------
+    // // Extração da seção de transações do extrato, ignorando outras partes como resumo de saldo, etc. O extrato da TR tem uma seção clara de "ACCOUNT TRANSACTIONS" que termina antes da seção "BALANCE OVERVIEW", então usamos isso para isolar as linhas relevantes para parsing.
+    // // -------------------------
 
-        return rows.slice(start + 1, end);
-    }
+    // private extractTransactionSection(rows: BrokerRecord[]): BrokerRecord[] {
+    //     let start = -1;
+    //     let end = -1;
 
-    // -------------------------
-    // Detetação das transações agrupando as linhas do extrato. Cada transação na TR começa com uma linha de data (ex: "15 Mar") seguida por uma linha de ano (ex: "2024"), e depois detalhes da transação. Agrupamos as linhas com base nesse padrão para depois extrair os dados de cada transação.
-    // -------------------------
+    //     for (let i = 0; i < rows.length; i++) {
+    //         const text = rows[i]["raw"];
 
-    private isDayMonth(line: string): boolean {
-        return /^\d{1,2} [A-Za-z]{3}$/.test(line);
-    }
+    //         if (text.includes("ACCOUNT TRANSACTIONS")) start = i;
+    //         if (text.includes("BALANCE OVERVIEW")) {
+    //             end = i;
+    //             break;
+    //         }
+    //     }
 
-    private isYearLine(line: string): boolean {
-        return /^\d{4}/.test(line);
-    }
+    //     if (start === -1 || end === -1) return [];
 
-    private extractTransactions(rows: BrokerRecord[]): BrokerRecord[][] {
-        const transactions: BrokerRecord[][] = [];
-        let i = 0;
+    //     return rows.slice(start + 1, end);
+    // }
 
-        while (i < rows.length) {
-            const current = rows[i]["raw"];
-            const next = rows[i + 1]?.["raw"];
+    // // -------------------------
+    // // Detetação das transações agrupando as linhas do extrato. Cada transação na TR começa com uma linha de data (ex: "15 Mar") seguida por uma linha de ano (ex: "2024"), e depois detalhes da transação. Agrupamos as linhas com base nesse padrão para depois extrair os dados de cada transação.
+    // // -------------------------
 
-            // Detecta o início de uma transação pelo padrão de data (dia e mês) seguido por uma linha de ano.
-            const isStartOfTransaction = this.isDayMonth(current) && next && this.isYearLine(next);
-            if (isStartOfTransaction) {
-                const transaction = [rows[i], rows[i + 1]];
-                i += 2;
+    // private isDayMonth(line: string): boolean {
+    //     return /^\d{1,2} [A-Za-z]{3}$/.test(line);
+    // }
 
-                // Enquanto a linha atual não for o início de uma nova transação (ou seja, não for um padrão de data), continuamos adicionando as linhas ao grupo atual.
-                const isSameTransaction = (line: string) => !this.isDayMonth(line);
-                while (i < rows.length && isSameTransaction(rows[i]["raw"])) {
-                    transaction.push(rows[i]);
-                    i++;
-                }
+    // private isYearLine(line: string): boolean {
+    //     return /^\d{4}/.test(line);
+    // }
 
-                // Adiciona a transação à lista de transações detetadas.
-                transactions.push(transaction);
-            } else {
-                i++;
-            }
-        }
+    // private extractTransactions(rows: BrokerRecord[]): BrokerRecord[][] {
+    //     const transactions: BrokerRecord[][] = [];
+    //     let i = 0;
 
-        return transactions;
-    }
+    //     while (i < rows.length) {
+    //         const current = rows[i]["raw"];
+    //         const next = rows[i + 1]?.["raw"];
 
-    // -------------------------
-    // Extração dos dados de uma transação para o formato padrão Transaction
-    // -------------------------
+    //         // Detecta o início de uma transação pelo padrão de data (dia e mês) seguido por uma linha de ano.
+    //         const isStartOfTransaction = this.isDayMonth(current) && next && this.isYearLine(next);
+    //         if (isStartOfTransaction) {
+    //             const transaction = [rows[i], rows[i + 1]];
+    //             i += 2;
 
-    private parseTransaction(group: BrokerRecord[]): Transaction | null {
-        const texts = group.map(r => r["raw"]);
-        const fullText = texts.join(" ");
+    //             // Enquanto a linha atual não for o início de uma nova transação (ou seja, não for um padrão de data), continuamos adicionando as linhas ao grupo atual.
+    //             const isSameTransaction = (line: string) => !this.isDayMonth(line);
+    //             while (i < rows.length && isSameTransaction(rows[i]["raw"])) {
+    //                 transaction.push(rows[i]);
+    //                 i++;
+    //             }
 
-        // DATE
-        const [dayMonth, yearLine] = texts;
-        const dateStr = `${dayMonth} ${yearLine.slice(0, 4)}`;
+    //             // Adiciona a transação à lista de transações detetadas.
+    //             transactions.push(transaction);
+    //         } else {
+    //             i++;
+    //         }
+    //     }
 
-        const date = DateTime.fromFormat(
-            dateStr,
-            "d LLL yyyy",
-            { zone: "utc" }
-        );
+    //     return transactions;
+    // }
 
-        // TYPE
-        const type = this.detectType(fullText);
-        if (!type) return null;
+    // // -------------------------
+    // // Extração dos dados de uma transação para o formato padrão Transaction
+    // // -------------------------
 
-        // ISIN
-        const isin = this.extractISIN(fullText);
+    // private parseTransaction(group: BrokerRecord[]): Transaction | null {
+    //     const texts = group.map(r => r["raw"]);
+    //     const fullText = texts.join(" ");
 
-        // AMOUNTS
-        const amounts = this.extractAmounts(fullText);
+    //     // DATE
+    //     const [dayMonth, yearLine] = texts;
+    //     const dateStr = `${dayMonth} ${yearLine.slice(0, 4)}`;
 
-        // SHARES (optional)
-        const shares = this.extractShares(fullText);
+    //     const date = DateTime.fromFormat(
+    //         dateStr,
+    //         "d LLL yyyy",
+    //         { zone: "utc" }
+    //     );
 
-        // Asset (ticker unknown)
-        const asset = new Asset("", isin || "", "EUR");
+    //     // TYPE
+    //     const type = this.detectType(fullText);
+    //     if (!type) return null;
 
-        const transaction: Transaction = {
-            date,
-            type,
-            asset,
-            shares,
-            amount: amounts[0] || 0,
-            currency: "EUR",
-            broker: new TradeRepublic(),
-            fees: [] as Fee[], // Não conseguimos extrair comissões do extrato da TR, então deixamos vazio por enquanto. Se no futuro encontrarmos um padrão para isso, podemos implementar a extração de taxas aqui.
-            taxes: [] as Tax[],
-            exchangeRate: 1
-        };
+    //     // ISIN
+    //     const isin = this.extractISIN(fullText);
 
-        return transaction;
-    }
+    //     // AMOUNTS
+    //     const amounts = this.extractAmounts(fullText);
 
-    // -------------------------
-    // Funções auxiliares para detetar o tipo de transação, extrair ISIN, valores monetários e quantidade de ações a partir do texto completo da transação. Essas funções usam expressões regulares simples para identificar os padrões relevantes no texto extraído do extrato.
-    // -------------------------
+    //     // SHARES (optional)
+    //     const shares = this.extractShares(fullText);
 
-    private detectType(text: string): TransactionType | null {
-        const t = text.toLowerCase();
+    //     // Asset (ticker unknown)
+    //     const asset = new Asset("", isin || "", "EUR");
 
-        if (t.includes("buy trade")) return "Buy";
-        if (t.includes("sell trade")) return "Sell";
-        if (t.includes("cash dividend")) return "Dividend";
-        if (t.includes("interest payment")) return "Interest";
+    //     const transaction: Transaction = {
+    //         date,
+    //         type,
+    //         asset,
+    //         shares,
+    //         amount: amounts[0] || 0,
+    //         currency: "EUR",
+    //         broker: new TradeRepublic(),
+    //         fees: [] as Fee[], // Não conseguimos extrair comissões do extrato da TR, então deixamos vazio por enquanto. Se no futuro encontrarmos um padrão para isso, podemos implementar a extração de taxas aqui.
+    //         taxes: [] as Tax[],
+    //         exchangeRate: 1
+    //     };
 
-        return null;
-    }
+    //     return transaction;
+    // }
 
-    private extractISIN(text: string): string | null {
-        const match = text.match(/[A-Z]{2}[A-Z0-9]{10}/);
-        return match ? match[0] : null;
-    }
+    // // -------------------------
+    // // Funções auxiliares para detetar o tipo de transação, extrair ISIN, valores monetários e quantidade de ações a partir do texto completo da transação. Essas funções usam expressões regulares simples para identificar os padrões relevantes no texto extraído do extrato.
+    // // -------------------------
 
-    private extractAmounts(text: string): number[] {
-        const matches = text.match(/€[\d.]+/g) || [];
-        return matches.map(v => parseFloat(v.replace("€", "")));
-    }
+    // private detectType(text: string): TransactionType | null {
+    //     const t = text.toLowerCase();
 
-    private extractShares(text: string): number {
-        const match = text.match(/quantity:\s*([\d.]+)/i);
-        return match ? parseFloat(match[1]) : 0;
-    }
+    //     if (t.includes("buy trade")) return "Buy";
+    //     if (t.includes("sell trade")) return "Sell";
+    //     if (t.includes("cash dividend")) return "Dividend";
+    //     if (t.includes("interest payment")) return "Interest";
+
+    //     return null;
+    // }
+
+    // private extractISIN(text: string): string | null {
+    //     const match = text.match(/[A-Z]{2}[A-Z0-9]{10}/);
+    //     return match ? match[0] : null;
+    // }
+
+    // private extractAmounts(text: string): number[] {
+    //     const matches = text.match(/€[\d.]+/g) || [];
+    //     return matches.map(v => parseFloat(v.replace("€", "")));
+    // }
+
+    // private extractShares(text: string): number {
+    //     const match = text.match(/quantity:\s*([\d.]+)/i);
+    //     return match ? parseFloat(match[1]) : 0;
+    // }
 }
 
 export { TradeRepublicParser };

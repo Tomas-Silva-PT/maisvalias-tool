@@ -14,13 +14,13 @@ class PTAnexoJQuadro92AFormatter implements IRSFormatter<CapitalGainEvent, Anexo
       const sell = realizedTransaction.sell;
       const realizedValue = realizedTransaction.realizedValue;
       const acquiredValue = realizedTransaction.acquiredValue;
-      const fees = realizedTransaction.buyFees + realizedTransaction.sellFees;
-      const taxes = realizedTransaction.buyTaxes + realizedTransaction.sellTaxes;
+      const fees = Math.round((realizedTransaction.buyFees + realizedTransaction.sellFees) * 100) / 100; // realizedTransaction.buyFees + realizedTransaction.sellFees;
+      const taxes = Math.round((realizedTransaction.buyTaxes + realizedTransaction.sellTaxes) * 100) / 100; // realizedTransaction.buyTaxes + realizedTransaction.sellTaxes;
 
 
       let code: string = "";
       switch (realizedTransaction.buy.asset!!.assetType) {
-        case "EQUITY":
+        case "STOCK":
           code = "G01";
           break;
         case "ETF":
