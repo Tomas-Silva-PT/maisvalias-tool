@@ -60,7 +60,7 @@ class TradeRepublicParser implements BrokerParser {
                     assetType = "CRYPTO";
                     break;
                 default:
-                    return; // Se o tipo de ativo não for reconhecido, ignoramos esta transação.
+                    assetType = "";
             }
 
             const transaction: Transaction = {
