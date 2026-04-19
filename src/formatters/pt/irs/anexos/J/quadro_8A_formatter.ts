@@ -14,8 +14,8 @@ class PTAnexoJQuadro8AFormatter implements IRSFormatter<IncomeEvent, AnexoJQuadr
       let codigoRendimento, countryDomiciled, paisFonte = "";
       switch (event.kind) {
         case "dividend":
-          codigoRendimento = "E11 - Dividendos ou lucros - sem retenção em Portugal"
           countryDomiciled = event.transaction.asset!!.countryDomiciled;
+          codigoRendimento = countryDomiciled?.paraisoFiscal ? "E99 - Rendimentos de capitais com origem em país, território ou região com regime fiscal claramente mais favorável" : "E11 - Dividendos ou lucros - sem retenção em Portugal";
 
           // Para ações domiciliadas em Portugal mas dividendos recebidos em corretoras estrangeiras, o país da fonte deve ser o da corretora
           if (!countryDomiciled?.code || countryDomiciled?.code === "620") {
@@ -26,9 +26,10 @@ class PTAnexoJQuadro8AFormatter implements IRSFormatter<IncomeEvent, AnexoJQuadr
           }
           break;
         case "interest":
-          codigoRendimento = "E21 - Juros sem retenção em Portugal";
           // Para juros adquiridas em corretoras estrangeiras, o país da fonte deve ser o da corretora
           countryDomiciled = event.transaction.broker.country;
+          codigoRendimento = countryDomiciled?.paraisoFiscal ? "E99 - Rendimentos de capitais com origem em país, território ou região com regime fiscal claramente mais favorável" : "E21 - Juros sem retenção em Portugal";
+
           if (countryDomiciled?.code) {
             paisFonte = `${countryDomiciled?.code} - ${countryDomiciled?.namePt}`;
           }

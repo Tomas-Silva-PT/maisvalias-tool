@@ -56,3 +56,11 @@ https://info.portaldasfinancas.gov.pt/pt/apoio_contribuinte/modelos_formularios/
 
 Anexo G1
 https://info.portaldasfinancas.gov.pt/pt/apoio_contribuinte/modelos_formularios/irs/Documents/Mod_3_anexo_G1.pdf
+
+Portarias com lista de paraísos fiscais:
+Portaria n.º 150/2004
+Portaria n.º 292/2011
+Portaria n.º 345-A/2016
+Lei n.º 114/2017 - Revogou a Portaria n.º 345-A/2016
+Portaria n.º 309-A/2020
+Portaria n.º 292/2025/1

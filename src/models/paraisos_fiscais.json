@@ -1,0 +1,562 @@
+[
+    {
+        "code": "660",
+        "alpha_2": "AI",
+        "alpha_3": "AIA",
+        "name_pt": "ANGUILHA",
+        "name_en": "ANGUILLA"
+    },
+    {
+        "code": "028",
+        "alpha_2": "AG",
+        "alpha_3": "ATG",
+        "name_pt": "ANTÍGUA E BARBUDA",
+        "name_en": "ANTIGUA AND BARBUDA"
+    },
+    {
+        "code": "531",
+        "alpha_2": "CW",
+        "alpha_3": "CUW",
+        "name_pt": "CURAÇAU",
+        "name_en": "Curaçao"
+    },
+    {
+        "code": "534",
+        "alpha_2": "SX",
+        "alpha_3": "SXM",
+        "name_pt": "SÃO MARTINHO",
+        "name_en": "SINT MAARTEN (DUTCH PART)"
+    },
+    {
+        "code": "535",
+        "alpha_2": "BQ",
+        "alpha_3": "BES",
+        "name_pt": "PAÍSES BAIXOS CARIBENHOS",
+        "name_en": "BONAIRE, SINT EUSTATIUS AND SABA"
+    },
+    {
+        "code": "533",
+        "alpha_2": "AW",
+        "alpha_3": "ABW",
+        "name_pt": "ARUBA",
+        "name_en": "ARUBA"
+    },
+    {
+        "code": "NaN",
+        "alpha_2": "AC",
+        "alpha_3": "ASC",
+        "name_pt": "ASCENSÃO",
+        "name_en": "ASCENSION ISLAND"
+    },
+    {
+        "code": "044",
+        "alpha_2": "BS",
+        "alpha_3": "BHS",
+        "name_pt": "BAHAMAS",
+        "name_en": "BAHAMAS, COMMONWEALTH OF THE"
+    },
+    {
+        "code": "048",
+        "alpha_2": "BH",
+        "alpha_3": "BHR",
+        "name_pt": "BAREIM",
+        "name_en": "BAHRAIN, KINGDOM OF"
+    },
+    {
+        "code": "052",
+        "alpha_2": "BB",
+        "alpha_3": "BRB",
+        "name_pt": "BARBADOS",
+        "name_en": "BARBADOS"
+    },
+    {
+        "code": "084",
+        "alpha_2": "BZ",
+        "alpha_3": "BLZ",
+        "name_pt": "BELIZE",
+        "name_en": "BELIZE"
+    },
+    {
+        "code": "060",
+        "alpha_2": "BM",
+        "alpha_3": "BMU",
+        "name_pt": "BERMUDA",
+        "name_en": "BERMUDA"
+    },
+    {
+        "code": "068",
+        "alpha_2": "BO",
+        "alpha_3": "BOL",
+        "name_pt": "BOLÍVIA",
+        "name_en": "BOLIVIA, REPUBLIC OF"
+    },
+    {
+        "code": "096",
+        "alpha_2": "BN",
+        "alpha_3": "BRN",
+        "name_pt": "BRUNEI DARUSSALAM",
+        "name_en": "BRUNEI DARUSSALAM"
+    },
+    {
+        "code": "831",
+        "alpha_2": "GG",
+        "alpha_3": "GGY",
+        "name_pt": "GUERNSEY",
+        "name_en": "GUERNSEY (a partir de 2006-03-29)"
+    },
+    {
+        "code": "832",
+        "alpha_2": "JE",
+        "alpha_3": "JEY",
+        "name_pt": "JERSEY",
+        "name_en": "JERSEY (a partir de 2006-03-29)"
+    },
+    {
+        "code": "136",
+        "alpha_2": "KY",
+        "alpha_3": "CYM",
+        "name_pt": "ILHAS CAIMÃO",
+        "name_en": "CAYMAN ISLANDS"
+    },
+    {
+        "code": "166",
+        "alpha_2": "CC",
+        "alpha_3": "CCK",
+        "name_pt": "ILHAS COCOS (KEELING)",
+        "name_en": "COCOS (KEELING) ISLANDS"
+    },
+    {
+        "code": "184",
+        "alpha_2": "CK",
+        "alpha_3": "COK",
+        "name_pt": "ILHAS COOK",
+        "name_en": "COOK ISLANDS"
+    },
+    {
+        "code": "188",
+        "alpha_2": "CR",
+        "alpha_3": "CRI",
+        "name_pt": "COSTA RICA",
+        "name_en": "COSTA RICA, REPUBLIC OF"
+    },
+    {
+        "code": "262",
+        "alpha_2": "DJ",
+        "alpha_3": "DJI",
+        "name_pt": "JIBUTI",
+        "name_en": "DJIBOUTI, REPUBLIC OF (WAS FRENCH AFARS AND ISSAS)"
+    },
+    {
+        "code": "212",
+        "alpha_2": "DM",
+        "alpha_3": "DMA",
+        "name_pt": "DOMINICA",
+        "name_en": "DOMINICA, COMMONWEALTH OF"
+    },
+    {
+        "code": "784",
+        "alpha_2": "AE",
+        "alpha_3": "ARE",
+        "name_pt": "EMIRATOS ÁRABES UNIDOS",
+        "name_en": "UNITED ARAB EMIRATES (WAS TRUCIAL STATES)"
+    },
+    {
+        "code": "238",
+        "alpha_2": "FK",
+        "alpha_3": "FLK",
+        "name_pt": "ILHAS FALKLAND (MALVINAS)",
+        "name_en": "FALKLAND ISLANDS (MALVINAS)"
+    },
+    {
+        "code": "242",
+        "alpha_2": "FJ",
+        "alpha_3": "FJI",
+        "name_pt": "ILHAS FIJI",
+        "name_en": "FIJI, REPUBLIC OF THE FIJI ISLANDS"
+    },
+    {
+        "code": "270",
+        "alpha_2": "GM",
+        "alpha_3": "GMB",
+        "name_pt": "GÂMBIA",
+        "name_en": "GAMBIA, REPUBLIC OF THE"
+    },
+    {
+        "code": "308",
+        "alpha_2": "GD",
+        "alpha_3": "GRD",
+        "name_pt": "GRANADA",
+        "name_en": "GRENADA"
+    },
+    {
+        "code": "292",
+        "alpha_2": "GI",
+        "alpha_3": "GIB",
+        "name_pt": "GIBRALTAR",
+        "name_en": "GIBRALTAR"
+    },
+    {
+        "code": "316",
+        "alpha_2": "GU",
+        "alpha_3": "GUM",
+        "name_pt": "GUAM",
+        "name_en": "GUAM"
+    },
+    {
+        "code": "328",
+        "alpha_2": "GY",
+        "alpha_3": "GUY",
+        "name_pt": "GUIANA",
+        "name_en": "GUYANA, REPUBLIC OF"
+    },
+    {
+        "code": "340",
+        "alpha_2": "HN",
+        "alpha_3": "HND",
+        "name_pt": "HONDURAS",
+        "name_en": "HONDURAS, REPUBLIC OF"
+    },
+    {
+        "code": "388",
+        "alpha_2": "JM",
+        "alpha_3": "JAM",
+        "name_pt": "JAMAICA",
+        "name_en": "JAMAICA"
+    },
+    {
+        "code": "400",
+        "alpha_2": "JO",
+        "alpha_3": "JOR",
+        "name_pt": "JORDÂNIA",
+        "name_en": "JORDAN, HASHEMITE KINGDOM OF"
+    },
+    {
+        "code": "364",
+        "alpha_2": "IR",
+        "alpha_3": "IRN",
+        "name_pt": "IRÃO (REPÚBLICA ISLÂMICA)",
+        "name_en": "IRAN, ISLAMIC REPUBLIC OF"
+    },
+    {
+        "code": "296",
+        "alpha_2": "KI",
+        "alpha_3": "KIR",
+        "name_pt": "QUIRIBATI",
+        "name_en": "KIRIBATI, REPUBLIC OF (WAS GILBERT ISLANDS)"
+    },
+    {
+        "code": "414",
+        "alpha_2": "KW",
+        "alpha_3": "KWT",
+        "name_pt": "KUWAIT",
+        "name_en": "KUWAIT, STATE OF"
+    },
+    {
+        "code": "458",
+        "alpha_2": "MY",
+        "alpha_3": "MYS",
+        "name_pt": "MALÁSIA",
+        "name_en": "MALAYSIA"
+    },
+    {
+        "code": "422",
+        "alpha_2": "LB",
+        "alpha_3": "LBN",
+        "name_pt": "LÍBANO",
+        "name_en": "LEBANON, LEBANESE REPUBLIC"
+    },
+    {
+        "code": "430",
+        "alpha_2": "LR",
+        "alpha_3": "LBR",
+        "name_pt": "LIBÉRIA",
+        "name_en": "LIBERIA, REPUBLIC OF"
+    },
+    {
+        "code": "462",
+        "alpha_2": "MV",
+        "alpha_3": "MDV",
+        "name_pt": "MALDIVAS",
+        "name_en": "MALDIVES, REPUBLIC OF"
+    },
+    {
+        "code": "833",
+        "alpha_2": "IM",
+        "alpha_3": "IMN",
+        "name_pt": "ILHA DE MAN",
+        "name_en": "ISLE OF MAN"
+    },
+    {
+        "code": "580",
+        "alpha_2": "MP",
+        "alpha_3": "MNP",
+        "name_pt": "ILHAS MARIANAS DO NORTE",
+        "name_en": "NORTHERN MARIANA ISLANDS"
+    },
+    {
+        "code": "584",
+        "alpha_2": "MH",
+        "alpha_3": "MHL",
+        "name_pt": "ILHAS MARSHALL",
+        "name_en": "MARSHALL ISLANDS"
+    },
+    {
+        "code": "480",
+        "alpha_2": "MU",
+        "alpha_3": "MUS",
+        "name_pt": "MAURÍCIOS",
+        "name_en": "MAURITIUS"
+    },
+    {
+        "code": "492",
+        "alpha_2": "MC",
+        "alpha_3": "MCO",
+        "name_pt": "MÔNACO",
+        "name_en": "MONACO, PRINCIPALITY OF"
+    },
+    {
+        "code": "500",
+        "alpha_2": "MS",
+        "alpha_3": "MSR",
+        "name_pt": "MONSERRATE",
+        "name_en": "MONTSERRAT"
+    },
+    {
+        "code": "520",
+        "alpha_2": "NR",
+        "alpha_3": "NRU",
+        "name_pt": "NAURU",
+        "name_en": "NAURU, REPUBLIC OF"
+    },
+    {
+        "code": "162",
+        "alpha_2": "CX",
+        "alpha_3": "CXR",
+        "name_pt": "ILHAS CHRISTMAS",
+        "name_en": "CHRISTMAS ISLAND"
+    },
+    {
+        "code": "570",
+        "alpha_2": "NU",
+        "alpha_3": "NIU",
+        "name_pt": "NIUE",
+        "name_en": "NIUE, REPUBLIC OF"
+    },
+    {
+        "code": "574",
+        "alpha_2": "NF",
+        "alpha_3": "NFK",
+        "name_pt": "ILHAS NORFOLK",
+        "name_en": "NORFOLK ISLAND"
+    },
+    {
+        "code": "512",
+        "alpha_2": "OM",
+        "alpha_3": "OMN",
+        "name_pt": "OMÃ",
+        "name_en": "OMAN, SULTANATE OF (WAS MUSCAT AND OMAN)"
+    },
+    {
+        "code": "NaN",
+        "alpha_2": "ZZ",
+        "alpha_3": "ZZZ",
+        "name_pt": "ILHAS DO PACÍFICO NÃO COMPREENDIDAS NOS RESTANTES NÚMEROS",
+        "name_en": "PACIFIC ISLANDS NOT ELSEWHERE CLASSIFIED"
+    },
+    {
+        "code": "585",
+        "alpha_2": "PW",
+        "alpha_3": "PLW",
+        "name_pt": "PALAU",
+        "name_en": "PALAU"
+    },
+    {
+        "code": "591",
+        "alpha_2": "PA",
+        "alpha_3": "PAN",
+        "name_pt": "PANAMÁ",
+        "name_en": "PANAMA, REPUBLIC OF"
+    },
+    {
+        "code": "612",
+        "alpha_2": "PN",
+        "alpha_3": "PCN",
+        "name_pt": "PITCAIRN",
+        "name_en": "PITCAIRN ISLAND"
+    },
+    {
+        "code": "258",
+        "alpha_2": "PF",
+        "alpha_3": "PYF",
+        "name_pt": "POLINÉSIA FRANCESA",
+        "name_en": "FRENCH POLYNESIA"
+    },
+    {
+        "code": "630",
+        "alpha_2": "PR",
+        "alpha_3": "PRI",
+        "name_pt": "PORTO RICO",
+        "name_en": "PUERTO RICO"
+    },
+    {
+        "code": "634",
+        "alpha_2": "QA",
+        "alpha_3": "QAT",
+        "name_pt": "CATAR",
+        "name_en": "QATAR, STATE OF"
+    },
+    {
+        "code": "090",
+        "alpha_2": "SB",
+        "alpha_3": "SLB",
+        "name_pt": "ILHAS SALOMÃO",
+        "name_en": "SOLOMON ISLANDS (WAS BRITISH SOLOMON ISLANDS)"
+    },
+    {
+        "code": "016",
+        "alpha_2": "AS",
+        "alpha_3": "ASM",
+        "name_pt": "SAMOA AMERICANA",
+        "name_en": "AMERICAN SAMOA"
+    },
+    {
+        "code": "882",
+        "alpha_2": "WS",
+        "alpha_3": "WSM",
+        "name_pt": "SAMOA",
+        "name_en": "SAMOA, INDEPENDENT STATE OF (WAS WESTERN SAMOA)"
+    },
+    {
+        "code": "654",
+        "alpha_2": "SH",
+        "alpha_3": "SHN",
+        "name_pt": "SANTA HELENA",
+        "name_en": "ST. HELENA"
+    },
+    {
+        "code": "662",
+        "alpha_2": "LC",
+        "alpha_3": "LCA",
+        "name_pt": "SANTA LÚCIA",
+        "name_en": "ST. LUCIA"
+    },
+    {
+        "code": "659",
+        "alpha_2": "KN",
+        "alpha_3": "KNA",
+        "name_pt": "SÃO CRISTÓVÃO E NEVIS",
+        "name_en": "ST. KITTS AND NEVIS"
+    },
+    {
+        "code": "674",
+        "alpha_2": "SM",
+        "alpha_3": "SMR",
+        "name_pt": "SÃO MARINO",
+        "name_en": "SAN MARINO, REPUBLIC OF"
+    },
+    {
+        "code": "666",
+        "alpha_2": "PM",
+        "alpha_3": "SPM",
+        "name_pt": "SÃO PEDRO E MIQUELON",
+        "name_en": "ST. PIERRE AND MIQUELON"
+    },
+    {
+        "code": "670",
+        "alpha_2": "VC",
+        "alpha_3": "VCT",
+        "name_pt": "SÃO VICENTE E GRANADINAS",
+        "name_en": "ST. VINCENT AND THE GRENADINES"
+    },
+    {
+        "code": "690",
+        "alpha_2": "SC",
+        "alpha_3": "SYC",
+        "name_pt": "SEYCHELLES",
+        "name_en": "SEYCHELLES, REPUBLIC OF"
+    },
+    {
+        "code": "748",
+        "alpha_2": "SZ",
+        "alpha_3": "SWZ",
+        "name_pt": "ESSUATINI",
+        "name_en": "ESWATINI"
+    },
+    {
+        "code": "744",
+        "alpha_2": "SJ",
+        "alpha_3": "SJM",
+        "name_pt": "SVALBARD E A ILHA DE JAN MAYEN",
+        "name_en": "SVALBARD & JAN MAYEN ISLANDS"
+    },
+    {
+        "code": "772",
+        "alpha_2": "TK",
+        "alpha_3": "TKL",
+        "name_pt": "TOKELAU",
+        "name_en": "TOKELAU (TOKELAU ISLANDS)"
+    },
+    {
+        "code": "776",
+        "alpha_2": "TO",
+        "alpha_3": "TON",
+        "name_pt": "TONGA",
+        "name_en": "TONGA, KINGDOM OF"
+    },
+    {
+        "code": "780",
+        "alpha_2": "TT",
+        "alpha_3": "TTO",
+        "name_pt": "TRINIDADE E TOBAGO",
+        "name_en": "TRINIDAD AND TOBAGO, REPUBLIC OF"
+    },
+    {
+        "code": "NaN",
+        "alpha_2": "TA",
+        "alpha_3": "TAA",
+        "name_pt": "ILHA TRISTÃO DA CUNHA",
+        "name_en": "TRISTAN DA CUNHA"
+    },
+    {
+        "code": "796",
+        "alpha_2": "TC",
+        "alpha_3": "TCA",
+        "name_pt": "TURCOS E CAICOS (ILHAS)",
+        "name_en": "TURKS AND CAICOS ISLANDS"
+    },
+    {
+        "code": "798",
+        "alpha_2": "TV",
+        "alpha_3": "TUV",
+        "name_pt": "TUVALU",
+        "name_en": "TUVALU (WAS PART OF GILBERT & ELLICE ISLANDS)"
+    },
+    {
+        "code": "548",
+        "alpha_2": "VU",
+        "alpha_3": "VUT",
+        "name_pt": "VANUATU",
+        "name_en": "VANUATU (WAS NEW HEBRIDES)"
+    },
+    {
+        "code": "092",
+        "alpha_2": "VG",
+        "alpha_3": "VGB",
+        "name_pt": "ILHAS VIRGENS (BRITÂNICAS)",
+        "name_en": "BRITISH VIRGIN ISLANDS"
+    },
+    {
+        "code": "850",
+        "alpha_2": "VI",
+        "alpha_3": "VIR",
+        "name_pt": "ILHAS VIRGENS (ESTADOS UNIDOS)",
+        "name_en": "US VIRGIN ISLANDS"
+    },
+    {
+        "code": "887",
+        "alpha_2": "YE",
+        "alpha_3": "YEM",
+        "name_pt": "IEMEN",
+        "name_en": "YEMEN"
+    }
+]
