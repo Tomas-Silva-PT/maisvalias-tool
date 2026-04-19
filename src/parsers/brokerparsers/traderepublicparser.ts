@@ -27,21 +27,21 @@ class TradeRepublicParser implements BrokerParser {
 
             const ticker = "";
             const isin = record["symbol"];
-            const shares = Math.abs(parseFloat(record["shares"]));
-            let amount = Math.abs(parseFloat(record["amount"]));
-            if(type === "Buy") amount += Math.abs(parseFloat(record["fee"] || "0")) + Math.abs(parseFloat(record["tax"] || "0"));
-            if(type === "Sell") amount -= Math.abs(parseFloat(record["fee"] || "0")) + Math.abs(parseFloat(record["tax"] || "0"));
+            const shares = Math.abs(parseFloat(record["shares"].replace(/,/g, "")));
+            let amount = Math.abs(parseFloat(record["amount"].replace(/,/g, "")));
+            if(type === "Buy") amount += Math.abs(parseFloat(record["fee"].replace(/,/g, "") || "0")) + Math.abs(parseFloat(record["tax"].replace(/,/g, "") || "0"));
+            if(type === "Sell") amount -= Math.abs(parseFloat(record["fee"].replace(/,/g, "") || "0")) + Math.abs(parseFloat(record["tax"].replace(/,/g, "") || "0"));
             const amountCurrency = record["currency"];
             const assetCurrency = record["currency"];
 
             const fees : Fee[] = [];
             if(record["fee"] && parseFloat(record["fee"]) !== 0) {
-                fees.push(new Fee("Fee", Math.abs(parseFloat(record["fee"])), record["currency"]));
+                fees.push(new Fee("Fee", Math.abs(parseFloat(record["fee"].replace(/,/g, ""))), record["currency"]));
             }
 
             const taxes : Tax[] = [];
             if(record["tax"] && parseFloat(record["tax"]) !== 0) {
-                taxes.push(new Tax("Tax", Math.abs(parseFloat(record["tax"])), record["currency"]));
+                taxes.push(new Tax("Tax", Math.abs(parseFloat(record["tax"].replace(/,/g, ""))), record["currency"]));
             }
 
             let exchangeRate = 1; // Porque a TR fornece os valores já convertidos para a moeda de referência, então assumimos que a taxa de câmbio é 1.
