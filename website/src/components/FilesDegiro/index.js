@@ -73,7 +73,7 @@ export default function FilesDegiro({ id, setFiscalData }) {
           </p>
           <p>
             Se o problema persistir,{" "}
-            <a href="./about#como-nos-contactar" target="_blank">
+            <a href="about#como-nos-contactar " target="_blank">
               contacta-nos
             </a>
             .
@@ -91,7 +91,7 @@ export default function FilesDegiro({ id, setFiscalData }) {
           <p>Por favor tenta novamente mais tarde.</p>
           <p>
             Se o problema persistir,{" "}
-            <a href="./about#como-nos-contactar" target="_blank">
+            <a href="about#como-nos-contactar " target="_blank">
               contacta-nos
             </a>
             .

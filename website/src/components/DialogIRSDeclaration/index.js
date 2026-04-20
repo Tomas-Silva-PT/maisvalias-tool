@@ -272,7 +272,7 @@ export default function DialogIRSDeclaration({
           </p>
           <p>
             Se o problema persistir,{" "}
-            <a href="./about#como-nos-contactar" target="_blank">
+            <a href="about#como-nos-contactar " target="_blank">
               contacta-nos
             </a>
             .
