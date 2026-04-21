@@ -175,8 +175,11 @@ export default function FiscalYearSummary({ id, year, fiscalData }) {
                     <span className={clsx(styles.textDanger)}>Despesas</span>
 
                     <h4 className={clsx(styles.textDanger)}>
-                      {fiscalData.byYear[year].summary.fees +
-                        fiscalData.byYear[year].summary.taxes}
+                      {Math.round(
+                        (fiscalData.byYear[year].summary.fees +
+                          fiscalData.byYear[year].summary.taxes) *
+                          100,
+                      ) / 100}
                       €
                     </h4>
                   </div>
