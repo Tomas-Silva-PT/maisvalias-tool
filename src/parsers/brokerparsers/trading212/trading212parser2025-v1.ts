@@ -32,7 +32,7 @@ class Trading212Parser2025_v1 implements ITrading212Parser {
 
     // heuristica para a data
     // 2022-12-08 20:12:02
-    const hDate = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/;
+    const hDate = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.?\d*\s*$/;
     console.log("Has valid date format: " + hDate.test(sample["Time"]));
     if (!hDate.test(sample["Time"])) return false;
 
@@ -77,7 +77,8 @@ class Trading212Parser2025_v1 implements ITrading212Parser {
       else if (record["Action"].toLowerCase().includes("dividend")) type = "Dividend";
       else if (record["Action"].toLowerCase().includes("interest on cash")) type = "Interest";
       else return;
-
+      
+      const name = record["Name"] || "";
       const ticker = record["Ticker"];
       const isin = record["ISIN"];
       const shares = parseFloat(record["No. of shares"]);
@@ -116,7 +117,7 @@ class Trading212Parser2025_v1 implements ITrading212Parser {
       const transaction: Transaction = {
         date: utcDate,
         type: type,
-        asset: new Asset(ticker, isin, assetCurrency),
+        asset: new Asset(name, ticker, isin, assetCurrency),
         shares: shares,
         amount: amount,
         currency: amountCurrency,

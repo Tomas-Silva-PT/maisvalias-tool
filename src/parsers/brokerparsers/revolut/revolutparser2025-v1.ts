@@ -220,7 +220,7 @@ class RevolutCapitalGainAndDividendParser {
     transaction = {
       date: utcDate,
       type: type,
-      asset: new Asset(ticker, "", assetCurrency), // O ISIN será preenchido posteriormente, após a correspondência com a lista de ISINs carregada
+      asset: new Asset("", ticker, "", assetCurrency), // O ISIN será preenchido posteriormente, após a correspondência com a lista de ISINs carregada
       shares: shares,
       amount: amount,
       currency: amountCurrency,

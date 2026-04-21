@@ -2,13 +2,15 @@ import { Country } from "./country.js";
 import { YahooFinance } from "./yahoofinance.js";
 
 class Asset {
+    name: string;
     ticker: string;
     isin: string;
     countryDomiciled?: Country;
     assetType: string;
     currency: string;
 
-    constructor(ticker: string, isin: string, currency: string, assetType: AssetType = "") {
+    constructor(name: string, ticker: string, isin: string, currency: string, assetType: AssetType = "") {
+        this.name = name;
         this.ticker = ticker;
         this.isin = isin;
         this.assetType = assetType;

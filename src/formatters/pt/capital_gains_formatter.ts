@@ -14,6 +14,7 @@ class CapitalGainsFormatter {
             const realizedValue = realizedTransaction.realizedValue;
             const acquiredValue = realizedTransaction.acquiredValue;
 
+            const name = sell.asset!!.name;
             const ticker = sell.asset!!.ticker;
             const isin = sell.asset!!.isin;
             const dataAquisicao = buy.date
@@ -25,7 +26,7 @@ class CapitalGainsFormatter {
 
             const capitalGain: CapitalGainForUser = {
                 transaction: realizedTransaction,
-                "Simbolo": ticker || isin || "Não encontrado",
+                "Simbolo": name || ticker || isin || "Não encontrado",
                 "Aquisição": {
                     "Data": dataAquisicao.toISODate()!,
                     "Valor": valorAquisicao, // Corresponde ao valor da ordem de compra do ativo (ou seja, quanto é que o vendedor recebeu pela tua compra)

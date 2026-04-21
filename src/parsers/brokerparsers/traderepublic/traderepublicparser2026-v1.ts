@@ -78,6 +78,7 @@ class TradeRepublicParser2026_v1 implements BrokerParser {
             else if (record["type"].toLowerCase() === "interest_payment") type = "Interest";
             else return;
 
+            const name = record["name"] || "";
             const ticker = "";
             const isin = record["symbol"];
             const shares = Math.abs(parseFloat(record["shares"].replace(/,/g, "")));
@@ -119,7 +120,7 @@ class TradeRepublicParser2026_v1 implements BrokerParser {
             const transaction: Transaction = {
                 date: utcDate,
                 type: type,
-                asset: new Asset(ticker, isin, assetCurrency, assetType),
+                asset: new Asset(name, ticker, isin, assetCurrency, assetType),
                 shares: shares,
                 amount: amount,
                 currency: amountCurrency,

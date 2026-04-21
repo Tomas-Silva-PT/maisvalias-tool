@@ -9,6 +9,7 @@ class DividendsFormatter {
 
     for (const transaction of dividends) {
 
+      const name = transaction.transaction.asset!!.name;
       const ticker = transaction.transaction.asset!!.ticker;
       const isin = transaction.transaction.asset!!.isin;
       const date = transaction.transaction.date;
@@ -23,7 +24,7 @@ class DividendsFormatter {
       const balance = Math.round((amount - expenses) * 100) / 100;
 
       const dividend: DividendForUser = {
-        "Simbolo": ticker || isin || "Não encontrado",
+        "Simbolo": name || ticker || isin || "Não encontrado",
         "Data": date.toISODate()!,
         "Valor": amount,
         "Despesas": expenses,

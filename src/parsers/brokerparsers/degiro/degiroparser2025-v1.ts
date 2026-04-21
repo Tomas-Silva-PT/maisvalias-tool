@@ -58,7 +58,7 @@ class DegiroParser2025_v1 implements IDegiroParser {
         const transaction: Transaction = {
             date: utcDate,
             type: type,
-            asset: new Asset("", isin, assetCurrency),
+            asset: new Asset(productName, "", isin, assetCurrency),
             shares: Math.abs(shares),
             amount: totalNetAmount,
             currency: "EUR",
@@ -118,7 +118,7 @@ class DegiroParser2025_v1 implements IDegiroParser {
         const transaction: Transaction = {
             date: utcDate,
             type: type,
-            asset: new Asset("", isin, changeCurrency),
+            asset: new Asset(product, "", isin, changeCurrency),
             // shares: 0, // In dividend transaction the shares are not relevant
             amount: Math.abs(netAmount),
             currency: changeCurrency,

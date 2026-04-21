@@ -97,7 +97,7 @@ class InteractiveBrokersParser2026_v1 implements IInteractiveBrokersParser {
       const transaction: Transaction = {
         date: utcDate,
         type: type,
-        asset: new Asset(ticker, isin, assetCurrency),
+        asset: new Asset("", ticker, isin, assetCurrency),
         shares: Math.abs(shares),
         amount: totalAmount,
         currency: amountCurrency,
@@ -142,7 +142,7 @@ class InteractiveBrokersParser2026_v1 implements IInteractiveBrokersParser {
       const transaction: Transaction = {
         date: utcDate,
         type: type,
-        asset: new Asset(ticker, isin, assetCurrency),
+        asset: new Asset("", ticker, isin, assetCurrency),
         shares: undefined,
         amount: Math.abs(amount),
         currency: amountCurrency,
