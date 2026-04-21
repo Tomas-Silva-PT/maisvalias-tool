@@ -1,12 +1,13 @@
-import { Transaction, TransactionType } from "../../models/transaction.js";
-import { BrokerParser } from "../parser.js";
-import { Fee } from "../../models/fee.js";
-import { Revolut } from "../../models/brokers/revolut.js";
+import { Transaction, TransactionType } from "../../../models/transaction.js";
+import { Fee } from "../../../models/fee.js";
+import { Revolut } from "../../../models/brokers/revolut.js";
 import { DateTime } from "luxon";
-import { Asset } from "../../models/asset.js";
-import { BrokerRecord, BrokerRecordRow, BrokerSection } from "../../models/brokerRecord.js";
+import { Asset } from "../../../models/asset.js";
+import { BrokerRecord, BrokerSection } from "../../../models/brokerRecord.js";
+import { IRevolutParser } from "./revolutparser.js";
 
-class RevolutParser implements BrokerParser {
+class RevolutParser2025_v1 implements IRevolutParser {
+
   isins?: Record<string, string>[];
   loadIsins(fileData: string): void {
     this.isins = [];
@@ -116,6 +117,61 @@ class RevolutParser implements BrokerParser {
 
     return transactions;
   }
+
+  canParse(sections: BrokerSection[]): boolean {
+    console.log("Checking if file can be parsed with RevolutParser2025_v1...");
+    if (!sections.length || !sections[0].rows.length) return false;
+
+    // pega numa linha representativa
+    const sample = Object.fromEntries(sections[0].rows.find(row => row[2][1] === "BUY - MARKET" || row[2][1] === "SELL - MARKET" || row[2][1] === "DIVIDEND") || []);
+    console.log("Sample found: " + JSON.stringify(sample));
+    if(!sample) return false;
+
+    // valida headers base (estrutura do ficheiro)
+    // Date;Ticker;Type;Quantity;Price per share;Total Amount;Currency;FX Rate
+    const headers = Object.keys(sample);
+    const hasRequiredHeaders = headers.includes("Date") &&
+                               headers.includes("Ticker") && 
+                               headers.includes("Type") && 
+                               headers.includes("Quantity") && 
+                               headers.includes("Price per share") && 
+                               headers.includes("Total Amount") && 
+                               headers.includes("Currency") && 
+                               headers.includes("FX Rate");
+
+    console.log("Has required headers: " + hasRequiredHeaders);
+    if (!hasRequiredHeaders) return false;
+
+    // heuristica para a data
+    // 2021-02-26T20:07:50.011692Z
+    const hDate = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d+Z$/;
+    console.log("Has valid date format: " + hDate.test(sample["Date"]));
+    if (!hDate.test(sample["Date"])) return false;
+
+    //  heurística para o montante:
+    // $12,08
+    const hAmount = sample["Total Amount"].split(" ").length === 1;
+    //  reforço (opcional): vírgula decimal
+    const hAmountHasCommaDecimal = /,\d+$/.test(sample["Total Amount"]);
+    console.log("Has valid amount format: " + hAmount);
+    console.log("Has comma as decimal separator: " + hAmountHasCommaDecimal);
+    if(!hAmount || !hAmountHasCommaDecimal) return false;
+
+    // heuristica para a quantidade:
+    // 0,0480192
+    const hQuantity = /^\d+,\d+$/.test(sample["Quantity"]);
+    console.log("Has valid quantity format: " + !(sample["Quantity"] && !hQuantity));
+    if (sample["Quantity"] && !hQuantity) return false;
+
+    // heuristica taxa de câmbio:
+    // 1,218
+    const hExchangeRate = /^\d+,\d+$/.test(sample["FX Rate"]);
+    console.log("Has valid exchange rate format: " + !(sample["FX Rate"] && !hExchangeRate));
+    if (sample["FX Rate"] && !hExchangeRate) return false;
+
+    return true;
+  }
+
 }
 
 
@@ -146,12 +202,10 @@ class RevolutCapitalGainAndDividendParser {
     const totalAmount = parseFloat(record["Total Amount"].replace(/[^\d,]/g, "").replace(",", "."));
     const assetCurrency = record["Currency"];
     const amountCurrency = record["Currency"];
-    // console.log("Currency: " + amountCurrency);
     let exchangeRate = 1 / parseFloat(record["FX Rate"].replace("\r", "").replace(",", ".")); // Porque a taxa de câmbio vem do EUR para a moeda do ativo, e nós queremos ao contrário
     if (isNaN(exchangeRate) || exchangeRate < Number.EPSILON) exchangeRate = 1;
     const feeAmount = Math.abs(Math.round((totalAmount - priceShare * shares) * 100) / 100);
 
-    // if (ticker === "SPOT" || ticker === "NVDA") console.log(`[${ticker}] Fee Amount: ` + feeAmount);
     const fees: Fee[] = [];
     let amount = totalAmount;
     if (feeAmount >= 0.01) {
@@ -175,27 +229,19 @@ class RevolutCapitalGainAndDividendParser {
       fees: fees,
       exchangeRate: exchangeRate
     };
-    // }
-    // if (!isin && type !== "Buy") {
-    //   throw new Error(
-    //     "Invalid file data: no isin found for " +
-    //     type +
-    //     " of ticker " +
-    //     ticker
-    //   );
-    // }
+
     return transaction;
   }
 }
 
 class RevolutInterestGainParser {
   parse(record: BrokerRecord): Transaction | undefined {
-    console.log("Parsing record: " + JSON.stringify(record));
+    // console.log("Parsing record: " + JSON.stringify(record));
     let transaction: Transaction;
     if (!record["Data"] || !record["Entrada de dinheiro"]) return;
 
     // Como o header "Descrição" vem com caracteres manhosos, vamos identificar as linhas de juros procurando pela presença da string "Pagamento de juros" em qualquer coluna
-    if(!Object.entries(record).find(([key, value]) => value.includes("Pagamento de juros"))) return;
+    if (!Object.entries(record).find(([key, value]) => value.includes("Pagamento de juros"))) return;
 
     const date = record["Data"];
 
@@ -260,4 +306,4 @@ class RevolutParserFactory {
 
 
 
-export { RevolutParser };
+export { RevolutParser2025_v1 };

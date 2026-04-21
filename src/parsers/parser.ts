@@ -3,6 +3,7 @@ import { Transaction } from "../models/transaction.js";
 
 interface BrokerParser {
     parse(records : BrokerSection[]): Transaction[];
+    canParse(sections: BrokerSection[]): boolean;
 }
 
 interface FileParser {

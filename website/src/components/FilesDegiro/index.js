@@ -3,7 +3,7 @@ import styles from "./styles.module.css";
 import React, { useEffect, useState } from "react";
 import { ArrowRight, Upload, X } from "lucide-react";
 
-import { DegiroParser } from "../../maisvalias-tool/parsers/brokerparsers/degiroparser.js";
+import { DegiroParser } from "../../maisvalias-tool/parsers/brokerparsers/degiro/degiroparser.js";
 import ErrorPopup from "@site/src/components/ErrorPopup";
 import { CSVParser } from "../../maisvalias-tool/parsers/fileparsers/csvparser.js";
 import { ParserEngine } from "../../maisvalias-tool/parsers/parserengine.js";

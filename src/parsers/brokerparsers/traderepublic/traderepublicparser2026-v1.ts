@@ -1,13 +1,66 @@
-import { BrokerParser } from "../parser.js";
-import { BrokerRecord, BrokerRecordRow, BrokerSection } from "../../models/brokerRecord.js";
-import { Transaction, TransactionType } from "../../models/transaction.js";
-import { Asset, AssetType } from "../../models/asset.js";
+import { BrokerParser } from "../../parser.js";
+import { BrokerRecord, BrokerSection } from "../../../models/brokerRecord.js";
+import { Transaction, TransactionType } from "../../../models/transaction.js";
+import { Asset, AssetType } from "../../../models/asset.js";
 import { DateTime } from "luxon";
-import { Fee } from "../../models/fee.js";
-import { Tax } from "../../models/tax.js";
-import { TradeRepublic } from "../../models/brokers/traderepublic.js";
+import { Fee } from "../../../models/fee.js";
+import { Tax } from "../../../models/tax.js";
+import { TradeRepublic } from "../../../models/brokers/traderepublic.js";
 
-class TradeRepublicParser implements BrokerParser {
+class TradeRepublicParser2026_v1 implements BrokerParser {
+
+    canParse(sections: BrokerSection[]): boolean {
+        console.log("Checking if file can be parsed with TradeRepublicParser2026_v1...");
+        if (!sections.length || !sections[0].rows.length) return false;
+
+        // pega numa linha representativa
+        const sample = Object.fromEntries(sections[0].rows.find(row => row[4][1] === "BUY" || row[2][1] === "SELL" || row[2][1] === "INTEREST_PAYMENT") || []);
+        console.log("Sample found: " + JSON.stringify(sample));
+        if (!sample) return false;
+
+        // valida headers base (estrutura do ficheiro)
+        // Date;Ticker;Type;Quantity;Price per share;Total Amount;Currency;FX Rate
+        const headers = Object.keys(sample);
+        const hasRequiredHeaders = headers.includes("datetime") &&
+            headers.includes("type") &&
+            headers.includes("symbol") &&
+            headers.includes("shares") &&
+            headers.includes("price") &&
+            headers.includes("amount") &&
+            headers.includes("fee") &&
+            headers.includes("tax") &&
+            headers.includes("fx_rate");
+
+        console.log("Has required headers: " + hasRequiredHeaders);
+        if (!hasRequiredHeaders) return false;
+
+        // heuristica para a data
+        // 2024-08-09T13:23:02.982565Z
+        const hDate = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d+Z$/;
+        console.log("Has valid date format: " + hDate.test(sample["datetime"]));
+        if (!hDate.test(sample["datetime"])) return false;
+
+        //  heurística para o montante:
+        // 5.000000
+        const hAmount = /\.\d+$/.test(sample["amount"]);
+        console.log("Has valid amount format: " + hAmount);
+        if (!hAmount) return false;
+
+        // heuristica para a quantidade:
+        // 0.1942950000
+        const hQuantity = /^\d+\.\d+$/.test(sample["shares"]);
+        console.log("Has valid quantity format: " + !(sample["shares"] && !hQuantity));
+        if (sample["shares"] && !hQuantity) return false;
+
+        // heuristica taxa de câmbio:
+        // 0.7047210000
+        const hExchangeRate = /^\d+\.\d+$/.test(sample["fx_rate"]);
+        console.log("Has valid exchange rate format: " + !(sample["fx_rate"] && !hExchangeRate));
+        if (sample["fx_rate"] && !hExchangeRate) return false;
+
+        return true;
+    }
+
 
     parse(sections: BrokerSection[]): Transaction[] {
         const transactions: Transaction[] = [];
@@ -29,18 +82,18 @@ class TradeRepublicParser implements BrokerParser {
             const isin = record["symbol"];
             const shares = Math.abs(parseFloat(record["shares"].replace(/,/g, "")));
             let amount = Math.abs(parseFloat(record["amount"].replace(/,/g, "")));
-            if(type === "Buy") amount += Math.abs(parseFloat(record["fee"].replace(/,/g, "") || "0")) + Math.abs(parseFloat(record["tax"].replace(/,/g, "") || "0"));
-            if(type === "Sell") amount -= Math.abs(parseFloat(record["fee"].replace(/,/g, "") || "0")) + Math.abs(parseFloat(record["tax"].replace(/,/g, "") || "0"));
+            if (type === "Buy") amount += Math.abs(parseFloat(record["fee"].replace(/,/g, "") || "0")) + Math.abs(parseFloat(record["tax"].replace(/,/g, "") || "0"));
+            if (type === "Sell") amount -= Math.abs(parseFloat(record["fee"].replace(/,/g, "") || "0")) + Math.abs(parseFloat(record["tax"].replace(/,/g, "") || "0"));
             const amountCurrency = record["currency"];
             const assetCurrency = record["currency"];
 
-            const fees : Fee[] = [];
-            if(record["fee"] && parseFloat(record["fee"]) !== 0) {
+            const fees: Fee[] = [];
+            if (record["fee"] && parseFloat(record["fee"]) !== 0) {
                 fees.push(new Fee("Fee", Math.abs(parseFloat(record["fee"].replace(/,/g, ""))), record["currency"]));
             }
 
-            const taxes : Tax[] = [];
-            if(record["tax"] && parseFloat(record["tax"]) !== 0) {
+            const taxes: Tax[] = [];
+            if (record["tax"] && parseFloat(record["tax"]) !== 0) {
                 taxes.push(new Tax("Tax", Math.abs(parseFloat(record["tax"].replace(/,/g, ""))), record["currency"]));
             }
 
@@ -48,8 +101,8 @@ class TradeRepublicParser implements BrokerParser {
 
             const asset_class = record["asset_class"];
 
-            let assetType : AssetType;
-            switch(asset_class) {
+            let assetType: AssetType;
+            switch (asset_class) {
                 case "STOCK":
                     assetType = "STOCK";
                     break;
@@ -245,4 +298,4 @@ class TradeRepublicParser implements BrokerParser {
     // }
 }
 
-export { TradeRepublicParser };
+export { TradeRepublicParser2026_v1 };

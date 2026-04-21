@@ -3,7 +3,7 @@ import styles from "./styles.module.css";
 import React, { useEffect, useState } from "react";
 import { ArrowRight, Upload, X } from "lucide-react";
 
-import { StrikeParser } from "../../maisvalias-tool/parsers/brokerparsers/strikeparser.js";
+import { StrikeParser } from "../../maisvalias-tool/parsers/brokerparsers/strike/strikeparser.js";
 
 import ErrorPopup from "@site/src/components/ErrorPopup";
 import { ParserEngine } from "../../maisvalias-tool/parsers/parserengine.js";

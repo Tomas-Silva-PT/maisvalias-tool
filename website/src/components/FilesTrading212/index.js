@@ -3,7 +3,7 @@ import styles from "./styles.module.css";
 import React, { useEffect, useState } from "react";
 import { ArrowRight, Upload, X } from "lucide-react";
 
-import { Trading212Parser } from "../../maisvalias-tool/parsers/brokerparsers/trading212parser.js";
+import { Trading212Parser } from "../../maisvalias-tool/parsers/brokerparsers/trading212/trading212parser.js";
 
 import ErrorPopup from "@site/src/components/ErrorPopup";
 import { ParserEngine } from "../../maisvalias-tool/parsers/parserengine.js";

@@ -4,39 +4,6 @@ import * as Papa from "papaparse";
 
 class CSVParser implements FileParser {
 
-  // parse(file: string): Promise<BrokerRecordRow[]> {
-
-  //   const rows = Papa.parse(file).data as string[][];
-  //   const headers = rows.shift();
-
-  //   if (!headers) {
-  //     throw new Error("Invalid CSV: no headers found");
-  //   }
-
-  //   const cleanHeaders = headers.map(h => h.trim());
-  //   const nonEmptyRows = rows.filter(row => row.some(cell => cell.trim() !== ""));
-
-  //   if (nonEmptyRows.length === 0) {
-  //     throw new Error("Invalid CSV: no data found");
-  //   }
-
-  //   if (nonEmptyRows.some(row => row.length !== cleanHeaders.length)) {
-  //     console.error("Row length mismatch: ", nonEmptyRows.find(row => row.length !== cleanHeaders.length));
-  //     throw new Error("Invalid CSV: number of columns does not match headers");
-  //   }
-
-  //   // O formato de saída é uma matriz (array de arrays: [header, value]), para manter a ordem dos campos e permitir múltiplas colunas com o mesmo nome (caso existam).
-  //   // A Degiro, por exemplo, tem extratos com múltiplas colunas com nome vazio, o que impossibilita o uso de um objeto simples para representar os registros.
-  //   const result : BrokerRecordRow[] = nonEmptyRows.map((row) =>
-  //     cleanHeaders.map((h, i) => [
-  //       h,
-  //       row[i]?.trim() ?? ""
-  //     ])
-  //   );
-
-  //   return Promise.resolve(result);
-  // }
-
   async parse(file: string): Promise<BrokerSection[]> {
 
     const rows = Papa.parse(file).data as string[][];

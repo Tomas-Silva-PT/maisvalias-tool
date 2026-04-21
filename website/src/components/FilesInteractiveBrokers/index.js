@@ -3,7 +3,7 @@ import styles from "./styles.module.css";
 import React, { useEffect, useState } from "react";
 import { ArrowRight, Upload, X } from "lucide-react";
 
-import { InteractiveBrokersParser } from "../../maisvalias-tool/parsers/brokerparsers/interactivebrokersparser.js";
+import { InteractiveBrokersParser } from "../../maisvalias-tool/parsers/brokerparsers/interactivebrokers/interactivebrokersparser.js";
 
 import ErrorPopup from "@site/src/components/ErrorPopup";
 import { ParserEngine } from "../../maisvalias-tool/parsers/parserengine.js";

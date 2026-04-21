@@ -1,13 +1,33 @@
-import { Fee } from "../../models/fee.js";
-import { Tax } from "../../models/tax.js";
-import { Transaction, TransactionType } from "../../models/transaction.js";
-import { BrokerParser } from "../parser.js";
+import { Fee } from "../../../models/fee.js";
+import { Transaction, TransactionType } from "../../../models/transaction.js";
 import { DateTime } from "luxon";
-import { Asset } from "../../models/asset.js";
-import { BrokerRecord, BrokerSection } from "../../models/brokerRecord.js";
-import { InteractiveBrokers } from "../../models/brokers/ibkr.js";
+import { Asset } from "../../../models/asset.js";
+import { BrokerRecord, BrokerSection } from "../../../models/brokerRecord.js";
+import { InteractiveBrokers } from "../../../models/brokers/ibkr.js";
+import { IInteractiveBrokersParser } from "./interactivebrokersparser.js";
 
-class InteractiveBrokersParser implements BrokerParser {
+class InteractiveBrokersParser2026_v1 implements IInteractiveBrokersParser {
+  canParse(sections: BrokerSection[]): boolean {
+    console.log("Checking if file can be parsed with InteractiveBrokersParser2026_v1...");
+    if (!sections.length) return false;
+
+    const getSectionName = (section: BrokerSection): string | undefined => {
+      return section.rows?.[0]?.[0]?.[0];
+    };
+
+    const sectionNames = sections
+      .map(getSectionName)
+      .filter(Boolean);
+
+    const hasTrades = sectionNames.includes("Trades");
+    const hasDividends = sectionNames.includes("Dividends");
+    const hasInterest = sectionNames.includes("Interest");
+    const hasAssets = sectionNames.includes("Financial Instrument Information");
+
+    if (hasTrades || hasDividends || hasInterest || hasAssets) return true;
+
+    return false;
+  }
 
   parse(records: BrokerSection[]): Transaction[] {
     const transactions: Transaction[] = [];
@@ -19,21 +39,21 @@ class InteractiveBrokersParser implements BrokerParser {
     // Obter a secção correspondente às transações
     const transactionsSection = records.find(section => section.rows[0][0][0] === "Trades");
     if (transactionsSection) {
-    const parsedTransactions = this.parseTransactionsSection(transactionsSection!, assetsSection);
-    transactions.push(...parsedTransactions);
+      const parsedTransactions = this.parseTransactionsSection(transactionsSection!, assetsSection);
+      transactions.push(...parsedTransactions);
     }
 
     // Obter a secção correspondente a dividendos
     const dividendsSection = records.find(section => section.rows[0][0][0] === "Dividends");
     if (dividendsSection) {
-    const parsedDividends = this.parseDividendsSection(dividendsSection!, assetsSection);
-    transactions.push(...parsedDividends);
+      const parsedDividends = this.parseDividendsSection(dividendsSection!, assetsSection);
+      transactions.push(...parsedDividends);
     }
     // Obter a secção correspondente a juros
     const interestsSection = records.find(section => section.rows[0][0][0] === "Interest");
     if (interestsSection) {
-    const parsedInterests = this.parseInterestSection(interestsSection!);
-    transactions.push(...parsedInterests);
+      const parsedInterests = this.parseInterestSection(interestsSection!);
+      transactions.push(...parsedInterests);
     }
 
     return transactions;
@@ -181,4 +201,4 @@ class InteractiveBrokersParser implements BrokerParser {
   }
 }
 
-export { InteractiveBrokersParser };
+export { InteractiveBrokersParser2026_v1 };

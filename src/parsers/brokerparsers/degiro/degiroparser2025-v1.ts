@@ -1,13 +1,13 @@
-import { Transaction } from "../../models/transaction";
-import { BrokerParser } from "../parser";
-import { Degiro } from "../../models/brokers/degiro";
-import { Tax } from "../../models/tax";
-import { Fee } from "../../models/fee";
+import { Transaction } from "../../../models/transaction";
+import { Degiro } from "../../../models/brokers/degiro";
+import { Tax } from "../../../models/tax";
+import { Fee } from "../../../models/fee";
 import { DateTime } from "luxon";
-import { Asset } from "../../models/asset";
-import { BrokerRecord, BrokerRecordRow, BrokerSection } from "../../models/brokerRecord";
+import { Asset } from "../../../models/asset";
+import { BrokerRecordRow, BrokerSection } from "../../../models/brokerRecord";
+import { IDegiroParser } from "./degiroparser";
 
-class DegiroParser implements BrokerParser {
+class DegiroParser2025_v1 implements IDegiroParser {
 
     accountResume: BrokerRecordRow[] = [];
 
@@ -153,70 +153,59 @@ class DegiroParser implements BrokerParser {
             let transaction = this.parseDividend(record);
             if (transaction) transactions.push(transaction);
 
-            // let dutchDate = record[0][1];
-            // let dutchTime = record[1][1];
-            // const dateValue = record[2][1];
-            // const product = record[3][1];
-            // const isin = record[4][1];
-            // const description = record[5][1];
-            // const exchangeRate = parseFloat(record[6][1]);
-            // const amountCurrency = record[7][1];
-            // const amount = parseFloat(record[8][1]);
-            // const balanceCurrency = record[9][1];
-            // const balance = parseFloat(record[10][1]);
-            // const orderId = record[11][1];
-
-            // if (!dutchDate || !dutchTime) return;
-
-            // const dutchDateTime = DateTime.fromFormat(`${dutchDate} ${dutchTime}`, "dd-MM-yyyy HH:mm", { zone: "Europe/Amsterdam" });
-            // const utcDate = dutchDateTime.setZone("UTC");
-
-            // const date = utcDate.toISODate()!;
-            // const time = utcDate.toISOTime()!.split(".")[0];
-
-            // if (description !== 'Dividendo') {
-            //     return;
-            // }
-            // const type = 'Dividend';
-
-            // let netAmount = amount;
-            // const netAmountCurrency = amountCurrency;
-            // const taxes: Tax[] = [];
-
-            // // Find tax
-            // const match = this.accountResume.find((row) => {
-            //     const get = (key: string) => row.find(([k]) => k === key)?.[1];
-            //     return (
-            //         get("Descrição") === "Imposto sobre dividendo" &&
-            //         get("Data") === dutchDate &&
-            //         get("Hora") === dutchTime
-            //     );
-            // });
-            // if (match) {
-            //     const taxAmount = Math.abs(parseFloat(match[8][1]));
-            //     netAmount -= taxAmount;
-            //     const taxCurrency = match[7][1];
-            //     const taxExchangeRate = parseFloat(match[6][1]);
-            //     taxes.push(new Tax("Imposto sobre dividendo", taxAmount, taxCurrency, taxExchangeRate));
-            // }
-
-            // const transaction: Transaction = {
-            //     date: utcDate,
-            //     type,
-            //     asset: new Asset(product, isin, ""),
-            //     // shares: 0, // In dividend transaction the shares are not relevant
-            //     amount: netAmount,
-            //     currency: netAmountCurrency,
-            //     broker: new Degiro(),
-            //     taxes: taxes,
-            //     fees: undefined,
-            //     exchangeRate: exchangeRate
-            // };
-            // if (transaction.type || !date || !time) transactions.push(transaction);
         });
 
         return transactions;
     }
+
+    canParse(sections: BrokerSection[]): boolean {
+        console.log("Checking if file can be parsed with DegiroParser2025_v1...");
+        if (!sections.length || !sections[0].rows.length) return false;
+
+        // pega numa linha representativa
+        const sample = Object.fromEntries(sections[0].rows[0]);
+        console.log("Sample found: " + JSON.stringify(sample));
+        if (!sample) return false;
+
+        // valida headers base (estrutura do ficheiro)
+        const headers = Object.keys(sample);
+        const hasRequiredHeaders = headers.includes("Data") &&
+            headers.includes("Hora") &&
+            headers.includes("ISIN") &&
+            headers.includes("Quantidade") &&
+            headers.includes("Valor EUR") &&
+            headers.includes("Taxa de Câmbio") &&
+            headers.includes("Total EUR");
+
+        console.log("Has required headers: " + hasRequiredHeaders);
+        if (!hasRequiredHeaders) return false;
+
+        // heuristica para a data
+        // 26-06-2025
+        const hDate = /^\d{2}-\d{2}-\d{4}$/;
+        console.log("Has valid date format: " + hDate.test(sample["Data"]));
+        if (!hDate.test(sample["Data"])) return false;
+
+        // heurística para o montante:
+        // 1,1716
+        const hAmount = /^-?\d+,\d+$/.test(sample["Valor EUR"]);
+        console.log("Has valid amount format: " + hAmount);
+        if (!hAmount) return false;
+
+        // heuristica para a quantidade:
+        // -1
+        const hQuantity = /^-?\d+$/.test(sample["Quantidade"]);
+        console.log("Has valid quantity format: " + !(sample["Quantidade"] && !hQuantity));
+        if (sample["Quantidade"] && !hQuantity) return false;
+
+        // heuristica taxa de câmbio:
+        // 1,218
+        const hExchangeRate = /^\d+,\d+$/.test(sample["Taxa de Câmbio"]);
+        console.log("Has valid exchange rate format: " + !(sample["Taxa de Câmbio"] && !hExchangeRate));
+        if (sample["Taxa de Câmbio"] && !hExchangeRate) return false;
+
+        return true;
+    }
 }
 
-export { DegiroParser };
+export { DegiroParser2025_v1 };
