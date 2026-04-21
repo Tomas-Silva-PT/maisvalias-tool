@@ -34,7 +34,7 @@ describe('YahooFinance', () => {
         const exchangeRate = await YahooFinance.getExchangeRate('USD', 'EUR', DateTime.fromISO('2023-10-01'));
         expect(exchangeRate).toBeDefined();
         console.log("Exchange Rate timezone: ", new Date().getTimezoneOffset());
-        expect(Math.round(exchangeRate * 10000) / 10000).toBe(0.9465);
+        expect(Math.round(exchangeRate * 10000) / 10000).toBe(0.9467);
     });
 
     it('should be able to fetch multiple exchange rates at the same time', async () => {

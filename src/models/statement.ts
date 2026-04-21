@@ -5,7 +5,7 @@ import { Currency } from "./currency.js";
 import { Fee } from "./fee.js";
 import { Tax } from "./tax.js";
 import { Transaction, transactionEquals } from "./transaction.js";
-import { ExchangeRate } from "./yahoofinance.js";
+import { ExchangeRate, YahooFinance } from "./yahoofinance.js";
 
 type ExchangeRateToFetch = {
     currency: string;
@@ -100,14 +100,14 @@ class Statement {
             
             transactionsWithoutExchangeRate.filter((transaction) => transaction.currency === rateToFetch.currency).forEach((transaction) => {
                 // console.log("Date transaction: ", transaction.date);
-                transaction.exchangeRate = exchangeRates.find((rate) => rate.date.equals(transaction.date))?.close;
+                transaction.exchangeRate = exchangeRates.find((rate) => YahooFinance.adjustToBusinessDay(rate.date).equals(YahooFinance.adjustToBusinessDay(transaction.date)))?.close;
             });
             // console.log("Adding exchange rates to taxes");
             taxesWithoutExchangeRate.filter((tax) => Object.values(tax)[0].currency === rateToFetch.currency).forEach((tax) => {
                 let taxObject = Object.values(tax)[0];
                 let date = Object.keys(tax)[0];
                 // console.log("Date tax: ", date);
-                let trueExchangeRate = exchangeRates.find((rate) => rate.date === DateTime.fromISO(date));
+                let trueExchangeRate = exchangeRates.find((rate) => YahooFinance.adjustToBusinessDay(rate.date).equals(YahooFinance.adjustToBusinessDay(DateTime.fromISO(date))));
                 // console.log("True Exchange Rate: ", trueExchangeRate);
                 taxObject.exchangeRate = trueExchangeRate?.close;
             });
@@ -116,7 +116,7 @@ class Statement {
                 let feeObject = Object.values(fee)[0];
                 let date = Object.keys(fee)[0];
                 // console.log("Date fee: ", date);
-                let trueExchangeRate = exchangeRates.find((rate) => rate.date === DateTime.fromISO(date));
+                let trueExchangeRate = exchangeRates.find((rate) => YahooFinance.adjustToBusinessDay(rate.date).equals(YahooFinance.adjustToBusinessDay(DateTime.fromISO(date))));
                 // console.log("True Exchange Rate: ", trueExchangeRate);
                 feeObject.exchangeRate = trueExchangeRate?.close;
             });

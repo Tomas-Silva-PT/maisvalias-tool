@@ -90,6 +90,25 @@ class YahooFinance {
     return data;
   }
 
+  // Porque a Yahoo Finance não funciona com dias finais de semana, temos de ajustar a data para o dia útil mais próximo (normalmente o dia anterior)
+  static adjustToBusinessDay(date: DateTime): DateTime {
+  const weekday = date.weekday; // 1 = Monday, 7 = Sunday
+
+  if (weekday === 6) {
+    // Saturday → go back 1 day (Friday)
+    console.log("Date is Saturday, adjusting to previous day (Friday)");
+    return date.minus({ days: 1 });
+  }
+
+  if (weekday === 7) {
+    // Sunday → go back 2 days (Friday)
+    console.log("Date is Sunday, adjusting to previous day (Friday)");
+    return date.minus({ days: 2 });
+  }
+
+  return date; // Weekday
+}
+
   static async getExchangeRateBatch(fromCurrency: string, toCurrency: string, dates: DateTime[]): Promise<ExchangeRate[]> {
     // console.log("Getting exchange rate batch...");
     const ticker = `${fromCurrency}${toCurrency}=X`;
@@ -104,8 +123,8 @@ class YahooFinance {
     if (intervals.length < dates.length) {
       console.log("Fetching exchange rates by intervals...");
       for (let interval of intervals) {
-        const from = interval.from;
-        const to = interval.to;
+        const from = this.adjustToBusinessDay(interval.from);
+        const to = this.adjustToBusinessDay(interval.to);
         to.plus({ days: 1 });
         let unixFromDate = Math.floor(from.toMillis() / 1000);
         let unixToDate = Math.floor(to.toMillis() / 1000);
@@ -135,7 +154,7 @@ class YahooFinance {
     } else {
       console.log("Fetching exchange rates by specific dates...");
       for (const date of dates) {
-        let unixDate = Math.floor(date.toMillis() / 1000);
+        let unixDate = Math.floor(this.adjustToBusinessDay(date).toMillis() / 1000);
         let data;
         const url = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?period1=${unixDate}&period2=${unixDate}&interval=1d`;
         data = await this.get(url);
@@ -166,8 +185,8 @@ class YahooFinance {
     console.log("Getting exchange rate...");
     const ticker = `${fromCurrency}${toCurrency}=X`;
     // console.log("fromCurrency: " + fromCurrency + ", toCurrency: " + toCurrency + ", date: " + date);
-    let exchangeDate = date;
-    let nextExchangeDate = date.plus({ days: 1 });
+    let exchangeDate = this.adjustToBusinessDay(date);
+    let nextExchangeDate = this.adjustToBusinessDay(date.plus({ days: 1 }));
 
     let unixDate = Math.floor(exchangeDate.toMillis() / 1000);
     let unixNextDate = Math.floor(nextExchangeDate.toMillis() / 1000);
