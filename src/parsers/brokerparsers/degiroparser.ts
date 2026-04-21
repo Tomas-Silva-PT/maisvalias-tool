@@ -106,7 +106,7 @@ class DegiroParser implements BrokerParser {
         const match = this.accountResume.find((row) => {
             return row[0][1] == record[0][1] && row[1][1] == record[1][1] && row[5][1] == "Imposto sobre dividendo"
         });
-        console.log("Matching tax for dividend: ", match);
+        // console.log("Matching tax for dividend: ", match);
         if (match) {
             const taxAmount = Math.abs(parseFloat(match[8][1].replace(",", ".")));
             netAmount -= taxAmount;
