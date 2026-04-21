@@ -1,7 +1,7 @@
 import { it, describe, expect } from 'vitest';
 import { Statement } from '../../models/statement.js';
 import fs from "fs";
-import { StrikeParser } from '../../parsers/brokerparsers/strikeparser.js';
+import { StrikeParser } from '../../parsers/brokerparsers/strike/strikeparser.js';
 import { ParserEngine } from '../../parsers/parserengine.js';
 import { CSVParser } from '../../parsers/fileparsers/csvparser.js';
 

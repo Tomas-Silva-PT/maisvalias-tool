@@ -1,5 +1,5 @@
 import { it, describe, expect } from 'vitest';
-import { RevolutParser } from '../../parsers/brokerparsers/revolutparser.js';
+import { RevolutParser } from '../../parsers/brokerparsers/revolut/revolutparser.js';
 import { Statement } from '../../models/statement.js';
 import fs from "fs";
 import { DividendsCalculator } from '../../calculators/DividendsCalculator.js';

@@ -1,7 +1,7 @@
 import { it, describe, expect } from 'vitest';
 import fs from 'fs';
 import { PDFParser } from '../../parsers/fileparsers/pdfparser';
-import { TradeRepublicParser } from '../../parsers/brokerparsers/traderepublicparser';
+import { TradeRepublicParser } from '../../parsers/brokerparsers/traderepublic/traderepublicparser';
 import { FIFOCalculator } from '../../calculators/FIFOCalculator';
 import { Statement } from '../../models/statement';
 import { DividendsCalculator } from '../../calculators/DividendsCalculator';

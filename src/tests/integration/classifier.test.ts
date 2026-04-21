@@ -1,6 +1,6 @@
 import { it, describe, expect } from 'vitest';
 import { FIFOCalculator } from '../../calculators/FIFOCalculator.js';
-import { RevolutParser } from '../../parsers/brokerparsers/revolutparser.js';
+import { RevolutParser } from '../../parsers/brokerparsers/revolut/revolutparser.js';
 import { Statement } from '../../models/statement.js';
 import { Classifier } from '../../classifiers/classifier.js';
 import { DividendsCalculator } from '../../calculators/DividendsCalculator.js';
