@@ -19,12 +19,12 @@ class PTAnexoJQuadro92AFormatter implements IRSFormatter<CapitalGainEvent, Anexo
 
 
       let code: string = "";
-      switch (realizedTransaction.buy.asset!!.assetType) {
+      switch (realizedTransaction.sell.asset!!.assetType) {
         case "STOCK":
-          code = "G01";
+          code = "G01 - Alienação onerosa de ações/partes sociais";
           break;
         case "ETF":
-          code = "G20";
+          code = "G20 - Resgates ou alienação de unidades de participação ou liquidação de fundos de investimento";
           break;
       }
 
@@ -114,7 +114,7 @@ class PTAnexoJQuadro92AFormatter implements IRSFormatter<CapitalGainEvent, Anexo
 
       add("NLinha", currNLinha.toString());
       add("CodPais", gain["País da fonte"].split("-")[0].trim());
-      add("Codigo", gain["Código"]);
+      add("Codigo", gain["Código"].split("-")[0].trim());
       add("AnoRealizacao", gain["Ano de Realização"].toString());
       add("MesRealizacao", gain["Mês de Realização"].toString());
       add("DiaRealizacao", gain["Dia de Realização"].toString());

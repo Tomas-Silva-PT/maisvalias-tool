@@ -59,7 +59,7 @@ Market buy,2022-12-23 16:25:12,IE00BFMXXD54,VUAA,"Vanguard S&P 500 (Acc)",,,2.26
 Market buy,2022-12-23 16:25:13,IE00BYVQ9F29,NQSE,"iShares NASDAQ 100 EUR Hedged (Acc)",,,11.1648300000,6.782000,EUR,1.00000000,,"EUR",75.72,"EUR",,,,,,,,
 Market buy,2022-12-23 16:28:30,IE00BYXVGX24,FUSD,"Fidelity US Quality Income (Dist)",,,9.9057900000,7.644000,EUR,1.00000000,,"EUR",75.72,"EUR",,,,,,,,
 Dividend (Ordinary),2022-12-29 14:09:39,AN8068571086,VGOV,"Vanguard U.K. Gilt (Dist)",,,0.2350030000,0.032220,GBP,Not available,,,0.01,"EUR",0.00,GBP,,,,,,
-Dividend (Ordinary),2022-12-30 14:54:58,PT00B3XXRP09,VUSA,"Vanguard S&P 500 (Dist)",,,0.1397860000,0.243183,EUR,Not available,,,0.03,"EUR",-0.00,EUR,,,,,,
+Dividend (Ordinary),2022-12-30 14:54:58,IE00B3XXRP09,VUSA,"Vanguard S&P 500 (Dist)",,,0.1397860000,0.243183,EUR,Not available,,,0.03,"EUR",-0.00,EUR,,,,,,
 Dividend (Ordinary),2022-12-30 15:01:33,IE00BZ163K21,VUCP,"Vanguard USD Corporate Bond (Dist)",,,0.1771210000,0.134888,EUR,Not available,,,0.02,"EUR",0.00,EUR,,,,,,
 Dividend (Ordinary),2022-12-30 15:03:59,IE00B8GKDB10,VHYL,"Vanguard FTSE All-World High Dividend Yield (Dist)",,,0.1422300000,0.387182,EUR,Not available,,,0.06,"EUR",0.00,EUR,,,,,,
 Dividend (Ordinary),2022-12-30 15:05:31,US3755581036,GILD,"Gilead Sciences",,,0.0359790000,0.620500,USD,Not available,,,0.02,"EUR",0.00,USD,,,,,,

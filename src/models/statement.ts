@@ -138,23 +138,30 @@ class Statement {
         for (let transaction of filteredTransactions) {
             const isin = transaction.asset!!.isin;
             const ticker = transaction.asset!!.ticker;
-            if (isins.includes(isin) && isins.includes(ticker)) continue;
+            if (isins.includes(isin) || isins.includes(ticker)) continue;
             if(isin) isins.push(isin);
             if(!isin && ticker) isins.push(ticker); // If no ISIN, use the ticker
         }
 
         console.log("[START] Fetching asset types...");
         const start = performance.now();
-
+        // console.log("ISINs/Tickers to fetch: ", JSON.stringify(isins));
         const assetTypes : Record<string, string> = await Asset.getAssetTypes(isins);
 
         const end = performance.now();
         console.log(`[END] Fetching asset types... (took ${((end - start) / 1000).toFixed(3)} seconds)`);
 
+        // console.log("Asset Types Found: ", JSON.stringify(assetTypes));
         for (let transaction of filteredTransactions) {
             const isin = transaction.asset!!.isin;
             const ticker = transaction.asset!!.ticker;
-            const assetType = assetTypes[isin] || assetTypes[ticker];
+            let assetType = assetTypes[isin] || assetTypes[ticker];
+            switch (assetType) {
+                case "EQUITY":
+                    assetType = "STOCK";
+                    break;
+            }
+            // console.log("Asset Type: " + assetType + " for ISIN: " + isin + " and ticker: " + ticker);
             transaction.asset!!.assetType = assetType;
         }
     }
