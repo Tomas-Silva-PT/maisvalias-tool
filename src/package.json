@@ -18,7 +18,8 @@
     "luxon": "^3.6.1",
     "papaparse": "^5.5.3",
     "pdf-parse": "^2.4.5",
-    "pdfjs-dist": "^5.6.205"
+    "pdfjs-dist": "^5.6.205",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@types/luxon": "^3.6.2",

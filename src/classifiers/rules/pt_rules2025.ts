@@ -7,19 +7,19 @@ const PTIRSRules2025: Rule[] = [
     // Add rules here
     {
         destination: PTDestinations.ANEXO_J_QUADRO_94A,
-        condition: (e : TaxEvent ) => isCapitalGainEvent(e) && !isCapitalGainHoldForMoreThanOneYear(e) && isCrypto(e)
+        condition: (e: TaxEvent) => isCapitalGainEvent(e) && !isCapitalGainHoldForMoreThanOneYear(e) && isCrypto(e)
     },
     {
         destination: PTDestinations.ANEXO_G1_QUADRO_7,
-        condition: (e : TaxEvent ) => isCapitalGainEvent(e) && isCapitalGainHoldForMoreThanOneYear(e) && isCrypto(e)
+        condition: (e: TaxEvent) => isCapitalGainEvent(e) && isCapitalGainHoldForMoreThanOneYear(e) && isCrypto(e)
     },
     {
-        destination: PTDestinations.ANEXO_J_QUADRO_8A, 
-        condition: (e : TaxEvent ) => ( isDividendEvent(e) || isInterestEvent(e) ) && isForeignBroker(e)
+        destination: PTDestinations.ANEXO_J_QUADRO_8A,
+        condition: (e: TaxEvent) => (isDividendEvent(e) || isInterestEvent(e)) && isForeignBroker(e)
     },
     {
         destination: PTDestinations.ANEXO_J_QUADRO_92A,
-        condition: (e : TaxEvent ) => isCapitalGainEvent(e) && isForeignBroker(e)
+        condition: (e: TaxEvent) => isCapitalGainEvent(e) && ( isAssetForeign(e) || (!isAssetForeign(e) && isForeignBroker(e) && isForeignBroker(e)) )
     },
 ];
 
@@ -57,6 +57,8 @@ function isInterestEvent(event: TaxEvent) {
  * This function checks if the broker associated with the tax event is a foreign broker.
  * A foreign broker is defined as a broker whose country is not Portugal.
  * 
+ * Important Note: As of 13/05/2026, if the asset has no ISIN (identified), this function will not be able to detect the country of the asset
+ * 
  * @param event The tax event to check.
  * @returns True if the tax event was executed by a foreign broker, false otherwise.
  */
@@ -67,6 +69,25 @@ function isForeignBroker(event: TaxEvent): boolean {
         case "dividend":
         case "interest":
             return event.transaction.broker.country.alpha2 !== "PT";
+    }
+
+    return true;
+}
+
+/**
+ * Returns true if the tax event involves a foreign asset.
+ * 
+ * 
+ * @param event The tax event to check.
+ * @returns True if the tax event asset is foreign, false otherwise.
+ */
+
+function isAssetForeign(event: TaxEvent): boolean {
+    switch (event.kind) {
+        case "capitalGain":
+            return event.sell.asset!!.countryDomiciled?.alpha2 !== "PT";
+        case "dividend":
+            return event.transaction.asset!!.countryDomiciled?.alpha2 !== "PT";
     }
 
     return false;

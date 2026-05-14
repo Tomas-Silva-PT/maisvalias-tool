@@ -7,6 +7,7 @@ import FilesTrading212 from "@site/src/components/FilesTrading212";
 import FilesDegiro from "@site/src/components/FilesDegiro";
 import FilesStrike from "@site/src/components/FilesStrike";
 import FilesTradeRepublic from "@site/src/components/FilesTradeRepublic";
+import FilesXTB from "@site/src/components/FilesXTB";
 import FilesInteractiveBrokers from "@site/src/components/FilesInteractiveBrokers";
 import DisclaimerPopup from "@site/src/components/DisclaimerPopup";
 import HelpDialog from "@site/src/components/HelpDialog";
@@ -73,13 +74,6 @@ const brokers = [
     beta: false,
   },
   {
-    name: "XTB",
-    logo: "/img/brokers/xtb.png",
-    active: false,
-    visible: false,
-    beta: false,
-  },
-  {
     name: "Degiro",
     logo: "/img/brokers/degiro.png",
     active: true,
@@ -141,6 +135,19 @@ const brokers = [
       {
         message: "Não sabes onde encontrar os ficheiros?",
         link: "docs/corretoras/interactivebrokers",
+      },
+    ],
+  },
+  {
+    name: "XTB",
+    logo: "/img/brokers/xtb.png",
+    active: true,
+    visible: true,
+    beta: true,
+    docs: [
+      {
+        message: "Não sabes onde encontrar os ficheiros?",
+        link: "docs/corretoras/xtb",
       },
     ],
   },
@@ -478,7 +485,7 @@ export default function LiveDemoForm() {
                   }}
                 >
                   {broker.beta && <div className={styles.betaTag}>BETA</div>}
-                  
+
                   {broker.active === false && (
                     <div className={clsx(styles.contentStep1BrokerInactive)}>
                       🚧 Em breve
@@ -526,6 +533,9 @@ export default function LiveDemoForm() {
             id={props.id}
             setFiscalData={setGainsAndDividends}
           />
+        )}
+        {broker.name === "XTB" && (
+          <FilesXTB id={props.id} setFiscalData={setGainsAndDividends} />
         )}
       </>
     );

@@ -177,7 +177,9 @@ class FIFOCalculator implements CapitalGainsCalculator {
 
     match(transactions: Transaction[]): MatchedTransaction[] {
         const buyTransactions = transactions.filter((t) => t.type === "Buy");
+        console.log("[MATCH] Buy transactions: " + JSON.stringify(buyTransactions));
         const sellTransactions = transactions.filter((t) => t.type === "Sell");
+        console.log("[MATCH] Sell transactions: " + JSON.stringify(sellTransactions));
 
         // Order by the oldest to the most recent
         buyTransactions.sort(
@@ -189,39 +191,89 @@ class FIFOCalculator implements CapitalGainsCalculator {
 
         const compensations: MatchedTransaction[] = [];
         for (let sell of sellTransactions) {
+            console.log("Processing sell transaction: " + JSON.stringify(sell));
             let remainingSharesForCompensation = sell.shares!!;
 
-            for (let buy of buyTransactions) {
-                if (buy.asset!!.isin !== sell.asset!!.isin) continue;
-                // Verificar se a compra ocorreu depois da venda, nesse caso, ignorar
-                if (buy.date.toMillis() > sell.date.toMillis()) continue;
+            if (sell.matches && sell.matches.length > 0) {
+                console.log("Sell transaction has predefined matches: " + JSON.stringify(sell.matches));
+                for (let buy of sell.matches) {
+                    console.log("Processing buy transaction: " + JSON.stringify(buy));
+                    if (buy.asset!!.isin && sell.asset!!.isin && buy.asset!!.isin !== sell.asset!!.isin) continue;
+                    if (buy.asset!!.ticker && sell.asset!!.ticker && buy.asset!!.ticker !== sell.asset!!.ticker) continue;
+                    // Verificar se a compra ocorreu depois da venda, nesse caso, ignorar
+                    if (buy.date.toMillis() > sell.date.toMillis()) continue;
 
-                // Calcular nº de ações da compra já compensada anteriormente
-                const alreadyCompensated = compensations
-                    .filter((c) => transactionEquals(c.buy, buy))
-                    .reduce((sum, c) => sum + c.shares, 0);
+                    // Calcular nº de ações da compra já compensada anteriormente
+                    // const alreadyCompensated = compensations
+                    //     .filter((c) => transactionEquals(c.buy, buy))
+                    //     .reduce((sum, c) => sum + c.shares, 0);
+                    const alreadyCompensated = compensations.filter((c) => c.buy.id === buy.id)
+                        .reduce((sum, c) => sum + c.shares, 0);
 
-                // Calcular nº de ações da compra que faltam compensar
-                const availableShares = buy.shares!! - alreadyCompensated;
-                if (availableShares < Number.EPSILON) continue;
+                    // Calcular nº de ações da compra que faltam compensar
+                    const availableShares = buy.shares!! - alreadyCompensated;
+                    if (availableShares < Number.EPSILON) continue;
 
-                // Calcular nº de ações da venda que podem ser compensadas
-                const sharesToCompensate = Math.min(
-                    availableShares,
-                    remainingSharesForCompensation
-                );
-                remainingSharesForCompensation -= sharesToCompensate;
+                    // Calcular nº de ações da venda que podem ser compensadas
+                    const sharesToCompensate = Math.min(
+                        availableShares,
+                        remainingSharesForCompensation
+                    );
+                    remainingSharesForCompensation -= sharesToCompensate;
 
-                compensations.push({
-                    buy: buy,
-                    sell: sell,
-                    shares: sharesToCompensate,
-                });
+                    compensations.push({
+                        buy: buy,
+                        sell: sell,
+                        shares: sharesToCompensate,
+                    });
+                    console.log(`Matched ${sharesToCompensate} shares from buy transaction on ${buy.date.toISODate()} with sell transaction on ${sell.date.toISODate()}`);
 
-                // Verificar se todas as ações da venda foram compensadas
-                if (remainingSharesForCompensation < Number.EPSILON) break;
+                    // Verificar se todas as ações da venda foram compensadas
+                    if (remainingSharesForCompensation < Number.EPSILON) break;
+                }
+            } else {
+                console.log("Sell transaction has no predefined matches, applying FIFO matching");
+                for (let buy of buyTransactions) {
+                    console.log("Processing buy transaction: " + JSON.stringify(buy));
+                    if (buy.asset!!.isin && sell.asset!!.isin && buy.asset!!.isin !== sell.asset!!.isin) continue;
+                    if (buy.asset!!.ticker && sell.asset!!.ticker && buy.asset!!.ticker !== sell.asset!!.ticker) continue;
+                    // Verificar se a compra ocorreu depois da venda, nesse caso, ignorar
+                    if (buy.date.toMillis() > sell.date.toMillis()) continue;
+
+                    // Calcular nº de ações da compra já compensada anteriormente
+                    // const alreadyCompensated = compensations
+                    //     .filter((c) => transactionEquals(c.buy, buy))
+                    //     .reduce((sum, c) => sum + c.shares, 0);
+                    const alreadyCompensated = compensations.filter((c) => c.buy.id === buy.id)
+                        .reduce((sum, c) => sum + c.shares, 0);
+
+                    // Calcular nº de ações da compra que faltam compensar
+                    const availableShares = buy.shares!! - alreadyCompensated;
+                    if (availableShares < Number.EPSILON) continue;
+
+                    // Calcular nº de ações da venda que podem ser compensadas
+                    const sharesToCompensate = Math.min(
+                        availableShares,
+                        remainingSharesForCompensation
+                    );
+                    remainingSharesForCompensation -= sharesToCompensate;
+
+                    compensations.push({
+                        buy: buy,
+                        sell: sell,
+                        shares: sharesToCompensate,
+                    });
+                    console.log(`Matched ${sharesToCompensate} shares from buy transaction on ${buy.date.toISODate()} with sell transaction on ${sell.date.toISODate()}`);
+
+                    // Verificar se todas as ações da venda foram compensadas
+                    if (remainingSharesForCompensation < Number.EPSILON) break;
+                }
             }
+
+
         }
+
+        console.log("Compensations: " + JSON.stringify(compensations));
 
         return compensations;
 

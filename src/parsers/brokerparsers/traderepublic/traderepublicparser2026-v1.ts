@@ -118,6 +118,7 @@ class TradeRepublicParser2026_v1 implements BrokerParser {
             }
 
             const transaction: Transaction = {
+                id: transactions.length + 1,
                 date: utcDate,
                 type: type,
                 asset: new Asset(name, ticker, isin, assetCurrency, assetType),

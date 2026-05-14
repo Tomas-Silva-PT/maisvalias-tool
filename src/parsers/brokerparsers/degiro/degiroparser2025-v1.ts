@@ -15,7 +15,7 @@ class DegiroParser2025_v1 implements IDegiroParser {
         this.accountResume = records[0].rows;
     }
 
-    parseCapitalGain(record: BrokerRecordRow): Transaction | null {
+    parseCapitalGain(record: BrokerRecordRow, transactions: Transaction[]): Transaction | null {
         let date = record[0][1];
         let time = record[1][1];
         let productName = record[2][1];
@@ -56,6 +56,7 @@ class DegiroParser2025_v1 implements IDegiroParser {
 
 
         const transaction: Transaction = {
+            id: transactions.length + 1,
             date: utcDate,
             type: type,
             asset: new Asset(productName, "", isin, assetCurrency),
@@ -71,7 +72,7 @@ class DegiroParser2025_v1 implements IDegiroParser {
         return null;
     }
 
-    parseDividend(record: BrokerRecordRow): Transaction | null {
+    parseDividend(record: BrokerRecordRow, transactions: Transaction[]): Transaction | null {
         let date = record[0][1]; // Dutch Date
         let time = record[1][1]; // Dutch Time
         let dateValue = record[2][1];
@@ -116,6 +117,7 @@ class DegiroParser2025_v1 implements IDegiroParser {
         }
 
         const transaction: Transaction = {
+            id: transactions.length + 1,
             date: utcDate,
             type: type,
             asset: new Asset(product, "", isin, changeCurrency),
@@ -131,7 +133,7 @@ class DegiroParser2025_v1 implements IDegiroParser {
         return null;
     }
 
-    parseInterest(record: BrokerRecordRow): Transaction | null {
+    parseInterest(record: BrokerRecordRow, transactions: Transaction[]): Transaction | null {
         return null;
     }
 
@@ -144,13 +146,13 @@ class DegiroParser2025_v1 implements IDegiroParser {
 
         const section = sections[0];
         section.rows.forEach((record) => {
-            let transaction = this.parseCapitalGain(record);
+            let transaction = this.parseCapitalGain(record, transactions);
             if (transaction) transactions.push(transaction);
         });
 
         // Adicionar dividendos
         this.accountResume.forEach((record) => {
-            let transaction = this.parseDividend(record);
+            let transaction = this.parseDividend(record, transactions);
             if (transaction) transactions.push(transaction);
 
         });

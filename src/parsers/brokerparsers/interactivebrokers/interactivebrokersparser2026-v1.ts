@@ -39,27 +39,27 @@ class InteractiveBrokersParser2026_v1 implements IInteractiveBrokersParser {
     // Obter a secção correspondente às transações
     const transactionsSection = records.find(section => section.rows[0][0][0] === "Trades");
     if (transactionsSection) {
-      const parsedTransactions = this.parseTransactionsSection(transactionsSection!, assetsSection);
+      const parsedTransactions = this.parseTransactionsSection(transactionsSection!, transactions, assetsSection);
       transactions.push(...parsedTransactions);
     }
 
     // Obter a secção correspondente a dividendos
     const dividendsSection = records.find(section => section.rows[0][0][0] === "Dividends");
     if (dividendsSection) {
-      const parsedDividends = this.parseDividendsSection(dividendsSection!, assetsSection);
+      const parsedDividends = this.parseDividendsSection(dividendsSection!, transactions, assetsSection);
       transactions.push(...parsedDividends);
     }
     // Obter a secção correspondente a juros
     const interestsSection = records.find(section => section.rows[0][0][0] === "Interest");
     if (interestsSection) {
-      const parsedInterests = this.parseInterestSection(interestsSection!);
+      const parsedInterests = this.parseInterestSection(interestsSection!, transactions);
       transactions.push(...parsedInterests);
     }
 
     return transactions;
   }
 
-  private parseTransactionsSection(section: BrokerSection, assetsSection?: BrokerSection): Transaction[] {
+  private parseTransactionsSection(section: BrokerSection, existingTransactions: Transaction[], assetsSection?: BrokerSection): Transaction[] {
     const transactions: Transaction[] = [];
     // console.log("Parsing transactions section: ", JSON.stringify(section));
 
@@ -95,6 +95,7 @@ class InteractiveBrokersParser2026_v1 implements IInteractiveBrokersParser {
 
 
       const transaction: Transaction = {
+        id: existingTransactions.length + transactions.length + 1,
         date: utcDate,
         type: type,
         asset: new Asset("", ticker, isin, assetCurrency),
@@ -113,7 +114,7 @@ class InteractiveBrokersParser2026_v1 implements IInteractiveBrokersParser {
     return transactions;
   }
 
-  private parseDividendsSection(section: BrokerSection, assetsSection?: BrokerSection): Transaction[] {
+  private parseDividendsSection(section: BrokerSection, existingTransactions: Transaction[], assetsSection?: BrokerSection): Transaction[] {
     const transactions: Transaction[] = [];
     // console.log("Parsing dividends section: ", JSON.stringify(section));
 
@@ -140,6 +141,7 @@ class InteractiveBrokersParser2026_v1 implements IInteractiveBrokersParser {
 
 
       const transaction: Transaction = {
+        id: existingTransactions.length + transactions.length + 1,
         date: utcDate,
         type: type,
         asset: new Asset("", ticker, isin, assetCurrency),
@@ -158,7 +160,7 @@ class InteractiveBrokersParser2026_v1 implements IInteractiveBrokersParser {
     return transactions;
   }
 
-  private parseInterestSection(section: BrokerSection): Transaction[] {
+  private parseInterestSection(section: BrokerSection, existingTransactions: Transaction[]): Transaction[] {
     const transactions: Transaction[] = [];
     // console.log("Parsing interest section: ", JSON.stringify(section));
 
@@ -182,6 +184,7 @@ class InteractiveBrokersParser2026_v1 implements IInteractiveBrokersParser {
       // fees.push(fee);
 
       const transaction: Transaction = {
+        id: existingTransactions.length + transactions.length + 1,
         date: utcDate,
         type: type,
         asset: undefined,

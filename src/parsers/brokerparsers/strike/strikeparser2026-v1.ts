@@ -82,6 +82,7 @@ class StrikeParser2026_v1 implements IStrikeParser {
 
 
       const transaction: Transaction = {
+        id: transactions.length + 1,
         date: utcDate,
         type: type,
         asset: new Asset("Bitcoin", ticker, isin, assetCurrency),

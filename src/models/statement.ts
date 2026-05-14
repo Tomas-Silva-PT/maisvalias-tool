@@ -183,10 +183,10 @@ class Statement {
     }
 
     addTransaction(transaction: Transaction): void {
-        if (!this.transactions.some((t) => transactionEquals(t, transaction) )) {
+        // if (!this.transactions.some((t) => transactionEquals(t, transaction) )) {
             this.transactions.push(transaction);
             this.sortTransactions();
-        }
+        // }
     }
 
     addTransactions(transactions: Transaction[]): void {

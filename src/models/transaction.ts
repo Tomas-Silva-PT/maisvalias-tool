@@ -7,6 +7,7 @@ import { DateTime } from "luxon";
 type TransactionType = "Buy" | "Sell" | "Dividend" | "Interest";
 
 type Transaction = {
+    id: number,
     date: DateTime;
     type: TransactionType;
     description?: string;
@@ -21,6 +22,7 @@ type Transaction = {
     taxes?: Tax[];
     fees?: Fee[];
     exchangeRate?: number;
+    matches?: Transaction[]; // campo específico para o caso de corretoras como a XTB que fornecem diretamente o match entre a compra e a venda, para evitar que sejam feitas suposições no processo de matching. Se este campo estiver preenchido, o processo de matching irá simplesmente usar as transações indicadas neste campo como correspondentes, sem fazer qualquer tipo de verificação adicional. Se este campo não estiver preenchido, o processo de matching irá tentar encontrar as correspondências com base nas regras definidas (por exemplo, FIFO).
 }
 
 function transactionEquals(t1: Transaction, t2: Transaction): boolean {

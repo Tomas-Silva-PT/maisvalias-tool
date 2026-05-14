@@ -115,6 +115,7 @@ class Trading212Parser2025_v1 implements ITrading212Parser {
       let exchangeRate = 1 / parseFloat(record["Exchange rate"]);
 
       const transaction: Transaction = {
+        id: transactions.length + 1,
         date: utcDate,
         type: type,
         asset: new Asset(name, ticker, isin, assetCurrency),

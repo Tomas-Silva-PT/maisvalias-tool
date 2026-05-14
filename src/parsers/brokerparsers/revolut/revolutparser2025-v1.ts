@@ -94,7 +94,7 @@ class RevolutParser2025_v1 implements IRevolutParser {
     oRecords.forEach((record) => {
       const parser = RevolutParserFactory.createParser(record);
       if (!parser) return;
-      const transaction = parser.parse(record);
+      const transaction = parser.parse(record, transactions);
       if (!transaction) return;
 
       // Fill in the ISIN for the transaction's asset, if it exists in the loaded ISINs
@@ -176,7 +176,7 @@ class RevolutParser2025_v1 implements IRevolutParser {
 
 
 class RevolutCapitalGainAndDividendParser {
-  parse(record: BrokerRecord): Transaction | undefined {
+  parse(record: BrokerRecord, transactions: Transaction[]): Transaction | undefined {
     let transaction: Transaction;
     if (!record["Date"]) return;
 
@@ -218,6 +218,7 @@ class RevolutCapitalGainAndDividendParser {
     // if (isin) {
 
     transaction = {
+      id: transactions.length + 1,
       date: utcDate,
       type: type,
       asset: new Asset("", ticker, "", assetCurrency), // O ISIN será preenchido posteriormente, após a correspondência com a lista de ISINs carregada
@@ -235,7 +236,7 @@ class RevolutCapitalGainAndDividendParser {
 }
 
 class RevolutInterestGainParser {
-  parse(record: BrokerRecord): Transaction | undefined {
+  parse(record: BrokerRecord, transactions: Transaction[]): Transaction | undefined {
     // console.log("Parsing record: " + JSON.stringify(record));
     let transaction: Transaction;
     if (!record["Data"] || !record["Entrada de dinheiro"]) return;
@@ -257,6 +258,7 @@ class RevolutInterestGainParser {
     const amountCurrency = "EUR";
 
     transaction = {
+      id: transactions.length + 1,
       date: utcDate,
       type: type,
       asset: undefined, // O ISIN será preenchido posteriormente, após a correspondência com a lista de ISINs carregada
