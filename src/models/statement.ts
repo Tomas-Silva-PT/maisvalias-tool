@@ -167,7 +167,7 @@ class Statement {
     }
 
     fetchCountries() {
-        const filteredTransactions = this.transactions.filter((transaction) => transaction.asset?.isin);
+        const filteredTransactions = this.transactions.filter((transaction) => transaction.asset?.isin && !transaction.asset?.countryDomiciled);
         for (let transaction of filteredTransactions) {
             const isin = transaction.asset!!.isin;
             transaction.asset!!.countryDomiciled = new Country(isin.substring(0, 2));

@@ -3,28 +3,27 @@ import styles from "./styles.module.css";
 import React, { useEffect, useState } from "react";
 import { ArrowRight, Upload, X } from "lucide-react";
 
-import { XTBParser } from "../../maisvalias-tool/parsers/brokerparsers/xtb/xtbparser.js";
+import { LightYearParser } from "../../maisvalias-tool/parsers/brokerparsers/lightyear/lightyearparser.js";
 
 import ErrorPopup from "@site/src/components/ErrorPopup";
 import { ParserEngine } from "../../maisvalias-tool/parsers/parserengine.js";
 import { CSVParser } from "../../maisvalias-tool/parsers/fileparsers/csvparser.js";
-import { ExcelParser } from "../../maisvalias-tool/parsers/fileparsers/excelparser.js";
 
 const broker = [
   {
-    name: "XTB",
-    logo: "/img/brokers/xtb.png",
+    name: "LightYear",
+    logo: "/img/brokers/lightyear.png",
     active: true,
     docs: [
       {
         message: "Não sabes onde encontrar os ficheiros?",
-        link: "docs/corretoras/xtb",
+        link: "docs/corretoras/lightyear",
       },
     ],
   },
 ];
 
-export default function FilesXTB({ id, setFiscalData }) {
+export default function FilesLightYear({ id, setFiscalData }) {
   const [files, setFiles] = useState([]);
   const [errorType, setErrorType] = useState(null);
   const [error, setError] = useState(null);
@@ -69,10 +68,7 @@ export default function FilesXTB({ id, setFiscalData }) {
           </p>
           <p>
             Se o problema persistir,{" "}
-            <a
-              href="/maisvalias-tool/about#como-nos-contactar "
-              target="_blank"
-            >
+            <a href="/maisvalias-tool/about#como-nos-contactar " target="_blank">
               contacta-nos
             </a>
             .
@@ -90,10 +86,7 @@ export default function FilesXTB({ id, setFiscalData }) {
           <p>Por favor tenta novamente mais tarde.</p>
           <p>
             Se o problema persistir,{" "}
-            <a
-              href="/maisvalias-tool/about#como-nos-contactar "
-              target="_blank"
-            >
+            <a href="/maisvalias-tool/about#como-nos-contactar " target="_blank">
               contacta-nos
             </a>
             .
@@ -148,32 +141,14 @@ export default function FilesXTB({ id, setFiscalData }) {
 
     if (files.length === 0 || !broker) return;
 
-    const brokerParser = new XTBParser();
-    const csvParser = new CSVParser();
-    const excelParser = new ExcelParser();
-
-    
+    const brokerParser = new LightYearParser();
+    const fileParser = new CSVParser();
+    const parserEngine = new ParserEngine(fileParser, brokerParser);
     // const statement = new Statement([]);
 
     const filePromises = files.map((file) => {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
-
-        // Escolher o parser consoante a extensão
-        const extension = file.name.split(".").pop().toLowerCase();
-        let fileParser;
-
-        if (extension === "csv") {
-          fileParser = csvParser;
-        } else if (extension === "xlsx") {
-          fileParser = excelParser;
-        } else {
-          reject(new Error(`Formato não suportado: ${extension}`));
-          return;
-        }
-
-        const parserEngine = new ParserEngine(fileParser, brokerParser);
-
         reader.onload = async (e) => {
           const data = e.target.result;
           try {
@@ -188,12 +163,7 @@ export default function FilesXTB({ id, setFiscalData }) {
           reject(e.target.error);
         };
 
-        // Ler como texto para CSV, como ArrayBuffer para Excel
-      if (extension === "csv") {
         reader.readAsText(file);
-      } else {
-        reader.readAsArrayBuffer(file);
-      }
       });
     });
 
@@ -209,7 +179,7 @@ export default function FilesXTB({ id, setFiscalData }) {
         `Duração do processamento dos ficheiros: ${(
           (end - start) /
           1000
-        ).toFixed(3)} seconds`,
+        ).toFixed(3)} seconds`
       );
       return;
     }
@@ -227,8 +197,8 @@ export default function FilesXTB({ id, setFiscalData }) {
     const end = performance.now();
     console.log(
       `Duração do processamento dos ficheiros: ${((end - start) / 1000).toFixed(
-        3,
-      )} segundos`,
+        3
+      )} segundos`
     );
   }
 
@@ -241,7 +211,7 @@ export default function FilesXTB({ id, setFiscalData }) {
           className={clsx(styles.contentStep2UploadInput)}
           id="file-upload"
           type="file"
-          accept=".xlsx"
+          accept=".csv"
           onChange={onFileUpload}
           multiple
         />

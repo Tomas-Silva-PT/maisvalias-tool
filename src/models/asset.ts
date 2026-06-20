@@ -9,12 +9,13 @@ class Asset {
     assetType: string;
     currency: string;
 
-    constructor(name: string, ticker: string, isin: string, currency: string, assetType: AssetType = "") {
+    constructor(name: string, ticker: string, isin: string, currency: string, assetType: AssetType = "", countryDomiciled?: Country) {
         this.name = name;
         this.ticker = ticker;
         this.isin = isin;
         this.assetType = assetType;
         this.currency = currency;
+        this.countryDomiciled = countryDomiciled;
     }
 
     toString(): string {
