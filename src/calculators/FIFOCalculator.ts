@@ -191,13 +191,13 @@ class FIFOCalculator implements CapitalGainsCalculator {
 
         const compensations: MatchedTransaction[] = [];
         for (let sell of sellTransactions) {
-            console.log("Processing sell transaction: " + JSON.stringify(sell));
+            // console.log("Processing sell transaction: " + JSON.stringify(sell));
             let remainingSharesForCompensation = sell.shares!!;
 
             if (sell.matches && sell.matches.length > 0) {
-                console.log("Sell transaction has predefined matches: " + JSON.stringify(sell.matches));
+                // console.log("Sell transaction has predefined matches: " + JSON.stringify(sell.matches));
                 for (let buy of sell.matches) {
-                    console.log("Processing buy transaction: " + JSON.stringify(buy));
+                    // console.log("Processing buy transaction: " + JSON.stringify(buy));
                     if (buy.asset!!.isin && sell.asset!!.isin && buy.asset!!.isin !== sell.asset!!.isin) continue;
                     if (buy.asset!!.ticker && sell.asset!!.ticker && buy.asset!!.ticker !== sell.asset!!.ticker) continue;
                     // Verificar se a compra ocorreu depois da venda, nesse caso, ignorar
@@ -226,15 +226,15 @@ class FIFOCalculator implements CapitalGainsCalculator {
                         sell: sell,
                         shares: sharesToCompensate,
                     });
-                    console.log(`Matched ${sharesToCompensate} shares from buy transaction on ${buy.date.toISODate()} with sell transaction on ${sell.date.toISODate()}`);
+                    // console.log(`Matched ${sharesToCompensate} shares from buy transaction on ${buy.date.toISODate()} with sell transaction on ${sell.date.toISODate()}`);
 
                     // Verificar se todas as ações da venda foram compensadas
                     if (remainingSharesForCompensation < Number.EPSILON) break;
                 }
             } else {
-                console.log("Sell transaction has no predefined matches, applying FIFO matching");
+                // console.log("Sell transaction has no predefined matches, applying FIFO matching");
                 for (let buy of buyTransactions) {
-                    console.log("Processing buy transaction: " + JSON.stringify(buy));
+                    // console.log("Processing buy transaction: " + JSON.stringify(buy));
                     if (buy.asset!!.isin && sell.asset!!.isin && buy.asset!!.isin !== sell.asset!!.isin) continue;
                     if (buy.asset!!.ticker && sell.asset!!.ticker && buy.asset!!.ticker !== sell.asset!!.ticker) continue;
                     // Verificar se a compra ocorreu depois da venda, nesse caso, ignorar
@@ -263,7 +263,7 @@ class FIFOCalculator implements CapitalGainsCalculator {
                         sell: sell,
                         shares: sharesToCompensate,
                     });
-                    console.log(`Matched ${sharesToCompensate} shares from buy transaction on ${buy.date.toISODate()} with sell transaction on ${sell.date.toISODate()}`);
+                    // console.log(`Matched ${sharesToCompensate} shares from buy transaction on ${buy.date.toISODate()} with sell transaction on ${sell.date.toISODate()}`);
 
                     // Verificar se todas as ações da venda foram compensadas
                     if (remainingSharesForCompensation < Number.EPSILON) break;
@@ -273,7 +273,7 @@ class FIFOCalculator implements CapitalGainsCalculator {
 
         }
 
-        console.log("Compensations: " + JSON.stringify(compensations));
+        // console.log("Compensations: " + JSON.stringify(compensations));
 
         return compensations;
 

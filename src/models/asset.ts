@@ -1,5 +1,5 @@
 import { Country } from "./country.js";
-import { YahooFinance } from "./yahoofinance.js";
+import { YahooFinance } from "./apis/yahoofinance.js";
 
 class Asset {
     name: string;
@@ -31,7 +31,7 @@ class Asset {
         let assetTypes : Record<string, string> = {};
 
         try {
-            assetTypes = await YahooFinance.getAssetTypeBatch(isins);
+            assetTypes = await new YahooFinance().getAssetTypeBatch(isins);
         } catch (error) {
             console.error("Erro ao buscar dados do ativo:", error);
         }
