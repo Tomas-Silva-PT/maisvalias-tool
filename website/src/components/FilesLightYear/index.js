@@ -11,7 +11,7 @@ import { CSVParser } from "../../maisvalias-tool/parsers/fileparsers/csvparser.j
 
 const broker = [
   {
-    name: "LightYear",
+    name: "Lightyear",
     logo: "/img/brokers/lightyear.png",
     active: true,
     docs: [

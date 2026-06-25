@@ -153,7 +153,7 @@ const brokers = [
     ],
   },
   {
-    name: "LightYear",
+    name: "Lightyear",
     logo: "/img/brokers/lightyear.png",
     active: true,
     visible: true,
@@ -551,7 +551,7 @@ export default function LiveDemoForm() {
         {broker.name === "XTB" && (
           <FilesXTB id={props.id} setFiscalData={setGainsAndDividends} />
         )}
-        {broker.name === "LightYear" && (
+        {broker.name === "Lightyear" && (
           <FilesLightYear id={props.id} setFiscalData={setGainsAndDividends} />
         )}
       </>
