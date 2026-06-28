@@ -40,14 +40,14 @@ class Statement {
 
     async fetchExchangeRates() {
         const exchangeRatesToFetch: ExchangeRateToFetch[] = [];
-        const transactionsWithoutExchangeRate : Transaction[] = [];
-        let taxesWithoutExchangeRate : Record<string, Tax>[] = [];
-        let feesWithoutExchangeRate : Record<string, Fee>[] = [];
+        const transactionsWithoutExchangeRate: Transaction[] = [];
+        let taxesWithoutExchangeRate: Record<string, Tax>[] = [];
+        let feesWithoutExchangeRate: Record<string, Fee>[] = [];
 
         for (const transaction of this.transactions) {
             const { currency, exchangeRate, date, taxes = [], fees = [] } = transaction;
 
-            let currenciesToCheck : string[] = [];
+            let currenciesToCheck: string[] = [];
 
             if (currency !== this.baseCurrency && (!exchangeRate || exchangeRate === 0 || exchangeRate === 1)) {
                 currenciesToCheck.push(currency);
@@ -60,7 +60,7 @@ class Statement {
                     currenciesToCheck.push(tax.currency);
                     let key = transaction.date;
                     let value = tax;
-                    taxesWithoutExchangeRate.push({[key.toISODate()!]: value});
+                    taxesWithoutExchangeRate.push({ [key.toISODate()!]: value });
                 }
             }
 
@@ -70,7 +70,7 @@ class Statement {
                     currenciesToCheck.push(fee.currency);
                     let key = transaction.date;
                     let value = fee;
-                    feesWithoutExchangeRate.push({[key.toISODate()!]: value});
+                    feesWithoutExchangeRate.push({ [key.toISODate()!]: value });
                 }
             }
 
@@ -94,29 +94,72 @@ class Statement {
         console.log(`[START] Fetching exchange rate...`);
         const start = performance.now();
 
+        const yf = new YahooFinance();
+
         for (const rateToFetch of exchangeRatesToFetch) {
-            const exchangeRates : ExchangeRate[] = await Currency.getExchangeRates(rateToFetch.currency, this.baseCurrency, rateToFetch.dates);
+            const exchangeRates: ExchangeRate[] = await Currency.getExchangeRates(rateToFetch.currency, this.baseCurrency, rateToFetch.dates);
             //  console.log("Exchange Rates: ", JSON.stringify(exchangeRates));
-            
-            transactionsWithoutExchangeRate.filter((transaction) => transaction.currency === rateToFetch.currency).forEach((transaction) => {
-                // console.log("Date transaction: ", transaction.date);
-                transaction.exchangeRate = exchangeRates.find((rate) => new YahooFinance().adjustToBusinessDay(rate.date).equals(new YahooFinance().adjustToBusinessDay(transaction.date)))?.value;
-            });
+
+            // transactionsWithoutExchangeRate.filter((transaction) => transaction.currency === rateToFetch.currency).forEach((transaction) => {
+            //     console.log("Date transaction: ", transaction.date);
+            //     transaction.exchangeRate = exchangeRates.find((rate) => new YahooFinance().adjustToBusinessDay(rate.date).equals(new YahooFinance().adjustToBusinessDay(transaction.date)))?.value;
+            //     console.log("Exchange Rate: ", transaction.exchangeRate);
+            // });
+            transactionsWithoutExchangeRate
+                .filter((transaction) => transaction.currency === rateToFetch.currency)
+                .forEach((transaction) => {
+
+                    const adjustedTransactionDate = yf.adjustToBusinessDay(transaction.date);
+
+                    // console.log("\n==============================");
+                    // console.log(`Transaction ${transaction.currency}`);
+                    // console.log(`Original transaction date : ${transaction.date.toISO()}`);
+                    // console.log(`Adjusted transaction date : ${adjustedTransactionDate.toISODate()}`);
+
+                    // console.log("Available exchange rates:");
+                    // exchangeRates.forEach((rate) => {
+                    //     console.log(
+                    //         `  ${rate.date.toISODate()} -> ${yf.adjustToBusinessDay(rate.date).toISODate()} = ${rate.value}`
+                    //     );
+                    // });
+
+                    const match = exchangeRates.find((rate) => {
+                        const adjustedRateDate = yf.adjustToBusinessDay(rate.date);
+
+                        const equal = adjustedRateDate.toISODate() === yf.adjustToBusinessDay(adjustedTransactionDate).toISODate();
+
+                        // console.log(
+                        //     `Comparing ${adjustedRateDate.toISODate()} == ${adjustedTransactionDate.toISODate()} -> ${equal}`
+                        // );
+
+                        return equal;
+                    });
+
+                    // if (!match) {
+                    //     console.error("❌ No exchange rate found!");
+                    // } else {
+                    //     console.log(
+                    //         `✅ Match found: ${match.date.toISODate()} -> ${match.value}`
+                    //     );
+                    // }
+
+                    transaction.exchangeRate = match?.value;
+                });
             // console.log("Adding exchange rates to taxes");
             taxesWithoutExchangeRate.filter((tax) => Object.values(tax)[0].currency === rateToFetch.currency).forEach((tax) => {
                 let taxObject = Object.values(tax)[0];
                 let date = Object.keys(tax)[0];
                 // console.log("Date tax: ", date);
-                let trueExchangeRate = exchangeRates.find((rate) => new YahooFinance().adjustToBusinessDay(rate.date).equals(new YahooFinance().adjustToBusinessDay(DateTime.fromISO(date))));
+                let trueExchangeRate = exchangeRates.find((rate) => yf.adjustToBusinessDay(rate.date).equals(yf.adjustToBusinessDay(DateTime.fromISO(date))));
                 // console.log("True Exchange Rate: ", trueExchangeRate);
                 taxObject.exchangeRate = trueExchangeRate?.value;
             });
-            
+
             feesWithoutExchangeRate.filter((fee) => Object.values(fee)[0].currency === rateToFetch.currency).forEach((fee) => {
                 let feeObject = Object.values(fee)[0];
                 let date = Object.keys(fee)[0];
                 // console.log("Date fee: ", date);
-                let trueExchangeRate = exchangeRates.find((rate) => new YahooFinance().adjustToBusinessDay(rate.date).equals(new YahooFinance().adjustToBusinessDay(DateTime.fromISO(date))));
+                let trueExchangeRate = exchangeRates.find((rate) => yf.adjustToBusinessDay(rate.date).equals(yf.adjustToBusinessDay(DateTime.fromISO(date))));
                 // console.log("True Exchange Rate: ", trueExchangeRate);
                 feeObject.exchangeRate = trueExchangeRate?.value;
             });
@@ -125,28 +168,28 @@ class Statement {
         const end = performance.now();
         console.log(`[END] Fetching exchange rate... (took ${((end - start) / 1000).toFixed(3)} seconds)`);
 
-
+        console.log("Transactions without exchange rate:" + JSON.stringify(transactionsWithoutExchangeRate));
         // console.log("Taxes without exchange rate:" + JSON.stringify(taxesWithoutExchangeRate));
 
         // console.log("Exchange Rates Found");
     }
 
     async fetchAssetTypes() {
-        const isins : string[] = [];
+        const isins: string[] = [];
         const filteredTransactions = this.transactions.filter((transaction) => transaction.asset && transaction.asset.assetType === "");
 
         for (let transaction of filteredTransactions) {
             const isin = transaction.asset!!.isin;
             const ticker = transaction.asset!!.ticker;
             if (isins.includes(isin) || isins.includes(ticker)) continue;
-            if(isin) isins.push(isin);
-            if(!isin && ticker) isins.push(ticker); // If no ISIN, use the ticker
+            if (isin) isins.push(isin);
+            if (!isin && ticker) isins.push(ticker); // If no ISIN, use the ticker
         }
 
         console.log("[START] Fetching asset types...");
         const start = performance.now();
         // console.log("ISINs/Tickers to fetch: ", JSON.stringify(isins));
-        const assetTypes : Record<string, string> = await Asset.getAssetTypes(isins);
+        const assetTypes: Record<string, string> = await Asset.getAssetTypes(isins);
 
         const end = performance.now();
         console.log(`[END] Fetching asset types... (took ${((end - start) / 1000).toFixed(3)} seconds)`);
@@ -184,8 +227,8 @@ class Statement {
 
     addTransaction(transaction: Transaction): void {
         // if (!this.transactions.some((t) => transactionEquals(t, transaction) )) {
-            this.transactions.push(transaction);
-            this.sortTransactions();
+        this.transactions.push(transaction);
+        this.sortTransactions();
         // }
     }
 

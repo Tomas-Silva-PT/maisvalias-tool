@@ -13,42 +13,42 @@ class BancoPortugal extends BaseApi implements ExchangeRateApi {
     }
 
     const intervals = this._splitIntervalByYear(dates);
-    console.log(`[BancoPortugal] Intervals (${intervals.length}): `, intervals);
-    console.log(`[BancoPortugal] Dates (${dates.length}): `, dates);
+    // console.log(`[BancoPortugal] Intervals (${intervals.length}): `, intervals);
+    // console.log(`[BancoPortugal] Dates (${dates.length}): `, dates);
 
-    if (intervals.length < dates.length) {
-      console.log("[BancoPortugal] Fetching exchange rates by intervals...");
+    // if (intervals.length < dates.length) {
+    //   console.log("[BancoPortugal] Fetching exchange rates by intervals...");
 
-      for (let interval of intervals) {
-        const from = this.adjustToBusinessDay(interval.from);
-        const to = this.adjustToBusinessDay(interval.to);
+    //   for (let interval of intervals) {
+    //     const from = this.adjustToBusinessDay(interval.from);
+    //     const to = this.adjustToBusinessDay(interval.to);
 
-        const fromString = from.toFormat("yyyyLLdd");
-        const toString = to.toFormat("yyyyLLdd");
+    //     const fromString = from.toFormat("yyyyLLdd");
+    //     const toString = to.toFormat("yyyyLLdd");
 
-        const url = `https://bpstat.bportugal.pt/data/v1/domains/29/datasets/23e0cdd56bddb4ad3016a9c3ad63a539/?series_ids=${series_id}&obs_since=${fromString}&obs_to=${toString}`;
-        const data = await this.get(url);
+    //     const url = `https://bpstat.bportugal.pt/data/v1/domains/29/datasets/23e0cdd56bddb4ad3016a9c3ad63a539/?series_ids=${series_id}&obs_since=${fromString}&obs_to=${toString}`;
+    //     const data = await this.get(url);
 
-        const d = data.dimension.reference_date.category.index;
-        const v = data.value;
+    //     const d = data.dimension.reference_date.category.index;
+    //     const v = data.value;
 
-        const rates = d.map((date: string, i: number) => ({
-          timestamp: DateTime.fromISO(date).toMillis() / 1000,
-          date: DateTime.fromISO(date),
-          value: 1 / v[i]
-        }));
+    //     const rates = d.map((date: string, i: number) => ({
+    //       timestamp: DateTime.fromISO(date).toMillis() / 1000,
+    //       date: DateTime.fromISO(date),
+    //       value: 1.0 / v[i]
+    //     }));
 
-        exchangeRates = exchangeRates.concat(rates);
-      }
+    //     exchangeRates = exchangeRates.concat(rates);
+    //   }
 
-    } else {
+    // } else {
       console.log("[BancoPortugal] Fetching exchange rates by specific dates...");
 
       for (const date of dates) {
         const rate = await this.fetchWithDateFallback(series_id, date);
         exchangeRates.push(rate);
       }
-    }
+    // }
 
     // Remove duplicados
     const unique = new Map<number, ExchangeRate>();
@@ -106,10 +106,12 @@ class BancoPortugal extends BaseApi implements ExchangeRateApi {
         throw new Error("No data");
       }
 
+      // console.log(`[BancoPortugal] Fetched exchange rate for ${dateString} ${dates[0]}: 1 ${seriesId} = ${1.0 / values[0]} EUR`);
+
       return {
         timestamp: DateTime.fromISO(dates[0]).toMillis() / 1000,
         date: DateTime.fromISO(dates[0]),
-        value: 1 / values[0]
+        value: 1.0 / values[0]
       };
 
     } catch (err) {

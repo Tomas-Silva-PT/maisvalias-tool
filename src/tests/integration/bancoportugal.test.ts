@@ -23,13 +23,13 @@ describe('BancoPortugal', () => {
         console.log("Exchange Rate timezone: ", new Date().getTimezoneOffset());
         expect(exchangeRate).toBeDefined();
         expect(exchangeRate.length).toBe(4);
-        expect(exchangeRate[0].date).toBe('2022-04-06');
+        expect(exchangeRate[0].date.toISODate()).toBe('2022-04-06');
         expect(Math.round(exchangeRate[0].value * 10000) / 10000).toBe(0.9155);
-        expect(exchangeRate[1].date).toBe('2023-03-01');
+        expect(exchangeRate[1].date.toISODate()).toBe('2023-03-01');
         expect(Math.round(exchangeRate[1].value * 10000) / 10000).toBe(0.936);
-        expect(exchangeRate[2].date).toBe('2024-08-08');
+        expect(exchangeRate[2].date.toISODate()).toBe('2024-08-08');
         expect(Math.round(exchangeRate[2].value * 10000) / 10000).toBe(0.9149);
-        expect(exchangeRate[3].date).toBe('2025-06-04');
+        expect(exchangeRate[3].date.toISODate()).toBe('2025-06-04');
         expect(Math.round(exchangeRate[3].value * 10000) / 10000).toBe(0.8784);
     });
 })

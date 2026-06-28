@@ -86,13 +86,13 @@ class BaseApi implements Api {
 
         if (weekday === 6) {
             // Saturday → go back 1 day (Friday)
-            console.log("Date is Saturday, adjusting to previous day (Friday)");
+            // console.log("Date is Saturday, adjusting to previous day (Friday)");
             return date.minus({ days: 1 });
         }
 
         if (weekday === 7) {
             // Sunday → go back 2 days (Friday)
-            console.log("Date is Sunday, adjusting to previous day (Friday)");
+            // console.log("Date is Sunday, adjusting to previous day (Friday)");
             return date.minus({ days: 2 });
         }
 

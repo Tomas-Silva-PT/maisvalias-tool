@@ -24,6 +24,9 @@ class CapitalGainsFormatter {
             const valorRealizacao = realizedValue;
             const despesasRealizacao = realizedTransaction.sellFees + realizedTransaction.sellTaxes;
 
+            // console.log("Exchange Rate Buy: ", buy.exchangeRate);
+            // console.log("Exchange Rate Sell: ", sell.exchangeRate);
+
             const capitalGain: CapitalGainForUser = {
                 transaction: realizedTransaction,
                 "Simbolo": name || ticker || isin || "Não encontrado",

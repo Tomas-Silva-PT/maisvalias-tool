@@ -16,7 +16,8 @@ class InterestGainsFormatter {
       const expenses = fees + taxes;
       const originalCurrency = transaction.transaction.currency;
       const exchangeRate = originalCurrency === "EUR" ? 1 : Math.round((transaction.transaction.exchangeRate || 1)*1000)/1000;
-
+      // console.log("Currency: ", originalCurrency);
+      // console.log("Exchange Rate (interest): ", exchangeRate);
 
       const balance = Math.round((amount - expenses) * 100) / 100;
 
