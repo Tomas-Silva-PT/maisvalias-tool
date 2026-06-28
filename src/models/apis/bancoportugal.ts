@@ -48,7 +48,7 @@ class BancoPortugal extends BaseApi implements ExchangeRateApi {
         const rate = await this.fetchWithDateFallback(series_id, date);
         exchangeRates.push(rate);
       }
-    // }
+    }
 
     // Remove duplicados
     const unique = new Map<number, ExchangeRate>();
