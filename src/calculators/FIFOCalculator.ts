@@ -27,6 +27,7 @@ class FIFOCalculator implements CapitalGainsCalculator {
                     sellTransaction.amount * sellTransaction.exchangeRate;
             } else {
                 // console.log(`[SELL] Fetching exchange rate used for ${sellTransaction.asset.ticker}`);
+                console.log(`Exchange rate ${sellTransaction.exchangeRate} not found for sell transaction, converting sell amount`);
                 sellNetAmount = await currencyConverter.convert(
                     sellTransaction.amount,
                     sellTransaction.currency,
@@ -44,6 +45,7 @@ class FIFOCalculator implements CapitalGainsCalculator {
                     } else if (fee.exchangeRate) {
                         sellFeesAmount += fee.amount * fee.exchangeRate;
                     } else {
+                        console.log(`Exchange rate ${fee.exchangeRate} not found for fee, converting sell fee`);
                         sellFeesAmount += await currencyConverter.convert(
                             fee.amount,
                             fee.currency,
@@ -66,6 +68,7 @@ class FIFOCalculator implements CapitalGainsCalculator {
                     } else if (tax.exchangeRate) {
                         sellTaxesAmount += tax.amount * tax.exchangeRate;
                     } else {
+                        console.log(`Exchange rate ${tax.exchangeRate} not found for tax, converting sell tax`);
                         sellTaxesAmount += await currencyConverter.convert(
                             tax.amount,
                             tax.currency,
@@ -98,6 +101,7 @@ class FIFOCalculator implements CapitalGainsCalculator {
                     buyTransaction.amount * buyTransaction.exchangeRate;
             } else {
                 // console.log(`[BUY] Fetching exchange rate used for ${buyTransaction.asset.ticker}`);
+                console.log(`Exchange rate ${buyTransaction.exchangeRate} not found for buy transaction, converting buy amount`);
                 buyNetAmount = await currencyConverter.convert(
                     buyTransaction.amount,
                     buyTransaction.currency,
@@ -115,6 +119,7 @@ class FIFOCalculator implements CapitalGainsCalculator {
                     } else if (fee.exchangeRate) {
                         buyFeesAmount += fee.amount * fee.exchangeRate;
                     } else {
+                        console.log(`Exchange rate ${fee.exchangeRate} not found for fee, converting buy fee`);
                         buyFeesAmount += await currencyConverter.convert(
                             fee.amount,
                             fee.currency,
@@ -137,6 +142,7 @@ class FIFOCalculator implements CapitalGainsCalculator {
                     } else if (tax.exchangeRate) {
                         buyTaxesAmount += tax.amount * tax.exchangeRate;
                     } else {
+                        console.log(`Exchange rate ${tax.exchangeRate} not found for tax, converting buy tax`);
                         buyTaxesAmount += await currencyConverter.convert(
                             tax.amount,
                             tax.currency,
@@ -177,9 +183,9 @@ class FIFOCalculator implements CapitalGainsCalculator {
 
     match(transactions: Transaction[]): MatchedTransaction[] {
         const buyTransactions = transactions.filter((t) => t.type === "Buy");
-        console.log("[MATCH] Buy transactions: " + JSON.stringify(buyTransactions));
+        // console.log("[MATCH] Buy transactions: " + JSON.stringify(buyTransactions));
         const sellTransactions = transactions.filter((t) => t.type === "Sell");
-        console.log("[MATCH] Sell transactions: " + JSON.stringify(sellTransactions));
+        // console.log("[MATCH] Sell transactions: " + JSON.stringify(sellTransactions));
 
         // Order by the oldest to the most recent
         buyTransactions.sort(

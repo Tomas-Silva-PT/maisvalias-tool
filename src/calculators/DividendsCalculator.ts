@@ -27,6 +27,7 @@ class DividendsCalculator implements IncomeCalculator {
                     } else if (fee.exchangeRate) {
                         totalFeesAmount += fee.amount * fee.exchangeRate;
                     } else {
+                        console.log(`Exchange rate ${fee.exchangeRate} not found for fee, converting dividend fee`);
                         console.log("Converting dividend fee");
                         totalFeesAmount += await currencyConverter.convert(
                             fee.amount,
@@ -44,6 +45,7 @@ class DividendsCalculator implements IncomeCalculator {
                     } else if (tax.exchangeRate) {
                         totalTaxAmount += tax.amount * tax.exchangeRate;
                     } else {
+                        console.log(`Exchange rate ${tax.exchangeRate} not found for tax, converting dividend tax`);
                         console.log("Converting dividend tax");
                         totalTaxAmount += await currencyConverter.convert(
                             tax.amount,
@@ -60,6 +62,7 @@ class DividendsCalculator implements IncomeCalculator {
             } else if (transaction.exchangeRate) {
                 totalNetAmount += transaction.amount * transaction.exchangeRate;
             } else {
+                console.log(`Exchange rate ${transaction.exchangeRate} not found for dividend, converting dividend amount`);
                 console.log("Converting dividend amount");
                 totalNetAmount += await currencyConverter.convert(
                     transaction.amount,

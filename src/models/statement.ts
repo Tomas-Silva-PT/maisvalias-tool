@@ -149,18 +149,18 @@ class Statement {
             taxesWithoutExchangeRate.filter((tax) => Object.values(tax)[0].currency === rateToFetch.currency).forEach((tax) => {
                 let taxObject = Object.values(tax)[0];
                 let date = Object.keys(tax)[0];
-                // console.log("Date tax: ", date);
+                console.log("Date tax: ", date);
                 let trueExchangeRate = exchangeRates.find((rate) => yf.adjustToBusinessDay(rate.date).equals(yf.adjustToBusinessDay(DateTime.fromISO(date))));
-                // console.log("True Exchange Rate: ", trueExchangeRate);
+                console.log("True Exchange Rate: ", trueExchangeRate);
                 taxObject.exchangeRate = trueExchangeRate?.value;
             });
 
             feesWithoutExchangeRate.filter((fee) => Object.values(fee)[0].currency === rateToFetch.currency).forEach((fee) => {
                 let feeObject = Object.values(fee)[0];
                 let date = Object.keys(fee)[0];
-                // console.log("Date fee: ", date);
+                console.log("Date fee: ", date);
                 let trueExchangeRate = exchangeRates.find((rate) => yf.adjustToBusinessDay(rate.date).equals(yf.adjustToBusinessDay(DateTime.fromISO(date))));
-                // console.log("True Exchange Rate: ", trueExchangeRate);
+                console.log("True Exchange Rate: ", trueExchangeRate);
                 feeObject.exchangeRate = trueExchangeRate?.value;
             });
         }
@@ -168,7 +168,6 @@ class Statement {
         const end = performance.now();
         console.log(`[END] Fetching exchange rate... (took ${((end - start) / 1000).toFixed(3)} seconds)`);
 
-        console.log("Transactions without exchange rate:" + JSON.stringify(transactionsWithoutExchangeRate));
         // console.log("Taxes without exchange rate:" + JSON.stringify(taxesWithoutExchangeRate));
 
         // console.log("Exchange Rates Found");

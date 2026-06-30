@@ -27,6 +27,7 @@ class InterestGainsCalculator implements IncomeCalculator {
                     } else if (fee.exchangeRate) {
                         totalFeesAmount += fee.amount * fee.exchangeRate;
                     } else {
+                        console.log(`Exchange rate ${fee.exchangeRate} not found for fee, converting interest fee`);
                         totalFeesAmount += await currencyConverter.convert(
                             fee.amount,
                             fee.currency,
@@ -43,6 +44,7 @@ class InterestGainsCalculator implements IncomeCalculator {
                     } else if (tax.exchangeRate) {
                         totalTaxAmount += tax.amount * tax.exchangeRate;
                     } else {
+                        console.log(`Exchange rate ${tax.exchangeRate} not found for tax, converting interest tax`);
                         totalTaxAmount += await currencyConverter.convert(
                             tax.amount,
                             tax.currency,
@@ -58,6 +60,7 @@ class InterestGainsCalculator implements IncomeCalculator {
             } else if (transaction.exchangeRate) {
                 totalNetAmount += transaction.amount * transaction.exchangeRate;
             } else {
+                console.log(`Exchange rate ${transaction.exchangeRate} not found for interest transaction, converting interest amount`);
                 totalNetAmount += await currencyConverter.convert(
                     transaction.amount,
                     transaction.currency,

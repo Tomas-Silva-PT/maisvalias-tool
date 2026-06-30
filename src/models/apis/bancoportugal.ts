@@ -13,8 +13,8 @@ class BancoPortugal extends BaseApi implements ExchangeRateApi {
     }
 
     const intervals = this._splitIntervalByYear(dates);
-    // console.log(`[BancoPortugal] Intervals (${intervals.length}): `, intervals);
-    // console.log(`[BancoPortugal] Dates (${dates.length}): `, dates);
+    console.log(`[BancoPortugal] Intervals (${intervals.length}): `, intervals);
+    console.log(`[BancoPortugal] Dates (${dates.length}): `, dates);
 
     if (intervals.length < dates.length) {
       console.log("[BancoPortugal] Fetching exchange rates by intervals...");
