@@ -53,5 +53,6 @@ Para mais detalhes sobre este processo, consulta a secção **"Algoritmo"**.
 ### Linguagem  
 Atualmente desenvolvida em **Typescript**, o _core_ da ferramenta assenta nesta linguagem para transformação do teu histórico de transações no formato desejado para declaração no IRS.  
 
-### Bibliotecas Utilizadas  
+### Bibliotecas/APIs Utilizadas  
 - **Yahoo Finance API** – usada para obter dados financeiros das ações em que investes.
+- **Banco de Portugal** - usada para obter dados sobre taxas de câmbio.
