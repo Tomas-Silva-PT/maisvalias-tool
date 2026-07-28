@@ -1,3 +1,56 @@
+# [1.4.0](https://github.com/Tomas-Silva-PT/maisvalias-tool/compare/v1.3.0...v1.4.0) (2026-07-28)
+
+
+### Bug Fixes
+
+* add missing code ([a2adf32](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/a2adf32412d434da328e586366367a1cc83cf56f))
+* bad dependencies for integration tests ([208c029](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/208c02984d0ba1069b2515b2a8e6e10e2061daff))
+* exchange rate date incorrectly compared to transactions date ([9132d57](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/9132d579b0dd4c1028be1e45ae3be1ee8d9deeb4))
+* IKBR parser throwing error when missing broker sections ([54a4ad2](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/54a4ad2c57ec67cf8c33d0c9eb5366c91026408d))
+* Interactive Brokers' code name typo ([c5bac10](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/c5bac10713ad5281975e18594d802e8ff8cce0b1))
+* missing asset type - not fetching correctly ([73bfa92](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/73bfa929b32fae48d1b50550b22a0a474e41ea5b))
+* missing dependencies ([c6ab5f6](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/c6ab5f68aca3bb6c3befce997edf10d9e7f62917))
+* **src:** bug when comparing transactions ([dd64874](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/dd6487455c866f1e45e0aa5754664be3d53741f6))
+* **src:** bug when exporting to IRS ([09be0a8](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/09be0a8a1c07c7dd5556a0c0f53390b865675f2d))
+* **src:** bug with integration test for ikbr ([2833a72](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/2833a72eca8909dfcd8ca87eb7997c337d2bf9a5))
+* **src:** integration test not working with new parsing logic ([3d4c198](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/3d4c198b63349d224842beee2849fea0d9c6b5de))
+* **src:** pdf parser not returning broker sections ([2237fa1](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/2237fa1b1b0ff78fd6495f6d051feb8b3b281a44))
+* **src:** trade republic not correctly identifying buy and sell trades ([3f6cbdf](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/3f6cbdfeb8c6eca7c381a7e126c879628d824630))
+* **src:** weekend - change to last business day for exchange rate fetching ([96bcdb7](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/96bcdb7e20927be47fb6431536d084663aa3ccd9))
+* **src:** wrong num in IRS export ([d1ec981](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/d1ec9813c3f33cccd3d24ce00e4a4ac14825cb5a))
+* trade republic - correctly intepret numbers on a magnitude of thousands ([3236a79](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/3236a79dcb597051bf045d8460b95674fff6f4d8))
+* trade republic - read interest gains values ([cf41b45](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/cf41b450d791a01e7ac3727d8a1c14396b59c5fc))
+* **website:** bad dependencies ([4aeb6b6](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/4aeb6b61f4b4104c9c93342a3e783d86bd561230))
+* **website:** bad imports ([ea62478](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/ea624781b9e0f6a4ba70dd8d9c59fd73db42567c))
+* **website:** change order of columns for IRS panel 9.2 ([65c1469](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/65c146902e21840a5892ade6d1e2b81f187d2070))
+* **website:** contact link not working ([a670bb5](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/a670bb5f3a265898b17e7e7cc655ad56ffae3d33))
+* **website:** contact link not working pt.2 ([ea3d6a3](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/ea3d6a31027d615a2e475da5b94bc80dae8354ad))
+* **website:** fiscal year summary - round number for total expenses ([e9e2b06](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/e9e2b06da56bab46987fc32355765fe5cb4894fa))
+* **website:** missing dependency ([914eaa2](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/914eaa2db6efef3d58bf94bd563fd7161fb1afc9))
+
+
+### Features
+
+* add api - banco de portugal ([967e059](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/967e0592fc114f7caea89c4ab1bd2ecceadf34bf))
+* add asset name property ([ee7702d](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/ee7702db1e6b4705f7c2d4e5519c92c35bd25af9))
+* add broker - InteractiveBrokers ([71fdae6](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/71fdae67852746e7647bd923e897680e42ed2079))
+* add broker - LightYear ([752b336](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/752b3366c7c45c2e02df8b7bb5425e5d75e00049))
+* add broker - trade republic ([56cc45a](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/56cc45ad9e9dade8f552ddd713d1012abfd28c0b))
+* add broker - XTB ([23cf311](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/23cf31169e818ae92d6a4e9d48edf8a7d1baca9f))
+* add developer flexibility for future changes in broker files ([3a4fff6](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/3a4fff621307357fd9f0b65884b601ba04e4e4b5))
+* add support for more IRS panel in export functionality ([aa7fd26](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/aa7fd26b939346a3a9c02fc6111bb86a3e3a6359))
+* add support for T212 interest on cash ([05903c4](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/05903c41c296c017ddadfcaff75c89f3f5315432))
+* add tax heavens for irs consideration ([8e27d39](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/8e27d39337e3ae7cb15ff744842479893a44686a))
+* interest gains on excel ([b91a672](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/b91a672d674f90403e3e8ee9517d8ef592a11d06))
+* lightyear - add documentation ([8d847da](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/8d847dad3d6f391b18c3b3bbc1ce628e8c1c6da4))
+* **src:** Add previous missing ISIN identification ([acef1d9](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/acef1d927b4de886a22ff4bf45df70f3fc25a401))
+* **src:** new irs infraestructure ([5c8f176](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/5c8f176a6d2011db8c6634d168324901f07de5d6))
+* support degiro dividends ([0cd1da7](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/0cd1da791adcc61aeaae9d1bb6a51e719c099112))
+* support revolut interest gains ([1828150](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/182815063d3e7a4be64d034413da6c5a8ce951a6))
+* trade republic - from pdf to csv parsing ([4efba76](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/4efba76571ca0933308d42c071bbb9664d8c3192))
+* **website:** Part 1 - New IRS sections ([2f4b7b3](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/2f4b7b36fd227058db450989cd79db1fed555c2f))
+* **website:** revolut allow multiple file input ([517c15d](https://github.com/Tomas-Silva-PT/maisvalias-tool/commit/517c15d5fda9b63fd54692b87769a7d93ff75f7a))
+
 # [1.3.0](https://github.com/Tomas-Silva-PT/maisvalias-tool/compare/v1.2.0...v1.3.0) (2026-02-01)
 
 
